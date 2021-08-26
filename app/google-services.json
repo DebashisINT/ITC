@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "148270680727",
+    "firebase_url": "https://speedy-area-274407.firebaseio.com",
+    "project_id": "speedy-area-274407",
+    "storage_bucket": "speedy-area-274407.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148270680727:android:b6260da39073f34b15f7d2",
+        "android_client_info": {
+          "package_name": "com.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148270680727-r501f1jvigsveqe6n56k6j76pjm9vj6f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4CvqaBws_qn1Pat82uEMo5WJzINfocqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148270680727-r501f1jvigsveqe6n56k6j76pjm9vj6f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
