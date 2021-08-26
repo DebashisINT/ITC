@@ -52,7 +52,7 @@ import kotlin.system.exitProcess
  */
 
 class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBack {
-
+//asd
     private var isLoginLoaded: Boolean = false
     private var permissionUtils: PermissionUtils? = null
     private var mGpsStatusDetector: GpsStatusDetector? = null
