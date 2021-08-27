@@ -1935,7 +1935,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             else
                 nearbyShops.visibility = View.GONE
 
-            addTravelAllowenceTV.visibility = View.VISIBLE
+            if(Pref.IsShowDayStart){
+                addTravelAllowenceTV.visibility = View.GONE
+            }else{
+                addTravelAllowenceTV.visibility = View.VISIBLE
+            }
+
         } else {
             addTravelAllowenceTV.visibility = View.GONE
             nearbyShops.visibility = View.GONE
@@ -2025,8 +2030,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         else
             chat_bot_TV.visibility = View.GONE
 
-        if (Pref.isShowTimeline)
-            orderHistoryTV.visibility = View.VISIBLE
+        if (Pref.isShowTimeline){
+            if(Pref.IsShowDayStart){
+                orderHistoryTV.visibility = View.GONE
+            }else{
+                orderHistoryTV.visibility = View.VISIBLE
+            }
+        }
         else
             orderHistoryTV.visibility = View.GONE
 

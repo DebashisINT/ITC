@@ -589,7 +589,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 }
             }
         })
-
+        //Pref.IsDDvistedOnceByDay=true
         end_TV.setOnClickListener({ view ->
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
@@ -597,8 +597,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 if (Pref.DayEndMarked) {
                     (mContext as DashboardActivity).showSnackMessage("Day already ended")
                 } else {
+                    //Pref.IsDDvistedOnceByDay=true
                     if (Pref.DayStartMarked) {
-                        if(Pref.IsDDvistedOnceByDay){
+                        if(Pref.IsDDvistedOnceByDay ){
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -4597,12 +4598,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         simpleDialog.setContentView(R.layout.dialog_end_day_sale_value)
         val et_saleValue: EditText = simpleDialog.findViewById(R.id.dialog_et_sale_value) as EditText
         val submit = simpleDialog.findViewById(R.id.tv_dialog_submit) as AppCustomTextView
-        try {
-            //et_saleValue.filters=(arrayOf<InputFilter>(DecimalDigitsInputFilter(8, 2)))
+      /*  try {
             et_saleValue.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(9, 2)))
         } catch (ex: Exception) {
             ex.printStackTrace()
-        }
+        }*/
         submit.setOnClickListener({ view ->
             simpleDialog.cancel()
 

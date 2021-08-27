@@ -26,7 +26,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_10sdp">
 
                 <com.demo.widgets.AppCustomTextView
                     android:id="@+id/dialog_cancel_order_header_TV"
@@ -49,17 +50,17 @@
             </LinearLayout>
 
 
-
             <EditText
                 android:id="@+id/dialog_et_sale_value"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:hint="00.00"
+                android:hint="00"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_12sdp"
-                android:inputType="numberDecimal"
+                android:inputType="number"
+                android:maxLength="7"
                 android:background="@color/white"/>
 
         </LinearLayout>
