@@ -641,7 +641,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
               System.out.println("onFacesDetected < 1");
 
                if(isTrueFace){
-                Toast.makeText(this,"Real Face", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"Real Face", Toast.LENGTH_SHORT).show();
                 CustomStatic.IsFaceRec=true;
 
                 Intent returnIntent = new Intent();
