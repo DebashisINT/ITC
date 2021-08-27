@@ -4839,7 +4839,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         Pref.DayEndMarked = response.DayEndMarked!!
                                         Pref.DayStartShopType = response.day_start_shop_type!!
                                         Pref.DayStartShopID = response.day_start_shop_id!!
-                                        Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
+                                        if(Pref.IsDDvistedOnceByDay !=true){
+                                            Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
+                                        }
+
 
                                         uiThread {
                                             progress_wheel.stopSpinning()
