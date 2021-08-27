@@ -1087,7 +1087,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                     if (Pref.IsShowDayStart) {
                         if (!Pref.DayStartMarked) {
-                            (mContext as DashboardActivity).showSnackMessage("Please start your day")
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Please start your day..."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                            (mContext as DashboardActivity).showSnackMessage("Please start your day")
                             return
                         }
                     }
@@ -4810,7 +4824,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     isCameraDayStart = true
                                                     initPermissionCheck()
                                                 } else {
-                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
+                                                    // 27-08-21 For ITC
+                                                    val simpleDialog = Dialog(mContext)
+                                                    simpleDialog.setCancelable(false)
+                                                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                                    simpleDialog.setContentView(R.layout.dialog_message)
+                                                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                                                    dialogHeader.text = "Thanks! Updated Successfully."
+                                                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                                    dialogYes.setOnClickListener({ view ->
+                                                        simpleDialog.cancel()
+                                                    })
+                                                    simpleDialog.show()
+//                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                                     voiceAttendanceMsg("Hi, your day start marked successfully.")
                                                 }
                                             }
@@ -4819,7 +4847,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     isCameraDayStart = false
                                                     initPermissionCheck()
                                                 } else {
-                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
+                                                    // 27-08-21 For ITC
+                                                    val simpleDialog = Dialog(mContext)
+                                                    simpleDialog.setCancelable(false)
+                                                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                                    simpleDialog.setContentView(R.layout.dialog_message)
+                                                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                                                    dialogHeader.text = "Thanks! Updated Successfully."
+                                                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                                    dialogYes.setOnClickListener({ view ->
+                                                        simpleDialog.cancel()
+                                                    })
+                                                    simpleDialog.show()
+//                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                                     voiceAttendanceMsg("Hi, your day end marked successfully.")
                                                     Handler(Looper.getMainLooper()).postDelayed({
                                                         (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
@@ -4917,7 +4959,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 progress_wheel.stopSpinning()
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
-                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
+                                    // 27-08-21 For ITC
+                                    val simpleDialog = Dialog(mContext)
+                                    simpleDialog.setCancelable(false)
+                                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                    simpleDialog.setContentView(R.layout.dialog_message)
+                                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                                    dialogHeader.text = "Thanks! Updated Successfully."
+                                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                    dialogYes.setOnClickListener({ view ->
+                                        simpleDialog.cancel()
+                                    })
+                                    simpleDialog.show()
+//                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                     voiceAttendanceMsg("Hi, your day start marked successfully.")
                                 } else {
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
@@ -4944,7 +5000,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     //19-08-21 Added for force day end
 //                                     performLogout()
-                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
+                                    // 27-08-21 For ITC
+                                    val simpleDialog = Dialog(mContext)
+                                    simpleDialog.setCancelable(false)
+                                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                    simpleDialog.setContentView(R.layout.dialog_message)
+                                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                                    dialogHeader.text = "Thanks! Updated Successfully."
+                                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                    dialogYes.setOnClickListener({ view ->
+                                        simpleDialog.cancel()
+                                    })
+                                    simpleDialog.show()
+//                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                     voiceAttendanceMsg("Hi, your day end marked successfully.")
 
                                     Handler(Looper.getMainLooper()).postDelayed({
