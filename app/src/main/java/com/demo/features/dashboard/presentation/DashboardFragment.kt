@@ -126,7 +126,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     var dY = 0f
     var lastAction = 0
 
-    //test by saheli
+    //test by saheliAdd
     private lateinit var fab: FloatingActionButton
     private lateinit var mContext: Context
     private lateinit var mRouteActivityDashboardAdapter: RouteActivityDashboardAdapter

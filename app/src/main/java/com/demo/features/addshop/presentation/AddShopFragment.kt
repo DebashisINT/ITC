@@ -1465,7 +1465,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
     private fun showShopVerificationDialog(shop_id: String) {
 
-        if (!Pref.isShowOTPVerificationPopup)  {
+        // change ITC 27-08-2021
+        if(Pref.isOrderShow==false){
+            (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
+        }else{
+                if (!Pref.isShowOTPVerificationPopup)  {
             (mContext as DashboardActivity).onBackPressed()
             (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, shop_id)
         }
@@ -1493,6 +1497,9 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                 }
             }).show((mContext as DashboardActivity).supportFragmentManager, "ShopVerificationDialog")
         }
+        }
+
+
     }
 
 
@@ -3822,8 +3829,14 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                             else
                                                 showAssignedToShopListDialog(AppDatabase.getDBInstance()?.assignToShopDao()?.getAll() as ArrayList<AssignToShopEntity>)
                                         }
-                                        else
-                                            showShopVerificationDialog(shop_id!!)
+                                        else{
+                                            // change ITC 27-08-2021
+                                            if(Pref.isOrderShow == false){
+                                                (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
+                                            }else{
+                                                showShopVerificationDialog(shop_id!!)
+                                            }
+                                        }
                                     }
                                 }
                             }
