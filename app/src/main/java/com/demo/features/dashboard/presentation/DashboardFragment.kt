@@ -125,7 +125,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     var dY = 0f
     var lastAction = 0
 
-//test by saheli
+    //test by saheli
     private lateinit var fab: FloatingActionButton
     private lateinit var mContext: Context
     private lateinit var mRouteActivityDashboardAdapter: RouteActivityDashboardAdapter
@@ -184,11 +184,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var DDVisit_TV: AppCustomTextView
     private lateinit var DDVisitdate_TV: AppCustomTextView
 
-  
-
-
-
-
 
     private lateinit var StartRL: RelativeLayout
     private lateinit var endRL: RelativeLayout
@@ -196,11 +191,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     private lateinit var start_shop: AppCustomTextView
     private lateinit var enddate_TV: AppCustomTextView
-
-
-
-
-
 
 
     private val customProgressDialog: CustomProgressDialog by lazy {
@@ -225,6 +215,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
 
+        initView(view)
         initView(view)
 
 
@@ -542,11 +533,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         start_TV = view.findViewById(R.id.start_TV)
         end_TV = view.findViewById(R.id.end_TV)
 
-        DDVisit_TV =  view.findViewById(R.id.DDVisit_TV)
-        DDVisitdate_TV =  view.findViewById(R.id.DDVisitdate_TV)
+        DDVisit_TV = view.findViewById(R.id.DDVisit_TV)
+        DDVisitdate_TV = view.findViewById(R.id.DDVisitdate_TV)
 
         StartRL = view.findViewById(R.id.StartRL)
-        endRL= view.findViewById(R.id.endRL)
+        endRL = view.findViewById(R.id.endRL)
 
         start_shop = view.findViewById(R.id.start_shop)
         enddate_TV = view.findViewById(R.id.enddate_TV)
@@ -557,7 +548,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             } else {
                 if (!Pref.isAddAttendence) {
-                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
+                    // 27-08-21 For ITC
+                    val simpleDialog = Dialog(mContext)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                    dialogHeader.text = "Please mark your attendance"
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+                    })
+                    simpleDialog.show()
+//                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
                 } else {
                     if (!Pref.DayStartMarked) {
                         val simpleDialog = Dialog(mContext)
@@ -584,8 +589,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         })
                         simpleDialog.show()
                     } else {
-
-                        (mContext as DashboardActivity).showSnackMessage("Day started already")
+                    // 27-08-21 For ITC
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialogHeader.text = "Your Day started already"
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+//                        (mContext as DashboardActivity).showSnackMessage("Day started already")
                     }
                 }
             }
@@ -614,7 +632,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 } else {
                     //Pref.IsDDvistedOnceByDay=true
                     if (Pref.DayStartMarked) {
-                        if(Pref.IsDDvistedOnceByDay ){
+                        if (Pref.IsDDvistedOnceByDay) {
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -642,7 +660,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 simpleDialog.cancel()
                             })
                             simpleDialog.show()
-                        }else{
+                        } else {
                             // 27-08-21 For ITC
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
@@ -684,9 +702,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         DDVisit_TV.setOnClickListener({ view ->
             if (!AppUtils.isOnline(mContext) && false) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-            }
-            else {
-                if (!Pref.isAddAttendence){
+            } else {
+                if (!Pref.isAddAttendence) {
                     // 27-08-21 For ITC
                     val simpleDialog = Dialog(mContext)
                     simpleDialog.setCancelable(false)
@@ -702,45 +719,43 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     })
                     simpleDialog.show()
 //                    (mContext as DashboardActivity).showSnackMessage("Please Marked Your Attendance First")
-                }
-                else {
-                        if(!Pref.IsDDvistedOnceByDay){
-                            val simpleDialog = Dialog(mContext)
-                            simpleDialog.setCancelable(false)
-                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                            simpleDialog.setContentView(R.layout.dialog_yes_no)
-                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
-                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                            dialogHeader.text = "Wish to Visit Distributor Location Right Now?"
-                            val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
-                            val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
-                            dialogYes.setOnClickListener({ view ->
-                                simpleDialog.cancel()
-                                getLocforDD()
-                            })
-                            dialogNo.setOnClickListener({ view ->
-                                simpleDialog.cancel()
-                            })
-                            simpleDialog.show()
-                        }
-                        else{
-                            // 27-08-21 For ITC
-                            val simpleDialog = Dialog(mContext)
-                            simpleDialog.setCancelable(false)
-                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                            simpleDialog.setContentView(R.layout.dialog_message)
-                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                            dialogHeader.text = "You are already visited once..."
-                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                            dialogYes.setOnClickListener({ view ->
-                                simpleDialog.cancel()
-                            })
-                            simpleDialog.show()
+                } else {
+                    if (!Pref.IsDDvistedOnceByDay) {
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_yes_no)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialogHeader.text = "Wish to Visit Distributor Location Right Now?"
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                        val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                            getLocforDD()
+                        })
+                        dialogNo.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+                    } else {
+                        // 27-08-21 For ITC
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialogHeader.text = "You are already visited once..."
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
 //                            (mContext as DashboardActivity).showSnackMessage("You are already visited once...")
-                        }
+                    }
 
                 }
             }
@@ -936,20 +951,18 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             DDVisitdate_TV.visibility = View.GONE
         }
 
-        if(Pref.IsShowDayStart){
+        if (Pref.IsShowDayStart) {
             StartRL.visibility = View.VISIBLE
             start_shop.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             StartRL.visibility = View.GONE
             start_shop.visibility = View.GONE
 
         }
-        if(Pref.IsShowDayEnd){
+        if (Pref.IsShowDayEnd) {
             endRL.visibility = View.VISIBLE
             enddate_TV.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             endRL.visibility = View.GONE
             enddate_TV.visibility = View.GONE
         }
@@ -958,7 +971,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         initAdapter()
         initBottomAdapter()
     }
-
 
 
     private fun getAttendanceReport(date: String) {
@@ -1061,7 +1073,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }).show((mContext as DashboardActivity).supportFragmentManager, "")
                     }*/
 
-                    if(Pref.IsShowDayStart){
+                    if (Pref.IsShowDayStart) {
                         if (!Pref.DayStartMarked) {
                             (mContext as DashboardActivity).showSnackMessage("Please start your day")
                             return
@@ -4094,20 +4106,18 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             DDVisitdate_TV.visibility = View.GONE
         }
 
-        if(Pref.IsShowDayStart){
+        if (Pref.IsShowDayStart) {
             StartRL.visibility = View.VISIBLE
             start_shop.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             StartRL.visibility = View.GONE
             start_shop.visibility = View.GONE
 
         }
-        if(Pref.IsShowDayEnd){
+        if (Pref.IsShowDayEnd) {
             endRL.visibility = View.VISIBLE
             enddate_TV.visibility = View.VISIBLE
-        }
-        else{
+        } else {
             endRL.visibility = View.GONE
             enddate_TV.visibility = View.GONE
         }
@@ -4446,7 +4456,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             dayst.latitude = loc.latitude.toString()
             dayst.longitude = loc.longitude.toString()
             dayst.IsDDvistedOnceByDay = "0"
-            dayst.visit_distributor_date_time =""
+            dayst.visit_distributor_date_time = ""
             dayst.visit_distributor_id = ""
             dayst.visit_distributor_name = ""
             if (isShop) {
@@ -4669,11 +4679,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         simpleDialog.setContentView(R.layout.dialog_end_day_sale_value)
         val et_saleValue: EditText = simpleDialog.findViewById(R.id.dialog_et_sale_value) as EditText
         val submit = simpleDialog.findViewById(R.id.tv_dialog_submit) as AppCustomTextView
-      /*  try {
-            et_saleValue.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(9, 2)))
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }*/
+        /*  try {
+              et_saleValue.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(9, 2)))
+          } catch (ex: Exception) {
+              ex.printStackTrace()
+          }*/
         submit.setOnClickListener({ view ->
             simpleDialog.cancel()
 
@@ -4688,9 +4698,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
                     dayst.latitude = loc.latitude.toString()
                     dayst.longitude = loc.longitude.toString()
-                    if(Pref.IsDDvistedOnceByDay){
+                    if (Pref.IsDDvistedOnceByDay) {
                         dayst.IsDDvistedOnceByDay = "1"
-                    }else{
+                    } else {
                         dayst.IsDDvistedOnceByDay = "0"
                     }
                     dayst.visit_distributor_date_time = AppUtils.getCurrentDateTime()
@@ -4767,7 +4777,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("DashboardFragment isStartOrEndDay : RESPONSE " + result.status +" " +AppUtils.getCurrentDateTime())
+                                XLog.d("DashboardFragment isStartOrEndDay : RESPONSE " + result.status + " " + AppUtils.getCurrentDateTime())
                                 val response = result as StatusDayStartEnd
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     doAsync {
@@ -4775,7 +4785,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         Pref.DayEndMarked = response.DayEndMarked!!
                                         Pref.DayStartShopType = response.day_start_shop_type!!
                                         Pref.DayStartShopID = response.day_start_shop_id!!
-                                        Pref.IsDDvistedOnceByDay=response.IsDDvistedOnceByDay!!
+                                        Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
 
                                         uiThread {
                                             progress_wheel.stopSpinning()
@@ -4787,7 +4797,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 if (Pref.IsshowDayStartSelfie) {
                                                     isCameraDayStart = true
                                                     initPermissionCheck()
-                                                }else{
+                                                } else {
                                                     (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                                     voiceAttendanceMsg("Hi, your day start marked successfully.")
                                                 }
@@ -4796,7 +4806,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 if (Pref.IsshowDayEndSelfie) {
                                                     isCameraDayStart = false
                                                     initPermissionCheck()
-                                                }else{
+                                                } else {
                                                     (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                                     voiceAttendanceMsg("Hi, your day end marked successfully.")
                                                     Handler(Looper.getMainLooper()).postDelayed({
@@ -5020,29 +5030,29 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             newList.add(allShopList[i])
         }
 
-    /*    if (newList != null && newList.size > 0) {
-            for (i in 0 until newList.size) {
-                val shopLat: Double = newList[i].shopLat
-                val shopLong: Double = newList[i].shopLong
-                if (shopLat != null && shopLong != null) {
-                    val shopLocation = Location("")
-                    shopLocation.latitude = shopLat
-                    shopLocation.longitude = shopLong
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
-                    if (isShopNearby) {
-                        if ((location.distanceTo(shopLocation)) < nearBy) {
-                            nearBy = location.distanceTo(shopLocation).toDouble()
-                            finalNearByShop = newList[i]
+        /*    if (newList != null && newList.size > 0) {
+                for (i in 0 until newList.size) {
+                    val shopLat: Double = newList[i].shopLat
+                    val shopLong: Double = newList[i].shopLong
+                    if (shopLat != null && shopLong != null) {
+                        val shopLocation = Location("")
+                        shopLocation.latitude = shopLat
+                        shopLocation.longitude = shopLong
+                        val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                        if (isShopNearby) {
+                            if ((location.distanceTo(shopLocation)) < nearBy) {
+                                nearBy = location.distanceTo(shopLocation).toDouble()
+                                finalNearByShop = newList[i]
+                            }
+                            //startDay(newList[i], location)
+                            //break
                         }
-                        //startDay(newList[i], location)
-                        //break
                     }
                 }
-            }
 
-        } else {
-            //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
-        }*/
+            } else {
+                //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
+            }*/
 
         val allDDList = AppDatabase.getDBInstance()!!.ddListDao().getAll()
         val newDDList = java.util.ArrayList<AssignToDDEntity>()
@@ -5102,49 +5112,49 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun ddDay(nearByShop: AddShopDBModelEntity, nearByDD: AssignToDDEntity, loc: Location, isShop: Boolean) {
         progress_wheel.spin()
-                try {
-                    var dayst: DaystartDayendRequest = DaystartDayendRequest()
-                    dayst.user_id = Pref.user_id
-                    dayst.session_token = Pref.session_token
-                    dayst.date = AppUtils.getCurrentDateTime()
-                    dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
-                    dayst.latitude = loc.latitude.toString()
-                    dayst.longitude = loc.longitude.toString()
-                    dayst.IsDDvistedOnceByDay = Pref.IsDDvistedOnceByDay.toString()
-                    dayst.visit_distributor_date_time = AppUtils.getCurrentDateTime()
-                    dayst.visit_distributor_id = nearByDD.dd_id
-                    dayst.visit_distributor_name = nearByDD.dd_name
+        try {
+            var dayst: DaystartDayendRequest = DaystartDayendRequest()
+            dayst.user_id = Pref.user_id
+            dayst.session_token = Pref.session_token
+            dayst.date = AppUtils.getCurrentDateTime()
+            dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
+            dayst.latitude = loc.latitude.toString()
+            dayst.longitude = loc.longitude.toString()
+            dayst.IsDDvistedOnceByDay = Pref.IsDDvistedOnceByDay.toString()
+            dayst.visit_distributor_date_time = AppUtils.getCurrentDateTime()
+            dayst.visit_distributor_id = nearByDD.dd_id
+            dayst.visit_distributor_name = nearByDD.dd_name
 
-                    val repository = DayStartEndRepoProvider.dayStartRepositiry()
-                    BaseActivity.compositeDisposable.add(
-                            repository.dayStart(dayst)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribeOn(Schedulers.io())
-                                    .subscribe({ result ->
-                                        XLog.d("DashboardFragment DayEnd : RESPONSE " + result.status)
-                                        val response = result as BaseResponse
-                                        if (response.status == NetworkConstant.SUCCESS) {
-                                            (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                    repository.dayStart(dayst)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                XLog.d("DashboardFragment DayEnd : RESPONSE " + result.status)
+                                val response = result as BaseResponse
+                                if (response.status == NetworkConstant.SUCCESS) {
+                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
 //                                            voiceAttendanceMsg("Hi, your day end marked successfully.")
-                                        }
-                                    }, { error ->
-                                        if (error == null) {
-                                            XLog.d("DashboardFragment DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
-                                        } else {
-                                            XLog.d("DashboardFragment DayEnd : ERROR " + error.localizedMessage)
-                                            error.printStackTrace()
-                                        }
-                                        progress_wheel.stopSpinning()
-                                    })
-                    )
+                                }
+                            }, { error ->
+                                if (error == null) {
+                                    XLog.d("DashboardFragment DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                                } else {
+                                    XLog.d("DashboardFragment DayEnd : ERROR " + error.localizedMessage)
+                                    error.printStackTrace()
+                                }
+                                progress_wheel.stopSpinning()
+                            })
+            )
 
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                    progress_wheel.stopSpinning()
-                }
-
-
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            progress_wheel.stopSpinning()
         }
+
+
+    }
 
 
 }
