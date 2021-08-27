@@ -35,6 +35,7 @@ import com.demo.app.uiaction.IntentActionable
 import com.demo.app.utils.AppUtils
 import com.demo.app.utils.FTStorageUtils
 import com.demo.app.utils.PermissionUtils
+import com.demo.app.utils.ProcessImageUtils_v1
 import com.demo.app.widgets.MovableFloatingActionButton
 import com.demo.base.BaseResponse
 import com.demo.base.presentation.BaseActivity
@@ -544,52 +545,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
         start_TV.setOnClickListener({ view ->
-            if (!AppUtils.isOnline(mContext)) {
-                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-            } else {
-                if (!Pref.isAddAttendence) {
-                    // 27-08-21 For ITC
-                    val simpleDialog = Dialog(mContext)
-                    simpleDialog.setCancelable(false)
-                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    simpleDialog.setContentView(R.layout.dialog_message)
-                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                    dialogHeader.text = "Please mark your attendance"
-                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                    dialogYes.setOnClickListener({ view ->
-                        simpleDialog.cancel()
-                    })
-                    simpleDialog.show()
-//                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
-                } else {
-                    if (!Pref.DayStartMarked) {
-                        val simpleDialog = Dialog(mContext)
-                        simpleDialog.setCancelable(false)
-                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        simpleDialog.setContentView(R.layout.dialog_yes_no)
-                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
-                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                        dialogHeader.text = "Are you sure ?"
-                        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
-                        val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
-                        dialogYes.setOnClickListener({ view ->
-                            simpleDialog.cancel()
-                            //if(Pref.IsshowDayStartSelfie){
-                            //isCameraDayStart=true
-                            //initPermissionCheck()
-                            //}else{
-                            getLocforStart()
-                            //}
-                        })
-                        dialogNo.setOnClickListener({ view ->
-                            simpleDialog.cancel()
-                        })
-                        simpleDialog.show()
-                    } else {
-                    // 27-08-21 For ITC
+
+            if(false){
+                isCameraDayStart = true
+                initPermissionCheck()
+            }else{
+                if (!AppUtils.isOnline(mContext)) {
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                }
+                else {
+                    if (!Pref.isAddAttendence) {
+                        // 27-08-21 For ITC
                         val simpleDialog = Dialog(mContext)
                         simpleDialog.setCancelable(false)
                         simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -597,16 +563,62 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
                         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                         dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                        dialogHeader.text = "Your Day started already"
+                        dialogHeader.text = "Please mark your attendance"
                         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                         dialogYes.setOnClickListener({ view ->
                             simpleDialog.cancel()
                         })
                         simpleDialog.show()
+//                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
+                    } else {
+                        if (!Pref.DayStartMarked) {
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_yes_no)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Are you sure ?"
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                            val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                                //if(Pref.IsshowDayStartSelfie){
+                                //isCameraDayStart=true
+                                //initPermissionCheck()
+                                //}else{
+                                getLocforStart()
+                                //}
+                            })
+                            dialogNo.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+                        } else {
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Your Day started already"
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
 //                        (mContext as DashboardActivity).showSnackMessage("Day started already")
+                        }
                     }
                 }
             }
+
+
+
+
         })
         //Pref.IsDDvistedOnceByDay=true
         end_TV.setOnClickListener({ view ->
@@ -4328,15 +4340,15 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         SingleShotLocationProvider.requestSingleUpdate(mContext,
                 object : SingleShotLocationProvider.LocationCallback {
                     override fun onStatusChanged(status: String) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onProviderEnabled(status: String) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onProviderDisabled(status: String) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun onNewLocationAvailable(location: Location) {
@@ -4879,7 +4891,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
     }
 
-    fun setCameraImage(file: File) {
+    //fun setCameraImage(file: File) {
+    fun setCameraImage(filePath: String) {
+        var file = File(filePath)
+
         if (file == null || TextUtils.isEmpty(file.absolutePath)) {
             (mContext as DashboardActivity).showSnackMessage("Invalid Image")
             return
@@ -4888,6 +4903,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             return
         }
+
 
         if (isCameraDayStart && Pref.IsshowDayStartSelfie) {
             //Toaster.msgShort(mContext,"isCameraDayStart true")
@@ -4913,7 +4929,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             })
             )
-        } else if (isCameraDayStart == false && Pref.IsshowDayEndSelfie) {
+        }
+        else if (isCameraDayStart == false && Pref.IsshowDayEndSelfie) {
             //Toaster.msgShort(mContext,"isCameraDayStart false")
             val repository = DashboardRepoProvider.provideDashboardImgRepository()
             progress_wheel.spin()
@@ -4947,6 +4964,29 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
 
     }
+
+
+    fun setImage(filePath: String) {
+        val file = File(filePath)
+        var newFile: File? = null
+        progress_wheel.spin()
+        doAsync {
+            val processImage = ProcessImageUtils_v1(mContext, file, 50)
+            newFile = processImage.ProcessImageSelfie()
+            uiThread {
+                if (newFile != null) {
+                    XLog.e("=========Image from new technique==========")
+                    val fileSize = AppUtils.getCompressImage(filePath)
+                    setCameraImage(filePath)
+                } else {
+                    // Image compression
+                    val fileSize = AppUtils.getCompressImage(filePath)
+                    setCameraImage(filePath)
+                }
+            }
+        }
+    }
+
 
 
     private fun getLocforDD() {

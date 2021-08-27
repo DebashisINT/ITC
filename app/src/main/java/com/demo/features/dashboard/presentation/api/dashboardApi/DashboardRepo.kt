@@ -67,7 +67,7 @@ class DashboardRepo(val apiService: DashboardApi) {
         val profile_img_file = File(image) //FileUtils.getFile(context, Uri.parse(image))
         if (profile_img_file != null && profile_img_file.exists()) {
             val profileImgBody = RequestBody.create(MediaType.parse("multipart/form-data"), profile_img_file)
-            profile_img_data = MultipartBody.Part.createFormData("image", profile_img_file.name, profileImgBody)
+            profile_img_data = MultipartBody.Part.createFormData("image", profile_img_file.name.dropLast(40).drop(18)+".jpg", profileImgBody)
         } else {
             var mFile: File? = null
             if (context is DashboardActivity)

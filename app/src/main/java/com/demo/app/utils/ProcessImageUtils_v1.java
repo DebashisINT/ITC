@@ -90,6 +90,37 @@ public class ProcessImageUtils_v1 {
 
     }
 
+    public File ProcessImageSelfie() throws IOException {
+
+
+        destFile = createImageFile();
+        Log.e(TAG, "source Img:" + sourceFile);
+        Log.e(TAG, "destination Img:" + destFile);
+        if (destFile != null) {
+
+            copyFile(sourceFile, destFile);
+            //copyExif(sourceFile.getAbsolutePath(), destFile.getAbsolutePath());
+            resizeImage(destFile.getAbsolutePath(), 1024 * fileSize);
+            copyExif(sourceFile.getAbsolutePath(), destFile.getAbsolutePath());
+            //RotateImage.ReRotateImage(destFile.getAbsolutePath());
+
+            if (sourceFile.exists()) {
+                // sourceFile.delete();
+                // deleteFileFromMediaStore(context.getContentResolver(),sourceFile);
+            }
+
+            // notifyMediaStoreScanner(destFile);
+            // DeleteRecursive(mediaStorageDir);
+
+
+        } else {
+            return null;
+        }
+
+        return destFile;
+
+    }
+
 
     private File createImageFile() {
         String imageFileName = "IMG_" + System.currentTimeMillis();

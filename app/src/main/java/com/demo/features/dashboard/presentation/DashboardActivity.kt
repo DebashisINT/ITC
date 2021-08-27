@@ -6681,7 +6681,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             }
                         }).show((mContext as DashboardActivity).supportFragmentManager, "OTPVerificationDialog")*/
                     }
-                } else if (Pref.isSefieAlarmed) {
+                }
+                else if (Pref.isSefieAlarmed) {
                     getCameraImage(data)
                     val fileSize = AppUtils.getCompressImage(filePath)
 
@@ -7253,7 +7254,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 else if (getCurrentFragType() == FragType.DashboardFragment) {
                     getCameraImage(data)
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Update Review Image (DashboardActivity)===========")
+             /*           val fileSize = AppUtils.getCompressBillingImage(filePath, this)
+                        val fileSizeee = AppUtils.getCompressBillingImage(File(Uri.parse(filePath).path).absolutePath, this)
+                        (getFragment() as DashboardFragment).setCameraImage(filePath)*/
+
+                        (getFragment() as DashboardFragment).setImage(filePath)
+
+
+
+                     /*   XLog.e("===========Update Review Image (DashboardActivity)===========")
                         XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
@@ -7267,13 +7276,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         } catch (e: Exception) {
                             e.printStackTrace()
                             XLog.e("Error: " + e.localizedMessage)
-                        }
+                        }*/
                     }
                 }
             }
-
-
-
             else if (ImagePickerManager.REQUEST_GET_GALLERY_PHOTO == requestCode && null != data) {
                 //val filePath = ImagePickerManager.getImagePathFromData(data, this)
                 if (getCurrentFragType() == FragType.ViewAllTAListFragment) {
@@ -8781,7 +8787,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         Log.e("Dashboard", "image file size after compression==========> $fileSizeInKB KB")
 
         val file = File(resultUri.path!!)
-        (getFragment() as DashboardFragment).setCameraImage(file)
+        //(getFragment() as DashboardFragment).setCameraImage(file)
 
     }
 
