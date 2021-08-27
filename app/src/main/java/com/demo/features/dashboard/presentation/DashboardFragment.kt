@@ -4467,7 +4467,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             startDay(finalNearByShop, finalNearByDD, location, true)
         } else {
             progress_wheel.stopSpinning()
-            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
+            // 27-08-21 For ITC
+            val simpleDialog = Dialog(mContext)
+            simpleDialog.setCancelable(false)
+            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialog.setContentView(R.layout.dialog_message)
+            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+            dialogHeader.text = "No nearby Shop/Distributor found..."
+            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+            })
+            simpleDialog.show()
+//            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
         }
 
     }
@@ -4683,7 +4697,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             endDay(finalNearByShop, finalNearByDD, location, true)
         } else {
             progress_wheel.stopSpinning()
-            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
+            // 27-08-21 For ITC
+            val simpleDialog = Dialog(mContext)
+            simpleDialog.setCancelable(false)
+            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialog.setContentView(R.layout.dialog_message)
+            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+            dialogHeader.text = "No nearby Shop/Distributor found..."
+            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+            })
+            simpleDialog.show()
+//            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
         }
 
     }
@@ -5203,7 +5231,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             Pref.visit_distributor_name = finalNearByDD.dd_name.toString()
             Pref.visit_distributor_date_time = AppUtils.getCurrentDateTime()
             progress_wheel.stopSpinning()
-            (mContext as DashboardActivity).showSnackMessage("Distributor Visited")
+            // 27-08-21 For ITC
+            val simpleDialog = Dialog(mContext)
+            simpleDialog.setCancelable(false)
+            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialog.setContentView(R.layout.dialog_message)
+            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+            dialogHeader.text = "Distributor Visited..."
+            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+            })
+            simpleDialog.show()
+//            (mContext as DashboardActivity).showSnackMessage("Distributor Visited")
             voiceAttendanceMsg("Distributor Visited")
 //            ddDay(finalNearByShop, finalNearByDD, location, false)
         } /*else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
@@ -5214,7 +5256,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             Pref.visit_distributor_date_time = AppUtils.getCurrentDateTime()*//*
         }*/ else {
             progress_wheel.stopSpinning()
-            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
+            // 27-08-21 For ITC
+            val simpleDialog = Dialog(mContext)
+            simpleDialog.setCancelable(false)
+            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialog.setContentView(R.layout.dialog_message)
+            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+            dialogHeader.text = "No nearby Shop/Distributor found..."
+            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+            })
+            simpleDialog.show()
+//            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
         }
 
 
