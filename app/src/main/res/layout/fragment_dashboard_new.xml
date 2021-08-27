@@ -361,7 +361,8 @@
                             android:textColor="@color/login_txt_color"
                             android:textSize="@dimen/_9sdp"
                             android:visibility="visible"
-                            android:singleLine="true"/>
+                            android:singleLine="true"
+                            android:paddingStart="@dimen/_5sdp"/>
 
                     </RelativeLayout>
 
