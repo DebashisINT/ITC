@@ -2520,7 +2520,21 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                     else{
                         if(!Pref.DayStartMarked){
-                            (mContext as DashboardActivity).showSnackMessage("Please start your day")
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Please start your day..."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                            (mContext as DashboardActivity).showSnackMessage("Please start your day")
                         }
                         else{
                             loadFragment(FragType.LocalShopListFragment, false, "")
