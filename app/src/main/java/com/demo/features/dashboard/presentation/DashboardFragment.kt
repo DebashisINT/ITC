@@ -584,6 +584,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         })
                         simpleDialog.show()
                     } else {
+
                         (mContext as DashboardActivity).showSnackMessage("Day started already")
                     }
                 }
@@ -595,7 +596,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             } else {
                 if (Pref.DayEndMarked) {
-                    (mContext as DashboardActivity).showSnackMessage("Day already ended")
+                    // 27-08-21 For ITC
+                    val simpleDialog = Dialog(mContext)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                    dialogHeader.text = "Your Day already ended..."
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+                    })
+                    simpleDialog.show()
+//                    (mContext as DashboardActivity).showSnackMessage("Day already ended")
                 } else {
                     if (Pref.DayStartMarked) {
                         if(Pref.IsDDvistedOnceByDay){
@@ -627,11 +642,39 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             })
                             simpleDialog.show()
                         }else{
-                            (mContext as DashboardActivity).showSnackMessage("Please visit Distributor at once...")
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Please visit Distributor at once..."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                            (mContext as DashboardActivity).showSnackMessage("Please visit Distributor at once...")
                         }
 
                     } else {
-                        (mContext as DashboardActivity).showSnackMessage("Please start your day")
+                        // 27-08-21 For ITC
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialogHeader.text = "Please start your day..."
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+//                        (mContext as DashboardActivity).showSnackMessage("Please start your day")
                     }
                 }
             }
@@ -643,7 +686,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             }
             else {
                 if (!Pref.isAddAttendence){
-                    (mContext as DashboardActivity).showSnackMessage("Please Marked Your Attendance First")
+                    // 27-08-21 For ITC
+                    val simpleDialog = Dialog(mContext)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                    dialogHeader.text = "Please Marked Your Attendance First..."
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+                    })
+                    simpleDialog.show()
+//                    (mContext as DashboardActivity).showSnackMessage("Please Marked Your Attendance First")
                 }
                 else {
                         if(!Pref.IsDDvistedOnceByDay){
@@ -667,7 +724,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             simpleDialog.show()
                         }
                         else{
-                            (mContext as DashboardActivity).showSnackMessage("You are already visited once...")
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "You are already visited once..."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                            (mContext as DashboardActivity).showSnackMessage("You are already visited once...")
                         }
 
                 }
