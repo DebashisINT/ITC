@@ -3800,6 +3800,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 }
 
                             }else{
+                                Pref.IsDDvistedOnceByDay=false
                                 getListFromDatabase()
                             }
                         }, { error ->
@@ -3809,6 +3810,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 XLog.d("Login DayStart : ERROR " + error.localizedMessage)
                                 error.printStackTrace()
                             }
+                            Pref.IsDDvistedOnceByDay=false
                             getListFromDatabase()
                         })
         )

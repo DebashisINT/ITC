@@ -211,6 +211,7 @@ class OrderTypeListFragment : BaseFragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.fragment_order_type_list_new, container, false)
+
         initView(view)
         initClickListener()
         initTextChangeListener()
@@ -263,7 +264,7 @@ class OrderTypeListFragment : BaseFragment(), View.OnClickListener {
                                         progress_wheel.stopSpinning()
                                         productRateList = response.product_rate_list
                                         AppUtils.saveSharedPreferencesProductRateList(mContext, productRateList!!)
-
+                                        println("order_type_list_fragment - getProductRateListApi  begin"+AppUtils.getCurrentDateTime());
                                         if (Pref.isShowAllProduct) {
                                             productList = AppDatabase.getDBInstance()?.productListDao()?.getAll() as ArrayList<ProductListEntity>?
                                             setProductAdapter(productList!!)
@@ -406,6 +407,7 @@ class OrderTypeListFragment : BaseFragment(), View.OnClickListener {
 
         //AppUtils.isShowAllProduct = true
         if (Pref.isShowAllProduct) {
+
             tv_select_all.visibility = View.VISIBLE
 
             /*if (Pref.isRateNotEditable && (list == null || list.size == 0))
@@ -434,6 +436,7 @@ class OrderTypeListFragment : BaseFragment(), View.OnClickListener {
 
 
         } else {
+            println("order_type_list_fragment - checkToShowAllProducts isShowAllProduct false"+AppUtils.getCurrentDateTime());
             tv_select_all.visibility = View.GONE
 
             /*if (Pref.isRateNotEditable && (list == null || list.size == 0))

@@ -1940,6 +1940,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }else{
                 addTravelAllowenceTV.visibility = View.VISIBLE
             }
+            addTravelAllowenceTV.visibility = View.VISIBLE
 
         } else {
             addTravelAllowenceTV.visibility = View.GONE
