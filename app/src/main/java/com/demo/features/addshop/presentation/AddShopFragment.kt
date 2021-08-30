@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import com.google.android.material.textfield.TextInputLayout
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
@@ -27,6 +28,7 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -1196,7 +1198,13 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         })
         )
     }
-
+    private fun voiceAttendanceMsg(msg: String) {
+        if (Pref.isVoiceEnabledForAttendanceSubmit) {
+            val speechStatus = (mContext as DashboardActivity).textToSpeech.speak(msg, TextToSpeech.QUEUE_FLUSH, null)
+            if (speechStatus == TextToSpeech.ERROR)
+                Log.e("Add Day Start", "TTS error in converting Text to Speech!");
+        }
+    }
 
     private fun addShopApi(addShop: AddShopRequestData, shop_imgPath: String?, doc_degree: String?) {
 //        if (!AppUtils.isOnline(mContext)){
@@ -1290,6 +1298,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 //                                (mContext as DashboardActivity).showSnackMessage("SUCCESS")
                                     (mContext as DashboardActivity).updateFence()
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
+
+                                    voiceAttendanceMsg("Data Added successfully.")
                                     //(mContext as DashboardActivity).onBackPressed()
 
                                     // force off for ITC 25-08-2021
