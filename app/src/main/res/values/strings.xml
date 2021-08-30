@@ -1465,6 +1465,6 @@
     <string name="day_end" translatable="false">Day End</string>
     <string name="Stop" translatable="false">STOP</string>
     <string name="Start" translatable="false">START</string>
-    <string name="dd_visit" translatable="false">Distributor Visit</string>
+    <string name="dd_visit" translatable="false">Point Visit</string>
 
 </resources>
