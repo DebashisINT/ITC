@@ -681,7 +681,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
                             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                            dialogHeader.text = "Please visit Distributor at once..."
+                            dialogHeader.text = "Please visit Point at once..."
                             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                             dialogYes.setOnClickListener({ view ->
                                 simpleDialog.cancel()
@@ -740,7 +740,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
                         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
                         dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                        dialogHeader.text = "Wish to Visit Distributor Location Right Now?"
+                        dialogHeader.text = "Wish to Visit Point Location Right Now?"
                         val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
                         val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
                         dialogYes.setOnClickListener({ view ->
@@ -4475,7 +4475,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-            dialogHeader.text = "No nearby Shop/Distributor found..."
+            dialogHeader.text = "No nearby Shop/Point found..."
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
@@ -4705,7 +4705,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-            dialogHeader.text = "No nearby Shop/Distributor found..."
+            dialogHeader.text = "No nearby Shop/Point found..."
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
@@ -5251,7 +5251,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
             //dialogHeader.text = "Distributor Visited..."
-            dialogHeader.text = "Thanks! Distributor visited Successfully."
+            dialogHeader.text = "Thanks! Point visited Successfully."
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
@@ -5276,7 +5276,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-            dialogHeader.text = "No nearby Shop/Distributor found..."
+            dialogHeader.text = "No nearby Shop/Point found..."
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
