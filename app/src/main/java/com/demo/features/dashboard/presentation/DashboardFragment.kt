@@ -5258,7 +5258,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             })
             simpleDialog.show()
 //            (mContext as DashboardActivity).showSnackMessage("Distributor Visited")
-            voiceAttendanceMsg("Distributor Visited")
+            voiceAttendanceMsg("Point Visited")
 //            ddDay(finalNearByShop, finalNearByDD, location, false)
         } /*else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
 //            ddDay(finalNearByShop, finalNearByDD, location, true)
