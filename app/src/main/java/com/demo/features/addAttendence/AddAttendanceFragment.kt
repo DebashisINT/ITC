@@ -1000,6 +1000,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                         if(AppUtils.getSharedPreferencesIsFaceDetectionWithCaptcha(mContext)){
                             captchaCheck()
                         }else{
+                            //31-08-2021
+                            BaseActivity.isApiInitiated=true
+
                             prepareAddAttendanceInputParams()
                         }
                     }
@@ -2272,6 +2275,8 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
 
     fun getPicUrl(){
+        //31-08-2021
+        BaseActivity.isApiInitiated=false
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
                 repository.getUserFacePicUrlApi(Pref.user_id!!,Pref.session_token!!)
@@ -2356,7 +2361,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     }
 
     private fun registerFace(mBitmap: Bitmap?) {
-        BaseActivity.isApiInitiated=false
+        //BaseActivity.isApiInitiated=false
         println("reg_face - add_attendance_registerFace"+AppUtils.getCurrentDateTime());
         try {
             if (mBitmap == null) {
