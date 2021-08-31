@@ -5234,8 +5234,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             assignToDD.type_id = list[i].type_id
                                             assignToDD.dd_latitude = list[i].dd_latitude
                                             assignToDD.dd_longitude = list[i].dd_longitude
-//                                            assignToDD.dd_latitude ="22.43514951884748"
-//                                            assignToDD.dd_longitude = "88.431546110307"
 
                                             AppDatabase.getDBInstance()?.ddListDao()?.insert(assignToDD)
                                         }
