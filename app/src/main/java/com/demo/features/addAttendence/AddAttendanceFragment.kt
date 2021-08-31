@@ -2289,6 +2289,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
                                 //var bitmap :Bitmap? = null
                                 //registerFace(bitmap);
+                                println("reg_face - GetImageFromUrl called"+AppUtils.getCurrentDateTime());
                                 GetImageFromUrl().execute(CustomStatic.FaceUrl)
 
                                 XLog.d(" AddAttendanceFragment : FaceRegistration/FaceMatch" +response.status.toString() +", : "  + ", Success: ")
@@ -2355,6 +2356,8 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     }
 
     private fun registerFace(mBitmap: Bitmap?) {
+        BaseActivity.isApiInitiated=false
+        println("reg_face - add_attendance_registerFace"+AppUtils.getCurrentDateTime());
         try {
             if (mBitmap == null) {
                 //Toast.makeText(this, "No File", Toast.LENGTH_SHORT).show()
@@ -2369,12 +2372,14 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             faceBmp = Bitmap.createBitmap(TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, Bitmap.Config.ARGB_8888)
             faceDetector?.process(image)?.addOnSuccessListener(OnSuccessListener<List<Face>> { faces ->
                 if (faces.size == 0) {
+                    println("reg_face - add_attendance_registerFace no face detected"+AppUtils.getCurrentDateTime());
                     return@OnSuccessListener
                 }
                 Handler().post {
                     object : Thread() {
                         override fun run() {
                             //action
+                            println("reg_face - add_attendance_registerFace face detected"+AppUtils.getCurrentDateTime());
                             onFacesDetected(1, faces, true) //no need to add currtime
                         }
                     }.start()
@@ -2579,6 +2584,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
         override fun onPostExecute(result: Bitmap?) {
             super.onPostExecute(result)
+            println("reg_face - registerFace called"+AppUtils.getCurrentDateTime());
             registerFace(result)
         }
 
