@@ -82,6 +82,11 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
                 //                listener.mapClick(adapterPosition)
             })
 
+            if(Pref.isOrderShow==false){
+                itemView.add_order_ll.visibility=View.GONE
+                itemView.direction_view.visibility=View.GONE
+            }
+
             itemView.add_order_ll.findViewById<LinearLayout>(R.id.add_order_ll).setOnClickListener {
                 listener.onOrderClick(list[adapterPosition])
             }
