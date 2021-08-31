@@ -1963,17 +1963,31 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                 }
             }*/
 
-            val locationList = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationUpdateForADay(AppUtils.getCurrentDateForShopActi())
-
+            var locationList = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationUpdateForADay(AppUtils.getCurrentDateForShopActi())
 
             //val distance = LocationWizard.getDistance(shop.shopLat, shop.shopLong, location.latitude, location.longitude)
 
             val userlocation = UserLocationDataEntity()
             userlocation.latitude = shop.shopLat.toString()
             userlocation.longitude = shop.shopLong.toString()
-            val loc_distance = LocationWizard.getDistance(locationList[locationList.size - 1].latitude.toDouble(), locationList[locationList.size - 1].longitude.toDouble(),
+
+            var loc_distance = 0.0
+            var finalDistance = ""
+
+            try{
+                 loc_distance = LocationWizard.getDistance(locationList[locationList.size - 1].latitude.toDouble(), locationList[locationList.size - 1].longitude.toDouble(),
+                        userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
+                 finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
+            }catch (ex:Exception){
+                ex.printStackTrace()
+                loc_distance=0.0
+                finalDistance="0.0"
+            }
+
+        /*    val loc_distance = LocationWizard.getDistance(locationList[locationList.size - 1].latitude.toDouble(), locationList[locationList.size - 1].longitude.toDouble(),
                     userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
-            val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
+            val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()*/
+
 
             XLog.e("===Distance (At new shop visit time)===")
             XLog.e("Temp Distance====> " + Pref.tempDistance)
