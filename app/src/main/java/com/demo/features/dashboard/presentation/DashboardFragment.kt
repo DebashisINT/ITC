@@ -644,7 +644,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 } else {
                     //Pref.IsDDvistedOnceByDay=true
                     if (Pref.DayStartMarked) {
-                        if (Pref.IsDDvistedOnceByDay) {
+//                        if (Pref.IsDDvistedOnceByDay) {// 1-09-21  end date time , point visit not checking
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -672,7 +672,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 simpleDialog.cancel()
                             })
                             simpleDialog.show()
-                        } else {
+//                        }
+                       /* else {
                             // 27-08-21 For ITC
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
@@ -687,8 +688,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 simpleDialog.cancel()
                             })
                             simpleDialog.show()
-//                            (mContext as DashboardActivity).showSnackMessage("Please visit Distributor at once...")
-                        }
+                        }*/
 
                     } else {
                         // 27-08-21 For ITC

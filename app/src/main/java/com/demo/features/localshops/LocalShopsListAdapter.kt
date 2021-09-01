@@ -140,7 +140,8 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
 
             itemView.tv_shop_contact_no.text = list[adapterPosition].ownerContactNumber
 
-            if (!TextUtils.isEmpty(list[adapterPosition].assigned_to_dd_id)) {
+            //1-9-21 ITC DD Pref Hide
+        /*    if (!TextUtils.isEmpty(list[adapterPosition].assigned_to_dd_id)) {
                 itemView.rl_dd.visibility = View.VISIBLE
                 itemView.tv_pp_dd_header.text = context.getString(R.string.dist)
 
@@ -164,9 +165,9 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
 
             } else {
                 itemView.rl_dd.visibility = View.GONE
-            }
+            }*/
 
-            try {
+          /*  try {
                 val orderList = AppDatabase.getDBInstance()!!.orderDetailsListDao().getListAccordingToShopId(list[adapterPosition].shop_id) as ArrayList<OrderDetailsListEntity>
 
                 if (orderList != null && orderList.isNotEmpty()) {
@@ -184,7 +185,7 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
             } catch (e: Exception) {
                 e.printStackTrace()
                 itemView.order_RL.visibility = View.GONE
-            }
+            }*/
 
             itemView.call_ll.setOnClickListener {
                 listener.onCallClick(list[adapterPosition])
@@ -235,14 +236,14 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
                 itemView.tv_entity_value.text = entity?.name
             }
             else
-                itemView.tv_entity_value.text = "N.A."
+                itemView.tv_entity_value.text = ""
 
             if (!TextUtils.isEmpty(list[adapterPosition].party_status_id)) {
                 val partyStatus = AppDatabase.getDBInstance()?.partyStatusDao()?.getSingleItem(list[adapterPosition].party_status_id)
                 itemView.tv_party_value.text = partyStatus?.name
             }
             else
-                itemView.tv_party_value.text = "N.A."
+                itemView.tv_party_value.text = ""
         }
     }
 
