@@ -1365,7 +1365,9 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                         AppDatabase.getDBInstance()!!.shopActivityDao().deleteShopByIdAndDate(addShop.shop_id!!, AppUtils.getCurrentDateForShopActi())
                                     }
                                     (mContext as DashboardActivity).onBackPressed()
-                                    (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
+                                    //01-09-2021
+                                    (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
+                                    //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 } else {
                                     progress_wheel.stopSpinning()
                                     XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
@@ -1373,7 +1375,10 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 //                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
                                     (mContext as DashboardActivity).onBackPressed()
                                     //(mContext as DashboardActivity).loadFragment(FragType.NearByShopsListFragment, false, "")
-                                    (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
+
+                                    //01-09-2021
+                                    (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
+                                    //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 }
                                 BaseActivity.isApiInitiated = false
 //                            isApiCall=true
@@ -1391,8 +1396,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
                                 (mContext as DashboardActivity).onBackPressed()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
+                                voiceAttendanceMsg("Data Added successfully.")
                                 //(mContext as DashboardActivity).loadFragment(FragType.NearByShopsListFragment, false, "")
-                                (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
+                                //01-09-2021
+                                (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
+                                //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 if (error != null) {
                                     XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", ERROR: " + error.localizedMessage)
                                 }
@@ -1416,7 +1424,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                     (mContext as DashboardActivity).updateFence()
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
                                     //(mContext as DashboardActivity).onBackPressed()
-
+                                    //01-09-2021
+                                    voiceAttendanceMsg("Data Added successfully.")
                                     // force off for ITC 25-08-2021
                                      /*   if(imagePathCompetitor!=null){
                                             addShopCompetetorImg(addShop.session_token,addShop.shop_id!!,Pref.user_id!!,imagePathCompetitor)
@@ -1442,7 +1451,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                         AppDatabase.getDBInstance()!!.shopActivityDao().deleteShopByIdAndDate(addShop.shop_id!!, AppUtils.getCurrentDateForShopActi())
                                     }
                                     (mContext as DashboardActivity).onBackPressed()
-                                    (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
+
+                                    //01-09-2021
+                                    (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
+
+                                    //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 } else {
                                     progress_wheel.stopSpinning()
                                     XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
@@ -1450,7 +1463,9 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 //                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
                                     (mContext as DashboardActivity).onBackPressed()
                                     //(mContext as DashboardActivity).loadFragment(FragType.NearByShopsListFragment, false, "")
-                                    (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
+                                    //01-09-2021
+                                    (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
+                                    //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 }
                                 BaseActivity.isApiInitiated = false
 //                            isApiCall=true
@@ -1469,7 +1484,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                 (mContext as DashboardActivity).onBackPressed()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
                                 //(mContext as DashboardActivity).loadFragment(FragType.NearByShopsListFragment, false, "")
-                                (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
+                                //01-09-2021
+                                 voiceAttendanceMsg("Data Added successfully.")
+                                //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
+                                //01-09-2021
+                                (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
                                 if (error != null) {
                                     XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", ERROR: " + error.localizedMessage)
                                 }
