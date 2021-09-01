@@ -2520,6 +2520,32 @@ class AppUtils {
             }
         }
 
+        fun getRandomNumber(digit:Int):String{
+            val rnd = Random()
+            var number =  0
+            if(digit==1){
+                number = rnd.nextInt(9)
+                return String.format("%01d", number)
+            }
+            if(digit==2){
+                number = rnd.nextInt(99)
+                return String.format("%02d", number)
+            }
+            if(digit==3){
+                number = rnd.nextInt(999)
+                return String.format("%03d", number)
+            }
+            if(digit==4){
+                number = rnd.nextInt(9999)
+                return String.format("%04d", number)
+            }
+            if(digit==5){
+                number = rnd.nextInt(99999)
+                return String.format("%05d", number)
+            }
+            return ""
+        }
+
         /*fun getDurationFromOnlineVideoLink(link: String) : String {
             val retriever = MediaMetadataRetriever()
             retriever.setDataSource(link, HashMap<String, String>())

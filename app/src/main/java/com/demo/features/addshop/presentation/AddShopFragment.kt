@@ -251,6 +251,15 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
     var finalUniqKey:String ? = null
 
+    //01-09-2021
+    private lateinit var customer_name_EDT: AppCustomTextView
+    private lateinit var rl_shop_name_root: RelativeLayout
+    private lateinit var rl_address_root: RelativeLayout
+    private lateinit var rl_pincode_root: RelativeLayout
+    private lateinit var rl_owner_contact_root: RelativeLayout
+    private var randTen:String=""
+
+
     private val mTess: TessOCR by lazy {
         TessOCR(mContext)
     }
@@ -585,6 +594,34 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         assign_to_shop_rl = view.findViewById(R.id.assign_to_shop_rl)
         assign_to_shop_tv = view.findViewById(R.id.assign_to_shop_tv)
 
+        //01-09-2021
+        customer_name_EDT = view.findViewById(R.id.customer_name_EDT)
+        rl_shop_name_root = view.findViewById(R.id.rl_shop_name_root)
+        rl_address_root = view.findViewById(R.id.rl_address_root)
+        rl_pincode_root = view.findViewById(R.id.rl_pincode_root)
+        rl_owner_contact_root = view.findViewById(R.id.rl_owner_contact_root)
+        rl_shop_name_root.visibility=View.GONE
+        rl_address_root.visibility=View.GONE
+        rl_pincode_root.visibility=View.GONE
+        rl_owner_contact_root.visibility=View.GONE
+
+
+        randTen=Pref.user_id+AppUtils.getRandomNumber(5).toString()
+        customer_name_EDT.text=randTen
+        try{
+            val assigDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
+            if (assigDDList != null || assigDDList!!.size>0){
+                var dis_id=assigDDList.get(0).dd_id
+                shop_name_EDT.setText(dis_id.toString()+"_"+randTen)
+                ownerNumber.setText(randTen)
+            }
+        }catch (ex:java.lang.Exception){ex.printStackTrace()}
+
+
+
+
+
+
         assign_to_shop_tv.hint = getString(R.string.assign_to_hint_text) + " ${Pref.shopText}"
 
         if (Pref.isShowBeatGroup)
@@ -616,7 +653,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             type_TV.text = typeList[0].shoptype_name
             addShopData.type = typeList[0].shoptype_id
             shop_name_TL.hint = Pref.shopText + " name"
-        } else {
+        }
+        else {
             type_TV.text = ""
             addShopData.type = ""
         }
@@ -638,7 +676,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             rl_select_retailer.visibility = View.GONE
             rl_select_dealer.visibility = View.GONE
             assign_to_shop_rl.visibility = View.GONE
-        } else {
+        }
+        else {
             ll_customer_view.visibility = View.GONE
             //rl_owner_name_main.visibility = View.VISIBLE  // force off for ITC 25-08-2021
 
@@ -905,7 +944,6 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                 }
             }
         }
-
 
         /*if (Pref.isReplaceShopText)
             shop_name_TL.hint = getString(R.string.customer_name)
@@ -4481,6 +4519,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         shopDataModel.timeStamp = System.currentTimeMillis().toString()
         shopDataModel.totalVisitCount = "1"
         shopDataModel.shop_id = Pref.user_id + "_" + System.currentTimeMillis().toString()
+
         shopDataModel.user_id = Pref.user_id
         shopDataModel.lastVisitedDate = AppUtils.getCurrentDateChanged()
 //        shopDataModel.lastVisitedDate
