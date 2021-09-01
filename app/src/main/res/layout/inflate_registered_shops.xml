@@ -127,6 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/sync_RL"
+                        android:visibility="invisible"
                         android:layout_marginBottom="@dimen/_3sdp"
                         android:text="@string/address_txt"
                         android:textColor="@color/light_gray"
@@ -143,18 +144,21 @@
                         android:layout_below="@id/myshop_address_TV"
                         android:gravity="center_vertical"
                         android:drawablePadding="@dimen/_5sdp"
+                        android:visibility="invisible"
                         android:drawableLeft="@drawable/ic_registered_shop_call_select"/>
 
                 </RelativeLayout>
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/ll_shop_typeRL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/_10sdp">
 
                 <LinearLayout
                     android:id="@+id/ll_shop_type"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -269,6 +273,7 @@
 
                 <RelativeLayout
                     android:id="@+id/total_visited_RL"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rl_party_status">
@@ -300,6 +305,7 @@
 
                 <RelativeLayout
                     android:id="@+id/last_visited_RL"
+                    android:visibility="invisible"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ll_shop_type"
@@ -334,6 +340,7 @@
 
                 <LinearLayout
                     android:id="@+id/ll_last_visit_age"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/total_visited_RL"
@@ -359,6 +366,7 @@
 
                 <LinearLayout
                     android:id="@+id/ll_average_visit_time"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/ll_last_visit_age"
@@ -384,6 +392,7 @@
 
                 <LinearLayout
                     android:id="@+id/ll_distance"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/ll_average_visit_time"
@@ -854,6 +863,7 @@
 
                     <LinearLayout
                         android:id="@+id/call_ll"
+                        android:visibility="invisible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -879,6 +889,7 @@
 
                     <View
                         android:id="@+id/call_view"
+                        android:visibility="gone"
                         android:layout_width="@dimen/_1sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_marginLeft="@dimen/_5sdp"

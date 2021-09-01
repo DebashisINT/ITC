@@ -140,14 +140,14 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                         listener.syncClick(adapterPosition)
                     })
                 }
-
+//1-9-21 ITC hide
                 val shopType = AppDatabase.getDBInstance()?.shopTypeDao()?.getSingleType(list[adapterPosition].type)
 
-                if (shopType != null && !TextUtils.isEmpty(shopType.shoptype_name)) {
+             /*   if (shopType != null && !TextUtils.isEmpty(shopType.shoptype_name)) {
                     itemView.tv_type.text = shopType.shoptype_name
                     itemView.ll_shop_type.visibility = View.VISIBLE
                 } else
-                    itemView.ll_shop_type.visibility = View.GONE
+                    itemView.ll_shop_type.visibility = View.GONE*/
 
                 if(Pref.isCollectioninMenuShow) {
                     itemView.ll_collection.visibility = View.VISIBLE
@@ -200,15 +200,15 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                     itemView.call_tv.setTextColor(context.resources.getColor(R.color.login_txt_color))
                     itemView.call_iv.setImageResource(R.drawable.ic_registered_shop_call_deselect)
                 }
-
+//1-9-21 Hide ITC order
                 val orderList = AppDatabase.getDBInstance()!!.orderDetailsListDao().getListAccordingToShopId(list[adapterPosition].shop_id) as ArrayList<OrderDetailsListEntity>
-                if (orderList != null && orderList.isNotEmpty()) {
-                    /*itemView.order_amount_tv.visibility = View.VISIBLE
+                /*if (orderList != null && orderList.isNotEmpty()) {
+                    *//*itemView.order_amount_tv.visibility = View.VISIBLE
                     itemView.highest_order_amount_tv.visibility = View.VISIBLE
                     itemView.avg_order_amount_tv.visibility = View.VISIBLE
                     itemView.lowest_order_amount_tv.visibility = View.VISIBLE
                     itemView.high_value_month_tv.visibility = View.VISIBLE
-                    itemView.low_value_month_tv.visibility = View.VISIBLE*/
+                    itemView.low_value_month_tv.visibility = View.VISIBLE*//*
 
                     val amountList = ArrayList<Double>()
                     var amount = 0.0
@@ -351,12 +351,12 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                     builder.append(str12)
                     itemView.low_value_month_tv.setText(builder, TextView.BufferType.SPANNABLE)
                 } else {
-                    /*itemView.order_amount_tv.visibility = View.GONE
+                    *//*itemView.order_amount_tv.visibility = View.GONE
                     itemView.highest_order_amount_tv.visibility = View.GONE
                     itemView.avg_order_amount_tv.visibility = View.GONE
                     itemView.lowest_order_amount_tv.visibility = View.GONE
                     itemView.high_value_month_tv.visibility = View.GONE
-                    itemView.low_value_month_tv.visibility = View.GONE*/
+                    itemView.low_value_month_tv.visibility = View.GONE*//*
 
                     val builder = SpannableStringBuilder()
 
@@ -412,7 +412,7 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                     str12.setSpan(ForegroundColorSpan(Color.BLACK), 0, str12.length, 0)
                     builder.append(str12)
                     itemView.low_value_month_tv.setText(builder, TextView.BufferType.SPANNABLE)
-                }
+                }*/
 
                 if (Pref.willStockShow) {
                     if (Pref.isStockAvailableForAll) {
@@ -693,6 +693,20 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 itemView.update_bank_details_TV.setOnClickListener{
                     listener.onUpdateBankDetailsClick(adapterPosition)
                 }
+
+
+                //01-09-2021
+                itemView.ll_shop_typeRL.visibility = View.GONE
+                itemView.highest_order_amount_tv.visibility = View.GONE
+                itemView.avg_order_amount_tv.visibility = View.GONE
+                itemView.lowest_order_amount_tv.visibility = View.GONE
+                itemView.high_value_month_tv.visibility = View.GONE
+                itemView.low_value_month_tv.visibility = View.GONE
+                itemView.ll_shop_code.visibility = View.GONE
+                itemView.next_visit_date_RL.visibility = View.GONE
+                itemView.ll_stage.visibility = View.GONE
+                itemView.update_stage_TV.visibility = View.GONE
+                itemView.update_party_status_TV.visibility = View.GONE
 
             } catch (e: Exception) {
                 e.printStackTrace()
