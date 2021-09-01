@@ -707,6 +707,10 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 itemView.ll_stage.visibility = View.GONE
                 itemView.update_stage_TV.visibility = View.GONE
                 itemView.update_party_status_TV.visibility = View.GONE
+                itemView.update_bank_details_TV.visibility = View.GONE
+
+
+
 
             } catch (e: Exception) {
                 e.printStackTrace()
