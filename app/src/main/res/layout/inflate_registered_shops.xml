@@ -72,7 +72,9 @@
                             android:textColor="@color/login_txt_color"
                             android:textSize="@dimen/_14sdp"
                             android:layout_below="@+id/sync_icon"
-                            android:layout_marginTop="@dimen/_3sdp"/>
+                            android:layout_marginTop="@dimen/_3sdp"
+                           />
+<!--                        android:layout_marginTop="@dimen/_3sdp"-->
 
                         <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/iv_create_qr"
@@ -127,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/sync_RL"
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         android:layout_marginBottom="@dimen/_3sdp"
                         android:text="@string/address_txt"
                         android:textColor="@color/light_gray"
@@ -144,7 +146,7 @@
                         android:layout_below="@id/myshop_address_TV"
                         android:gravity="center_vertical"
                         android:drawablePadding="@dimen/_5sdp"
-                        android:visibility="invisible"
+                        android:visibility="gone"
                         android:drawableLeft="@drawable/ic_registered_shop_call_select"/>
 
                 </RelativeLayout>
@@ -152,6 +154,7 @@
 
             <RelativeLayout
                 android:id="@+id/ll_shop_typeRL"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/_10sdp">
@@ -446,19 +449,21 @@
             </RelativeLayout>
 
             <com.demo.widgets.AppCustomTextView
+                android:visibility="gone"
                 android:id="@+id/highest_order_amount_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginBottom="@dimen/_3sdp"
                 android:layout_marginRight="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:singleLine="true"
                 android:text=""
                 android:textColor="@color/light_gray"
                 android:textSize="@dimen/_11sdp" />
+<!--            android:layout_marginTop="@dimen/_5sdp"-->
 
             <com.demo.widgets.AppCustomTextView
+                android:visibility="gone"
                 android:id="@+id/avg_order_amount_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -472,6 +477,7 @@
                 android:textSize="@dimen/_11sdp" />
 
             <com.demo.widgets.AppCustomTextView
+                android:visibility="gone"
                 android:id="@+id/lowest_order_amount_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -485,6 +491,7 @@
                 android:textSize="@dimen/_11sdp" />
 
             <com.demo.widgets.AppCustomTextView
+                android:visibility="gone"
                 android:id="@+id/high_value_month_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -499,6 +506,7 @@
 
             <com.demo.widgets.AppCustomTextView
                 android:id="@+id/low_value_month_tv"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_10sdp"
@@ -512,6 +520,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_shop_code"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_10sdp"
@@ -539,6 +548,7 @@
             <RelativeLayout
                 android:id="@+id/next_visit_date_RL"
                 android:layout_width="wrap_content"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginLeft="@dimen/_10sdp">
@@ -570,6 +580,7 @@
 
             <LinearLayout
                 android:id="@+id/ll_stage"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_10sdp"
@@ -625,25 +636,330 @@
                 android:text="@string/update_stage"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/_12sdp"
                 android:layout_marginLeft="@dimen/_10sdp"/>
 
-            <com.demo.widgets.AppCustomTextView
-                android:id="@+id/update_address_TV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:paddingBottom="@dimen/_5sdp"
-                android:paddingTop="@dimen/_5sdp"
-                android:singleLine="true"
-                android:text="@string/update_address"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="visible"
-                android:drawableLeft="@drawable/ic_registered_shop_direction_select"
-                android:drawablePadding="@dimen/_5sdp"
-                android:gravity="center_vertical"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="match_parent">
+                <com.demo.widgets.AppCustomTextView
+                    android:id="@+id/update_address_TV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:paddingBottom="@dimen/_5sdp"
+                    android:paddingTop="@dimen/_5sdp"
+                    android:singleLine="true"
+                    android:text="@string/update_address"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/_10sdp"
+                    android:visibility="visible"
+                    android:drawableLeft="@drawable/ic_registered_shop_direction_select"
+                    android:drawablePadding="@dimen/_5sdp"
+                    android:gravity="center_vertical"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/_10sdp">
+
+                    <LinearLayout
+                        android:id="@+id/iconWrapper_rl"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/_7sdp"
+                        android:paddingTop="@dimen/_5sdp">
+
+                        <ImageView
+                            android:id="@+id/tag_iv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@drawable/ic_tag_icon"
+                            android:padding="@dimen/_5sdp"
+                            android:visibility="gone" />
+
+
+                        <View
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:background="@color/popup_window_bar_color"
+                            android:visibility="gone" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_collection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/iv_collection"
+                                android:layout_width="@dimen/_25sdp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/ic_collection_new" />
+
+                            <com.demo.widgets.AppCustomTextView
+                                android:id="@+id/tv_collection"
+                                gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/collection"
+                                android:textColor="@color/login_txt_color"
+                                android:textSize="@dimen/_8sdp" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/collection_view"
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:background="@color/popup_window_bar_color" />
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/iv_activity"
+                                android:layout_width="@dimen/_25sdp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/ic_activity_gray" />
+
+                            <com.demo.widgets.AppCustomTextView
+                                android:id="@+id/tv_activity"
+                                gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/activities"
+                                android:textColor="@color/login_txt_color"
+                                android:textSize="@dimen/_8sdp" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/activity_view"
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:background="@color/popup_window_bar_color" />
+
+
+                        <LinearLayout
+                            android:id="@+id/ll_stock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/iv_stock"
+                                android:layout_width="@dimen/_25sdp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_stock_deselect" />
+
+                            <com.demo.widgets.AppCustomTextView
+                                android:id="@+id/tv_stock"
+                                gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/new_stock"
+                                android:textColor="@color/login_txt_color"
+                                android:textSize="@dimen/_8sdp" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/stock_view"
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:background="@color/popup_window_bar_color" />
+
+                        <LinearLayout
+                            android:id="@+id/call_ll"
+                            android:visibility="invisible"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/call_iv"
+                                android:layout_width="@dimen/_25sdp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_registered_shop_call_deselect" />
+
+                            <com.demo.widgets.AppCustomTextView
+                                android:id="@+id/call_tv"
+                                gravity="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="@string/not_verified"
+                                android:textColor="@color/login_txt_color"
+                                android:textSize="@dimen/_8sdp" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/call_view"
+                            android:visibility="gone"
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:background="@color/popup_window_bar_color" />
+
+                        <LinearLayout
+                            android:id="@+id/direction_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/direction_iv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_registered_shop_direction_deselect" />
+
+                            <com.demo.widgets.AppCustomTextView
+                                android:id="@+id/direction_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:text="@string/address"
+                                android:textColor="@color/login_txt_color"
+                                android:textSize="@dimen/_8sdp" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/direction_view"
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:background="@color/popup_window_bar_color" />
+
+                        <LinearLayout
+                            android:id="@+id/add_order_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/order_iv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_registered_shop_add_order_deselect" />
+
+                            <com.demo.widgets.AppCustomTextView
+                                android:id="@+id/order_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:text="@string/order"
+                                android:textColor="@color/login_txt_color"
+                                android:textSize="@dimen/_8sdp"  />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/order_view"
+                            android:layout_width="@dimen/_1sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:background="@color/popup_window_bar_color" />
+
+                        <LinearLayout
+                            android:id="@+id/add_quot_ll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/quot_iv"
+                                android:layout_width="@dimen/_25sdp"
+                                android:layout_height="@dimen/_25sdp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_quotation" />
+
+                            <com.demo.widgets.AppCustomTextView
+                                android:id="@+id/quot_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:text="@string/quot"
+                                android:textColor="@color/login_txt_color"
+                                android:textSize="@dimen/_8sdp"  />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/shop_IV_flased"
+                        android:layout_width="@dimen/_43sdp"
+                        android:layout_height="0dp"
+                        android:contentDescription="@null"
+                        android:visibility="gone" />
+
+                    <com.demo.widgets.AppCustomTextView
+                        android:id="@+id/marketing_detail_TV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/shop_IV_flased"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="@string/marketing_details"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_11sdp"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+<!--            <com.demo.widgets.AppCustomTextView-->
+<!--                android:id="@+id/update_address_TV"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="@dimen/_10sdp"-->
+<!--                android:paddingBottom="@dimen/_5sdp"-->
+<!--                android:paddingTop="@dimen/_5sdp"-->
+<!--                android:singleLine="true"-->
+<!--                android:text="@string/update_address"-->
+<!--                android:textColor="@color/colorPrimary"-->
+<!--                android:textSize="@dimen/_10sdp"-->
+<!--                android:visibility="visible"-->
+<!--                android:drawableLeft="@drawable/ic_registered_shop_direction_select"-->
+<!--                android:drawablePadding="@dimen/_5sdp"-->
+<!--                android:gravity="center_vertical"/>-->
 
             <com.demo.widgets.AppCustomTextView
                 android:id="@+id/update_party_status_TV"
@@ -656,7 +972,7 @@
                 android:text="@string/update_party_status"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:drawableLeft="@drawable/ic_star"
                 android:drawablePadding="@dimen/_5sdp"
                 android:gravity="center_vertical"/>
@@ -672,7 +988,7 @@
                 android:text="@string/update_bank_details"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_10sdp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:drawableLeft="@drawable/ic_star"
                 android:drawablePadding="@dimen/_5sdp"
                 android:gravity="center_vertical"/>
@@ -726,288 +1042,288 @@
             </RelativeLayout>
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/_10sdp">
+<!--            <RelativeLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingLeft="@dimen/_10sdp">-->
 
-                <LinearLayout
-                    android:id="@+id/iconWrapper_rl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:paddingBottom="@dimen/_7sdp"
-                    android:paddingTop="@dimen/_5sdp">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/iconWrapper_rl"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:layout_marginRight="@dimen/_5sdp"-->
+<!--                    android:gravity="center"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:paddingBottom="@dimen/_7sdp"-->
+<!--                    android:paddingTop="@dimen/_5sdp">-->
 
-                    <ImageView
-                        android:id="@+id/tag_iv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@drawable/ic_tag_icon"
-                        android:padding="@dimen/_5sdp"
-                        android:visibility="gone" />
-
-
-                    <View
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:background="@color/popup_window_bar_color"
-                        android:visibility="gone" />
-
-                    <LinearLayout
-                        android:id="@+id/ll_collection"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/iv_collection"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_collection_new" />
-
-                        <com.demo.widgets.AppCustomTextView
-                            android:id="@+id/tv_collection"
-                            gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="@string/collection"
-                            android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp" />
-                    </LinearLayout>
-
-                    <View
-                        android:id="@+id/collection_view"
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:background="@color/popup_window_bar_color" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/tag_iv"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@drawable/ic_tag_icon"-->
+<!--                        android:padding="@dimen/_5sdp"-->
+<!--                        android:visibility="gone" />-->
 
 
-                    <LinearLayout
-                        android:id="@+id/ll_activity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
+<!--                    <View-->
+<!--                        android:layout_width="@dimen/_1sdp"-->
+<!--                        android:layout_height="@dimen/_20sdp"-->
+<!--                        android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                        android:layout_marginRight="@dimen/_5sdp"-->
+<!--                        android:background="@color/popup_window_bar_color"-->
+<!--                        android:visibility="gone" />-->
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/iv_activity"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            app:srcCompat="@drawable/ic_activity_gray" />
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_collection"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:orientation="vertical">-->
 
-                        <com.demo.widgets.AppCustomTextView
-                            android:id="@+id/tv_activity"
-                            gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="@string/activities"
-                            android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp" />
-                    </LinearLayout>
+<!--                        <androidx.appcompat.widget.AppCompatImageView-->
+<!--                            android:id="@+id/iv_collection"-->
+<!--                            android:layout_width="@dimen/_25sdp"-->
+<!--                            android:layout_height="@dimen/_25sdp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            app:srcCompat="@drawable/ic_collection_new" />-->
 
-                    <View
-                        android:id="@+id/activity_view"
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:background="@color/popup_window_bar_color" />
+<!--                        <com.demo.widgets.AppCustomTextView-->
+<!--                            android:id="@+id/tv_collection"-->
+<!--                            gravity="center"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="@string/collection"-->
+<!--                            android:textColor="@color/login_txt_color"-->
+<!--                            android:textSize="@dimen/_8sdp" />-->
+<!--                    </LinearLayout>-->
+
+<!--                    <View-->
+<!--                        android:id="@+id/collection_view"-->
+<!--                        android:layout_width="@dimen/_1sdp"-->
+<!--                        android:layout_height="@dimen/_20sdp"-->
+<!--                        android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                        android:layout_marginRight="@dimen/_5sdp"-->
+<!--                        android:background="@color/popup_window_bar_color" />-->
 
 
-                    <LinearLayout
-                        android:id="@+id/ll_stock"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_activity"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:orientation="vertical">-->
 
-                        <ImageView
-                            android:id="@+id/iv_stock"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_stock_deselect" />
+<!--                        <androidx.appcompat.widget.AppCompatImageView-->
+<!--                            android:id="@+id/iv_activity"-->
+<!--                            android:layout_width="@dimen/_25sdp"-->
+<!--                            android:layout_height="@dimen/_25sdp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            app:srcCompat="@drawable/ic_activity_gray" />-->
 
-                        <com.demo.widgets.AppCustomTextView
-                            android:id="@+id/tv_stock"
-                            gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="@string/new_stock"
-                            android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp" />
-                    </LinearLayout>
+<!--                        <com.demo.widgets.AppCustomTextView-->
+<!--                            android:id="@+id/tv_activity"-->
+<!--                            gravity="center"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="@string/activities"-->
+<!--                            android:textColor="@color/login_txt_color"-->
+<!--                            android:textSize="@dimen/_8sdp" />-->
+<!--                    </LinearLayout>-->
 
-                    <View
-                        android:id="@+id/stock_view"
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:background="@color/popup_window_bar_color" />
+<!--                    <View-->
+<!--                        android:id="@+id/activity_view"-->
+<!--                        android:layout_width="@dimen/_1sdp"-->
+<!--                        android:layout_height="@dimen/_20sdp"-->
+<!--                        android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                        android:layout_marginRight="@dimen/_5sdp"-->
+<!--                        android:background="@color/popup_window_bar_color" />-->
 
-                    <LinearLayout
-                        android:id="@+id/call_ll"
-                        android:visibility="invisible"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/call_iv"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_registered_shop_call_deselect" />
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/ll_stock"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:orientation="vertical">-->
 
-                        <com.demo.widgets.AppCustomTextView
-                            android:id="@+id/call_tv"
-                            gravity="center"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="@string/not_verified"
-                            android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp" />
-                    </LinearLayout>
+<!--                        <ImageView-->
+<!--                            android:id="@+id/iv_stock"-->
+<!--                            android:layout_width="@dimen/_25sdp"-->
+<!--                            android:layout_height="@dimen/_25sdp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/ic_stock_deselect" />-->
 
-                    <View
-                        android:id="@+id/call_view"
-                        android:visibility="gone"
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:background="@color/popup_window_bar_color" />
+<!--                        <com.demo.widgets.AppCustomTextView-->
+<!--                            android:id="@+id/tv_stock"-->
+<!--                            gravity="center"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="@string/new_stock"-->
+<!--                            android:textColor="@color/login_txt_color"-->
+<!--                            android:textSize="@dimen/_8sdp" />-->
+<!--                    </LinearLayout>-->
 
-                    <LinearLayout
-                        android:id="@+id/direction_ll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
+<!--                    <View-->
+<!--                        android:id="@+id/stock_view"-->
+<!--                        android:layout_width="@dimen/_1sdp"-->
+<!--                        android:layout_height="@dimen/_20sdp"-->
+<!--                        android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                        android:layout_marginRight="@dimen/_5sdp"-->
+<!--                        android:background="@color/popup_window_bar_color" />-->
 
-                        <ImageView
-                            android:id="@+id/direction_iv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_registered_shop_direction_deselect" />
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/call_ll"-->
+<!--                        android:visibility="invisible"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:orientation="vertical">-->
 
-                        <com.demo.widgets.AppCustomTextView
-                            android:id="@+id/direction_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:text="@string/address"
-                            android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp" />
-                    </LinearLayout>
+<!--                        <ImageView-->
+<!--                            android:id="@+id/call_iv"-->
+<!--                            android:layout_width="@dimen/_25sdp"-->
+<!--                            android:layout_height="@dimen/_25sdp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/ic_registered_shop_call_deselect" />-->
 
-                    <View
-                        android:id="@+id/direction_view"
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:background="@color/popup_window_bar_color" />
+<!--                        <com.demo.widgets.AppCustomTextView-->
+<!--                            android:id="@+id/call_tv"-->
+<!--                            gravity="center"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="@string/not_verified"-->
+<!--                            android:textColor="@color/login_txt_color"-->
+<!--                            android:textSize="@dimen/_8sdp" />-->
+<!--                    </LinearLayout>-->
 
-                    <LinearLayout
-                        android:id="@+id/add_order_ll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
+<!--                    <View-->
+<!--                        android:id="@+id/call_view"-->
+<!--                        android:visibility="gone"-->
+<!--                        android:layout_width="@dimen/_1sdp"-->
+<!--                        android:layout_height="@dimen/_20sdp"-->
+<!--                        android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                        android:layout_marginRight="@dimen/_5sdp"-->
+<!--                        android:background="@color/popup_window_bar_color" />-->
 
-                        <ImageView
-                            android:id="@+id/order_iv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_registered_shop_add_order_deselect" />
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/direction_ll"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:orientation="vertical">-->
 
-                        <com.demo.widgets.AppCustomTextView
-                            android:id="@+id/order_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:text="@string/order"
-                            android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp"  />
-                    </LinearLayout>
+<!--                        <ImageView-->
+<!--                            android:id="@+id/direction_iv"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="@dimen/_25sdp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/ic_registered_shop_direction_deselect" />-->
 
-                    <View
-                        android:id="@+id/order_view"
-                        android:layout_width="@dimen/_1sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:background="@color/popup_window_bar_color" />
+<!--                        <com.demo.widgets.AppCustomTextView-->
+<!--                            android:id="@+id/direction_tv"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:gravity="center"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="@string/address"-->
+<!--                            android:textColor="@color/login_txt_color"-->
+<!--                            android:textSize="@dimen/_8sdp" />-->
+<!--                    </LinearLayout>-->
 
-                    <LinearLayout
-                        android:id="@+id/add_quot_ll"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
+<!--                    <View-->
+<!--                        android:id="@+id/direction_view"-->
+<!--                        android:layout_width="@dimen/_1sdp"-->
+<!--                        android:layout_height="@dimen/_20sdp"-->
+<!--                        android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                        android:layout_marginRight="@dimen/_5sdp"-->
+<!--                        android:background="@color/popup_window_bar_color" />-->
 
-                        <ImageView
-                            android:id="@+id/quot_iv"
-                            android:layout_width="@dimen/_25sdp"
-                            android:layout_height="@dimen/_25sdp"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_quotation" />
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/add_order_ll"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:orientation="vertical">-->
 
-                        <com.demo.widgets.AppCustomTextView
-                            android:id="@+id/quot_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:singleLine="true"
-                            android:text="@string/quot"
-                            android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp"  />
-                    </LinearLayout>
-                </LinearLayout>
+<!--                        <ImageView-->
+<!--                            android:id="@+id/order_iv"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="@dimen/_25sdp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/ic_registered_shop_add_order_deselect" />-->
 
-                <ImageView
-                    android:id="@+id/shop_IV_flased"
-                    android:layout_width="@dimen/_43sdp"
-                    android:layout_height="0dp"
-                    android:contentDescription="@null"
-                    android:visibility="gone" />
+<!--                        <com.demo.widgets.AppCustomTextView-->
+<!--                            android:id="@+id/order_tv"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:gravity="center"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="@string/order"-->
+<!--                            android:textColor="@color/login_txt_color"-->
+<!--                            android:textSize="@dimen/_8sdp"  />-->
+<!--                    </LinearLayout>-->
 
-                <com.demo.widgets.AppCustomTextView
-                    android:id="@+id/marketing_detail_TV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/shop_IV_flased"
-                    android:paddingBottom="@dimen/_5sdp"
-                    android:paddingTop="@dimen/_5sdp"
-                    android:singleLine="true"
-                    android:text="@string/marketing_details"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="@dimen/_11sdp"
-                    android:visibility="gone" />
-            </RelativeLayout>
+<!--                    <View-->
+<!--                        android:id="@+id/order_view"-->
+<!--                        android:layout_width="@dimen/_1sdp"-->
+<!--                        android:layout_height="@dimen/_20sdp"-->
+<!--                        android:layout_marginLeft="@dimen/_5sdp"-->
+<!--                        android:layout_marginRight="@dimen/_5sdp"-->
+<!--                        android:background="@color/popup_window_bar_color" />-->
+
+<!--                    <LinearLayout-->
+<!--                        android:id="@+id/add_quot_ll"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:orientation="vertical">-->
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/quot_iv"-->
+<!--                            android:layout_width="@dimen/_25sdp"-->
+<!--                            android:layout_height="@dimen/_25sdp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:src="@drawable/ic_quotation" />-->
+
+<!--                        <com.demo.widgets.AppCustomTextView-->
+<!--                            android:id="@+id/quot_tv"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:gravity="center"-->
+<!--                            android:singleLine="true"-->
+<!--                            android:text="@string/quot"-->
+<!--                            android:textColor="@color/login_txt_color"-->
+<!--                            android:textSize="@dimen/_8sdp"  />-->
+<!--                    </LinearLayout>-->
+<!--                </LinearLayout>-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/shop_IV_flased"-->
+<!--                    android:layout_width="@dimen/_43sdp"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:contentDescription="@null"-->
+<!--                    android:visibility="gone" />-->
+
+<!--                <com.demo.widgets.AppCustomTextView-->
+<!--                    android:id="@+id/marketing_detail_TV"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@id/shop_IV_flased"-->
+<!--                    android:paddingBottom="@dimen/_5sdp"-->
+<!--                    android:paddingTop="@dimen/_5sdp"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:text="@string/marketing_details"-->
+<!--                    android:textColor="@color/colorPrimary"-->
+<!--                    android:textSize="@dimen/_11sdp"-->
+<!--                    android:visibility="gone" />-->
+<!--            </RelativeLayout>-->
 
             <ImageView
                 android:id="@+id/menu_IV"
