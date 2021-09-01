@@ -84,6 +84,7 @@ import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_add_attendence.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.uiThread
@@ -171,6 +172,12 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     private var fromLong = ""
     private var toLat = ""
     private var toLong = ""
+
+    //01-09-2021
+    private lateinit var cv_work_type_root: CardView
+    private lateinit var cv_remarks_root: CardView
+    private lateinit var cv_mark_attendance_root: CardView
+
 
     private val addAttendenceModel: AddAttendenceInpuModel by lazy {
         AddAttendenceInpuModel()
@@ -323,6 +330,11 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             ll_on_leave.visibility=View.GONE
         }
 
+
+        //01-09-2021
+        cv_work_type_root = view.findViewById(R.id.cv_work_type_root)
+        cv_remarks_root = view.findViewById(R.id.cv_remarks_root)
+        cv_mark_attendance_root = view.findViewById(R.id.cv_mark_attendance_root)
 
         faceDetectorSetUp()
     }
@@ -1287,6 +1299,8 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         when (view?.id) {
             R.id.tv_attendance_submit -> {
                 AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
+                //01-09-2021
+                workTypeId="9"
                 if(Pref.IsShowDayStart){
                     getLocforStart()
                 }
@@ -1364,6 +1378,18 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                         tv_attendance_submit.text = Pref.updateDayPlanText
                     else
                         tv_attendance_submit.text = getString(R.string.submit_button_text)
+
+                    //01-09-2021
+                    cv_work_type_root.visibility= View.GONE
+                    cv_dd_field.visibility = View.GONE
+                    cv_route.visibility = View.GONE
+                    cv_dd_field.visibility = View.GONE
+                    cv_visit_plan.visibility = View.GONE
+                    cv_distance.visibility = View.GONE
+                    cv_todays_target.visibility = View.GONE
+                    cv_remarks_root.visibility = View.GONE
+                    //cv_mark_attendance_root.visibility = View.GONE
+
 
                     //fab_add_work_type.visibility = View.VISIBLE
                 }
