@@ -109,7 +109,7 @@
                     android:layout_centerVertical="true"
                     android:contentDescription="@null"
                     android:visibility="visible"
-                    android:layout_marginBottom="@dimen/_5sdp"/>
+                    android:layout_marginBottom="@dimen/_9sdp"/>
 
                 <RelativeLayout
                     android:id="@+id/shop_details_rl"
@@ -122,7 +122,8 @@
                     <RelativeLayout
                         android:id="@+id/sync_RL"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp">
 
                         <com.demo.widgets.AppCustomTextView
                             android:id="@+id/myshop_name_TV"
