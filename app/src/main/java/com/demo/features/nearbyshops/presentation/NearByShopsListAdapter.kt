@@ -140,7 +140,7 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                         listener.syncClick(adapterPosition)
                     })
                 }
-//1-9-21 ITC hide
+//01-09-2021 ITC hide
                 val shopType = AppDatabase.getDBInstance()?.shopTypeDao()?.getSingleType(list[adapterPosition].type)
 
              /*   if (shopType != null && !TextUtils.isEmpty(shopType.shoptype_name)) {
@@ -200,7 +200,7 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                     itemView.call_tv.setTextColor(context.resources.getColor(R.color.login_txt_color))
                     itemView.call_iv.setImageResource(R.drawable.ic_registered_shop_call_deselect)
                 }
-//1-9-21 Hide ITC order
+//01-09-2021 Hide ITC order
                 val orderList = AppDatabase.getDBInstance()!!.orderDetailsListDao().getListAccordingToShopId(list[adapterPosition].shop_id) as ArrayList<OrderDetailsListEntity>
                 /*if (orderList != null && orderList.isNotEmpty()) {
                     *//*itemView.order_amount_tv.visibility = View.VISIBLE

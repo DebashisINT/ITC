@@ -644,7 +644,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 } else {
                     //Pref.IsDDvistedOnceByDay=true
                     if (Pref.DayStartMarked) {
-//                        if (Pref.IsDDvistedOnceByDay) {// 1-09-21  end date time , point visit not checking
+//                        if (Pref.IsDDvistedOnceByDay) {// 01-09-2021  end date time , point visit not checking
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

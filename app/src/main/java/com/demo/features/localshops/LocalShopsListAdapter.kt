@@ -140,7 +140,7 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
 
             itemView.tv_shop_contact_no.text = list[adapterPosition].ownerContactNumber
 
-            //1-9-21 ITC DD Pref Hide
+            //01-09-2021 ITC DD Pref Hide
         /*    if (!TextUtils.isEmpty(list[adapterPosition].assigned_to_dd_id)) {
                 itemView.rl_dd.visibility = View.VISIBLE
                 itemView.tv_pp_dd_header.text = context.getString(R.string.dist)
