@@ -13,10 +13,10 @@
             android:id="@+id/shop_list_LL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_2sdp"
             android:layout_marginLeft="@dimen/_5sdp"
-            android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
             android:background="@drawable/nearby_shop_list_bg"
             android:orientation="vertical">
 
@@ -60,8 +60,8 @@
                     android:id="@+id/approx_distance_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:padding="@dimen/_5sdp"
                     android:text="@string/approx_distance"
@@ -73,12 +73,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/approx_distance_header"
                     android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_toRightOf="@+id/approx_distance_header"
                     android:text="50 mtr"
                     android:textColor="@color/navy_blue_dot"
                     android:textSize="@dimen/_11sdp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -87,9 +87,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:paddingBottom="@dimen/_5sdp"
                 android:paddingLeft="@dimen/_10sdp"
-                android:paddingRight="@dimen/_10sdp">
+                android:paddingRight="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_5sdp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/shop_image_IV"
@@ -144,7 +144,8 @@
                         android:singleLine="true"
                         android:text="@string/address_txt"
                         android:textColor="@color/light_gray"
-                        android:textSize="@dimen/_11sdp" />
+                        android:textSize="@dimen/_11sdp"
+                        android:visibility="invisible" />
 
                     <com.demo.widgets.AppCustomTextView
                         android:id="@+id/tv_shop_contact_no"
@@ -157,7 +158,8 @@
                         android:text=""
                         android:textColor="@color/light_gray"
                         android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="invisible" />
                 </RelativeLayout>
             </RelativeLayout>
 
@@ -166,7 +168,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_7sdp"
-                android:paddingTop="@dimen/_5sdp">
+                android:paddingTop="@dimen/_5sdp"
+                android:visibility="gone">
 
                 <com.demo.widgets.AppCustomTextView
                     android:id="@+id/tv_pp_dd_header"
@@ -197,7 +200,8 @@
                 android:id="@+id/rl_entity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_7sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginStart="@dimen/_7sdp"
                 android:paddingTop="@dimen/_5sdp">
 
                 <com.demo.widgets.AppCustomTextView
@@ -299,6 +303,7 @@
 
                 <RelativeLayout
                     android:id="@+id/order_RL"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/shop_IV_flase"
@@ -321,8 +326,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="@dimen/_2sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
                         android:layout_toRightOf="@id/order_amt_TV"
                         android:singleLine="true"
                         android:text="@string/zero_order_in_value"
@@ -337,7 +342,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/order_RL"
-                    android:paddingTop="@dimen/_5sdp">
+                    android:paddingTop="@dimen/_5sdp"
+                    android:visibility="gone">
 
                     <com.demo.widgets.AppCustomTextView
                         android:id="@+id/total_v_TV"
@@ -382,11 +388,12 @@
                     android:layout_marginRight="@dimen/_5sdp"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:paddingBottom="@dimen/_7sdp"
-                    android:paddingTop="@dimen/_5sdp">
+                    android:paddingTop="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_7sdp">
 
                     <LinearLayout
                         android:id="@+id/call_ll"
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -416,6 +423,7 @@
                         android:layout_height="@dimen/_20sdp"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginRight="@dimen/_5sdp"
+                        android:visibility="gone"
                         android:background="@color/popup_window_bar_color" />
 
                     <LinearLayout
@@ -473,7 +481,7 @@
                             android:singleLine="true"
                             android:text="@string/order"
                             android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp"  />
+                            android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
 
                     <View
@@ -506,7 +514,7 @@
                             android:singleLine="true"
                             android:text="@string/quot"
                             android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_8sdp"  />
+                            android:textSize="@dimen/_8sdp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -523,9 +531,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/shop_IV_flased"
-
-
-                    >
+                    android:visibility="gone">
 
                     <com.demo.widgets.AppCustomTextView
                         android:id="@+id/last_visited_TV"
