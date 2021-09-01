@@ -40,16 +40,17 @@
                     android:contentDescription="@null"
                     android:padding="@dimen/_10sdp"
                     android:src="@drawable/ic_logo"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:id="@+id/shop_IV"
-                    android:layout_width="@dimen/_43sdp"
-                    android:layout_height="@dimen/_43sdp"
+                    android:layout_width="@dimen/_45sdp"
+                    android:layout_height="@dimen/_45sdp"
                     android:contentDescription="@null"
                     android:visibility="visible"
                     android:src="@drawable/ic_logo"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/_5sdp"/>
 
                 <RelativeLayout
                     android:id="@+id/shop_details_rl"
@@ -70,7 +71,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/dummy_text"
                             android:textColor="@color/login_txt_color"
-                            android:textSize="@dimen/_14sdp"
+                            android:textSize="@dimen/_12sdp"
                             android:layout_below="@+id/sync_icon"
                             android:layout_marginTop="@dimen/_3sdp"
                            />
@@ -649,8 +650,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"
-                    android:paddingBottom="@dimen/_5sdp"
-                    android:paddingTop="@dimen/_5sdp"
+                    android:paddingBottom="@dimen/_10sdp"
+                    android:paddingTop="@dimen/_1sdp"
                     android:singleLine="true"
                     android:text="@string/update_address"
                     android:textColor="@color/colorPrimary"
@@ -658,7 +659,8 @@
                     android:visibility="visible"
                     android:drawableLeft="@drawable/ic_registered_shop_direction_select"
                     android:drawablePadding="@dimen/_5sdp"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center"
+                    android:layout_gravity="bottom"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

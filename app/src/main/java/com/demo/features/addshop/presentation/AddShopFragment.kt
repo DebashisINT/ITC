@@ -612,6 +612,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             val assigDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
             if (assigDDList != null || assigDDList!!.size>0){
                 var dis_id=assigDDList.get(0).dd_id
+                dis_id=dis_id!!.drop(6)
                 shop_name_EDT.setText(dis_id.toString()+"_"+randTen)
                 ownerNumber.setText(randTen)
             }
