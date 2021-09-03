@@ -13,7 +13,7 @@
         android:orientation="horizontal"
         android:layout_height="wrap_content">
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:id="@+id/tv_doc_file_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
             android:textColor="@color/login_txt_color"
             android:textSize="@dimen/_11sdp" />
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:id="@+id/tv_doc_date_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
             android:textColor="@color/login_txt_color"
             android:textSize="@dimen/_11sdp" />
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:id="@+id/tv_attachment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
     </LinearLayout>
 
 
-    <com.demo.widgets.AppCustomTextView
+    <com.fsmitc.widgets.AppCustomTextView
         android:id="@+id/tv_down_text"
         android:layout_below="@+id/mid"
         android:gravity="end"

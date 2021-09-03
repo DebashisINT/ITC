@@ -27,7 +27,7 @@
             android:layout_below="@+id/profile_picture_IV"
             android:gravity="center">
 
-            <com.demo.widgets.AppCustomTextView
+            <com.fsmitc.widgets.AppCustomTextView
                 android:id="@+id/profile_name_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.demo.widgets.AppCustomEditText
+                    <com.fsmitc.widgets.AppCustomEditText
                         android:id="@+id/address_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                     android:layout_toLeftOf="@+id/iv_apply"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.demo.widgets.AppCustomEditText
+                    <com.fsmitc.widgets.AppCustomEditText
                         android:id="@+id/pincode_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.demo.widgets.AppCustomEditText
+                    <com.fsmitc.widgets.AppCustomEditText
                         android:id="@+id/city_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -258,7 +258,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.demo.widgets.AppCustomEditText
+                    <com.fsmitc.widgets.AppCustomEditText
                         android:id="@+id/state_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -312,7 +312,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.demo.widgets.AppCustomEditText
+                    <com.fsmitc.widgets.AppCustomEditText
                         android:id="@+id/country_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -328,7 +328,7 @@
 
 
 
-            <com.demo.widgets.AppCustomTextView
+            <com.fsmitc.widgets.AppCustomTextView
                 android:id="@+id/update_TV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

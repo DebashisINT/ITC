@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp">
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_team_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_10sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_shop_details"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

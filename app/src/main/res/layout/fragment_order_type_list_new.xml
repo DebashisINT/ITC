@@ -31,7 +31,7 @@
                     android:background="@color/white"
                     android:orientation="vertical">
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_shop_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                                 android:paddingBottom="@dimen/_5sdp"
                                 android:paddingTop="@dimen/_5sdp">
 
-                                <com.demo.widgets.AppCustomTextView
+                                <com.fsmitc.widgets.AppCustomTextView
                                     android:id="@+id/tv_brand_type"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -101,7 +101,7 @@
                                     android:layout_height="0.5dp"
                                     android:background="@android:color/black" />
 
-                                <com.demo.widgets.AppCustomEditText
+                                <com.fsmitc.widgets.AppCustomEditText
                                     android:id="@+id/et_grp_search"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
                                 android:paddingBottom="@dimen/_5sdp"
                                 android:paddingTop="@dimen/_5sdp">
 
-                                <com.demo.widgets.AppCustomTextView
+                                <com.fsmitc.widgets.AppCustomTextView
                                     android:id="@+id/tv_category_type"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
                                     android:layout_height="0.5dp"
                                     android:background="@android:color/black" />
 
-                                <com.demo.widgets.AppCustomEditText
+                                <com.fsmitc.widgets.AppCustomEditText
                                     android:id="@+id/et_category_search"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
                                 android:paddingBottom="@dimen/_5sdp"
                                 android:paddingTop="@dimen/_5sdp">
 
-                                <com.demo.widgets.AppCustomTextView
+                                <com.fsmitc.widgets.AppCustomTextView
                                     android:id="@+id/tv_watt_type"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -259,7 +259,7 @@
                                     android:layout_height="0.5dp"
                                     android:background="@android:color/black" />
 
-                                <com.demo.widgets.AppCustomEditText
+                                <com.fsmitc.widgets.AppCustomEditText
                                     android:id="@+id/et_watt_search"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -300,7 +300,7 @@
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingBottom="@dimen/_5sdp">
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_products"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -310,7 +310,7 @@
                     android:textStyle="bold"
                     android:layout_centerVertical="true"/>
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_select_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -346,7 +346,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_500sdp">
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerInParent="true"
@@ -361,7 +361,7 @@
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <com.demo.widgets.AppCustomTextView
+    <com.fsmitc.widgets.AppCustomTextView
         android:id="@+id/tv_no_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -57,7 +57,7 @@
                         android:layout_gravity="center"
                         android:src="@drawable/ic_camera_pic" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/take_photo_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <com.demo.widgets.AppCustomTextView
+            <com.fsmitc.widgets.AppCustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/category_IV">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/type_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                             android:text="@string/shop_type"
                             android:textSize="@dimen/_13sdp" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -176,7 +176,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/assign_to_IV">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/assign_to_tv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -185,7 +185,7 @@
                             android:padding="@dimen/_5sdp"
                             android:textSize="@dimen/_13sdp" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_pp_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -240,7 +240,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_select_dealer">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_select_dealer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -259,7 +259,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_dealer_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -304,7 +304,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_assign_to_dd">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_assign_to_dd"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -323,7 +323,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_dd_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -368,7 +368,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_select_retailer">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_select_retailer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -387,7 +387,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_retailer_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -432,7 +432,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/assign_to_shop_IV">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/assign_to_shop_tv"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -441,7 +441,7 @@
                             android:padding="@dimen/_5sdp"
                             android:textSize="@dimen/_13sdp" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_assigned_shop_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -496,7 +496,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_select_beat">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_select_beat"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -515,7 +515,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_beat_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -553,7 +553,7 @@
                         android:src="@drawable/ic_add_shop_name_icon"
                         android:layout_gravity="center"/>
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center|start"
@@ -562,7 +562,7 @@
                         android:textSize="@dimen/_11sdp" />
 
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/customer_name_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -595,7 +595,7 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:src="@drawable/ic_add_shop_name_icon" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_shop_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -621,7 +621,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/shop_name_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -673,7 +673,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_type">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_type"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -692,7 +692,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_type_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -729,7 +729,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:src="@drawable/ic_add_shop_address_icon" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_address_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -753,7 +753,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/address_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -791,7 +791,7 @@
                         android:layout_marginTop="@dimen/_12sdp"
                         android:src="@drawable/ic_add_shop_pin_icon" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_pincode_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -815,7 +815,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/pin_code_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -862,7 +862,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_area">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_area"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -881,7 +881,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_area_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -929,7 +929,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_entity">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_entity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -948,7 +948,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_entity_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -996,7 +996,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/iv_party">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_party"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1015,7 +1015,7 @@
                             android:padding="@dimen/_2sdp"
                             android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_party_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -1039,7 +1039,7 @@
                 </RelativeLayout>
 
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="15dp"
                     android:layout_marginTop="@dimen/_15sdp"
@@ -1066,7 +1066,7 @@
                         android:layout_marginTop="@dimen/_7sdp"
                         android:src="@drawable/ic_add_shop_owner_name" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_name_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1090,7 +1090,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/ownername_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1127,7 +1127,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:src="@drawable/ic_add_shop_owner_contact_number" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_no_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1151,7 +1151,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/ownernumber_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1196,7 +1196,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/owneremail_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1228,7 +1228,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:src="@drawable/ic_rupee_icon" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_amount_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1252,7 +1252,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/amount_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1306,7 +1306,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/iv_model">
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_model"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1325,7 +1325,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_model_asterisk_mark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1371,7 +1371,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/iv_primary_app">
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_primary_app"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1390,7 +1390,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_primary_app_asterisk_mark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1437,7 +1437,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/iv_secondary_app">
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_secondary_app"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1456,7 +1456,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_secondary_app_asterisk_mark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1496,7 +1496,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_rupee_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_booking_amount_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -1521,7 +1521,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/booking_amount_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1567,7 +1567,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/iv_lead_type">
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_lead_type"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1586,7 +1586,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_lead_type_asterisk_mark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1633,7 +1633,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/iv_stage">
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_stage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1652,7 +1652,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_stage_asterisk_mark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1698,7 +1698,7 @@
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/iv_funnel_stage">
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_funnel_stage"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1717,7 +1717,7 @@
                                 android:padding="@dimen/_2sdp"
                                 android:src="@drawable/ic_gray_down_arrow_icon" />
 
-                            <com.demo.widgets.AppCustomTextView
+                            <com.fsmitc.widgets.AppCustomTextView
                                 android:id="@+id/tv_funnel_stage_asterisk_mark"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -1805,7 +1805,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/dob_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1842,7 +1842,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/date_aniverdary_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1867,7 +1867,7 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/more_info"
@@ -1888,7 +1888,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_owner_name" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_director_name_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -1912,7 +1912,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/director_name_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1948,7 +1948,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_birthday_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_family_mem_dob_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -1972,7 +1972,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/family_mem_dob_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1994,7 +1994,7 @@
                             android:background="@color/light_gray" />
                     </RelativeLayout>
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
@@ -2017,7 +2017,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_owner_name" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_key_person_name_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2041,7 +2041,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/key_person_name_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2076,7 +2076,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_owner_contact_number" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_key_person_no_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2100,7 +2100,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/key_person_no_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2141,7 +2141,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/add_dob_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2177,7 +2177,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/add_date_aniverdary_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2202,7 +2202,7 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/more_info"
@@ -2224,7 +2224,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             app:srcCompat="@drawable/ic_gray_attachment" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_attachment_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2248,7 +2248,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/attachment_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2284,7 +2284,7 @@
                             android:layout_marginTop="@dimen/_7sdp"
                             app:srcCompat="@drawable/ic_specialization" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_specalization_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2308,7 +2308,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/et_specalization"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2344,7 +2344,7 @@
                             android:layout_marginTop="@dimen/_7sdp"
                             app:srcCompat="@drawable/ic_avarage_patient" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_patient_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2368,7 +2368,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/et_patient_count"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2404,7 +2404,7 @@
                             android:layout_marginTop="@dimen/_7sdp"
                             app:srcCompat="@drawable/ic_category" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_category_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2428,7 +2428,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/et_category"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2464,7 +2464,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_birthday_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_doc_family_mem_dob_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2488,7 +2488,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/doc_family_mem_dob_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2523,7 +2523,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_address_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_doc_address_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2547,7 +2547,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/doc_address_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2584,7 +2584,7 @@
                             android:layout_marginTop="@dimen/_12sdp"
                             android:src="@drawable/ic_add_shop_pin_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_doc_pincode_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2608,7 +2608,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/doc_pin_code_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2630,7 +2630,7 @@
                             android:background="@color/light_gray" />
                     </RelativeLayout>
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_15sdp"
@@ -2653,7 +2653,7 @@
                             android:layout_marginTop="@dimen/_12sdp"
                             app:srcCompat="@drawable/ic_hospital" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_chamber_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2664,7 +2664,7 @@
                             android:textSize="@dimen/_15sdp"
                             android:paddingTop="@dimen/_5sdp"/>
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_chamber_header"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2693,7 +2693,7 @@
                                     android:contentDescription="@null"
                                     android:src="@drawable/selector_check_box" />
 
-                                <com.demo.widgets.AppCustomTextView
+                                <com.fsmitc.widgets.AppCustomTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/_5sdp"
@@ -2715,7 +2715,7 @@
                                     android:contentDescription="@null"
                                     android:src="@drawable/selector_check_box" />
 
-                                <com.demo.widgets.AppCustomTextView
+                                <com.fsmitc.widgets.AppCustomTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/_5sdp"
@@ -2737,7 +2737,7 @@
                             android:visibility="gone"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/et_remarks"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2766,7 +2766,7 @@
                             android:layout_marginTop="@dimen/_12sdp"
                             android:src="@drawable/ic_add_shop_owner_name" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_chemist_name_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2790,7 +2790,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/chemist_name_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2825,7 +2825,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_address_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_chemist_address_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2849,7 +2849,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/chemist_address_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2886,7 +2886,7 @@
                             android:layout_marginTop="@dimen/_12sdp"
                             android:src="@drawable/ic_add_shop_pin_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_chemist_pincode_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2910,7 +2910,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/chemist_pin_code_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -2932,7 +2932,7 @@
                             android:background="@color/light_gray" />
                     </RelativeLayout>
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_10sdp"
@@ -2955,7 +2955,7 @@
                             android:layout_marginTop="@dimen/_7sdp"
                             android:src="@drawable/ic_add_shop_owner_name" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_assistant_name_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -2980,7 +2980,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/assistant_name_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -3016,7 +3016,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_owner_contact_number" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_assistant_no_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -3041,7 +3041,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/assistant_no_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -3085,7 +3085,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/assistant_dob_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -3119,7 +3119,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/assistant_date_aniverdary_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -3147,7 +3147,7 @@
                             android:layout_marginTop="@dimen/_10sdp"
                             android:src="@drawable/ic_add_shop_birthday_icon" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_assistant_family_mem_dob_asterisk_mark"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -3172,7 +3172,7 @@
                             android:textColorHint="@color/light_gray"
                             app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                            <com.demo.widgets.AppCustomEditText
+                            <com.fsmitc.widgets.AppCustomEditText
                                 android:id="@+id/assistant_family_mem_dob_EDT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -3222,7 +3222,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/feedback_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -3252,7 +3252,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         android:src="@drawable/ic_add_shop_anniversary_icon" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_visit_date_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -3277,7 +3277,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/next_visit_date_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -3315,7 +3315,7 @@
                         android:layout_marginTop="@dimen/_10sdp"
                         app:srcCompat="@drawable/ic_mic" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/tv_audio_record_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -3339,7 +3339,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.demo.widgets.AppCustomEditText
+                        <com.fsmitc.widgets.AppCustomEditText
                             android:id="@+id/audio_record_date_EDT"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -3382,7 +3382,7 @@
                         android:layout_marginRight="@dimen/_7sdp"/>
 
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -3400,7 +3400,7 @@
 
                 </LinearLayout>
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/save_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

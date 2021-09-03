@@ -49,7 +49,7 @@
                             app:civ_border_color="@color/colorAccent"
                             app:civ_border_width="@dimen/_2sdp" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/profile_name_TV1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -60,20 +60,20 @@
                             android:paddingLeft="@dimen/_17sdp"
                             android:paddingRight="@dimen/_17sdp"
                             android:paddingTop="@dimen/_5sdp"
-                            android:text="@string/demo_user_name"
+                            android:text="@string/fsmitc_user_name"
                             android:textColor="@color/menu_text_color"
                             android:textSize="@dimen/_14sdp" />
 
                     </RelativeLayout>
 
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_15sdp"
                         android:gravity="center"
                         android:paddingBottom="@dimen/_7sdp"
-                        android:text="@string/demo_login"
+                        android:text="@string/fsmitc_login"
                         android:textColor="@color/menu_text_color"
                         android:textSize="@dimen/_10sdp"
                         android:visibility="gone" />
@@ -95,7 +95,7 @@
                         app:civ_border_color="@color/colorAccent"
                         app:civ_border_width="@dimen/_2sdp" />
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/profile_name_TV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_2sdp">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/login_time_text_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10sdp" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/login_time_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/_10sdp" />
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/login_time_am_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -153,7 +153,7 @@
                 </RelativeLayout>
 
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/add_order_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -167,7 +167,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/photo_registration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/chat_bot_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -197,7 +197,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_change_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/add_attendence_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -225,7 +225,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/my_allowence_request_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -239,7 +239,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/update_worktype_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -253,7 +253,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/leave_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/add_travel_allowence_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -281,7 +281,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/nearby_shop_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -296,7 +296,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/nearby_user_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -311,7 +311,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/activity_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -327,7 +327,7 @@
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/order_history_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/quo_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -355,7 +355,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/settings_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -369,7 +369,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <!--<com.demo.widgets.AppCustomTextView
+                <!--<com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/collection_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -388,7 +388,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/collection_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -421,7 +421,7 @@
                         android:layout_marginLeft="@dimen/_70sdp"
                         android:visibility="gone">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_report"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -431,7 +431,7 @@
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_entry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -444,7 +444,7 @@
                 </RelativeLayout>
 
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/state_report_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -458,7 +458,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/view_pp_dd_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -473,7 +473,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_pp_dd_outstanding"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -488,7 +488,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/ta_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -503,7 +503,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/mis_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -518,7 +518,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -533,7 +533,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/reimbursement_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -548,7 +548,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/target_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -564,7 +564,7 @@
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/team_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -579,7 +579,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/all_team_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -609,7 +609,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />-->
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/timesheet_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -625,7 +625,7 @@
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/task_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -641,7 +641,7 @@
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/achievement_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -656,7 +656,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/tv_performance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -677,7 +677,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.demo.widgets.AppCustomTextView
+                    <com.fsmitc.widgets.AppCustomTextView
                         android:id="@+id/reports_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -710,7 +710,7 @@
                         android:layout_marginLeft="@dimen/_70sdp"
                         android:visibility="gone">
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_attendance_report"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -720,7 +720,7 @@
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_performance_report"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -730,7 +730,7 @@
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/tv_visit_report"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -740,7 +740,7 @@
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/meeting_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -750,7 +750,7 @@
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/achv_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -760,7 +760,7 @@
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
 
-                        <com.demo.widgets.AppCustomTextView
+                        <com.fsmitc.widgets.AppCustomTextView
                             android:id="@+id/targ_achv_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -773,7 +773,7 @@
                 </RelativeLayout>
 
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/dynamic_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -789,7 +789,7 @@
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/maps_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -804,7 +804,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/share_log_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -819,7 +819,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/share_loc_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -834,7 +834,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/home_loc_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -849,7 +849,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/weather_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -864,7 +864,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/doc_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -879,7 +879,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/chat_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -894,7 +894,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/scan_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -909,7 +909,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/device_info_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -924,7 +924,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/permission_info_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -939,7 +939,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/micro_learning_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -955,7 +955,7 @@
                     android:visibility="visible" />
 
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/anydesk_info_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -970,7 +970,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/screen_record_info_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -985,7 +985,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/logout_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -999,7 +999,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp" />
 
-                <com.demo.widgets.AppCustomTextView
+                <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/version_name_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

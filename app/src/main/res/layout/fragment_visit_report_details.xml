@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:id="@+id/tv_member_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
         android:padding="@dimen/_10sdp"
         android:weightSum="5">
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
@@ -47,7 +47,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/_10sdp" />
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -56,7 +56,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/_10sdp" />
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -65,7 +65,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/_10sdp" />
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.demo.widgets.AppCustomTextView
+        <com.fsmitc.widgets.AppCustomTextView
             android:id="@+id/tv_no_data_available"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
