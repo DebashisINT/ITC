@@ -20,9 +20,6 @@ import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
 import android.provider.Settings
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.google.android.material.textfield.TextInputEditText
-import androidx.core.content.FileProvider
 import android.telephony.TelephonyManager
 import android.text.TextUtils
 import android.util.Log
@@ -31,7 +28,8 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.elvishew.xlog.XLog
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.FileProvider
 import com.demo.R
 import com.demo.app.*
 import com.demo.app.AlarmReceiver.Companion.setAlarm
@@ -118,7 +116,8 @@ import com.demo.features.viewPPDDStock.model.stocklist.StockListDataModel
 import com.demo.features.viewPPDDStock.model.stocklist.StockListResponseModel
 import com.demo.widgets.AppCustomEditText
 import com.demo.widgets.AppCustomTextView
-
+import com.elvishew.xlog.XLog
+import com.google.android.material.textfield.TextInputEditText
 import com.theartofdev.edmodo.cropper.CropImage
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -3640,6 +3639,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         Pref.login_time = AppUtils.getCurrentTimeWithMeredian()
         Pref.login_date_time = AppUtils.getCurrentDateTime()
         Pref.login_date = AppUtils.getCurrentDateChanged()
+
         Pref.isFieldWorkVisible = loginResponse.user_details?.isFieldWorkVisible!!
 
         startService(Intent(this, MemberShopListIntentService::class.java))

@@ -107,7 +107,6 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         isApiInitiated = false
-
         /*filter = IntentFilter()
         filter?.addAction(AppUtils.gpsDisabledAction)
         filter?.addAction(AppUtils.gpsEnabledAction)*/
@@ -566,7 +565,8 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
             var dayst: DaystartDayendRequest = DaystartDayendRequest()
             dayst.user_id = Pref.user_id
             dayst.session_token = Pref.session_token
-            dayst.date = AppUtils.getCurrentDateTime()
+            //dayst.date = AppUtils.getCurrentDateTime()
+            dayst.date = AppUtils.getCurrentDateTime12(Pref.login_date!!)
             dayst.location_name = LocationWizard.getNewLocationName(this, location.latitude, location.longitude)
             dayst.latitude = location.latitude.toString()
             dayst.longitude = location.longitude.toString()
