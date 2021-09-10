@@ -8,4 +8,5 @@ interface PhotoRegUserListner {
     fun getWhatsappOnLick(phone: String)
     fun deletePicOnLick(obj: UserListResponseModel)
     fun viewPicOnLick(img_link: String,name : String)
+    fun getAadhaarOnLick(obj: UserListResponseModel)
 }

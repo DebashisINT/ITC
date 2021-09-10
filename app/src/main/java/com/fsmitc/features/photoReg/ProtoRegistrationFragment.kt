@@ -237,6 +237,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
                 simpleDialogg.show()
             }
+
+            override fun getAadhaarOnLick(obj: UserListResponseModel) {
+
+            }
         },{
             it
         })

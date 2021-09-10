@@ -63,6 +63,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 //sync_delete_iv.setOnClickListener{listner?.deletePicOnLick(mList?.get(adapterPosition)!!)}
                 sync_delete_iv_red.setOnClickListener{listner?.deletePicOnLick(mList?.get(adapterPosition)!!)}
 
+                iv_aadhaar_ion.setOnClickListener{listner?.getAadhaarOnLick(mList?.get(adapterPosition)!!)}
+
                 if(mList?.get(adapterPosition)?.isFaceRegistered!!){
                     sync_image_view.setOnClickListener{listner?.viewPicOnLick(mList?.get(adapterPosition)?.face_image_link!!,mList?.get(adapterPosition)?.user_name!!)}
                 }
@@ -105,6 +107,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 }else{
                     sync_delete_iv_red.visibility=View.GONE
                 }
+
+
 
             }
         }

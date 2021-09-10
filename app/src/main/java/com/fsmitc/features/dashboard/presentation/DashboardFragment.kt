@@ -5,14 +5,12 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
+import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.media.projection.MediaProjectionManager
 import android.net.Uri
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.speech.tts.TextToSpeech
 import android.text.InputFilter
 import android.text.TextUtils
@@ -99,7 +97,20 @@ import com.fsmitc.features.timesheet.model.TimeSheetConfigResponseModel
 import com.fsmitc.features.timesheet.model.TimeSheetDropDownResponseModel
 import com.fsmitc.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
+import com.fsmitc.CustomStatic
+import com.fsmitc.faceRec.DetectorActivity
+import com.fsmitc.faceRec.FaceStartActivity
+import com.fsmitc.faceRec.tflite.SimilarityClassifier
+import com.fsmitc.faceRec.tflite.TFLiteObjectDetectionAPIModel
+import com.fsmitc.features.photoReg.api.GetUserListPhotoRegProvider
+import com.fsmitc.features.photoReg.model.UserFacePicUrlResponse
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
+import com.google.mlkit.vision.face.FaceDetection
+import com.google.mlkit.vision.face.FaceDetector
+import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.hbisoft.hbrecorder.HBRecorder
 import com.hbisoft.hbrecorder.HBRecorderListener
 import com.pnikosis.materialishprogress.ProgressWheel
@@ -110,10 +121,8 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONArray
 import org.json.JSONObject
-import java.io.BufferedWriter
-import java.io.File
-import java.io.FileWriter
-import java.io.Writer
+import java.io.*
+import java.net.URL
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -772,6 +781,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 }
             }
         })
+
+        faceDetectorSetUp()
 
         /*if (Pref.isReplaceShopText)
             tv_shop.text = getString(R.string.customers)
@@ -5334,5 +5345,324 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     }
 
+
+
+
+    /////////////////////////////// 10-09-2021
+    var cropToFrameTransform: Matrix? = Matrix()
+    var faceDetector: FaceDetector? = null
+    private val TF_OD_API_MODEL_FILE = "mobile_face_net.tflite"
+    val TF_OD_API_IS_QUANTIZED = false
+    val TF_OD_API_LABELS_FILE = "file:///android_asset/labelmap.txt"
+    val TF_OD_API_INPUT_SIZE = 112
+
+    private var rgbFrameBitmap: Bitmap? = null
+    private var faceBmp: Bitmap? = null
+    protected var previewWidth = 0
+    protected var previewHeight = 0
+    private var portraitBmp: Bitmap? = null
+
+    fun faceDetectorSetUp(){
+        try {
+            FaceStartActivity.detector = TFLiteObjectDetectionAPIModel.create(
+                    mContext.getAssets(),
+                    TF_OD_API_MODEL_FILE,
+                    TF_OD_API_LABELS_FILE,
+                    TF_OD_API_INPUT_SIZE,
+                    TF_OD_API_IS_QUANTIZED)
+            //cropSize = TF_OD_API_INPUT_SIZE;
+        } catch (e: IOException) {
+            e.printStackTrace()
+            //LOGGER.e(e, "Exception initializing classifier!");
+            val toast = Toast.makeText(mContext, "Classifier could not be initialized", Toast.LENGTH_SHORT)
+            toast.show()
+            //finish()
+        }
+        val options = FaceDetectorOptions.Builder()
+                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                .setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
+                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+                .build()
+
+        val detector = FaceDetection.getClient(options)
+
+        faceDetector = detector
+    }
+
+
+    fun getPicUrl(){
+        //31-08-2021
+        BaseActivity.isApiInitiated=false
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        BaseActivity.compositeDisposable.add(
+                repository.getUserFacePicUrlApi(Pref.user_id!!,Pref.session_token!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as UserFacePicUrlResponse
+                            if(response.status== NetworkConstant.SUCCESS){
+
+                                CustomStatic.FaceUrl=response.face_image_link
+
+                                //val intent = Intent(mContext, FaceStartActivity::class.java)
+                                //startActivityForResult(intent, 111)
+
+
+                                //var bitmap :Bitmap? = null
+                                //registerFace(bitmap);
+                                println("reg_face - GetImageFromUrl called"+AppUtils.getCurrentDateTime());
+                                GetImageFromUrl().execute(CustomStatic.FaceUrl)
+
+                                XLog.d(" AddAttendanceFragment : FaceRegistration/FaceMatch" +response.status.toString() +", : "  + ", Success: ")
+                            }else{
+                                BaseActivity.isApiInitiated = false
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_reg_face))
+                                progress_wheel.stopSpinning()
+                                XLog.d("AddAttendanceFragment : FaceRegistration/FaceMatch : " + response.status.toString() +", : "  + ", Failed: ")
+                            }
+                        },{
+                            error ->
+                            if (error != null) {
+                                XLog.d("AddAttendanceFragment : FaceRegistration/FaceMatch : " + " : "  + ", ERROR: " + error.localizedMessage)
+                            }
+                            BaseActivity.isApiInitiated = false
+                        })
+        )
+    }
+
+    inner class GetImageFromUrl : AsyncTask<String?, Void?, Bitmap?>() {
+        fun GetImageFromUrl() {
+            //this.imageView = img;
+        }
+        override fun doInBackground(vararg url: String?): Bitmap {
+            var bitmappppx: Bitmap? = null
+            val stringUrl = url[0]
+            bitmappppx = null
+            val inputStream: InputStream
+            try {
+                inputStream = URL(stringUrl).openStream()
+                bitmappppx = BitmapFactory.decodeStream(inputStream)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            return bitmappppx!!
+        }
+
+        override fun onPostExecute(result: Bitmap?) {
+            super.onPostExecute(result)
+            println("reg_face - registerFace called"+AppUtils.getCurrentDateTime());
+            registerFace(result)
+        }
+
+    }
+
+    private fun registerFace(mBitmap: Bitmap?) {
+        //BaseActivity.isApiInitiated=false
+        println("reg_face - add_attendance_registerFace"+AppUtils.getCurrentDateTime());
+        try {
+            if (mBitmap == null) {
+                //Toast.makeText(this, "No File", Toast.LENGTH_SHORT).show()
+                return
+            }
+            //ivFace.setImageBitmap(mBitmap)
+            previewWidth = mBitmap.width
+            previewHeight = mBitmap.height
+            rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888)
+            portraitBmp = mBitmap
+            val image = InputImage.fromBitmap(mBitmap, 0)
+            faceBmp = Bitmap.createBitmap(TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, Bitmap.Config.ARGB_8888)
+            faceDetector?.process(image)?.addOnSuccessListener(OnSuccessListener<List<Face>> { faces ->
+                if (faces.size == 0) {
+                    println("reg_face - add_attendance_registerFace no face detected"+AppUtils.getCurrentDateTime());
+                    return@OnSuccessListener
+                }
+                Handler().post {
+                    object : Thread() {
+                        override fun run() {
+                            //action
+                            println("reg_face - add_attendance_registerFace face detected"+AppUtils.getCurrentDateTime());
+                            onFacesDetected(1, faces, true) //no need to add currtime
+                        }
+                    }.start()
+                }
+            })
+
+
+
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun onFacesDetected(currTimestamp: Long, faces: List<Face>, add: Boolean) {
+        val paint = Paint()
+        paint.color = Color.RED
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = 2.0f
+        val mappedRecognitions: MutableList<SimilarityClassifier.Recognition> = LinkedList()
+
+
+        //final List<Classifier.Recognition> results = new ArrayList<>();
+
+        // Note this can be done only once
+        val sourceW = rgbFrameBitmap!!.width
+        val sourceH = rgbFrameBitmap!!.height
+        val targetW = portraitBmp!!.width
+        val targetH = portraitBmp!!.height
+        val transform = createTransform(
+                sourceW,
+                sourceH,
+                targetW,
+                targetH,
+                90)
+        val mutableBitmap = portraitBmp!!.copy(Bitmap.Config.ARGB_8888, true)
+        val cv = Canvas(mutableBitmap)
+
+        // draws the original image in portrait mode.
+        cv.drawBitmap(rgbFrameBitmap!!, transform!!, null)
+        val cvFace = Canvas(faceBmp!!)
+        val saved = false
+        for (face in faces) {
+            //results = detector.recognizeImage(croppedBitmap);
+            val boundingBox = RectF(face.boundingBox)
+
+            //final boolean goodConfidence = result.getConfidence() >= minimumConfidence;
+            val goodConfidence = true //face.get;
+            if (boundingBox != null && goodConfidence) {
+
+                // maps crop coordinates to original
+                cropToFrameTransform?.mapRect(boundingBox)
+
+                // maps original coordinates to portrait coordinates
+                val faceBB = RectF(boundingBox)
+                transform.mapRect(faceBB)
+
+                // translates portrait to origin and scales to fit input inference size
+                //cv.drawRect(faceBB, paint);
+                val sx = TF_OD_API_INPUT_SIZE.toFloat() / faceBB.width()
+                val sy = TF_OD_API_INPUT_SIZE.toFloat() / faceBB.height()
+                val matrix = Matrix()
+                matrix.postTranslate(-faceBB.left, -faceBB.top)
+                matrix.postScale(sx, sy)
+                cvFace.drawBitmap(portraitBmp!!, matrix, null)
+
+                //canvas.drawRect(faceBB, paint);
+                var label = ""
+                var confidence = -1f
+                var color = Color.BLUE
+                var extra: Any? = null
+                var crop: Bitmap? = null
+                if (add) {
+                    try {
+                        crop = Bitmap.createBitmap(portraitBmp!!,
+                                faceBB.left.toInt(),
+                                faceBB.top.toInt(),
+                                faceBB.width().toInt(),
+                                faceBB.height().toInt())
+                    } catch (eon: java.lang.Exception) {
+                        //runOnUiThread(Runnable { Toast.makeText(mContext, "Failed to detect", Toast.LENGTH_LONG) })
+                    }
+                }
+                val startTime = SystemClock.uptimeMillis()
+                val resultsAux = FaceStartActivity.detector.recognizeImage(faceBmp, add)
+                val lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime
+                if (resultsAux.size > 0) {
+                    val result = resultsAux[0]
+                    extra = result.extra
+                    //          Object extra = result.getExtra();
+//          if (extra != null) {
+//            LOGGER.i("embeeding retrieved " + extra.toString());
+//          }
+                    val conf = result.distance
+                    if (conf < 1.0f) {
+                        confidence = conf
+                        label = result.title
+                        color = if (result.id == "0") {
+                            Color.GREEN
+                        } else {
+                            Color.RED
+                        }
+                    }
+                }
+                val flip = Matrix()
+                flip.postScale(1f, -1f, previewWidth / 2.0f, previewHeight / 2.0f)
+
+                //flip.postScale(1, -1, targetW / 2.0f, targetH / 2.0f);
+                flip.mapRect(boundingBox)
+                val result = SimilarityClassifier.Recognition(
+                        "0", label, confidence, boundingBox)
+                result.color = color
+                result.location = boundingBox
+                result.extra = extra
+                result.crop = crop
+                mappedRecognitions.add(result)
+            }
+        }
+
+        //    if (saved) {
+//      lastSaved = System.currentTimeMillis();
+//    }
+
+        Log.e("xc", "startabc" )
+        val rec = mappedRecognitions[0]
+        FaceStartActivity.detector.register("", rec)
+        val intent = Intent(mContext, DetectorActivity::class.java)
+        startActivityForResult(intent, 171)
+//        startActivity(new Intent(this,DetectorActivity.class));
+//        finish();
+
+        // detector.register("Sakil", rec);
+        /*   runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ivFace.setImageBitmap(rec.getCrop());
+                //showAddFaceDialog(rec);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                LayoutInflater inflater = getLayoutInflater();
+                View dialogLayout = inflater.inflate(R.layout.image_edit_dialog, null);
+                ImageView ivFace = dialogLayout.findViewById(R.id.dlg_image);
+                TextView tvTitle = dialogLayout.findViewById(R.id.dlg_title);
+                EditText etName = dialogLayout.findViewById(R.id.dlg_input);
+
+                tvTitle.setText("Register Your Face");
+                ivFace.setImageBitmap(rec.getCrop());
+                etName.setHint("Please tell your name");
+                detector.register("sam", rec); //for register a face
+
+                //button.setPressed(true);
+                //button.performClick();
+            }
+
+        });*/
+
+        // updateResults(currTimestamp, mappedRecognitions);
+    }
+
+    fun createTransform(srcWidth: Int, srcHeight: Int, dstWidth: Int, dstHeight: Int, applyRotation: Int): Matrix? {
+        val matrix = Matrix()
+        if (applyRotation != 0) {
+            if (applyRotation % 90 != 0) {
+                // LOGGER.w("Rotation of %d % 90 != 0", applyRotation);
+            }
+
+            // Translate so center of image is at origin.
+            matrix.postTranslate(-srcWidth / 2.0f, -srcHeight / 2.0f)
+
+            // Rotate around origin.
+            matrix.postRotate(applyRotation.toFloat())
+        }
+
+//        // Account for the already applied rotation, if any, and then determine how
+//        // much scaling is needed for each axis.
+//        final boolean transpose = (Math.abs(applyRotation) + 90) % 180 == 0;
+//        final int inWidth = transpose ? srcHeight : srcWidth;
+//        final int inHeight = transpose ? srcWidth : srcHeight;
+        if (applyRotation != 0) {
+
+            // Translate back from origin centered reference to destination frame.
+            matrix.postTranslate(dstWidth / 2.0f, dstHeight / 2.0f)
+        }
+        return matrix
+    }
 
 }
