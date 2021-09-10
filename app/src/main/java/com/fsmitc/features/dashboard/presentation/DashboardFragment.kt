@@ -202,6 +202,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var start_shop: AppCustomTextView
     private lateinit var enddate_TV: AppCustomTextView
 
+    private var isStartCall:Boolean=false
+    private var isCalledFromStart:Boolean=false
+    private var isEndCall:Boolean=false
+
 
     private val customProgressDialog: CustomProgressDialog by lazy {
         CustomProgressDialog.getInstance()
@@ -554,12 +558,39 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
         start_TV.setOnClickListener({ view ->
 
-            getPicUrl()
+            if (!AppUtils.isOnline(mContext)) {
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
 
-            if(false){
-                isCameraDayStart = true
-                initPermissionCheck()
-            }else{
+            }else if(isStartCall==false && Pref.DayStartMarked == false && Pref.isAddAttendence){
+
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_yes_no)
+                val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                dialogHeader.text = "Are you sure ?"
+                val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                dialogYes.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                    //if(Pref.IsshowDayStartSelfie){
+                    //isCameraDayStart=true
+                    //initPermissionCheck()
+                    //}else{
+                    progress_wheel.spin()
+                    isCalledFromStart=true
+                    getPicUrl()
+                    //}
+                })
+                dialogNo.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                })
+                simpleDialog.show()
+            }
+            else{
+                println("reg_face - start_tv"+AppUtils.getCurrentDateTime());
                 if (!AppUtils.isOnline(mContext)) {
                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                 }
@@ -582,7 +613,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 //                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
                     } else {
                         if (!Pref.DayStartMarked) {
-                            val simpleDialog = Dialog(mContext)
+
+                            getLocforStart()
+
+                            /*val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                             simpleDialog.setContentView(R.layout.dialog_yes_no)
@@ -594,17 +628,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
                             dialogYes.setOnClickListener({ view ->
                                 simpleDialog.cancel()
-                                //if(Pref.IsshowDayStartSelfie){
-                                //isCameraDayStart=true
-                                //initPermissionCheck()
-                                //}else{
                                 getLocforStart()
-                                //}
                             })
                             dialogNo.setOnClickListener({ view ->
                                 simpleDialog.cancel()
                             })
-                            simpleDialog.show()
+                            simpleDialog.show()*/
+
                         } else {
                             // 27-08-21 For ITC
                             val simpleDialog = Dialog(mContext)
@@ -627,13 +657,38 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             }
 
 
-
-
         })
         //Pref.IsDDvistedOnceByDay=true
         end_TV.setOnClickListener({ view ->
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            } else if(isEndCall==false && Pref.DayEndMarked == false && Pref.DayStartMarked ==true){
+
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_yes_no)
+                val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                dialogHeader.text = "Are you sure to Exit for the Day?"
+                val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                dialogYes.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                    //if(Pref.IsshowDayStartSelfie){
+                    //isCameraDayStart=true
+                    //initPermissionCheck()
+                    //}else{
+                    progress_wheel.spin()
+                    isCalledFromStart=false
+                    getPicUrl()
+                    //}
+                })
+                dialogNo.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                })
+                simpleDialog.show()
             } else {
                 if (Pref.DayEndMarked) {
                     // 27-08-21 For ITC
@@ -654,8 +709,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 } else {
                     //Pref.IsDDvistedOnceByDay=true
                     if (Pref.DayStartMarked) {
+
+                        getLocforEnd()
+
 //                        if (Pref.IsDDvistedOnceByDay) {// 01-09-2021  end date time , point visit not checking
-                            val simpleDialog = Dialog(mContext)
+                            /*val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                             simpleDialog.setContentView(R.layout.dialog_yes_no)
@@ -667,21 +725,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
                             dialogYes.setOnClickListener({ view ->
                                 simpleDialog.cancel()
-                                //if(Pref.IsshowDayEndSelfie){
-                                //isCameraDayStart=false
-                                //initPermissionCheck()
-                                //}else{
+
                                 getLocforEnd()
-                                //}
-                                //check is it end day flag
-                                //launchCamera()
+
 
 
                             })
                             dialogNo.setOnClickListener({ view ->
                                 simpleDialog.cancel()
                             })
-                            simpleDialog.show()
+                            simpleDialog.show()*/
+
+
+
+
+
 //                        }
                        /* else {
                             // 27-08-21 For ITC
@@ -1391,6 +1449,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
             R.id.price_RL -> {
                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.functionality_disabled))
+
+                if(Pref.IsShowDayEnd){
+                    return
+                }
+
                 when {
                     //Pref.isServiceFeatureEnable -> (mContext as DashboardActivity).loadFragment(FragType.MyJobsFragment, true, "")
                     Pref.willActivityShow -> (mContext as DashboardActivity).loadFragment(FragType.DateWiseActivityListFragment, true, "")
@@ -4303,6 +4366,18 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                            mContext.startService(intent)*/
                 hbRecorder!!.startScreenRecording(data, resultCode, mContext as Activity)
             }
+            if (requestCode == 171){
+                println("reg_face - dashboard_frag face Detect Face Match"+AppUtils.getCurrentDateTime());
+                if(isCalledFromStart){
+                    isStartCall=true
+                    start_TV.performClick()
+                }else{
+                    isEndCall=true
+                    end_TV.performClick()
+                }
+
+
+            }
         }
     }
 
@@ -5458,6 +5533,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun registerFace(mBitmap: Bitmap?) {
+        progress_wheel.stopSpinning()
         //BaseActivity.isApiInitiated=false
         println("reg_face - add_attendance_registerFace"+AppUtils.getCurrentDateTime());
         try {
@@ -5474,14 +5550,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             faceBmp = Bitmap.createBitmap(TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, Bitmap.Config.ARGB_8888)
             faceDetector?.process(image)?.addOnSuccessListener(OnSuccessListener<List<Face>> { faces ->
                 if (faces.size == 0) {
-                    println("reg_face - add_attendance_registerFace no face detected"+AppUtils.getCurrentDateTime());
+                    println("reg_face - dashboard_frag no face detected"+AppUtils.getCurrentDateTime());
                     return@OnSuccessListener
                 }
                 Handler().post {
                     object : Thread() {
                         override fun run() {
                             //action
-                            println("reg_face - add_attendance_registerFace face detected"+AppUtils.getCurrentDateTime());
+                            println("reg_face - dashboard_frag face detected"+AppUtils.getCurrentDateTime());
                             onFacesDetected(1, faces, true) //no need to add currtime
                         }
                     }.start()
