@@ -226,7 +226,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
         initView(view)
-        initView(view)
 
 
         if (Pref.isAttendanceFeatureOnly) {
@@ -554,6 +553,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
         start_TV.setOnClickListener({ view ->
+
+            getPicUrl()
 
             if(false){
                 isCameraDayStart = true

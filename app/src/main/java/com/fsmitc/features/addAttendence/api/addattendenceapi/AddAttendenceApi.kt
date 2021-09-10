@@ -19,7 +19,7 @@ interface AddAttendenceApi {
 
     //@FormUrlEncoded
     //@POST("ShopAttendance/AddAttendance")
-    @POST("DemoAttendance/AttendanceSubmit")
+    @POST("ShopAttendance/AttendanceSubmit")
     fun addAttendence(@Body/*("session_token")*/ addAttendenceModel: AddAttendenceInpuModel): Observable<BaseResponse>
 
     @POST("LeaveApproval/Records")
