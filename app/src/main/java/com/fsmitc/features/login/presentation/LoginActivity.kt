@@ -3064,6 +3064,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun initView() {
         val login_TV = findViewById<TextView>(R.id.login_TV)
+        login_TV.isEnabled=true
         username_EDT = findViewById(R.id.username_EDT)
         password_EDT = findViewById(R.id.password_EDT)
         forgotPassword = findViewById(R.id.forgot_password_TV)
@@ -3804,6 +3805,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             //showSnackMessage(resources.getString(R.string.alert_imei_unavailable))
                                             Pref.user_id=""
                                             showSnackMessage("You already marked Day End. You will be able to login tomorrow! Thanks.")
+                                            login_TV.isEnabled=true
                                         }else{
                                             getListFromDatabase()
                                         }
