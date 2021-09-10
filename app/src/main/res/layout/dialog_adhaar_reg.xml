@@ -39,7 +39,8 @@
                 android:gravity="center_vertical"
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_12sdp"
+                android:inputType="number"/>
 
             <com.fsmitc.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_2"
@@ -51,7 +52,8 @@
                 android:gravity="center_vertical"
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_12sdp"
+                android:inputType="number"/>
 
             <com.fsmitc.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_3"
@@ -63,7 +65,8 @@
                 android:gravity="center_vertical"
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_12sdp"
+                android:inputType="number"/>
 
 
         </LinearLayout>

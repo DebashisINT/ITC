@@ -7266,6 +7266,28 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         }
                     }
                 }
+
+                /**10-09-2021/
+                 *
+                 *
+                 */
+
+                else if(getCurrentFragType() == FragType.ProtoRegistrationFragment){
+                    getCameraImage(data)
+
+                    if (!TextUtils.isEmpty(filePath)) {
+                        XLog.e("===========Update Review Image (DashboardActivity)===========")
+                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+
+                        //val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
+                        (getFragment() as ProtoRegistrationFragment).setImage(filePath)
+                        //XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+
+                    }
+                }
+
+
+
                 else if (getCurrentFragType() == FragType.DashboardFragment) {
                     getCameraImage(data)
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7582,6 +7604,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             .setAllowRotation(false)
                             .setOutputCompressQuality(100)
                             .start(this)
+                }else if (getCurrentFragType() == FragType.ProtoRegistrationFragment) {
+                    //AppUtils.getCompressContentImage(data!!.data, this)
+
+                    getGalleryImage(this, data)
+
+                    (getFragment() as ProtoRegistrationFragment).setImage(filePath)
+
                 }
                 else {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
