@@ -3118,12 +3118,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     override fun onClick(p0: View?) {
         when (p0!!.id) {
             R.id.login_TV -> {
-
+                login_TV.isEnabled = false
+                println("xyzy - login called" + AppUtils.getCurrentDateTime());
                 //Crashlytics.getInstance().crash()
-                if (TextUtils.isEmpty(username_EDT.text.toString().trim()))
+                if (TextUtils.isEmpty(username_EDT.text.toString().trim())){
                     showSnackMessage(getString(R.string.error_enter_username))
-                else if (TextUtils.isEmpty(password_EDT.text.toString().trim()))
+                    login_TV.isEnabled = true
+                }
+
+                else if (TextUtils.isEmpty(password_EDT.text.toString().trim())){
                     showSnackMessage(getString(R.string.error_enter_pwd))
+                    login_TV.isEnabled = true
+                }
+
                 else {
                     AppUtils.hideSoftKeyboard(this)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -3290,6 +3297,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             } else {
                                 progress_wheel.stopSpinning()
                                 showSnackMessage(newSettings.message!!)
+                                login_TV.isEnabled = true
                             }
                             isApiInitiated = false
 
@@ -3297,7 +3305,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             isApiInitiated = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-
+                            login_TV.isEnabled = true
                             showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )
@@ -3607,15 +3615,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                             } else if (loginResponse.status == "220") {
                                 progress_wheel.stopSpinning()
+                                login_TV.isEnabled = true
                                 //showSnackMessage(loginResponse.message!!)
                                 Toaster.msgLong(this, loginResponse.message!!)
                             } else {
                                 progress_wheel.stopSpinning()
                                 showSnackMessage(loginResponse.message!!)
+                                login_TV.isEnabled = true
                             }
                             isApiInitiated = false
 
                         }, { error ->
+                            login_TV.isEnabled = true
                             isApiInitiated = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
@@ -5367,7 +5378,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
     private fun gotoHomeActivity() {
-
+        login_TV.isEnabled = true
         progress_wheel.stopSpinning()
         setServiceAlarm(this, 1, 123)
 
