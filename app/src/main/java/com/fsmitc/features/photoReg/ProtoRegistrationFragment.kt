@@ -239,7 +239,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             }
 
             override fun getAadhaarOnLick(obj: UserListResponseModel) {
-
+                OpenDialogForAdhaarReg()
             }
         },{
             it
@@ -248,6 +248,26 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         mRv_userList.adapter = adapter
     }
 
+    private fun OpenDialogForAdhaarReg() {
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_adhaar_reg)
+        val dialogEtCardNumber1 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_1) as AppCustomTextView
+        val dialogEtCardNumber2 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_2) as AppCustomTextView
+        val dialogEtCardNumber3 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_3) as AppCustomTextView
+
+        val dialogEtFeedback = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_feedback) as AppCustomTextView
+        val dialogCameraclick = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_iv_camera) as ImageView
+
+        val dialogConfirm = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_confirm) as AppCustomTextView
+
+        dialogConfirm.setOnClickListener({ view ->
+            simpleDialog.cancel()
+        })
+        simpleDialog.show()
+
+    }
 
 
     override fun onClick(p0: View?) {
