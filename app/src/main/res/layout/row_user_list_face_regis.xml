@@ -55,8 +55,8 @@
 
             <ImageView
                 android:id="@+id/iv_aadhaar_ion"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="28dp"
+                android:layout_width="@dimen/_45sdp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/_4sdp"
                 android:layout_marginRight="@dimen/_4sdp"

@@ -13,4 +13,9 @@ object GetUserListPhotoRegProvider {
         return GetUserListPhotoRegRepository(GetUserListPhotoRegApi.createFacePic())
     }
 
+
+    fun jobMultipartRepoProvider(): GetUserListPhotoRegRepository {
+        return GetUserListPhotoRegRepository(GetUserListPhotoRegApi.createMultiPart())
+    }
+
 }

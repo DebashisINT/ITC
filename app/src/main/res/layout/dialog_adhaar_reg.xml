@@ -96,6 +96,8 @@
         </LinearLayout>
 
 
+
+
         <com.fsmitc.widgets.AppCustomEditText
             android:id="@+id/tv_dialog_adhaar_reg_feedback"
             android:layout_width="match_parent"

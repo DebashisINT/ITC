@@ -6764,6 +6764,20 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
 
                 }
+                else if (getCurrentFragType() == FragType.ProtoRegistrationFragment) {
+                    // request for camera image
+                    getCameraImage(data)
+                    if (!TextUtils.isEmpty(filePath)) {
+                        //val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, filePath)
+                        //XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        //val fileSize = AppUtils.getCompressBillingImage(contentURI.toString(), this)
+                        //updatePhotoRegAadhaarCroppedImg(fileSize, contentURI)
+
+                        (getFragment() as ProtoRegistrationFragment).setImage(filePath)
+
+                    }
+
+                }
                 else if (getCurrentFragType() == FragType.MyProfileFragment /*&& FTStorageUtils.IMG_URI != null*/) {
                     /*AppUtils.getCompressContentImage(FTStorageUtils.IMG_URI, this)
                     (getFragment() as MyProfileFragment).setImage(FTStorageUtils.IMG_URI)*/
@@ -7266,28 +7280,6 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         }
                     }
                 }
-
-                /**10-09-2021/
-                 *
-                 *
-                 */
-
-                else if(getCurrentFragType() == FragType.ProtoRegistrationFragment){
-                    getCameraImage(data)
-
-                    if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Update Review Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
-
-                        //val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
-                        (getFragment() as ProtoRegistrationFragment).setImage(filePath)
-                        //XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
-
-                    }
-                }
-
-
-
                 else if (getCurrentFragType() == FragType.DashboardFragment) {
                     getCameraImage(data)
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7421,6 +7413,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 val fileSize = AppUtils.getCompressBillingImage(resultUri.toString(), this)
                                 updateReviewCroppedImg(fileSize, resultUri)
                             }
+                            getCurrentFragType() == FragType.ProtoRegistrationFragment -> {
+                                val fileSize = AppUtils.getCompressBillingImage(resultUri.toString(), this)
+                                updatePhotoRegAadhaarCroppedImg(fileSize, resultUri)
+                            }
                             else -> {
                                 if (getCurrentFragType() == FragType.NearByShopsListFragment || getCurrentFragType() == FragType.NewDateWiseOrderListFragment ||
                                         getCurrentFragType() == FragType.NewOrderListFragment || getCurrentFragType() == FragType.ShopBillingListFragment ||
@@ -7529,7 +7525,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     (getFragment() as ReimbursementFragment).setImage(filePath)
 
                     //(getFragment() as MyProfileFragment).setImage(data.data)
-                } else if (getCurrentFragType() == FragType.EditReimbursementFragment) {
+                }
+                else if (getCurrentFragType() == FragType.EditReimbursementFragment) {
                     //AppUtils.getCompressContentImage(data!!.data, this)
 
                     getGalleryImage(this, data)
@@ -7604,13 +7601,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             .setAllowRotation(false)
                             .setOutputCompressQuality(100)
                             .start(this)
-                }else if (getCurrentFragType() == FragType.ProtoRegistrationFragment) {
-                    //AppUtils.getCompressContentImage(data!!.data, this)
+                }
+                else if(getCurrentFragType() == FragType.ProtoRegistrationFragment){
+                    // for gallary image
+                    getGalleryImage(this,data)
+                    if (!TextUtils.isEmpty(filePath)) {
+                        //val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, filePath)
+                        //XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        //val fileSize = AppUtils.getCompressBillingImage(contentURI.toString(), this)
+                        //updatePhotoRegAadhaarCroppedImg(fileSize, contentURI)
 
-                    getGalleryImage(this, data)
+                        (getFragment() as ProtoRegistrationFragment).setImage(filePath)
 
-                    (getFragment() as ProtoRegistrationFragment).setImage(filePath)
-
+                    }
                 }
                 else {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
@@ -7672,6 +7675,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     getCurrentFragType() == FragType.WorkCompletedFragment -> workCompletedDocument(file.length())
                                     getCurrentFragType() == FragType.WorkCancelledFragment -> workCancelledDocument(file.length())
                                     getCurrentFragType() == FragType.UpdateReviewFragment -> updateReviewDocument(file.length())
+                                    getCurrentFragType() == FragType.ProtoRegistrationFragment -> updatePhotoAadhaarDocument(file.length())
 
                                     else -> {
                                         if (getCurrentFragType() == FragType.NearByShopsListFragment || getCurrentFragType() == FragType.NewDateWiseOrderListFragment ||
@@ -8701,6 +8705,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         (getFragment() as UpdateReviewFragment).setImage(file)
     }
 
+    private fun updatePhotoRegAadhaarCroppedImg(fileSize: Long, resultUri: Uri) {
+        val fileSizeInKB = fileSize / 1024
+        Log.e("Dashboard", "image file size after compression==========> $fileSizeInKB KB")
+
+        val file = File(resultUri.path!!)
+        //(getFragment() as ProtoRegistrationFragment).setImage(file)
+    }
+
 
     private fun updateReviewDocument(fileSize: Long) {
         val fileSizeInKB = fileSize / 1024
@@ -8710,6 +8722,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             if (fileSizeInKB <= Pref.maxFileSize.toInt()) {
                 val file = File(filePath)
                 (getFragment() as UpdateReviewFragment).setImage(file)
+            } else
+                showSnackMessage("More than " + Pref.maxFileSize + " KB file is not allowed")
+        }
+    }
+
+    private fun updatePhotoAadhaarDocument(fileSize: Long) {
+        val fileSizeInKB = fileSize / 1024
+        Log.e("Dashboard", "image file size after compression==========> $fileSizeInKB KB")
+        Pref.maxFileSize="400"
+        if (!TextUtils.isEmpty(Pref.maxFileSize)) {
+            if (fileSizeInKB <= Pref.maxFileSize.toInt()) {
+                val file = File(filePath)
+                (getFragment() as ProtoRegistrationFragment).setDoc(file)
             } else
                 showSnackMessage("More than " + Pref.maxFileSize + " KB file is not allowed")
         }

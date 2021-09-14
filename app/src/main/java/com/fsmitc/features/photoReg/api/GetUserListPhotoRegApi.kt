@@ -35,6 +35,15 @@ interface GetUserListPhotoRegApi {
     fun deleteUserPicApi(@Field("user_id") user_id: String,@Field("session_token") session_token: String):
             Observable<DeleteUserPicResponse>
 
+
+    @Multipart
+    @POST("UserAadharImageSave/UserAadharImage")
+    fun submitAadhaarDetails(@Query("data") data: String, @Part attachments: List<MultipartBody.Part?>): Observable<BaseResponse>
+
+    @POST("UserWiseAadharInfo/UserAadharInfo")
+    fun submitAadhaarDetailsSingle(@Body aadhaarSubmitData: AadhaarSubmitData): Observable<BaseResponse>
+
+
     companion object Factory {
         fun create(): GetUserListPhotoRegApi {
             val retrofit = Retrofit.Builder()
@@ -60,6 +69,19 @@ interface GetUserListPhotoRegApi {
 
             return retrofit.create(GetUserListPhotoRegApi::class.java)
         }
+
+
+        fun createMultiPart(): GetUserListPhotoRegApi {
+            val retrofit = Retrofit.Builder()
+                    .client(NetworkConstant.setTimeOut())
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(NetworkConstant.ADD_SHOP_BASE_URL)
+                    .build()
+
+            return retrofit.create(GetUserListPhotoRegApi::class.java)
+        }
+
     }
 
 

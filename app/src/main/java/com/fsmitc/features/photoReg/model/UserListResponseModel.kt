@@ -11,6 +11,7 @@ class UserListResponseModel {
     var IsPhotoDeleteShow: Boolean? = false
     var ShowDDInFaceRegistration: String? = ""
     var registration_date_time: String? = ""
+    var IsAadhaarRegistered: Boolean? = false
 
 
 }

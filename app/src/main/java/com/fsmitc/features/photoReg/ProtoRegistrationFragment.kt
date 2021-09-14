@@ -15,11 +15,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.MediaController
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,12 +40,17 @@ import com.fsmitc.app.uiaction.IntentActionable
 import com.fsmitc.app.utils.AppUtils
 import com.fsmitc.app.utils.PermissionUtils
 import com.fsmitc.app.utils.ProcessImageUtils_v1
+import com.fsmitc.app.utils.Toaster
+import com.fsmitc.base.BaseResponse
 import com.fsmitc.base.presentation.BaseActivity
 import com.fsmitc.base.presentation.BaseFragment
 import com.fsmitc.features.dashboard.presentation.DashboardActivity
+import com.fsmitc.features.myjobs.api.MyJobRepoProvider
+import com.fsmitc.features.myjobs.model.WIPImageSubmit
 import com.fsmitc.features.photoReg.adapter.AdapterUserList
 import com.fsmitc.features.photoReg.adapter.PhotoRegUserListner
 import com.fsmitc.features.photoReg.api.GetUserListPhotoRegProvider
+import com.fsmitc.features.photoReg.model.AadhaarSubmitData
 import com.fsmitc.features.photoReg.model.DeleteUserPicResponse
 import com.fsmitc.features.photoReg.model.GetUserListResponse
 import com.fsmitc.features.photoReg.model.UserListResponseModel
@@ -68,6 +76,14 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     var userList:ArrayList<UserListResponseModel> = ArrayList()
     var userList_temp:ArrayList<UserListResponseModel> = ArrayList()
     private var adapter: AdapterUserList?= null
+    private var str_aadhaarNo:String=""
+
+    private lateinit var et_attachment: AppCustomEditText
+    private lateinit var et_photo: AppCustomEditText
+
+    private var isAttachment = false
+    private var dataPath = ""
+    private var imagePath = ""
 
 
     override fun onAttach(context: Context) {
@@ -110,6 +126,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     }
 
     private fun initView(view:View){
+        et_attachment = view!!.findViewById(R.id.et_attachment)
+        et_photo = view!!.findViewById(R.id.et_photo)
         mRv_userList=view!!.findViewById(R.id.rv_frag_photo_reg)
         progress_wheel = view.findViewById(R.id.progress_wheel)
 
@@ -325,11 +343,141 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         }
 
         dialogConfirm.setOnClickListener({ view ->
-            simpleDialog.cancel()
+            //simpleDialog.cancel()
+
+            if(dialogEtCardNumber1.text.toString().length==4){
+                if(dialogEtCardNumber2.text.toString().length==4){
+                    if(dialogEtCardNumber3.text.toString().length==4){
+                        ////////
+                        val simpleDialogInner = Dialog(mContext)
+                        simpleDialogInner.setCancelable(false)
+                        simpleDialogInner.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialogInner.setContentView(R.layout.dialog_yes_no)
+                        val dialogHeader = simpleDialogInner.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                        val dialogHeaderTTV = simpleDialogInner.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                        dialogHeader.text="Are you sure?"
+                        dialogHeaderTTV.text="Hi! "+Pref.user_name
+                        val dialogYes = simpleDialogInner.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                        val dialogNo = simpleDialogInner.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+
+                        dialogYes.setOnClickListener( { view ->
+                            simpleDialogInner.cancel()
+                            str_aadhaarNo=dialogEtCardNumber1.text.toString()+dialogEtCardNumber2.text.toString()+dialogEtCardNumber3.text.toString()
+                            simpleDialog.cancel()
+                            submitAadhaarDetails(obj,dialogEtFeedback.text.toString())
+                        })
+                        dialogNo.setOnClickListener( { view ->
+                            simpleDialogInner.cancel()
+                        })
+                        simpleDialogInner.show()
+
+                        ///////
+
+                    }else{
+                        dialogEtCardNumber3.setError("Please Enter Aadhaad No")
+                        dialogEtCardNumber3.requestFocus()
+                    }
+                }else{
+                    dialogEtCardNumber2.setError("Please Enter Aadhaad No")
+                    dialogEtCardNumber2.requestFocus()
+                }
+            }else{
+                dialogEtCardNumber1.setError("Please Enter Aadhaad No")
+                dialogEtCardNumber1.requestFocus()
+            }
 
         })
         simpleDialog.show()
 
+    }
+
+
+    private fun submitAadhaarDetails(obj: UserListResponseModel,feedBac:String){
+        var tt=str_aadhaarNo
+        //Toaster.msgLong(mContext,str_aadhaarNo)
+
+        var aadhaarSubmitData: AadhaarSubmitData=AadhaarSubmitData()
+        aadhaarSubmitData.session_token=Pref.session_token.toString()
+        aadhaarSubmitData.aadhaar_holder_user_id=obj.user_id.toString()
+        aadhaarSubmitData.aadhaar_holder_user_contactid=obj.user_contactid.toString()
+        aadhaarSubmitData.aadhaar_no=str_aadhaarNo
+        aadhaarSubmitData.date=AppUtils.getCurrentDateForShopActi()
+        aadhaarSubmitData.feedback=feedBac
+        aadhaarSubmitData.address=""
+
+
+
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        BaseActivity.compositeDisposable.add(
+                repository.sendUserAadhaarApi(aadhaarSubmitData)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as BaseResponse
+                            progress_wheel.stopSpinning()
+                            //(mContext as DashboardActivity).showSnackMessage(response.message!!)
+                            (mContext as DashboardActivity).showSnackMessage("Aadhar registered successfully")
+
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                if (!TextUtils.isEmpty(et_attachment.text.toString().trim()) || !TextUtils.isEmpty(et_photo.text.toString().trim())) {
+                                    val imgList = java.util.ArrayList<WIPImageSubmit>()
+
+                                    if (!TextUtils.isEmpty(et_attachment.text.toString()))
+                                        imgList.add(WIPImageSubmit(dataPath, "attachment"))
+
+                                    if (!TextUtils.isEmpty(et_photo.text.toString()))
+                                        imgList.add(WIPImageSubmit(imagePath, "image"))
+
+                                    val repository = GetUserListPhotoRegProvider.jobMultipartRepoProvider()
+                                    BaseActivity.compositeDisposable.add(
+                                            repository.submitAadhaarDetails(aadhaarSubmitData, imgList, mContext)
+                                                    .observeOn(AndroidSchedulers.mainThread())
+                                                    .subscribeOn(Schedulers.io())
+                                                    .subscribe({ result ->
+                                                        val response = result as BaseResponse
+                                                        progress_wheel.stopSpinning()
+                                                        //(mContext as DashboardActivity).showSnackMessage(response.message!!)
+                                                        //(mContext as DashboardActivity).showSnackMessage("Aadhar registered successfully")
+                                                        if (response.status == NetworkConstant.SUCCESS) {
+                                                            voiceAttendanceMsg("Aadhar registered successfully")
+                                                           /* Handler(Looper.getMainLooper()).postDelayed({
+                                                                callUSerListApi()
+                                                            }, 300)*/
+                                                            //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
+                                                        }
+
+                                                    }, { error ->
+                                                        progress_wheel.stopSpinning()
+                                                        error.printStackTrace()
+                                                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                                    })
+                                    )
+                                }else{
+                                    voiceAttendanceMsg("Aadhar registered successfully")
+                                    //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
+                                }
+                            }
+
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        })
+        )
+
+
+    }
+
+
+    private fun voiceAttendanceMsg(msg: String) {
+        if (Pref.isVoiceEnabledForAttendanceSubmit) {
+            val speechStatus = (mContext as DashboardActivity).textToSpeech.speak(msg, TextToSpeech.QUEUE_FLUSH, null)
+            if (speechStatus == TextToSpeech.ERROR)
+                Log.e("Add Day Start", "TTS error in converting Text to Speech!");
+        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            callUSerListApi()
+        }, 300)
     }
 
 
@@ -340,11 +488,16 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         pictureDialog.setItems(pictureDialogItems,
                 DialogInterface.OnClickListener { dialog, which ->
                     when (which) {
-                        0 -> selectImageInAlbum()
+                        0 ->{
+                            isAttachment=false
+                            selectImageInAlbum()
+                        }
                         1 -> {
+                            isAttachment=false
                             launchCamera()
                         }
                         2 -> {
+                            isAttachment=true
                             (mContext as DashboardActivity).openFileManager()
                         }
                     }
@@ -365,28 +518,78 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
 
 
-    fun setImage(filePath: String) {
+    /*fun setImage(file: File) {
+        if (isAttachment) {
+            et_attachment.setText(file.name)
+            dataPath = file.absolutePath
+        }
+        else {
+            imagePath = file.absolutePath
+            et_photo.setText(file.name)
+        }
+    }*/
 
+    fun setImage(filePath: String) {
         val file = File(filePath)
         var newFile: File? = null
-
         progress_wheel.spin()
         doAsync {
-
             val processImage = ProcessImageUtils_v1(mContext, file, 50)
-            newFile = processImage.ProcessImage()
-
+            newFile = processImage.ProcessImageSelfie()
             uiThread {
                 if (newFile != null) {
                     XLog.e("=========Image from new technique==========")
-                    //reimbursementEditPic(newFile!!.length(), newFile?.absolutePath!!)
+                    val fileSize = AppUtils.getCompressImage(filePath)
+                    var tyy=filePath
+
+                    if (isAttachment) {
+                        et_attachment.setText(newFile!!.name)
+                        dataPath = newFile!!.absolutePath
+                    }
+                    else {
+                        imagePath = newFile!!.absolutePath
+                        et_photo.setText(newFile!!.name)
+                    }
                 } else {
                     // Image compression
                     val fileSize = AppUtils.getCompressImage(filePath)
-                    //reimbursementEditPic(fileSize, filePath)
+                    var tyy=filePath
                 }
             }
         }
     }
+
+    fun setDoc(file: File) {
+        if (isAttachment) {
+            et_attachment.setText(file.name)
+            dataPath = file.absolutePath
+        }
+    }
+
+
+
+    /* fun setImage(filePath: String) {
+
+         val file = File(filePath)
+         var newFile: File? = null
+
+         progress_wheel.spin()
+         doAsync {
+
+             val processImage = ProcessImageUtils_v1(mContext, file, 50)
+             newFile = processImage.ProcessImage()
+
+             uiThread {
+                 if (newFile != null) {
+                     XLog.e("=========Image from new technique==========")
+                     //reimbursementEditPic(newFile!!.length(), newFile?.absolutePath!!)
+                 } else {
+                     // Image compression
+                     val fileSize = AppUtils.getCompressImage(filePath)
+                     //reimbursementEditPic(fileSize, filePath)
+                 }
+             }
+         }
+     }*/
 
 }
