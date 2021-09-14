@@ -405,8 +405,6 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         aadhaarSubmitData.feedback=feedBac
         aadhaarSubmitData.address=""
 
-
-
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
                 repository.sendUserAadhaarApi(aadhaarSubmitData)
@@ -416,7 +414,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                             val response = result as BaseResponse
                             progress_wheel.stopSpinning()
                             //(mContext as DashboardActivity).showSnackMessage(response.message!!)
-                            (mContext as DashboardActivity).showSnackMessage("Aadhar registered successfully")
+                            //(mContext as DashboardActivity).showSnackMessage("Aadhaar registered successfully")
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (!TextUtils.isEmpty(et_attachment.text.toString().trim()) || !TextUtils.isEmpty(et_photo.text.toString().trim())) {
@@ -439,7 +437,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                                         //(mContext as DashboardActivity).showSnackMessage(response.message!!)
                                                         //(mContext as DashboardActivity).showSnackMessage("Aadhar registered successfully")
                                                         if (response.status == NetworkConstant.SUCCESS) {
-                                                            voiceAttendanceMsg("Aadhar registered successfully")
+                                                            aadharSuccessDialogShow()
+                                                            //voiceAttendanceMsg("Aadhaar registered successfully")
                                                            /* Handler(Looper.getMainLooper()).postDelayed({
                                                                 callUSerListApi()
                                                             }, 300)*/
@@ -453,7 +452,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                                     })
                                     )
                                 }else{
-                                    voiceAttendanceMsg("Aadhar registered successfully")
+                                    aadharSuccessDialogShow()
+                                    //voiceAttendanceMsg("Aadhaar registered successfully")
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
                                 }
                             }
@@ -466,6 +466,24 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         )
 
 
+    }
+
+    private fun aadharSuccessDialogShow() {
+        val simpleDialogAdhhar = Dialog(mContext)
+        simpleDialogAdhhar.setCancelable(false)
+        simpleDialogAdhhar.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialogAdhhar.setContentView(R.layout.dialog_message)
+        val dialogHeader = simpleDialogAdhhar.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        val dialogHeaderTTV = simpleDialogAdhhar.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+        dialogHeader.text="Aadhaar registered successfully"
+        dialogHeaderTTV.text="Hi! "+Pref.user_name
+        val tv_message_ok = simpleDialogAdhhar.findViewById(R.id.tv_message_ok) as AppCustomTextView
+
+        tv_message_ok.setOnClickListener( { view ->
+            simpleDialogAdhhar.cancel()
+            voiceAttendanceMsg("Aadhaar registered successfully")
+        })
+        simpleDialogAdhhar.show()
     }
 
 
