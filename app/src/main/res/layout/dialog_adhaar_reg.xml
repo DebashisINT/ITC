@@ -113,7 +113,17 @@
                 android:id="@+id/iv_dialog_aadhaar_reg_cancel_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_cancel"/>
+                android:src="@drawable/ic_cancel"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_dialog_aadhaar_reg_doc"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12sdp"/>
 
 
         </LinearLayout>

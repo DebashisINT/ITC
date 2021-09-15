@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.MediaController
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -328,6 +329,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
     lateinit var simpleDialog:Dialog
     lateinit var iv_takenImg:ImageView
+    lateinit var dialogCameraclickCancel:ImageView
+    lateinit var tv_docShow:TextView
     private fun OpenDialogForAdhaarReg(obj: UserListResponseModel) {
         simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(true)
@@ -339,8 +342,9 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
         val dialogEtFeedback = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_feedback) as AppCustomEditText
         val dialogCameraclick = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_iv_camera) as ImageView
-        val dialogCameraclickCancel = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_cancel_pic) as ImageView
+        dialogCameraclickCancel = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_cancel_pic) as ImageView
         iv_takenImg = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_pic) as ImageView
+        tv_docShow = simpleDialog.findViewById(R.id.tv_dialog_aadhaar_reg_doc) as TextView
 
         val dialogConfirm = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_confirm) as AppCustomTextView
         val dialogCancel = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_cancel) as AppCustomTextView
@@ -352,6 +356,19 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                     obj.RegisteredAadhaarNo!!.get(6).toString()+obj.RegisteredAadhaarNo!!.get(7).toString())
             dialogEtCardNumber3.setText(obj.RegisteredAadhaarNo!!.get(8).toString()+obj.RegisteredAadhaarNo!!.get(9).toString()+
                     obj.RegisteredAadhaarNo!!.get(10).toString()+obj.RegisteredAadhaarNo!!.get(11).toString())
+        }
+        if(obj.RegisteredAadhaarDocLink!=null && obj.RegisteredAadhaarDocLink!!.length>0 && obj.RegisteredAadhaarDocLink!!.contains("jpg")){
+            iv_takenImg.visibility=View.VISIBLE
+            dialogCameraclickCancel.visibility=View.VISIBLE
+            Picasso.get()
+                    .load(obj.RegisteredAadhaarDocLink)
+                    .resize(500, 500)
+                    .into(iv_takenImg)
+        }else if(obj.RegisteredAadhaarDocLink!=null && obj.RegisteredAadhaarDocLink!!.length>0){
+            //Toaster.msgLong(mContext,obj.RegisteredAadhaarDocLink!!.toString())
+            iv_takenImg.visibility=View.GONE
+            dialogCameraclickCancel.visibility=View.GONE
+            tv_docShow.text="Document Attached."
         }
 
         dialogCameraclick.setOnClickListener{v: View? ->
@@ -418,6 +435,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
 
     private fun submitAadhaarDetails(obj: UserListResponseModel,feedBac:String){
+        progress_wheel.spin()
         var aadhaarSubmitData: AadhaarSubmitData=AadhaarSubmitData()
         aadhaarSubmitData.session_token=Pref.session_token.toString()
         aadhaarSubmitData.aadhaar_holder_user_id=obj.user_id.toString()
@@ -474,6 +492,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                                     })
                                     )
                                 }else{
+                                    progress_wheel.stopSpinning()
                                     aadharSuccessDialogShow()
                                     //voiceAttendanceMsg("Aadhaar registered successfully")
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
@@ -598,12 +617,16 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                         var tt="asd"
 
                     }
+                    iv_takenImg.visibility=View.VISIBLE
+                    dialogCameraclickCancel.visibility=View.VISIBLE
                     progress_wheel.stopSpinning()
                 } else {
                     // Image compression
                     val fileSize = AppUtils.getCompressImage(filePath)
                     var tyy=filePath
                     progress_wheel.stopSpinning()
+                    iv_takenImg.visibility=View.VISIBLE
+                    dialogCameraclickCancel.visibility=View.VISIBLE
                 }
             }
         }
@@ -613,6 +636,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         if (isAttachment) {
             et_attachment.setText(file.name)
             dataPath = file.absolutePath
+            iv_takenImg.visibility=View.GONE
+            tv_docShow.text="Document Attached."
         }
     }
 

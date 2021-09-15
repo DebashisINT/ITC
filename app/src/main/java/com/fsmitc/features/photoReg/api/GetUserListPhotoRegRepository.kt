@@ -89,7 +89,7 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
             else
                 File(item.link).extension
 
-            val imageName = aadhaarSubmitData.aadhaar_holder_user_id + "~" + aadhaarSubmitData.date + "~"
+            val imageName = aadhaarSubmitData.aadhaar_holder_user_id + aadhaarSubmitData.date
             val fileName = imageName + item.type + "_" + System.currentTimeMillis() + "." + fileExt
 
             Log.e("Work Reschedule Image", "File Name=========> $fileName")
