@@ -4820,6 +4820,15 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         simpleDialog.setContentView(R.layout.dialog_end_day_sale_value)
         val et_saleValue: EditText = simpleDialog.findViewById(R.id.dialog_et_sale_value) as EditText
         val submit = simpleDialog.findViewById(R.id.tv_dialog_submit) as AppCustomTextView
+
+        et_saleValue.setOnFocusChangeListener({ v, hasFocus ->
+            if (hasFocus) {
+                et_saleValue.setBackgroundResource(R.drawable.blue_line_custom_selected)
+            } else {
+                et_saleValue.setBackgroundResource(R.drawable.blue_line_custom)
+            }
+        })
+
         /*  try {
               et_saleValue.setFilters(arrayOf<InputFilter>(DecimalDigitsInputFilter(9, 2)))
           } catch (ex: Exception) {
