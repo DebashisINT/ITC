@@ -5,6 +5,7 @@
     <color name="colorAccent">#1A8BA6</color>
 
     <color name="default_text_color">#1A8BA6</color>
+    <color name="default_text_color_light">#49B5CF</color>
     <color name="black">#000000</color>
     <color name="login_txt_color">#606060</color>
     <color name="menu_text_color">#EEEFF1</color>
