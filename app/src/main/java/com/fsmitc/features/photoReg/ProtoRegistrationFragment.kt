@@ -337,9 +337,13 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val dialogCameraclick = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_iv_camera) as ImageView
 
         val dialogConfirm = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_confirm) as AppCustomTextView
+        val dialogCancel = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_cancel) as AppCustomTextView
 
         dialogCameraclick.setOnClickListener{v: View? ->
             showPictureDialog()
+        }
+        dialogCancel.setOnClickListener{v: View? ->
+            simpleDialog.cancel()
         }
 
         dialogConfirm.setOnClickListener({ view ->
@@ -393,9 +397,6 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
 
     private fun submitAadhaarDetails(obj: UserListResponseModel,feedBac:String){
-        var tt=str_aadhaarNo
-        //Toaster.msgLong(mContext,str_aadhaarNo)
-
         var aadhaarSubmitData: AadhaarSubmitData=AadhaarSubmitData()
         aadhaarSubmitData.session_token=Pref.session_token.toString()
         aadhaarSubmitData.aadhaar_holder_user_id=obj.user_id.toString()

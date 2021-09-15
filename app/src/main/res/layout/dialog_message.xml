@@ -23,7 +23,16 @@
             android:padding="@dimen/_10sdp"
             android:text="@string/app_name"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_15sdp" />
+            android:textSize="@dimen/_14sdp" />
+
+        <View
+            android:id="@+id/dialog_adhaar_reg_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_1sdp"
+            android:background="@color/light_gray"
+            android:layout_marginLeft="@dimen/_7sdp"
+            android:layout_marginRight="@dimen/_7sdp"/>
 
         <com.fsmitc.widgets.AppCustomTextView
             android:id="@+id/dialog_message_header_TV"

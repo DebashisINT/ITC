@@ -19,7 +19,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_80sdp"
+            android:layout_height="@dimen/_70sdp"
             android:orientation="vertical">
 
 
@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Enter Sales Value : "
+                    android:text="Enter Sales Value"
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_12sdp" />
 
@@ -44,7 +44,8 @@
                     android:text="*"
                     android:textColor="@color/red"
                     android:textSize="@dimen/_15sdp"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:visibility="gone"/>
 
 
             </LinearLayout>
@@ -52,16 +53,17 @@
 
             <EditText
                 android:id="@+id/dialog_et_sale_value"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:gravity="center"
+                android:layout_gravity="center"
                 android:hint="00"
+                android:background="@drawable/rect_silver_border_bg"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_12sdp"
                 android:inputType="number"
                 android:maxLength="7"
-                android:background="@color/white"/>
+                android:layout_marginTop="@dimen/_5sdp"/>
 
         </LinearLayout>
 

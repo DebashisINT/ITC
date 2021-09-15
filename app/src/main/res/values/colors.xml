@@ -99,4 +99,6 @@
 
 
     <color name="color_deep_blue">#084e8b</color>
+    <color name="color_silver">#E8E6E6</color>
+    <color name="color_silver_dark">#D6D6D6</color>
 </resources>

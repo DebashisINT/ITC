@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    app:cardBackgroundColor="@android:color/white"
+    app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="@dimen/_4sdp"
     app:cardElevation="@dimen/_2sdp">
 
@@ -22,7 +22,7 @@
             android:layout_marginLeft="@dimen/_11sdp"
             android:layout_weight="1"
             android:gravity="center|start"
-            android:textColor="@color/login_txt_color"
+            android:textColor="@color/black"
             android:textSize="@dimen/_11sdp" />
 
         <com.fsmitc.widgets.AppCustomTextView

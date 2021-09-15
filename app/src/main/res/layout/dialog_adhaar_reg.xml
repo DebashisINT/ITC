@@ -10,24 +10,31 @@
     app:cardCornerRadius="@dimen/_10sdp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/_300sdp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:background="@drawable/rounded_corner_white_bg"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
+
 
         <com.fsmitc.widgets.AppCustomTextView
             android:id="@+id/dialog_adhaar_reg_adhharTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
-            android:text="Adhaar Card No:"
+            android:text="Aadhaar No :"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_15sdp" />
+            android:textSize="@dimen/_15sdp"
+            android:layout_marginLeft="@dimen/_3sdp"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/_7sdp"
+            android:layout_marginRight="@dimen/_7sdp">
 
             <com.fsmitc.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_1"
@@ -35,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/_5sdp"
                 android:layout_weight="1"
-                android:background="@drawable/rectangular_black_border_bg"
+                android:background="@drawable/rect_silver_border_bg"
                 android:gravity="center_vertical"
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
@@ -48,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/_5sdp"
                 android:layout_weight="1"
-                android:background="@drawable/rectangular_black_border_bg"
+                android:background="@drawable/rect_silver_border_bg"
                 android:gravity="center_vertical"
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
@@ -61,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/_5sdp"
                 android:layout_weight="1"
-                android:background="@drawable/rectangular_black_border_bg"
+                android:background="@drawable/rect_silver_border_bg"
                 android:gravity="center_vertical"
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
@@ -78,11 +85,13 @@
             android:padding="@dimen/_10sdp"
             android:text="Attach Documnent:"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_15sdp" />
+            android:textSize="@dimen/_15sdp"
+            android:layout_marginLeft="@dimen/_3sdp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/_3sdp">
 
             <ImageView
                 android:id="@+id/tv_dialog_adhaar_reg_iv_camera"
@@ -108,21 +117,42 @@
             android:imeOptions="actionDone"
             android:inputType="text"
             android:padding="@dimen/_5sdp"
-            android:textSize="@dimen/_12sdp" />
+            android:textSize="@dimen/_12sdp"
+            android:paddingStart="@dimen/_10sdp"/>
 
         <View
             android:id="@+id/dialog_adhaar_reg_view"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:background="@color/black" />
+            android:layout_marginTop="@dimen/_1sdp"
+            android:background="@color/light_gray"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"/>
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
-            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal">
+
+            <com.fsmitc.widgets.AppCustomTextView
+                android:id="@+id/tv_dialog_adhaar_reg_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="@drawable/selector_order_history_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="Cancel"
+                android:textColor="@drawable/selector_text_clor_blue_white"
+                android:textSize="@dimen/_13sdp"
+                android:layout_marginRight="@dimen/_2sdp"
+                android:backgroundTint="#f8424e"/>
 
             <com.fsmitc.widgets.AppCustomTextView
                 android:id="@+id/tv_dialog_adhaar_reg_confirm"
@@ -136,7 +166,9 @@
                 android:gravity="center"
                 android:text="Confirm"
                 android:textColor="@drawable/selector_text_clor_blue_white"
-                android:textSize="@dimen/_13sdp" />
+                android:textSize="@dimen/_13sdp"
+                android:backgroundTint="#57a518"
+                android:layout_marginLeft="@dimen/_2sdp"/>
 
         </LinearLayout>
 
