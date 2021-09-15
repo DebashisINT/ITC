@@ -330,6 +330,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     lateinit var simpleDialog:Dialog
     lateinit var iv_takenImg:ImageView
     lateinit var dialogCameraclickCancel:ImageView
+    lateinit var dialogDocclickCancel:ImageView
     lateinit var tv_docShow:TextView
     private fun OpenDialogForAdhaarReg(obj: UserListResponseModel) {
         simpleDialog = Dialog(mContext)
@@ -343,6 +344,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val dialogEtFeedback = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_feedback) as AppCustomEditText
         val dialogCameraclick = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_iv_camera) as ImageView
         dialogCameraclickCancel = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_cancel_pic) as ImageView
+        dialogDocclickCancel = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_cancel_pic_doc) as ImageView
         iv_takenImg = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_pic) as ImageView
         tv_docShow = simpleDialog.findViewById(R.id.tv_dialog_aadhaar_reg_doc) as TextView
 
@@ -372,10 +374,24 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         }
 
         dialogCameraclick.setOnClickListener{v: View? ->
+            iv_takenImg.visibility=View.GONE
+            dialogCameraclickCancel.visibility=View.GONE
+            dialogDocclickCancel.visibility=View.GONE
+            tv_docShow.visibility=View.GONE
             showPictureDialog()
         }
         dialogCameraclickCancel.setOnClickListener{v: View? ->
+
             iv_takenImg.setImageBitmap(null)
+            dialogCameraclickCancel.visibility=View.GONE
+            dataPath=""
+            imagePath=""
+        }
+        dialogDocclickCancel.setOnClickListener{v: View? ->
+
+            tv_docShow.visibility=View.GONE
+            dialogDocclickCancel.visibility=View.GONE
+
             dataPath=""
             imagePath=""
         }
@@ -638,6 +654,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             dataPath = file.absolutePath
             iv_takenImg.visibility=View.GONE
             tv_docShow.text="Document Attached."
+            tv_docShow.visibility=View.VISIBLE
+            dialogDocclickCancel.visibility=View.VISIBLE
         }
     }
 
