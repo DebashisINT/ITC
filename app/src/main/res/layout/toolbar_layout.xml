@@ -3,14 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="true"
-    >
+    android:fitsSystemWindows="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/custom_toolbar_back"
         android:visibility="visible"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"
@@ -36,9 +35,9 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/_40sdp"
+            android:background="@drawable/green_round"
             android:contentDescription="@null"
-            android:padding="@dimen/_7sdp"
-            android:background="@drawable/green_round" />
+            android:padding="@dimen/_7sdp" />
 
         <ImageView
             android:id="@+id/iv_back_arrow"
@@ -50,7 +49,7 @@
             android:contentDescription="@null"
             android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_header_back_arrow"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
 
         <!--<ImageView
@@ -70,107 +69,107 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:gravity="center_vertical"
-            android:layout_marginEnd="@dimen/_10sdp">
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:gravity="center_vertical">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_map"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
-                app:srcCompat="@drawable/ic_map"
+                android:padding="@dimen/_5sdp"
                 android:visibility="gone"
-                android:padding="@dimen/_5sdp" />
+                app:srcCompat="@drawable/ic_map" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_settings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
-                app:srcCompat="@drawable/ic_settings"
+                android:padding="@dimen/_5sdp"
                 android:visibility="gone"
-                android:padding="@dimen/_5sdp" />
+                app:srcCompat="@drawable/ic_settings" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ic_chat_bot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_bot"
-                android:padding="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:visibility="gone"/>
+                android:padding="@dimen/_5sdp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_bot" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_cancel_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_exit"
-                android:padding="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:visibility="gone"/>
+                android:padding="@dimen/_5sdp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_exit" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ic_calendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_event_note"
-                android:visibility="gone"
+                android:layout_marginTop="@dimen/_1sdp"
                 android:padding="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_1sdp"/>
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_event_note" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_people"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_people_white"
-                android:padding="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:visibility="gone"/>
+                android:padding="@dimen/_5sdp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_people_white" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_scan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_scanner"
-                android:padding="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:visibility="gone"/>
+                android:padding="@dimen/_5sdp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_scanner" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_view_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_view_list"
-                android:padding="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_1sdp"
-                android:visibility="gone"/>
+                android:padding="@dimen/_5sdp"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_view_list" />
 
             <ImageView
                 android:id="@+id/iv_home_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_header_home_icon_top"
-                android:visibility="visible"
-                android:contentDescription="@null"/>
+                android:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
-                app:srcCompat="@drawable/ic_notification_white"
+                android:padding="@dimen/_5sdp"
                 android:visibility="visible"
-                android:padding="@dimen/_5sdp" />
+                app:srcCompat="@drawable/ic_notification_white" />
 
             <ImageView
                 android:id="@+id/iv_filter_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@null"
                 android:padding="@dimen/_5sdp"
                 android:src="@drawable/ic_dashboard_filter_icon"
-                android:contentDescription="@null"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rl_cart"
@@ -193,18 +192,17 @@
                     android:id="@+id/tv_cart_count"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
+                    android:layout_alignTop="@+id/iv_delete_icon"
+                    android:layout_alignRight="@+id/iv_delete_icon"
+                    android:background="@drawable/red_circle"
                     android:gravity="center"
+                    android:text="0"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/_8sdp"
-                    android:text="0"
-                    android:layout_alignRight="@+id/iv_delete_icon"
-                    android:layout_alignTop="@+id/iv_delete_icon"
-                    android:textStyle="bold"
-                    android:background="@drawable/red_circle"/>
+                    android:textStyle="bold" />
             </RelativeLayout>
 
         </LinearLayout>
-
 
 
         <RelativeLayout
@@ -214,17 +212,17 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/_10sdp"
-            android:visibility="gone"
-            android:background="@drawable/rounded_corner_cyan_bg">
+            android:background="@drawable/rounded_corner_cyan_bg"
+            android:visibility="gone">
 
             <com.fsmitc.widgets.AppCustomTextView
                 android:id="@+id/tv_confirm_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_10sdp"
                 android:text="Confirm"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_11sdp"
-                android:padding="@dimen/_10sdp"/>
+                android:textSize="@dimen/_11sdp" />
         </RelativeLayout>
 
 
@@ -232,34 +230,34 @@
             android:id="@+id/iv_search_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/ll_home_bell"
             android:contentDescription="@null"
-            app:srcCompat="@drawable/ic_action_search_white"
-            android:layout_centerVertical="true"
             android:padding="@dimen/_5sdp"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_action_search_white" />
 
         <ImageView
             android:id="@+id/iv_list_party"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_list_of_party"
-            android:layout_toLeftOf="@id/iv_search_icon"
             android:layout_centerVertical="true"
-            android:padding="@dimen/_5sdp"
+            android:layout_toLeftOf="@id/iv_search_icon"
             android:contentDescription="@null"
-            android:visibility="gone"/>
+            android:padding="@dimen/_5sdp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_list_of_party" />
 
 
         <ImageView
             android:id="@+id/iv_sync_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_5sdp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/iv_search_icon"
+            android:padding="@dimen/_5sdp"
             android:src="@drawable/ic_header_reload_icon"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <!--<RelativeLayout
             android:id="@+id/rl_cart"
@@ -320,8 +318,8 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:paddingTop="@dimen/_3sdp"
-                android:paddingBottom="@dimen/_3sdp"
                 android:paddingRight="@dimen/_15sdp"
+                android:paddingBottom="@dimen/_3sdp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp" />
 
@@ -380,9 +378,9 @@
 
         <com.fsmitc.app.MaterialSearchView
             android:id="@+id/search_view"
+            style="@style/MaterialSearchViewStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/MaterialSearchViewStyle"/>
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
 

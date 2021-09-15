@@ -997,7 +997,7 @@
                 android:layout_marginLeft="@dimen/_10sdp"
                 android:layout_marginRight="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_15sdp"
-                android:background="@drawable/selector_blue_botton_bg"
+                android:background="@drawable/shape_custom_border_blue_button"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
