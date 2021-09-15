@@ -604,7 +604,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
                         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                         dialog_yes_no_headerTV.text = "Hi"+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
-                        dialogHeader.text = "Please mark your attendance"
+                        dialogHeader.text = "Please mark your attendance."
                         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                         dialogYes.setOnClickListener({ view ->
                             simpleDialog.cancel()

@@ -476,13 +476,13 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         simpleDialogAdhhar.setContentView(R.layout.dialog_message)
         val dialogHeader = simpleDialogAdhhar.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialogHeaderTTV = simpleDialogAdhhar.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-        dialogHeader.text="Aadhaar registered successfully"
+        dialogHeader.text="Aadhaar registered successfully."
         dialogHeaderTTV.text="Hi "+Pref.user_name+"!"
         val tv_message_ok = simpleDialogAdhhar.findViewById(R.id.tv_message_ok) as AppCustomTextView
 
         tv_message_ok.setOnClickListener( { view ->
             simpleDialogAdhhar.cancel()
-            voiceAttendanceMsg("Aadhaar registered successfully")
+            voiceAttendanceMsg("Aadhaar registered successfully.")
         })
         simpleDialogAdhhar.show()
     }
