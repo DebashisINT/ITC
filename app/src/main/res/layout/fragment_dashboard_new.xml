@@ -247,7 +247,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/ic_day_start" />
+                                android:src="@drawable/ic_day_start_new" />
 
                         </RelativeLayout>
 
@@ -345,7 +345,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/ic_dist_dash"
+                                android:src="@drawable/ic_dist_dash_new"
                                 app:tint="@color/white" />
 
                         </RelativeLayout>
@@ -475,7 +475,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/ic_day_end" />
+                                android:src="@drawable/ic_day_end_new" />
 
                         </RelativeLayout>
 
