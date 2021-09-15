@@ -774,6 +774,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         })
                         simpleDialog.show()
 //                        (mContext as DashboardActivity).showSnackMessage("Please start your day")
+                        //test
                     }
                 }
             }
