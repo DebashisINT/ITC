@@ -3238,7 +3238,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         /***********API CALL************/
         if (AppUtils.isOnline(this)) {
-            tv_internet_info.setBackgroundColor(resources.getColor(R.color.green))
+            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_green))
             tv_internet_info.text = getString(R.string.login_net_connected)
             if (isApiInitiated)
                 return
@@ -3247,7 +3247,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             callNewSettingsApi()
         } else {
             //showSnackMessage(getString(R.string.no_internet))
-            tv_internet_info.setBackgroundColor(resources.getColor(R.color.red))
+            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_red))
             tv_internet_info.text = getString(R.string.login_net_disconnected)
         }
     }
@@ -5711,12 +5711,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         if (!AppUtils.isOnline(this)) {
             //showSnackMessage(getString(R.string.no_internet))
-            tv_internet_info.setBackgroundColor(resources.getColor(R.color.red))
+            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_red))
             tv_internet_info.text = getString(R.string.login_net_disconnected)
             return
         }
 
-        tv_internet_info.setBackgroundColor(resources.getColor(R.color.green))
+        tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_green))
         tv_internet_info.text = getString(R.string.login_net_connected)
 
         val repository = LoginRepositoryProvider.provideLoginImgRepository()
