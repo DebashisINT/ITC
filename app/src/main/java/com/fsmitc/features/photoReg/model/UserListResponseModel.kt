@@ -12,6 +12,8 @@ class UserListResponseModel {
     var ShowDDInFaceRegistration: String? = ""
     var registration_date_time: String? = ""
     var IsAadhaarRegistered: Boolean? = false
+    var RegisteredAadhaarNo: String? = ""
+    var RegisteredAadhaarDocLink: String? = ""
 
 
 }

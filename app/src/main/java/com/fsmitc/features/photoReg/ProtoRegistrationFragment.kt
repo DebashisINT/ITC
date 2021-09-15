@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -66,6 +68,7 @@ import kotlinx.android.synthetic.main.row_user_list_face_regis.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.File
+import java.io.FileInputStream
 import java.net.URLEncoder
 
 class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
@@ -323,9 +326,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         }
     }
 
-
+    lateinit var simpleDialog:Dialog
+    lateinit var iv_takenImg:ImageView
     private fun OpenDialogForAdhaarReg(obj: UserListResponseModel) {
-        val simpleDialog = Dialog(mContext)
+        simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(true)
         simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         simpleDialog.setContentView(R.layout.dialog_adhaar_reg)
@@ -335,14 +339,31 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
         val dialogEtFeedback = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_feedback) as AppCustomEditText
         val dialogCameraclick = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_iv_camera) as ImageView
+        val dialogCameraclickCancel = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_cancel_pic) as ImageView
+        iv_takenImg = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_pic) as ImageView
 
         val dialogConfirm = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_confirm) as AppCustomTextView
         val dialogCancel = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_cancel) as AppCustomTextView
 
+        if(obj.RegisteredAadhaarNo!=null && obj.RegisteredAadhaarNo!!.length>0){
+            dialogEtCardNumber1.setText(obj.RegisteredAadhaarNo!!.get(0).toString()+obj.RegisteredAadhaarNo!!.get(1).toString()+
+                    obj.RegisteredAadhaarNo!!.get(2).toString()+obj.RegisteredAadhaarNo!!.get(3).toString())
+            dialogEtCardNumber2.setText(obj.RegisteredAadhaarNo!!.get(4).toString()+obj.RegisteredAadhaarNo!!.get(5).toString()+
+                    obj.RegisteredAadhaarNo!!.get(6).toString()+obj.RegisteredAadhaarNo!!.get(7).toString())
+            dialogEtCardNumber3.setText(obj.RegisteredAadhaarNo!!.get(8).toString()+obj.RegisteredAadhaarNo!!.get(9).toString()+
+                    obj.RegisteredAadhaarNo!!.get(10).toString()+obj.RegisteredAadhaarNo!!.get(11).toString())
+        }
+
         dialogCameraclick.setOnClickListener{v: View? ->
             showPictureDialog()
         }
+        dialogCameraclickCancel.setOnClickListener{v: View? ->
+            iv_takenImg.setImageBitmap(null)
+            dataPath=""
+            imagePath=""
+        }
         dialogCancel.setOnClickListener{v: View? ->
+            progress_wheel.stopSpinning()
             simpleDialog.cancel()
         }
 
@@ -568,11 +589,21 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                     else {
                         imagePath = newFile!!.absolutePath
                         et_photo.setText(newFile!!.name)
+
+                        val f = File(newFile!!.absolutePath)
+                        val options: BitmapFactory.Options = BitmapFactory.Options()
+                        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+                        var bitmap = BitmapFactory.decodeStream(FileInputStream(f), null, options)
+                        iv_takenImg.setImageBitmap(bitmap)
+                        var tt="asd"
+
                     }
+                    progress_wheel.stopSpinning()
                 } else {
                     // Image compression
                     val fileSize = AppUtils.getCompressImage(filePath)
                     var tyy=filePath
+                    progress_wheel.stopSpinning()
                 }
             }
         }

@@ -58,7 +58,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:hint="00"
-                android:background="@drawable/rect_silver_border_bg"
+                android:background="@drawable/blue_line_custom"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_12sdp"
                 android:inputType="number"
