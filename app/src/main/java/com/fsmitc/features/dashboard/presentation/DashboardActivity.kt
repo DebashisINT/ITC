@@ -2463,7 +2463,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         val submitRemarks = dialog.findViewById(R.id.tv_cancel_order_submit_remarks) as AppCustomTextView
 
                         order_status.text="Failure"
-                        user_name.text="Hi! "+Pref.user_name
+                        user_name.text="Hi"+Pref.user_name+"!"
 
                         submitRemarks.setOnClickListener(View.OnClickListener { view ->
                             if(!TextUtils.isEmpty(cancel_remarks.text.toString().trim())){
@@ -6276,7 +6276,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     val submitRemarks = dialog.findViewById(R.id.tv_cancel_order_submit_remarks) as AppCustomTextView
 
                     order_status.text="Failure"
-                    user_name.text="Hi! "+Pref.user_name
+                    user_name.text="Hi "+Pref.user_name+"!"
 
                     submitRemarks.setOnClickListener(View.OnClickListener { view ->
                         if(!TextUtils.isEmpty(cancel_remarks.text.toString().trim())){

@@ -360,7 +360,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                         val dialogHeader = simpleDialogInner.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
                         val dialogHeaderTTV = simpleDialogInner.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
                         dialogHeader.text="Are you sure?"
-                        dialogHeaderTTV.text="Hi! "+Pref.user_name
+                        dialogHeaderTTV.text="Hi "+Pref.user_name+"!"
                         val dialogYes = simpleDialogInner.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
                         val dialogNo = simpleDialogInner.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
 
@@ -477,7 +477,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val dialogHeader = simpleDialogAdhhar.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialogHeaderTTV = simpleDialogAdhhar.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
         dialogHeader.text="Aadhaar registered successfully"
-        dialogHeaderTTV.text="Hi! "+Pref.user_name
+        dialogHeaderTTV.text="Hi "+Pref.user_name+"!"
         val tv_message_ok = simpleDialogAdhhar.findViewById(R.id.tv_message_ok) as AppCustomTextView
 
         tv_message_ok.setOnClickListener( { view ->
