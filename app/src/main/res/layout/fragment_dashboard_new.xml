@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:background="@color/colorPrimary">
+            android:background="@drawable/custom_toolbar_back">
 
             <LinearLayout
                 android:id="@+id/horizental_icon_holder_ll"
@@ -506,7 +506,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorPrimary">
+                android:background="@drawable/shape_custom_border_blue_button">
 
                 <com.fsmitc.widgets.AppCustomTextView
                     android:id="@+id/best_performing_shop_TV"
