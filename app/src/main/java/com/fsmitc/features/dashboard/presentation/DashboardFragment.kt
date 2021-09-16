@@ -828,7 +828,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         simpleDialog.setContentView(R.layout.dialog_message)
                         val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
                         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
                         dialogHeader.text = "You are already visited once..."
                         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                         dialogYes.setOnClickListener({ view ->
@@ -1165,7 +1165,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             simpleDialog.setContentView(R.layout.dialog_message)
                             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
                             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
                             dialogHeader.text = "Please start your day..."
                             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                             dialogYes.setOnClickListener({ view ->
