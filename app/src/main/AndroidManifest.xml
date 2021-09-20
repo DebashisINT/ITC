@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fsmitc">
+    package="com.breezefsmdsm">
 
     <uses-sdk />
 
@@ -112,7 +112,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="com.google.android.exoplayer.fsmitc.action.VIEW" />
+                <action android:name="com.google.android.exoplayer.breezefsmdsm.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -184,7 +184,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.fsmitc.provider"
+            android:authorities="com.breezefsmdsm.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -200,7 +200,7 @@
         <!-- android:name=".features.updatedlocation.LocationService" -->
         <!-- android:enabled="true" /> -->
         <receiver
-            android:name="com.fsmitc.features.location.GeofenceBroadcastReceiver"
+            android:name="com.breezefsmdsm.features.location.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
         <receiver

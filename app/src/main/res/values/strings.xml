@@ -1,6 +1,7 @@
 <resources>
     <!--<string name="app_name">Field Tracking System</string>-->
-    <string name="app_name" translatable="false">FSM-ITC</string>
+    <!-- <string name="app_name" translatable="false">FSM-ITC</string>-->
+    <string name="app_name" translatable="false">BreezeFSM- DSM</string>
     <string name="blank" translatable="false"></string>
     <string name="enter_a_title" translatable="false">Enter a title</string>
     <string name="entry_details_default_text" translatable="false">Entry Details!</string>
@@ -13,7 +14,7 @@
     <!--Map Key-->
     <!--<string name="MAP_ProjectAPIKey">AIzaSyBRrqsLZFqThqM8uxw_k94pZMbv3-3h0dM</string>-->
 <!--    <string name="MAP_ProjectAPIKey" translatable="false">AIzaSyCbYMZjnt8T6yivYfIa4_R9oy-L3SIYyrQ</string>-->
-    <string name="MAP_ProjectAPIKey" translatable="false">AIzaSyCRwlSQ-Qt9N-8r8mwTsYkPk3jbnIcc5vY</string>
+    <string name="MAP_ProjectAPIKey" translatable="false">AIzaSyDt4K_4qm-xMO7FfKF08Nj25FgJIh0jhBY</string>
 
     <!--Login-->
     <string name="username" translatable="false">Enter Login ID</string>
@@ -409,12 +410,12 @@
     <string name="email" translatable="false">Email ID</string>
 
 
-    <!--fsmitc-->
-    <string name="fsmitc_user_name" translatable="false">Mr. Kinsuk Roy</string>
-    <string name="fsmitc_login" translatable="false">Logged in at 10:55 AM</string>
-    <string name="fsmitc_location" translatable="false">You have covered the distance of 3 KM in last hour </string>
-    <string name="fsmitc_shops" translatable="false">You have visited 2 shops</string>
-    <string name="fsmitc_time" translatable="false">10:30 AM</string>
+    <!--breezefsmdsm-->
+    <string name="breezefsmdsm_user_name" translatable="false">Mr. Kinsuk Roy</string>
+    <string name="breezefsmdsm_login" translatable="false">Logged in at 10:55 AM</string>
+    <string name="breezefsmdsm_location" translatable="false">You have covered the distance of 3 KM in last hour </string>
+    <string name="breezefsmdsm_shops" translatable="false">You have visited 2 shops</string>
+    <string name="breezefsmdsm_time" translatable="false">10:30 AM</string>
 
     <!--Change Password-->
     <string name="old_pwd" translatable="false">Old Password</string>
@@ -477,8 +478,8 @@
     <string name="capture_shop_image" translatable="false">Capture an image of shop</string>
     <string name="welcome" translatable="false">Welcome</string>
     <string name="vikas_malhotra" translatable="false">Vikash Malhotra</string>
-    <string name="dashboard_fsmitc_item" translatable="false">10.30\nAM</string>
-    <string name="dashboard_fsmitc_address" translatable="false">SDF Building, GP Block, Saltlake </string>
+    <string name="dashboard_breezefsmdsm_item" translatable="false">10.30\nAM</string>
+    <string name="dashboard_breezefsmdsm_address" translatable="false">SDF Building, GP Block, Saltlake </string>
     <string name="ten" translatable="false">10</string>
     <string name="five" translatable="false">5</string>
     <string name="organization_name" translatable="false">Nordusk</string>
@@ -1453,7 +1454,7 @@
     <string name="error_enter_canceled_by" translatable="false">Please enter cancelled by</string>
 
 
-    <string name="tfe_od_app_name" translation_description="Object Detection fsmitc app [CHAR_LIMIT=40]">Face Recognition</string>
+    <string name="tfe_od_app_name" translation_description="Object Detection breezefsmdsm app [CHAR_LIMIT=40]">Face Recognition</string>
     <string name="tfe_od_camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>
     <string name="label_install_anydesk" translatable="false">Install Anydesk</string>
     <string name="label_open_anydesk" translatable="false">Open Anydesk</string>

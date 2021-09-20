@@ -41,7 +41,7 @@
                         android:padding="@dimen/_5sdp"
                         android:src="@drawable/ic_tick_select_icon_maroon" />
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/visit_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                         android:textStyle="bold" />
                 </RelativeLayout>
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/approx_distance_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/approx_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp">
 
-                        <com.fsmitc.widgets.AppCustomTextView
+                        <com.breezefsmdsm.widgets.AppCustomTextView
                             android:id="@+id/myshop_name_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
 
                     </RelativeLayout>
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/myshop_address_TV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                         android:textSize="@dimen/_11sdp"
                         android:visibility="invisible" />
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/tv_shop_contact_no"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                 android:paddingTop="@dimen/_5sdp"
                 android:visibility="gone">
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/tv_pp_dd_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -187,7 +187,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/tv_pp_dd_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -210,7 +210,7 @@
                 android:layout_marginStart="@dimen/_7sdp"
                 android:paddingTop="@dimen/_5sdp">
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/tv_entity_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -221,7 +221,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/tv_entity_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -243,7 +243,7 @@
                 android:layout_marginLeft="@dimen/_7sdp"
                 android:paddingTop="@dimen/_5sdp">
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/tv_party_header"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -254,7 +254,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/tv_party_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -276,7 +276,7 @@
                 android:layout_marginLeft="@dimen/_7sdp"
                 android:paddingTop="@dimen/_5sdp">
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
@@ -284,7 +284,7 @@
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/tv_shop_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -317,7 +317,7 @@
                     android:layout_toRightOf="@+id/shop_IV_flase"
                     android:paddingTop="@dimen/_5sdp">
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/order_amt_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -328,7 +328,7 @@
                         android:textColor="@color/light_gray"
                         android:textSize="@dimen/_11sdp" />
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/order_amt_p_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -353,7 +353,7 @@
                     android:paddingTop="@dimen/_5sdp"
                     android:visibility="gone">
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/total_v_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -364,7 +364,7 @@
                         android:textColor="@color/light_gray"
                         android:textSize="@dimen/_11sdp" />
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/total_visited_value_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -414,7 +414,7 @@
 <!--                            android:layout_gravity="center"-->
 <!--                            android:src="@drawable/ic_registered_shop_call_deselect" />-->
 
-<!--                        <com.fsmitc.widgets.AppCustomTextView-->
+<!--                        <com.breezefsmdsm.widgets.AppCustomTextView-->
 <!--                            android:id="@+id/call_tv"-->
 <!--                            gravity="center"-->
 <!--                            android:layout_width="wrap_content"-->
@@ -448,7 +448,7 @@
 <!--                            android:layout_gravity="center"-->
 <!--                            android:src="@drawable/ic_registered_shop_direction_deselect" />-->
 
-<!--                        <com.fsmitc.widgets.AppCustomTextView-->
+<!--                        <com.breezefsmdsm.widgets.AppCustomTextView-->
 <!--                            android:id="@+id/direction_tv"-->
 <!--                            android:layout_width="wrap_content"-->
 <!--                            android:layout_height="wrap_content"-->
@@ -481,7 +481,7 @@
 <!--                            android:layout_gravity="center"-->
 <!--                            android:src="@drawable/ic_registered_shop_add_order_deselect" />-->
 
-<!--                        <com.fsmitc.widgets.AppCustomTextView-->
+<!--                        <com.breezefsmdsm.widgets.AppCustomTextView-->
 <!--                            android:id="@+id/order_tv"-->
 <!--                            android:layout_width="wrap_content"-->
 <!--                            android:layout_height="wrap_content"-->
@@ -514,7 +514,7 @@
 <!--                            android:layout_gravity="center"-->
 <!--                            android:src="@drawable/ic_quotation" />-->
 
-<!--                        <com.fsmitc.widgets.AppCustomTextView-->
+<!--                        <com.breezefsmdsm.widgets.AppCustomTextView-->
 <!--                            android:id="@+id/quot_tv"-->
 <!--                            android:layout_width="wrap_content"-->
 <!--                            android:layout_height="wrap_content"-->
@@ -541,7 +541,7 @@
 <!--                    android:layout_toRightOf="@+id/shop_IV_flased"-->
 <!--                    android:visibility="gone">-->
 
-<!--                    <com.fsmitc.widgets.AppCustomTextView-->
+<!--                    <com.breezefsmdsm.widgets.AppCustomTextView-->
 <!--                        android:id="@+id/last_visited_TV"-->
 <!--                        android:layout_width="wrap_content"-->
 <!--                        android:layout_height="wrap_content"-->
@@ -552,7 +552,7 @@
 <!--                        android:textColor="@color/light_gray"-->
 <!--                        android:textSize="@dimen/_11sdp" />-->
 
-<!--                    <com.fsmitc.widgets.AppCustomTextView-->
+<!--                    <com.breezefsmdsm.widgets.AppCustomTextView-->
 <!--                        android:id="@+id/last_visited_date_TV"-->
 <!--                        android:layout_width="wrap_content"-->
 <!--                        android:layout_height="wrap_content"-->
@@ -601,7 +601,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/ic_registered_shop_call_deselect" />
 
-                        <com.fsmitc.widgets.AppCustomTextView
+                        <com.breezefsmdsm.widgets.AppCustomTextView
                             android:id="@+id/call_tv"
                             gravity="center"
                             android:layout_width="wrap_content"
@@ -635,7 +635,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/ic_registered_shop_direction_deselect" />
 
-                        <com.fsmitc.widgets.AppCustomTextView
+                        <com.breezefsmdsm.widgets.AppCustomTextView
                             android:id="@+id/direction_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -668,7 +668,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/ic_registered_shop_add_order_deselect" />
 
-                        <com.fsmitc.widgets.AppCustomTextView
+                        <com.breezefsmdsm.widgets.AppCustomTextView
                             android:id="@+id/order_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -701,7 +701,7 @@
                             android:layout_gravity="center"
                             android:src="@drawable/ic_quotation" />
 
-                        <com.fsmitc.widgets.AppCustomTextView
+                        <com.breezefsmdsm.widgets.AppCustomTextView
                             android:id="@+id/quot_tv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -728,7 +728,7 @@
                     android:layout_toRightOf="@+id/shop_IV_flased"
                     android:visibility="gone">
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/last_visited_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -739,7 +739,7 @@
                         android:textColor="@color/light_gray"
                         android:textSize="@dimen/_11sdp" />
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/last_visited_date_TV"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

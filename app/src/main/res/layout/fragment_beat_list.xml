@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.fsmitc.widgets.AppCustomTextView
+    <com.breezefsmdsm.widgets.AppCustomTextView
         android:id="@+id/tv_beat_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         wheel:matProg_barColor="@color/default_text_color"
         wheel:matProg_progressIndeterminate="true" />
 
-    <com.fsmitc.widgets.AppCustomTextView
+    <com.breezefsmdsm.widgets.AppCustomTextView
         android:id="@+id/no_beat_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

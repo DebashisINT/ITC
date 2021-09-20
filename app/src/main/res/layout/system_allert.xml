@@ -8,7 +8,7 @@
     android:background="@color/popup_window_bg"
     android:orientation="vertical">
 
-    <com.fsmitc.widgets.AppCustomTextView
+    <com.breezefsmdsm.widgets.AppCustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"
@@ -23,7 +23,7 @@
         android:background="@color/colorPrimary" />
 
 
-    <com.fsmitc.widgets.AppCustomTextView
+    <com.breezefsmdsm.widgets.AppCustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"
@@ -34,7 +34,7 @@
       />
 
 
-    <com.fsmitc.widgets.AppCustomTextView
+    <com.breezefsmdsm.widgets.AppCustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_5sdp"

@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.fsmitc.widgets.AppCustomTextView
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/dialog_header_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
                     android:weightSum="2"
                     android:layout_alignParentBottom="true">
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/cancel_TV"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -84,7 +84,7 @@
                         android:textColor="@drawable/selector_text_clor_blue_white"
                         android:textSize="@dimen/_13sdp" />
 
-                    <com.fsmitc.widgets.AppCustomTextView
+                    <com.breezefsmdsm.widgets.AppCustomTextView
                         android:id="@+id/ok_TV"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

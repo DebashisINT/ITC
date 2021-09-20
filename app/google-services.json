@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "741986353008",
-    "project_id": "fsmitc-7f383",
-    "storage_bucket": "fsmitc-7f383.appspot.com"
+    "project_number": "774354825268",
+    "project_id": "breezefsm--dsm",
+    "storage_bucket": "breezefsm--dsm.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:741986353008:android:ba31d0b0718ce7e64319b5",
+        "mobilesdk_app_id": "1:774354825268:android:13e664f8902d1b52ea9a61",
         "android_client_info": {
-          "package_name": "com.fsmitc"
+          "package_name": "com.breezefsmdsm"
         }
       },
       "oauth_client": [
         {
-          "client_id": "741986353008-7d4tn57h0sqf6ps8dafgh9vujofhbh3i.apps.googleusercontent.com",
+          "client_id": "774354825268-cb5gg5dm88nuktqi0mbqh19nqslp4ue7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBJe-13hFPVHm_35NUD-gzfkuib-_B-EzA"
+          "current_key": "AIzaSyCJSQJ8rPUa1uZLzvkylN-YgUQ2dLE2VLg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "741986353008-7d4tn57h0sqf6ps8dafgh9vujofhbh3i.apps.googleusercontent.com",
+              "client_id": "774354825268-cb5gg5dm88nuktqi0mbqh19nqslp4ue7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -15,7 +15,7 @@
         android:padding="@dimen/_3sdp">
 
 
-        <com.fsmitc.widgets.AppCustomTextView
+        <com.breezefsmdsm.widgets.AppCustomTextView
             android:id="@+id/photo_reg_user_name_tv"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
@@ -25,7 +25,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/_11sdp" />
 
-        <com.fsmitc.widgets.AppCustomTextView
+        <com.breezefsmdsm.widgets.AppCustomTextView
             android:id="@+id/photo_reg_dd_name_tv"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
@@ -43,7 +43,7 @@
             android:orientation="horizontal"
             android:layout_marginLeft="@dimen/_10sdp">
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/photo_reg_user_ph_tv"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -156,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/_5sdp">
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/click_for_photo_reg_tv"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

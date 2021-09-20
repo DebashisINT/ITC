@@ -7,7 +7,7 @@
     android:padding="@dimen/_5sdp"
     android:background="@color/color_silver">
 
-    <com.fsmitc.widgets.AppCustomEditText
+    <com.breezefsmdsm.widgets.AppCustomEditText
         android:id="@+id/et_attachment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:textSize="@dimen/_13sdp"
         android:visibility="gone"/>
 
-    <com.fsmitc.widgets.AppCustomEditText
+    <com.breezefsmdsm.widgets.AppCustomEditText
         android:id="@+id/et_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_cust_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

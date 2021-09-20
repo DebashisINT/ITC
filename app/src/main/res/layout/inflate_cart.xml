@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_particular_item"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp">
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_category_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/_11sdp" />
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_brand_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +72,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/_11sdp" />
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_watt_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp">
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_edit_product"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 android:textSize="@dimen/_11sdp"
                 android:visibility="gone"/>
 
-            <com.fsmitc.widgets.AppCustomTextView
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_remove_product"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

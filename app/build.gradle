@@ -19,14 +19,14 @@ apply plugin: 'de.undercouch.download'
 
 android {
 
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
     defaultConfig {
-        applicationId "com.fsmitc"
+        applicationId "com.breezefsmdsm"
         minSdkVersion 24
-        targetSdkVersion 29
-        versionCode 83
-        versionName "3.9.3"
+        targetSdkVersion 30
+        versionCode 84
+        versionName "3.9.4"
         //versionName "2.3.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
