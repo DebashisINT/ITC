@@ -19,6 +19,7 @@ import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.net.*
 import android.os.*
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.provider.MediaStore
 import android.provider.Settings
 import android.speech.tts.TextToSpeech
@@ -3054,7 +3055,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
 //        val phototUri = Uri.parse(localAbsoluteFilePath)
-            val fileUrl = Uri.parse(File(Environment.getExternalStorageDirectory(), "xbreezefsmdsmlogsample/log").path);
+            //val fileUrl = Uri.parse(File(Environment.getExternalStorageDirectory(), "xbreezefsmdsmlogsample/log").path);
+            val fileUrl = Uri.parse(File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
 
             val file = File(fileUrl.path)
             if (!file.exists()) {
@@ -10023,8 +10025,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         val bytes = ByteArrayOutputStream()
         bm!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
 
-        var destination = File(Environment.getExternalStorageDirectory(),
+      /*  var destination = File(Environment.getExternalStorageDirectory(),
+                System.currentTimeMillis().toString() + ".jpg")*/
+
+        var destination = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                 System.currentTimeMillis().toString() + ".jpg")
+
         val camera_image_path = destination?.absolutePath
         val fo: FileOutputStream
         try {

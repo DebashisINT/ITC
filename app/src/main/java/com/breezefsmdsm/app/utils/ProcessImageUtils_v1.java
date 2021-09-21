@@ -128,7 +128,8 @@ public class ProcessImageUtils_v1 {
         File dir /*= new File(context.getFilesDir() + File.separator + "" + context.getResources().getString(R.string.app_name))*/;
 
         if (isDocument)
-            dir = new File(Environment.getExternalStorageDirectory() + File.separator);
+            //dir = new File(Environment.getExternalStorageDirectory() + File.separator);
+            dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + File.separator);
         else {
             dir = new File(context.getFilesDir() + File.separator + "" + context.getResources().getString(R.string.app_name));
 

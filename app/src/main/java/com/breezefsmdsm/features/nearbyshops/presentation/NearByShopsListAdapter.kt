@@ -98,6 +98,8 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 } else
                     itemView.update_address_TV.visibility = View.GONE
 
+                //itemView.update_address_TV.visibility=View.VISIBLE
+
                 val drawable = TextDrawable.builder()
                         .buildRoundRect(list[adapterPosition].shopName.trim().toUpperCase().take(1), ColorGenerator.MATERIAL.randomColor, 120)
 

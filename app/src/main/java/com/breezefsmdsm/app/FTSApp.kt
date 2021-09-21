@@ -1,7 +1,9 @@
 package com.breezefsmdsm.app
 
 import android.content.Context
+import android.os.Environment
 import android.os.Environment.getExternalStorageDirectory
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.os.StrictMode
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
@@ -85,7 +87,8 @@ class FTSApp : MultiDexApplication() {
                 .build()
 
         val androidPrinter = AndroidPrinter()             // Printer that print the log using android.util.Log
-        val filePrinter = FilePrinter.Builder(File(getExternalStorageDirectory(), "xbreezefsmdsmlogsample").path)// Printer that print the log to the file system
+        //val filePrinter = FilePrinter.Builder(File(getExternalStorageDirectory(), "xbreezefsmdsmlogsample").path)// Printer that print the log to the file system
+        val filePrinter = FilePrinter.Builder(File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample").path)// Printer that print the log to the file system
                 // Specify the path to save log file
 //                .fileNameGenerator(ChangelessFileNameGenerator())        // Default: ChangelessFileNameGenerator("log")
                  .backupStrategy(NeverBackupStrategy())             // Default: FileSizeBackupStrategy(1024 * 1024)

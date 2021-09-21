@@ -18,6 +18,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.*
+import android.os.Environment.getExternalStoragePublicDirectory
 import android.provider.MediaStore
 import android.provider.Settings
 import android.telephony.TelephonyManager
@@ -3198,7 +3199,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
 //        val phototUri = Uri.parse(localAbsoluteFilePath)
-            val fileUrl = Uri.parse(File(Environment.getExternalStorageDirectory(), "xbreezefsmdsmlogsample/log").path);
+            //val fileUrl = Uri.parse(File(Environment.getExternalStorageDirectory(), "xbreezefsmdsmlogsample/log").path);
+            val fileUrl = Uri.parse(File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
 
             val file = File(fileUrl.path)
             if (!file.exists()) {
