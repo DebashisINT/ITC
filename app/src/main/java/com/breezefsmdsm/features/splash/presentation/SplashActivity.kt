@@ -43,7 +43,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.themechangeapp.pickimage.PermissionHelper
-import com.vmadalin.easypermissions.EasyPermissions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_splash.*
