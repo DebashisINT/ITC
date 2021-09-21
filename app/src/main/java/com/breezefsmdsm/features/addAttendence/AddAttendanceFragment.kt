@@ -1279,7 +1279,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         } else {
             //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
         }
-
+        //visibilityCheck()
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
             //attendance given
             visibilityCheck()
