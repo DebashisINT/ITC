@@ -18,6 +18,7 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import com.breezefsmdsm.BuildConfig
 import com.breezefsmdsm.R
@@ -41,6 +42,8 @@ import com.elvishew.xlog.XLog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.themechangeapp.pickimage.PermissionHelper
+import com.vmadalin.easypermissions.EasyPermissions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_splash.*
@@ -89,11 +92,30 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            if (Pref.isLocationPermissionGranted)
+            if (Pref.isLocationPermissionGranted){
+                /*if (hasLocPermission()) {
+                    //locationProcess()
+                    var ttt="asd"
+                } else {
+                    requestLocPermission()
+                }*/
                 initPermissionCheck()
+            }
+
+            ////
+
+            ////
             else {
+
+
                 LocationPermissionDialog.newInstance(object : LocationPermissionDialog.OnItemSelectedListener {
                     override fun onOkClick() {
+                      /*  if (hasLocPermission()) {
+                            //locationProcess()
+                            var ttt="asd"
+                        } else {
+                            requestLocPermission()
+                        }*/
                         initPermissionCheck()
                     }
 
@@ -159,18 +181,20 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         var permissionLists : Array<String> ?= null
 
         permissionLists = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            arrayOf<String>(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION)
         else
             arrayOf<String>(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
         permissionUtils = PermissionUtils(this, object : PermissionUtils.OnPermissionListener {
-            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+           // @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onPermissionGranted() {
                 Pref.isLocationPermissionGranted = true
+
                 checkGPSProvider()
             }
 
             override fun onPermissionNotGranted() {
+                //ActivityCompat.requestPermissions(this@SplashActivity,permissionLists, PermissionHelper.TAG_LOCATION_RESULTCODE)
                 //AppUtils.showButtonSnackBar(this@SplashActivity, rl_splash_main, getString(R.string.error_loc_permission_request_msg))
                 DisplayAlert.showSnackMessage(this@SplashActivity, alert_splash_snack_bar, getString(R.string.accept_permission))
                 Handler().postDelayed(Runnable {
@@ -181,6 +205,8 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
 
         }, permissionLists)
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun checkGPSProvider() {
@@ -451,4 +477,31 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
 
     override fun onGpsAlertCanceledByUser() {
     }
+
+
+///////////////
+/*private fun hasLocPermission() = EasyPermissions.hasPermissions(
+        this,
+        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION
+)
+    private fun requestLocPermission() {
+        EasyPermissions.requestPermissions(
+                this, "Permission Needed", 154,
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION
+        )
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+    override fun onPermissionsDenied(requestCode: Int, perms: List<String>) {
+        Toast.makeText(this, "Operation Need", Toast.LENGTH_SHORT).show()
+    }
+    override fun onPermissionsGranted(requestCode: Int, perms: List<String>) {
+
+    }*/
+///////////
+
+
 }
