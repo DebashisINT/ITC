@@ -17,7 +17,9 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -42,6 +44,7 @@ import com.breezefsmdsm.app.utils.ProcessImageUtils_v1
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
+import com.breezefsmdsm.features.SearchLocation.EditTextAddressModel
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
 import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
@@ -346,7 +349,28 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val dialogCancel = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_cancel) as AppCustomTextView
 
 
-        val key: OnKeyListener = object : OnKeyListener {
+        dialogEtCardNumber1.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                if(dialogEtCardNumber1.text.toString().length==4){
+                    dialogEtCardNumber2.requestFocus()
+                }
+            }
+        })
+        dialogEtCardNumber2.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun afterTextChanged(s: Editable) {
+                if(dialogEtCardNumber2.text.toString().length==4){
+                    dialogEtCardNumber3.requestFocus()
+                }
+            }
+        })
+
+       /* val key: OnKeyListener = object : OnKeyListener {
             override fun onKey(v: View, keyCode: Int, event: KeyEvent?): Boolean {
                 if((v as EditText).length()==4){
                     if (!(v as EditText).toString().isEmpty()){
@@ -356,11 +380,11 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 }
                 return false
             }
-        }
+        }*/
 
-        dialogEtCardNumber1.setOnKeyListener(key)
-        dialogEtCardNumber2.setOnKeyListener(key)
-        dialogEtCardNumber3.setOnKeyListener(key)
+        //dialogEtCardNumber1.setOnKeyListener(key)
+        //dialogEtCardNumber2.setOnKeyListener(key)
+        //dialogEtCardNumber3.setOnKeyListener(key)
 
               /*  if(dialogEtCardNumber1.getText().toString().length==4)
                 {
