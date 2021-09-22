@@ -4592,10 +4592,10 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         }
         else if (TextUtils.isEmpty(shopContactNumber.text.toString().trim()))
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.numberblank_error))
-        else if (!AppUtils.isValidateMobile(shopContactNumber.text.toString()))
+        else if (!AppUtils.isValidateMobile(shopContactNumber.text.toString()) && false)//22-09-2021 false added
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.numbervalid_error))
         else if (!shopContactNumber.text.toString().trim().startsWith("6") && !shopContactNumber.text.toString().trim().startsWith("7") &&
-                !shopContactNumber.text.toString().trim().startsWith("8") && !shopContactNumber.text.toString().trim().startsWith("9") && true)//22-09-2021
+                !shopContactNumber.text.toString().trim().startsWith("8") && !shopContactNumber.text.toString().trim().startsWith("9") && false)//22-09-2021 false added
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.error_enter_valid_phn_no), 3000)
         else if (!TextUtils.isEmpty(shopOwnerEmail.text.toString().trim()) && !AppUtils.isValidEmail(shopOwnerEmail.text.toString().trim()))
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.email_error))
@@ -5802,6 +5802,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         assigned_to_dd_TV.isEnabled = true
         assigned_to_pp_TV.isEnabled = true
 
+
         tv_area.isEnabled = true
         tv_model.isEnabled = true
         tv_primary_application.isEnabled = true
@@ -6093,7 +6094,8 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
 
         //22-09-2021
-        shops_detail_CV.visibility=View.GONE
+        shopName.isEnabled=true // 22-09-2021
+        /*shops_detail_CV.visibility=View.GONE
         //rl_catagoryRoot= view.findViewById(R.id.rv_frag_shop_dtls_catagory)
         rl_catagoryRoot.visibility=View.GONE
         rl_dealer.visibility=View.GONE
@@ -6123,7 +6125,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         rl_ownerDOBRoot.visibility=View.GONE
         rl_ownerAniRoot.visibility=View.GONE
         ll_extra_info.visibility=View.GONE
-        ll_doc_extra_info.visibility=View.GONE
+        ll_doc_extra_info.visibility=View.GONE*/
 
     }
 

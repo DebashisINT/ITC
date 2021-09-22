@@ -603,7 +603,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/_3sdp"
-                        android:paddingTop="@dimen/_2sdp"
+                        android:paddingTop="@dimen/_5sdp"
                         android:text="@string/mandatory_mark"
                         android:textColor="@color/red"
                         android:textSize="@dimen/_15sdp" />

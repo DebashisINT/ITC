@@ -355,6 +355,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {
                 if(dialogEtCardNumber1.text.toString().length==4){
+                    dialogEtCardNumber2.setSelection(dialogEtCardNumber2.text.toString().length)
                     dialogEtCardNumber2.requestFocus()
                 }
             }
@@ -365,6 +366,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {
                 if(dialogEtCardNumber2.text.toString().length==4){
+                    dialogEtCardNumber3.setSelection(dialogEtCardNumber3.text.toString().length)
                     dialogEtCardNumber3.requestFocus()
                 }
             }
