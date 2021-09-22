@@ -75,6 +75,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.customnotification.view.*
 import kotlinx.android.synthetic.main.dialog_scan_details.view.*
 import kotlinx.android.synthetic.main.fragment_add_shop.*
+import kotlinx.android.synthetic.main.fragment_shop_detail.*
 import kotlinx.android.synthetic.main.fragment_shop_detail.view.*
 import kotlinx.android.synthetic.main.inflate_avg_shop_item.view.*
 import org.jetbrains.anko.doAsync
@@ -288,6 +289,13 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
     private var programFab5: FloatingActionButton? = null
 
+    //22-09-2021
+    private lateinit var rl_catagoryRoot:RelativeLayout
+    private lateinit var rl_assignIV:RelativeLayout
+    private lateinit var rl_pincodeRoot:RelativeLayout
+    private lateinit var rl_ownerDOBRoot:RelativeLayout
+    private lateinit var rl_ownerAniRoot:RelativeLayout
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.fragment_shop_detail, container, false)
@@ -469,6 +477,9 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
         quot_amt_TV = view.findViewById(R.id.quot_amt_TV)
 
+
+
+
         //et_booking_amount.addTextChangedListener(CustomTextWatcher(et_booking_amount, 6, 2))
         et_booking_amount.filters = arrayOf<InputFilter>(InputFilterDecimal(10, 2))
 
@@ -477,7 +488,8 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
             owner_name_RL.visibility = View.GONE
             owner_contact_no_label_TV.text = getString(R.string.contact_number)
             owner_email_label_TV.text = getString(R.string.only_email)
-        } else {
+        }
+        else {
             ll_customer_view.visibility = View.GONE
             owner_name_RL.visibility = View.VISIBLE
             owner_contact_no_label_TV.text = getString(R.string.owner_contact_number)
@@ -597,7 +609,8 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
 
 
-        if (addShopData.type != "8") {
+        if (addShopData.type != "8")
+        {
             if (Pref.isOrderShow)
                 getFloatingVal.add("View / Create Order")
 
@@ -1336,7 +1349,8 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                 showRevisitActionDialog()
             }
 
-        } else {
+        }
+        else {
             disabledEntry()
 
             if (AppUtils.isShopAdded) {
@@ -1402,6 +1416,40 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                 }
             }
         }
+
+        //22-09-2021
+        shops_detail_CV.visibility=View.GONE
+        rl_catagoryRoot= view.findViewById(R.id.rv_frag_shop_dtls_catagory)
+        rl_catagoryRoot.visibility=View.GONE
+        rl_dealer.visibility=View.GONE
+        rl_assigned_to_pp.visibility=View.GONE
+        rl_assigned_to_dd.visibility=View.GONE
+        rl_retailer.visibility=View.GONE
+        rl_assignIV= view.findViewById(R.id.rl_frag_shop_dtls_assigned_to_iv)
+        rl_assignIV.visibility=View.GONE
+        rl_retailer.visibility=View.GONE
+        rl_assign_to_shop.visibility=View.GONE
+        rl_beat.visibility=View.GONE
+        rl_type.visibility=View.GONE
+        address_RL.visibility=View.GONE
+        rl_pincodeRoot= view.findViewById(R.id.rl_frag_shop_details_pincode)
+        rl_pincodeRoot.visibility=View.GONE
+        rl_area_main.visibility=View.GONE
+        rl_entity_main.visibility=View.GONE
+        rl_party_main.visibility=View.GONE
+
+        owner_name_RL.visibility=View.GONE
+        rl_amount.visibility=View.GONE
+        sendEmail.visibility=View.GONE
+        ll_customer_view.visibility=View.GONE
+        rl_ownerDOBRoot= view.findViewById(R.id.owner_dob_RL)
+        rl_ownerAniRoot= view.findViewById(R.id.owner_ani_RL)
+
+        rl_ownerDOBRoot.visibility=View.GONE
+        rl_ownerAniRoot.visibility=View.GONE
+        ll_extra_info.visibility=View.GONE
+        ll_doc_extra_info.visibility=View.GONE
+
     }
 
     private fun showActionDialog(status: Int) {
@@ -4547,7 +4595,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         else if (!AppUtils.isValidateMobile(shopContactNumber.text.toString()))
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.numbervalid_error))
         else if (!shopContactNumber.text.toString().trim().startsWith("6") && !shopContactNumber.text.toString().trim().startsWith("7") &&
-                !shopContactNumber.text.toString().trim().startsWith("8") && !shopContactNumber.text.toString().trim().startsWith("9"))
+                !shopContactNumber.text.toString().trim().startsWith("8") && !shopContactNumber.text.toString().trim().startsWith("9") && true)//22-09-2021
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.error_enter_valid_phn_no), 3000)
         else if (!TextUtils.isEmpty(shopOwnerEmail.text.toString().trim()) && !AppUtils.isValidEmail(shopOwnerEmail.text.toString().trim()))
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.email_error))
@@ -6041,6 +6089,42 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
             rl_amount.visibility = View.GONE
             rl_type.visibility = View.GONE
         }
+
+
+
+        //22-09-2021
+        shops_detail_CV.visibility=View.GONE
+        //rl_catagoryRoot= view.findViewById(R.id.rv_frag_shop_dtls_catagory)
+        rl_catagoryRoot.visibility=View.GONE
+        rl_dealer.visibility=View.GONE
+        rl_assigned_to_pp.visibility=View.GONE
+        rl_assigned_to_dd.visibility=View.GONE
+        rl_retailer.visibility=View.GONE
+        //rl_assignIV= view.findViewById(R.id.rl_frag_shop_dtls_assigned_to_iv)
+        rl_assignIV.visibility=View.GONE
+        rl_retailer.visibility=View.GONE
+        rl_assign_to_shop.visibility=View.GONE
+        rl_beat.visibility=View.GONE
+        rl_type.visibility=View.GONE
+        address_RL.visibility=View.GONE
+        //rl_pincodeRoot= view.findViewById(R.id.rl_frag_shop_details_pincode)
+        rl_pincodeRoot.visibility=View.GONE
+        rl_area_main.visibility=View.GONE
+        rl_entity_main.visibility=View.GONE
+        rl_party_main.visibility=View.GONE
+
+        owner_name_RL.visibility=View.GONE
+        rl_amount.visibility=View.GONE
+        sendEmail.visibility=View.GONE
+        ll_customer_view.visibility=View.GONE
+        //rl_ownerDOBRoot= view.findViewById(R.id.owner_dob_RL)
+        //rl_ownerAniRoot= view.findViewById(R.id.owner_ani_RL)
+
+        rl_ownerDOBRoot.visibility=View.GONE
+        rl_ownerAniRoot.visibility=View.GONE
+        ll_extra_info.visibility=View.GONE
+        ll_doc_extra_info.visibility=View.GONE
+
     }
 
 

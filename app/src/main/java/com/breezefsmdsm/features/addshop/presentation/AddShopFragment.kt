@@ -600,10 +600,10 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         rl_address_root = view.findViewById(R.id.rl_address_root)
         rl_pincode_root = view.findViewById(R.id.rl_pincode_root)
         rl_owner_contact_root = view.findViewById(R.id.rl_owner_contact_root)
-        //rl_shop_name_root.visibility=View.GONE
+        //rl_shop_name_root.visibility=View.GONE  //22-09-2021 comment
         rl_address_root.visibility=View.GONE
         rl_pincode_root.visibility=View.GONE
-        rl_owner_contact_root.visibility=View.GONE
+        //rl_owner_contact_root.visibility=View.GONE   //22-09-2021 comment
 
 
         randTen=Pref.user_id+AppUtils.getRandomNumber(5).toString()
@@ -613,8 +613,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             if (assigDDList != null || assigDDList!!.size>0){
                 var dis_id=assigDDList.get(0).dd_id
                 dis_id=dis_id!!.drop(6)
-                shop_name_EDT.setText(dis_id.toString()+"_"+randTen)
-                ownerNumber.setText(randTen)
+                //shop_name_EDT.setText(dis_id.toString()+"_"+randTen) //22-09-2021  comment
+                //ownerNumber.setText(randTen)  //22-09-2021  comment
             }
         }catch (ex:java.lang.Exception){ex.printStackTrace()}
 
@@ -2195,6 +2195,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                     (mContext as DashboardActivity).finish()
                     return
                 }
+
 
                 if (AppUtils.isAutoRevisit) {
                     (mContext as DashboardActivity).showSnackMessage("Auto Revisit just started")
@@ -4263,12 +4264,17 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             return
         }*/
 
-        if(ownerNumber.text.toString().length>=10 && ownerNumber.text.toString().length<=15){
+        if(ownerNumber.text.toString().length>=0 && ownerNumber.text.toString().length<=15){
             shopDataModel.ownerContactNumber = ownerNumber.text.toString()
         }else{
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.numbervalid_error))
             BaseActivity.isApiInitiated = false
             return
+        }
+
+        //22-09-2021 added
+        if(ownerNumber.text.toString().length==0){
+            shopDataModel.ownerContactNumber = randTen
         }
 
 

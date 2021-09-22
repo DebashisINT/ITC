@@ -351,6 +351,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val dialogConfirm = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_confirm) as AppCustomTextView
         val dialogCancel = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_cancel) as AppCustomTextView
 
+
+
         if(obj.RegisteredAadhaarNo!=null && obj.RegisteredAadhaarNo!!.length>0){
             dialogEtCardNumber1.setText(obj.RegisteredAadhaarNo!!.get(0).toString()+obj.RegisteredAadhaarNo!!.get(1).toString()+
                     obj.RegisteredAadhaarNo!!.get(2).toString()+obj.RegisteredAadhaarNo!!.get(3).toString())

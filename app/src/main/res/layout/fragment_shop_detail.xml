@@ -224,9 +224,11 @@
                     android:padding="@dimen/_10sdp">
 
                     <RelativeLayout
+                        android:id="@+id/rv_frag_shop_dtls_catagory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_7sdp">
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/type_IV"
@@ -399,7 +401,8 @@
                         android:id="@+id/rl_dealer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_7sdp">
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_dealer"
@@ -556,8 +559,8 @@
                         </RelativeLayout>
                     </RelativeLayout>
 
-
                     <RelativeLayout
+                        android:id="@+id/rl_frag_shop_dtls_assigned_to_iv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_7sdp"
@@ -612,7 +615,8 @@
                         android:id="@+id/rl_retailer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_7sdp">
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_retailer"
@@ -774,7 +778,8 @@
                         android:id="@+id/rl_beat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_7sdp">
+                        android:layout_marginTop="@dimen/_7sdp"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/iv_beat"
@@ -995,7 +1000,6 @@
                             android:id="@+id/address_IV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:paddingTop="@dimen/_5sdp"
                             android:src="@drawable/ic_add_shop_address_icon" />
 
@@ -1056,6 +1060,7 @@
 
                     <!--pincode-->
                     <RelativeLayout
+                        android:id="@+id/rl_frag_shop_details_pincode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_7sdp">
@@ -1378,7 +1383,8 @@
                         android:text="@string/contact_info"
                         android:textColor="@color/colorPrimary"
                         android:textSize="@dimen/_11sdp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:visibility="gone"/>
 
                     <!--owner name-->
                     <RelativeLayout
