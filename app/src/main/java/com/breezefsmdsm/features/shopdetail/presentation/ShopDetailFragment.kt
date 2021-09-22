@@ -295,6 +295,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
     private lateinit var rl_pincodeRoot:RelativeLayout
     private lateinit var rl_ownerDOBRoot:RelativeLayout
     private lateinit var rl_ownerAniRoot:RelativeLayout
+    var tempContactNoStr:String=""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -1449,6 +1450,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         rl_ownerAniRoot.visibility=View.GONE
         ll_extra_info.visibility=View.GONE
         ll_doc_extra_info.visibility=View.GONE
+        tempContactNoStr=addShopData.ownerContactNumber!!
 
     }
 
@@ -4590,7 +4592,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
             else
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.contactname_error))
         }
-        else if (TextUtils.isEmpty(shopContactNumber.text.toString().trim()))
+        else if (TextUtils.isEmpty(shopContactNumber.text.toString().trim()) && false)//22-09-2021 false added
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.numberblank_error))
         else if (!AppUtils.isValidateMobile(shopContactNumber.text.toString()) && false)//22-09-2021 false added
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.numbervalid_error))
@@ -4732,6 +4734,12 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         addShopData.address = shopAddress.text.toString().trim()
         addShopData.pinCode = shopPin.text.toString().trim()
         addShopData.ownerContactNumber = shopContactNumber.text.toString().trim()
+        //22-09-2021
+        if(shopContactNumber.text.toString().length==0){
+            //addShopData.ownerContactNumber=addShopData.ownerContactNumber
+            addShopData.ownerContactNumber=tempContactNoStr
+            println("updated_contc   "+addShopData.ownerContactNumber);
+        }
         addShopData.ownerEmailId = shopOwnerEmail.text.toString().trim()
         addShopData.ownerName = ownwr_name_TV.text.toString().trim()
         /*addShopData.dateOfBirth = ownwr_dob_TV.text.toString().trim()
@@ -6095,7 +6103,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
         //22-09-2021
         shopName.isEnabled=true // 22-09-2021
-        /*shops_detail_CV.visibility=View.GONE
+        shops_detail_CV.visibility=View.GONE
         //rl_catagoryRoot= view.findViewById(R.id.rv_frag_shop_dtls_catagory)
         rl_catagoryRoot.visibility=View.GONE
         rl_dealer.visibility=View.GONE
@@ -6125,7 +6133,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         rl_ownerDOBRoot.visibility=View.GONE
         rl_ownerAniRoot.visibility=View.GONE
         ll_extra_info.visibility=View.GONE
-        ll_doc_extra_info.visibility=View.GONE*/
+        ll_doc_extra_info.visibility=View.GONE
 
     }
 
