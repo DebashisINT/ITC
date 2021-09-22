@@ -209,6 +209,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
         locationList()
         //getWorkTypeListApi()
+        ll_at_work.performClick()
 
         return view
     }

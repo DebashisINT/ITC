@@ -25,7 +25,7 @@ android {
         applicationId "com.breezefsmdsm"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 84
+        versionCode 85
         versionName "3.9.4"
         //versionName "2.3.0"
         vectorDrawables.useSupportLibrary = true

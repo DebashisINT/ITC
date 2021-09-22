@@ -8,6 +8,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
+import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.AddShopDBModelEntity
 import com.breezefsmdsm.features.chat.model.ChatListDataModel
 import com.breezefsmdsm.features.myjobs.model.CustomerDataModel
@@ -107,7 +108,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 }
 
 
-                if(mList?.get(adapterPosition)?.IsPhotoDeleteShow!!){
+                //if(mList?.get(adapterPosition)?.IsPhotoDeleteShow!!){
+                if(Pref.IsPhotoDeleteShow){
                     sync_delete_iv_red.visibility=View.VISIBLE
                 }else{
                     sync_delete_iv_red.visibility=View.GONE

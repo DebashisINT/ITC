@@ -600,7 +600,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         rl_address_root = view.findViewById(R.id.rl_address_root)
         rl_pincode_root = view.findViewById(R.id.rl_pincode_root)
         rl_owner_contact_root = view.findViewById(R.id.rl_owner_contact_root)
-        rl_shop_name_root.visibility=View.GONE
+        //rl_shop_name_root.visibility=View.GONE
         rl_address_root.visibility=View.GONE
         rl_pincode_root.visibility=View.GONE
         rl_owner_contact_root.visibility=View.GONE

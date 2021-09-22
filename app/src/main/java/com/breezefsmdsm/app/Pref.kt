@@ -305,6 +305,8 @@ object Pref : PreferenceHolder() {
     var visit_distributor_name: String by bindToPreferenceField("", "visit_distributor_name")
     var visit_distributor_date_time: String by bindToPreferenceField("", "visit_distributor_date_time")
 
+    var IsPhotoDeleteShow: Boolean by bindToPreferenceField(false, "IsPhotoDeleteShow")
+
 
 
 
