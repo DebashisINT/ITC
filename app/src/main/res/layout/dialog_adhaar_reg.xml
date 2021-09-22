@@ -39,9 +39,11 @@
             <com.breezefsmdsm.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_1"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:layout_weight="1"
+                android:singleLine="true"
+                android:nextFocusForward="@+id/dialog_adhaar_reg_et_no_et_2"
                 android:background="@drawable/rect_silver_border_bg"
                 android:gravity="center_vertical"
                 android:maxLength="4"
@@ -52,8 +54,10 @@
             <com.breezefsmdsm.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
+                android:singleLine="true"
+                android:nextFocusForward="@+id/dialog_adhaar_reg_et_no_et_3"
                 android:layout_weight="1"
                 android:background="@drawable/rect_silver_border_bg"
                 android:gravity="center_vertical"
@@ -65,7 +69,7 @@
             <com.breezefsmdsm.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_3"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:layout_weight="1"
                 android:background="@drawable/rect_silver_border_bg"
