@@ -28,6 +28,8 @@ import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.UUID;
@@ -283,7 +285,7 @@ public class FileUtils {
 
                 if ("primary".equalsIgnoreCase(type)) {
                     //return Environment.getExternalStorageDirectory() + "/" + split[1];
-                    return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + split[1];
+                    return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + split[1];
                 }
 
                 // TODO handle non-primary volumes
@@ -334,10 +336,14 @@ public class FileUtils {
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
+        }else if("http".equalsIgnoreCase(uri.getScheme())){
+            return uri.getPath();
         }
+
 
         return null;
     }
+
 
     private static String copyFile(Context context, Uri uri) {
 

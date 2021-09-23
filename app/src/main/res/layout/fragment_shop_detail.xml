@@ -1509,7 +1509,7 @@
                                     android:background="@android:color/transparent"
                                     android:imeOptions="actionNext"
                                     android:inputType="number"
-                                    android:maxLength="10"
+                                    android:maxLength="15"
                                     android:paddingRight="@dimen/_5sdp"
                                     android:text="N.A."
                                     android:textColor="@color/login_txt_color"

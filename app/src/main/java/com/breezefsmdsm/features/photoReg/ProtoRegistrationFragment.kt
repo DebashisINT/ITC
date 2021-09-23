@@ -212,6 +212,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             override fun getWhatsappOnLick(phone: String) {
                 var phone = "+91" + phone
                 sendWhats(phone)
+                //openWhatsApp(phone)
             }
 
             override fun deletePicOnLick(obj: UserListResponseModel) {
@@ -313,7 +314,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val packageManager: PackageManager = mContext.getPackageManager()
         val i = Intent(Intent.ACTION_VIEW)
         try {
-            val url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + URLEncoder.encode("", "UTF-8")
+            //val url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + URLEncoder.encode("", "UTF-8")
+            val url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + " "
             i.setPackage("com.whatsapp")
             i.data = Uri.parse(url)
             if (i.resolveActivity(packageManager) != null) {
@@ -323,6 +325,27 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             e.printStackTrace()
         }
     }
+
+    private fun openWhatsApp(num: String) {
+        val isAppInstalled = appInstalledOrNot("com.whatsapp")
+        if (isAppInstalled) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=$num"))
+            startActivity(intent)
+        } else {
+            // WhatsApp not installed show toast or dialog
+        }
+    }
+
+    private fun appInstalledOrNot(uri: String): Boolean {
+        val pm = requireActivity().packageManager
+        return try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
+        }
+    }
+
 
     lateinit var simpleDialog:Dialog
     lateinit var iv_takenImg:ImageView

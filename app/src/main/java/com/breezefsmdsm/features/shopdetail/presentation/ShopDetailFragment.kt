@@ -4742,6 +4742,10 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         }
         addShopData.ownerEmailId = shopOwnerEmail.text.toString().trim()
         addShopData.ownerName = ownwr_name_TV.text.toString().trim()
+
+        addShopData.ownerName =addShopData.shopName // 22-09-2021
+
+
         /*addShopData.dateOfBirth = ownwr_dob_TV.text.toString().trim()
         addShopData.dateOfAniversary = ownwr_ani_TV.text.toString().trim()*/
         addShopData.type = type
@@ -5022,6 +5026,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         progress_wheel.spin()
 
         if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(degreeImgLink)) {
+        //if (true) {
             val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
                     repository.editShop(addShopReqData)

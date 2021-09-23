@@ -3,17 +3,21 @@ package com.breezefsmdsm.features.shopdetail.presentation.api
 import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.breezefsmdsm.app.FileUtils
 import com.breezefsmdsm.features.addshop.model.AddShopRequestData
 import com.breezefsmdsm.features.addshop.model.AddShopResponse
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
 import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.File
+import java.io.FileOutputStream
+import java.net.URL
 
 /**
  * Created by Saikat on 10-10-2018.
@@ -84,6 +88,7 @@ class EditShopRepo(val apiService: EditShopApi) {
 
         if (!TextUtils.isEmpty(shop_image)) {
             val profile_img_file = FileUtils.getFile(context, Uri.parse(shop_image))
+
             if (profile_img_file != null && profile_img_file.exists()) {
                 val profileImgBody = RequestBody.create(MediaType.parse("multipart/form-data"), profile_img_file)
                 profile_img_data = MultipartBody.Part.createFormData("shop_image", profile_img_file.name, profileImgBody)
@@ -114,6 +119,8 @@ class EditShopRepo(val apiService: EditShopApi) {
         } catch (e: Throwable) {
             e.printStackTrace()
         }
+        var gc=profile_img_data
+        var gcc=profile_img_data
 
         return if (degree_img_data != null)
             apiService.editShopWithDegImage(jsonInString, degree_img_data)
