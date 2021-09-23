@@ -571,6 +571,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         isTrueFace=false;
       }
 
+      isTrueFace=true;
+
       //System.out.println("onFacesDetected");
 
       LOGGER.i("FACE" + face.toString());
@@ -631,6 +633,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 //          }
 
           float conf = result.getDistance();
+
+          Log.v("face_D",String.valueOf(conf));
           if (conf < 1.0f) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
             confidence = conf;

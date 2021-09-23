@@ -223,7 +223,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                 simpleDialogg.setContentView(R.layout.dialog_yes_no)
                 val dialogHeader = simpleDialogg.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-                dialogHeader.text = "Are you sure?"
+                val dialogHeaderHeader = simpleDialogg.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                //dialogHeader.text = "Are you sure?"
+                dialogHeader.text = "Wish to Delete Face Registration ?"
+                dialogHeaderHeader.text = "Hi "+Pref.user_name!!+"!"
                 val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
                 val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
 

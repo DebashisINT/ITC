@@ -979,10 +979,13 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
                     if (!TextUtils.isEmpty(mAddShopDBModelEntity.add_dob))
                         addShopData.addtional_dob = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.add_dob)
+                    else
+                        addShopData.addtional_dob=""
 
                     if (!TextUtils.isEmpty(mAddShopDBModelEntity.add_doa))
                         addShopData.addtional_doa = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.add_doa)
-
+                    else
+                        addShopData.addtional_doa=""
 
                     addShopData.specialization = mAddShopDBModelEntity.specialization
                     addShopData.category = mAddShopDBModelEntity.category
@@ -2074,9 +2077,22 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
         XLog.d("assigned to shop id=======> " + addShopReqData.assigned_to_shop_id)
         XLog.d("==========================================")
 
+
+        if(addShopReqData.actual_address==null){
+
+                var address = LocationWizard.getAdressFromLatlng(mContext, addShopReqData.shop_lat!!.toDouble(), addShopReqData.shop_long!!.toDouble())
+                XLog.e("Actual Shop address (Add Shop)======> $address")
+
+                if (address.contains("http"))
+                    address = "Unknown"
+            addShopReqData.actual_address = address
+
+        }
+
         progress_wheel.spin()
 
-        if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(doc_degree)) {
+        //if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(doc_degree)) {
+        if (true) {
             val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
                     repository.editShop(addShopReqData)
@@ -2153,7 +2169,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
                             })
             )
         }
-        else {
+        /*else {
             val repository = EditShopRepoProvider.provideEditShopRepository()
             BaseActivity.compositeDisposable.add(
                     repository.addShopWithImage(addShopReqData, shopImageLocalPath, doc_degree, mContext)
@@ -2229,7 +2245,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
                                 }
                             })
             )
-        }
+        }*/
     }
 
     private fun openAddressUpdateDialog(addShopModelEntity: AddShopDBModelEntity, location: Location) {

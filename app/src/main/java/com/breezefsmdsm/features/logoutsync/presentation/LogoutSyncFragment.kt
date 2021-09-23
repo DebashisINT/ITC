@@ -1,15 +1,11 @@
 package com.breezefsmdsm.features.logoutsync.presentation
 
-import android.app.ActivityManager
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatImageView
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,17 +13,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.annotation.RequiresApi
+import androidx.appcompat.widget.AppCompatImageView
 import com.breezefsmdsm.CustomConstants
-import com.elvishew.xlog.XLog
-
+import com.breezefsmdsm.MonitorService
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.*
-import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.BaseResponse
@@ -74,7 +68,6 @@ import com.breezefsmdsm.features.shopdetail.presentation.api.addcollection.AddCo
 import com.breezefsmdsm.features.shopdetail.presentation.model.addcollection.AddCollectionInputParamsModel
 import com.breezefsmdsm.features.stock.api.StockRepositoryProvider
 import com.breezefsmdsm.features.stock.model.AddStockInputParamsModel
-import com.breezefsmdsm.features.stockAddCurrentStock.AddShopStockFragment
 import com.breezefsmdsm.features.stockAddCurrentStock.ShopAddCurrentStockList
 import com.breezefsmdsm.features.stockAddCurrentStock.ShopAddCurrentStockRequest
 import com.breezefsmdsm.features.stockAddCurrentStock.api.ShopAddStockProvider
@@ -88,9 +81,8 @@ import com.breezefsmdsm.features.timesheet.model.AddTimeSheetInputModel
 import com.breezefsmdsm.features.viewAllOrder.api.addorder.AddOrderRepoProvider
 import com.breezefsmdsm.features.viewAllOrder.model.AddOrderInputParamsModel
 import com.breezefsmdsm.features.viewAllOrder.model.AddOrderInputProductList
-import com.breezefsmdsm.mappackage.SendBrod
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.breezefsmdsm.MonitorService
+import com.elvishew.xlog.XLog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
@@ -1459,7 +1451,17 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         progress_wheel.spin()
 
-        if (TextUtils.isEmpty(mAddShopDBModelEntity.shopImageLocalPath) && TextUtils.isEmpty(mAddShopDBModelEntity.doc_degree)) {
+        if(addShopData.actual_address==null){
+            var address = LocationWizard.getAdressFromLatlng(mContext, addShopData.shop_lat!!.toDouble(), addShopData.shop_long!!.toDouble())
+            XLog.e("Actual Shop address (Add Shop)======> $address")
+            if (address.contains("http"))
+                address = "Unknown"
+            addShopData.actual_address = address
+        }
+
+        //if (TextUtils.isEmpty(mAddShopDBModelEntity.shopImageLocalPath) && TextUtils.isEmpty(mAddShopDBModelEntity.doc_degree)) {
+        if (true) {
+            Log.v("sync_odd","shop_edit_sync_data")
             val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
                     repository.editShop(addShopData)
@@ -1554,6 +1556,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             )
         }
         else {
+            Log.v("sync_odd","shop_edit_sync_data")
             val repository = EditShopRepoProvider.provideEditShopRepository()
             BaseActivity.compositeDisposable.add(
                     repository.addShopWithImage(addShopData, mAddShopDBModelEntity.shopImageLocalPath, mAddShopDBModelEntity.doc_degree, mContext)

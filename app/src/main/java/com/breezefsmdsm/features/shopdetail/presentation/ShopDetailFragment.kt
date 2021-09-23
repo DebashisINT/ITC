@@ -15,18 +15,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.text.InputFilter
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.EditorInfo
 import android.widget.*
-import com.elvishew.xlog.XLog
+import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
@@ -35,6 +33,7 @@ import com.breezefsmdsm.app.domain.*
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.uiaction.IntentActionable
 import com.breezefsmdsm.app.utils.AppUtils
+import com.breezefsmdsm.app.utils.InputFilterDecimal
 import com.breezefsmdsm.app.utils.PermissionUtils
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
@@ -42,6 +41,8 @@ import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.addshop.api.areaList.AreaListRepoProvider
 import com.breezefsmdsm.features.addshop.api.assignToPPList.AssignToPPListRepoProvider
 import com.breezefsmdsm.features.addshop.api.assignedToDDList.AssignToDDListRepoProvider
+import com.breezefsmdsm.features.addshop.api.typeList.TypeListRepoProvider
+import com.breezefsmdsm.features.addshop.model.*
 import com.breezefsmdsm.features.addshop.model.assigntoddlist.AssignToDDListResponseModel
 import com.breezefsmdsm.features.addshop.model.assigntopplist.AssignToPPListResponseModel
 import com.breezefsmdsm.features.addshop.presentation.*
@@ -53,31 +54,23 @@ import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.dashboard.presentation.api.otpsentapi.OtpSentRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.api.otpverifyapi.OtpVerificationRepoProvider
 import com.breezefsmdsm.features.location.LocationWizard
+import com.breezefsmdsm.features.login.model.productlistmodel.ModelListResponse
 import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.nearbyshops.api.ShopListRepositoryProvider
+import com.breezefsmdsm.features.nearbyshops.model.*
+import com.breezefsmdsm.features.reimbursement.presentation.FullImageDialog
 import com.breezefsmdsm.features.shopdetail.presentation.api.EditShopRepoProvider
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.elvishew.xlog.XLog
 import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import com.hahnemann.features.commondialog.presentation.CommonDialogTripleBtn
 import com.hahnemann.features.commondialog.presentation.CommonTripleDialogClickListener
-import com.breezefsmdsm.app.utils.InputFilterDecimal
-import com.breezefsmdsm.features.addshop.api.typeList.TypeListRepoProvider
-import com.breezefsmdsm.features.addshop.model.*
-import com.breezefsmdsm.features.login.model.productlistmodel.ModelListResponse
-import com.breezefsmdsm.features.nearbyshops.model.*
-import com.breezefsmdsm.features.reimbursement.presentation.FullImageDialog
 import com.squareup.picasso.Picasso
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.customnotification.view.*
-import kotlinx.android.synthetic.main.dialog_scan_details.view.*
-import kotlinx.android.synthetic.main.fragment_add_shop.*
-import kotlinx.android.synthetic.main.fragment_shop_detail.*
-import kotlinx.android.synthetic.main.fragment_shop_detail.view.*
-import kotlinx.android.synthetic.main.inflate_avg_shop_item.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
@@ -2050,7 +2043,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         //Picasso.with(mContext).load(addShopData.shopImageLocalPath).into(shopImage)
 
         try {
-
+            Log.v("face_D", addShopData.shopImageLocalPath.toString())
             if (!TextUtils.isEmpty(addShopData.shopImageLocalPath)) {
                 Picasso.get()
                         .load(addShopData.shopImageLocalPath)
@@ -2564,6 +2557,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
             }
 
             R.id.shop_img_IV -> {
+                return
                 isDocDegree = 0
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     initPermissionCheck()
@@ -5025,8 +5019,21 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
         progress_wheel.spin()
 
-        if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(degreeImgLink)) {
-        //if (true) {
+        /*val downloadmanager: DownloadManager = context!!.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val uri = Uri.parse(shopImageLocalPath)
+
+        val request: DownloadManager.Request = DownloadManager.Request(uri)
+        request.setTitle("My File")
+        request.setDescription("Downloading") //request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "game-of-life")
+        downloadmanager.enqueue(request)*/
+
+
+        //downloadImage(shopImageLocalPath!!)
+
+
+        //if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(degreeImgLink)) {
+        if (true) {
             val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
                     repository.editShop(addShopReqData)
@@ -5069,7 +5076,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                             })
             )
         }
-        else {
+        /*else {
             val repository = EditShopRepoProvider.provideEditShopRepository()
             BaseActivity.compositeDisposable.add(
                     repository.addShopWithImage(addShopReqData, shopImageLocalPath, degreeImgLink, mContext)
@@ -5111,8 +5118,40 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                                 (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShopReqData.shop_id!!)
                             })
             )
-        }
+        }*/
     }
+
+ /*   lateinit var outputStream: OutputStream
+    private fun downloadImage(url: String) {
+        var drawable:BitmapDrawable =shopImage.drawable as BitmapDrawable
+        var bitMap:Bitmap = drawable.bitmap
+        var filePpath: File = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),context!!.getPackageName())
+        var fileDir:File=File(filePpath.absoluteFile.toString()+"Cus")
+        fileDir.mkdir()
+        var fille:File = File(fileDir,"cacc"+".jpg")
+        try{
+            outputStream=FileOutputStream(fille)
+        }catch (ex:java.lang.Exception){
+            ex.printStackTrace()
+        }
+        bitMap.compress(Bitmap.CompressFormat.JPEG,80,outputStream)
+
+        val options: BitmapFactory.Options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        //BitmapFactory.decodeResource(resources, outputStream, options)
+
+
+        outputStream.flush()
+        try{
+            outputStream.close()
+        }catch (ex:java.lang.Exception){
+            ex.printStackTrace()
+        }
+
+
+
+
+    }*/
 
 
     private fun showPictureDialog() {
