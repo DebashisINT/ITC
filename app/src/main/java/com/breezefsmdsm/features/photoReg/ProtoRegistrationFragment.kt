@@ -12,11 +12,9 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -33,7 +31,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder.with
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
@@ -43,7 +40,6 @@ import com.breezefsmdsm.app.uiaction.IntentActionable
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.PermissionUtils
 import com.breezefsmdsm.app.utils.ProcessImageUtils_v1
-import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
@@ -58,15 +54,10 @@ import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Glide.with
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.elvishew.xlog.XLog
-import com.squareup.picasso.LruCache
-import com.squareup.picasso.Picasso
+import com.squareup.picasso.*
 import com.squareup.picasso.Picasso.RequestTransformer
 import com.themechangeapp.pickimage.PermissionHelper
-import io.fabric.sdk.android.Fabric.with
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_photo_registration.*
@@ -74,8 +65,6 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
@@ -305,13 +294,22 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                         .into(faceImg)
                              .clearOnDetach()*/
 
-
-
-
-                Picasso.get()
-                        .load(Uri.parse(img_link))
+                val picasso = Picasso.Builder(mContext)
+                        .memoryCache(Cache.NONE)
+                        .indicatorsEnabled(true)
+                        .loggingEnabled(true) //add other settings as needed
+                        .build()
+                //Picasso.setSingletonInstance(picasso)
+                picasso.load(Uri.parse(img_link))
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
                         .resize(500, 500)
                         .into(faceImg)
+
+                /*Picasso.get()
+                        .load(Uri.parse(img_link))
+                        .resize(500, 500)
+                        .into(faceImg)*/
 
               /*  Picasso.get()
                         .load(img_link)
@@ -326,9 +324,11 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
                 simpleDialogg.setOnCancelListener({view ->
                     simpleDialogg.dismiss()
+
                 })
                 simpleDialogg.setOnDismissListener({view ->
                     simpleDialogg.dismiss()
+
                 })
             }
 

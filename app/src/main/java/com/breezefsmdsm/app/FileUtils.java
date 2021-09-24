@@ -336,8 +336,6 @@ public class FileUtils {
         // File
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
-        }else if("http".equalsIgnoreCase(uri.getScheme())){
-            return uri.getPath();
         }
 
 
