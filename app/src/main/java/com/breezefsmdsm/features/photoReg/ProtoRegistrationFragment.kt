@@ -2,17 +2,21 @@ package com.breezefsmdsm.features.photoReg
 
 import android.Manifest
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.ACTIVITY_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -21,17 +25,15 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnKeyListener
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cafe.adriel.androidaudiorecorder.AndroidAudioRecorder.with
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
@@ -41,10 +43,10 @@ import com.breezefsmdsm.app.uiaction.IntentActionable
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.PermissionUtils
 import com.breezefsmdsm.app.utils.ProcessImageUtils_v1
+import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
-import com.breezefsmdsm.features.SearchLocation.EditTextAddressModel
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
 import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
@@ -56,18 +58,24 @@ import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.with
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.elvishew.xlog.XLog
+import com.squareup.picasso.LruCache
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Picasso.RequestTransformer
 import com.themechangeapp.pickimage.PermissionHelper
+import io.fabric.sdk.android.Fabric.with
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_photo_registration.*
-import kotlinx.android.synthetic.main.row_user_list_face_regis.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.FileInputStream
-import java.net.URLEncoder
+import java.io.FileOutputStream
+import java.io.OutputStream
 
 class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
@@ -194,6 +202,29 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
     }
 
+    private fun getBytesForMemCache(percent: Int): Int {
+        val mi: ActivityManager.MemoryInfo = ActivityManager.MemoryInfo()
+        val activityManager: ActivityManager = context!!.getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        activityManager.getMemoryInfo(mi)
+        val availableMemory: Double = mi.availMem.toDouble()
+        return (percent * availableMemory / 100).toInt()
+    }
+
+    private fun getCustomPicasso(): Picasso? {
+        val builder = Picasso.Builder(mContext)
+        //set 12% of available app memory for image cache
+        builder.memoryCache(LruCache(getBytesForMemCache(12)))
+        //set request transformer
+        val requestTransformer = RequestTransformer { request ->
+            Log.d("image request", request.toString())
+            request
+        }
+        builder.requestTransformer(requestTransformer)
+        return builder.build()
+    }
+
+
+
     private fun setAdapter(){
 
         //Toast.makeText(mContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
@@ -258,16 +289,47 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
 
                 val faceImg = simpleDialogg.findViewById(R.id.iv_face_img) as ImageView
+                faceImg.setImageDrawable(null)
+                faceImg.setBackgroundDrawable(null)
+                faceImg.invalidate();
+                faceImg.setImageBitmap(null);
                 val faceName = simpleDialogg.findViewById(R.id.face_name) as AppCustomTextView
                 faceName.text = name
 
-                Picasso.get()
+                //var ppiic=Picasso.setSingletonInstance(getCustomPicasso()!!)
+                //Picasso.get().load(img_link).resize(500, 500).into(faceImg);
+
+
+           /*          Glide.with(mContext)
                         .load(img_link)
+                        .into(faceImg)
+                             .clearOnDetach()*/
+
+
+
+
+                Picasso.get()
+                        .load(Uri.parse(img_link))
                         .resize(500, 500)
                         .into(faceImg)
+
+              /*  Picasso.get()
+                        .load(img_link)
+                        .resize(500, 500)
+                        .into(faceImg)*/
+
+
                 progress_wheel.stopSpinning()
 
+
                 simpleDialogg.show()
+
+                simpleDialogg.setOnCancelListener({view ->
+                    simpleDialogg.dismiss()
+                })
+                simpleDialogg.setOnDismissListener({view ->
+                    simpleDialogg.dismiss()
+                })
             }
 
             override fun getAadhaarOnLick(obj: UserListResponseModel) {
@@ -760,5 +822,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
              }
          }
      }*/
+
+
 
 }

@@ -243,6 +243,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
     private lateinit var tv_assign_to_shop_asterisk_mark: TextView
     private lateinit var tv_dealer_asterisk_mark: TextView
     private lateinit var tv_retailer_asterisk_mark: TextView
+    private lateinit var call_shop_IV: ImageView
 
     private lateinit var quot_amt_TV: AppCustomTextView
 
@@ -468,6 +469,8 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         tv_assign_to_shop_asterisk_mark = view.findViewById(R.id.tv_assign_to_shop_asterisk_mark)
         tv_retailer_asterisk_mark = view.findViewById(R.id.tv_retailer_asterisk_mark)
         tv_dealer_asterisk_mark = view.findViewById(R.id.tv_dealer_asterisk_mark)
+        call_shop_IV = view.findViewById(R.id.call_shop_IV)
+        call_shop_IV.setOnClickListener(this)
 
         quot_amt_TV = view.findViewById(R.id.quot_amt_TV)
 
@@ -2043,13 +2046,22 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         //Picasso.with(mContext).load(addShopData.shopImageLocalPath).into(shopImage)
 
         try {
-            Log.v("face_D", addShopData.shopImageLocalPath.toString())
-            if (!TextUtils.isEmpty(addShopData.shopImageLocalPath)) {
+            //Log.v("face_D", addShopData.shopImageLocalPath.toString())
+
+            try{
+                if(addShopData.shopImageLocalPath!=null){
+                if (!TextUtils.isEmpty(addShopData.shopImageLocalPath)) {
                 Picasso.get()
                         .load(addShopData.shopImageLocalPath)
                         .resize(800, 100)
                         .into(shopImage)
             }
+            }
+
+            }catch (ex:Exception){
+                ex.printStackTrace()
+            }
+
             /* shopName.text = addShopData.shopName
          shopAddress.text = addShopData.address + ", " + addShopData.pinCode
          shopPin.text = addShopData.pinCode
@@ -2548,7 +2560,8 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
     override fun onClick(p0: View?) {
         when (p0!!.id) {
-            R.id.call_shop_RL -> {
+            //R.id.call_shop_RL -> {
+            R.id.call_shop_IV -> {
                 IntentActionable.initiatePhoneCall(mContext, addShopData.ownerContactNumber)
             }
 

@@ -162,9 +162,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     // Real-time contour detection of multiple faces
     FaceDetectorOptions options =
             new FaceDetectorOptions.Builder()
-                    .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                    //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                    .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
                     .setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
-                    //.setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
                     .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                     .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
                     .build();
@@ -635,7 +635,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
           float conf = result.getDistance();
 
           Log.v("face_D",String.valueOf(conf));
-          if (conf < 1.0f) {
+          if (conf>.79f && conf < 1.0f) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
             confidence = conf;
             label = result.getTitle();

@@ -1,5 +1,7 @@
 package com.breezefsmdsm;
 
+import com.squareup.picasso.Picasso;
+
 public class CustomStatic {
     public static Boolean IsFaceRec=false;
     public static String FaceUrl="";
@@ -7,6 +9,7 @@ public class CustomStatic {
     public static Boolean IsChooseTab=false;
 
     public static Boolean IsDocZero=true;
+
 
 
 }
