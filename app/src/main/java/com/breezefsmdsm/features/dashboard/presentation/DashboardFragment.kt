@@ -661,7 +661,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
         })
-        //Pref.IsDDvistedOnceByDay=true
+
         end_TV.setOnClickListener({ view ->
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
@@ -4385,8 +4385,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     isEndCall=true
                     end_TV.performClick()
                 }
-
-
             }
         }
     }
@@ -4414,7 +4412,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
         return true;
     }
-
 
     ///// added on 13/08/2021
 
@@ -4472,9 +4469,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 getNearyShopList(location)
                         }
                     }
-
                 })
-
         val t = Timer()
         t.schedule(object : TimerTask() {
             override fun run() {
