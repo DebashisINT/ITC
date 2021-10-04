@@ -32,6 +32,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
+import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.SearchListener
@@ -82,6 +83,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     private var isAttachment = false
     private var dataPath = ""
     private var imagePath = ""
+
+    private var aadhaarList:ArrayList<String> = ArrayList()
 
 
     override fun onAttach(context: Context) {
@@ -155,6 +158,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
     private fun callUSerListApi(){
         userList.clear()
+        aadhaarList.clear()
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -169,6 +173,11 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
                                     doAsync {
                                         userList = response.user_list!!
+                                        for(j in 0..userList.size-1){
+                                            if(userList.get(j).IsAadhaarRegistered!!){
+                                                aadhaarList.add(userList.get(j).RegisteredAadhaarNo!!)
+                                            }
+                                        }
 
                                         uiThread {
                                             setAdapter()
@@ -559,8 +568,26 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                         dialogYes.setOnClickListener({ view ->
                             simpleDialogInner.cancel()
                             str_aadhaarNo = dialogEtCardNumber1.text.toString() + dialogEtCardNumber2.text.toString() + dialogEtCardNumber3.text.toString()
-                            simpleDialog.cancel()
-                            submitAadhaarDetails(obj, dialogEtFeedback.text.toString())
+                            // check aadhar unique or not
+
+                            var tagAadhaar=false
+                            for(j in 0..aadhaarList.size-1){
+                                if(str_aadhaarNo.equals(aadhaarList.get(j))){
+                                    tagAadhaar=true
+                                }
+                            }
+
+
+                            if(tagAadhaar==false){
+                                simpleDialog.cancel()
+                                submitAadhaarDetails(obj, dialogEtFeedback.text.toString())
+                            }
+                            else{
+                                (mContext as DashboardActivity).showSnackMessage("Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                            }
+
+
+
                         })
                         dialogNo.setOnClickListener({ view ->
                             simpleDialogInner.cancel()
