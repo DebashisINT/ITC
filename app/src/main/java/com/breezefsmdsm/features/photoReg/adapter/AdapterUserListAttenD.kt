@@ -15,6 +15,7 @@ import com.squareup.picasso.Cache
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.*
 import kotlinx.android.synthetic.main.row_user_list_face_attend.view.*
 import kotlinx.android.synthetic.main.row_user_list_face_regis.view.*
 import kotlinx.android.synthetic.main.row_user_list_face_regis.view.photo_reg_dd_name_tv
@@ -62,6 +63,7 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
 
 
                 if(mList?.get(adapterPosition)!!.isFaceRegistered!!){
+                    tv_row_user_list_face_attend_face_not.visibility=View.GONE
                     var picasso = Picasso.Builder(mContext)
                             .memoryCache(Cache.NONE)
                             .indicatorsEnabled(true)
@@ -72,6 +74,8 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
                             .networkPolicy(NetworkPolicy.NO_CACHE)
                             .resize(500, 500)
                             .into(iv_row_face_attd_face)
+                }else{
+                    tv_row_user_list_face_attend_face_not.visibility=View.VISIBLE
                 }
 
                 click_for_photo_attd.setOnClickListener{listner?.getUserInfoOnLick(mList?.get(adapterPosition)!!)}

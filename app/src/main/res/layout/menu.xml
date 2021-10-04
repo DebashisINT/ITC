@@ -164,7 +164,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/home"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -178,7 +178,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="Photo Registration"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -193,7 +193,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="Team Attendance"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -208,7 +208,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/chat_bot"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -223,7 +223,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingBottom="@dimen/_7sdp"
                     android:text="@string/change_pwd"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -237,7 +237,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/add_attendance"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -251,7 +251,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/view_attendance"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -265,7 +265,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/update_work_type"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -279,7 +279,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/apply_leave"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -293,7 +293,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingBottom="@dimen/_7sdp"
                     android:text="@string/shops"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -307,7 +307,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/nearby_shops"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -322,7 +322,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/nearby_user"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -337,7 +337,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/activities"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
@@ -353,7 +353,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/history"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -367,7 +367,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/quotation"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -381,7 +381,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/orders"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <!--<com.breezefsmdsm.widgets.AppCustomTextView
@@ -414,7 +414,7 @@
                         android:paddingRight="@dimen/_17sdp"
                         android:paddingTop="@dimen/_15sdp"
                         android:text="@string/collection"
-                        android:textColor="@color/light_gray"
+                        android:textColor="@color/lightest_gray"
                         android:textSize="@dimen/_12sdp"
                         android:layout_toLeftOf="@+id/iv_collection_drop_down_icon"
                         android:layout_alignParentLeft="true"/>
@@ -441,7 +441,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/report"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -451,7 +451,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/entry"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -470,7 +470,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/report_on_state"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -484,7 +484,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/stock_details_pp_dd"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -499,7 +499,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/outstanding_details_pp_dd"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -514,7 +514,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/ta_text"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -529,7 +529,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/mis_reports"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -544,7 +544,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="Location"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -559,7 +559,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/reimbursement"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -574,7 +574,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/list_of_party"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
@@ -590,7 +590,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/team_details"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -605,7 +605,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/all_team"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -635,7 +635,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/timesheet"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
@@ -651,7 +651,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/task_without_colon"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
@@ -667,7 +667,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/achievement"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -682,7 +682,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/performance"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="gone" />
 
@@ -703,7 +703,7 @@
                         android:paddingRight="@dimen/_17sdp"
                         android:paddingTop="@dimen/_15sdp"
                         android:text="@string/reports"
-                        android:textColor="@color/light_gray"
+                        android:textColor="@color/lightest_gray"
                         android:textSize="@dimen/_12sdp"
                         android:layout_toLeftOf="@+id/iv_drop_down_icon"
                         android:layout_alignParentLeft="true"/>
@@ -730,7 +730,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/new_attendance_report"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -740,7 +740,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/performance_report"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -750,7 +750,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/visit_report"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -760,7 +760,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/meeting_details"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -770,7 +770,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/achv_report"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -780,7 +780,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/targ_achv_report"
-                            android:textColor="@color/light_gray"
+                            android:textColor="@color/lightest_gray"
                             android:textSize="@dimen/_12sdp"
                             android:paddingTop="@dimen/_10sdp"
                             android:paddingBottom="@dimen/_10sdp"/>
@@ -799,7 +799,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/dynamic"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible"
                     android:gravity="center_vertical"/>
@@ -815,7 +815,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/map_view"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -830,7 +830,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/share_log"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -845,7 +845,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/share_loc"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -860,7 +860,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/view_home_loc"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -875,7 +875,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/weather"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -890,7 +890,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/doc_repo"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -905,7 +905,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/chat"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -920,7 +920,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/scan"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -935,7 +935,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/device_info"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -950,7 +950,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/permission_info"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -965,7 +965,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/micro_learning"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -981,7 +981,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text=""
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -996,7 +996,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text=""
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
 
@@ -1011,7 +1011,7 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/sync_logout"
-                    android:textColor="@color/light_gray"
+                    android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
@@ -1023,8 +1023,8 @@
                     android:gravity="center"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="@string/version_name"
-                    android:textColor="@color/light_gray"
-                    android:textSize="@dimen/_8sdp" />
+                    android:textColor="@color/color_custom_red"
+                    android:textSize="@dimen/_10sdp" />
 
             </LinearLayout>
 

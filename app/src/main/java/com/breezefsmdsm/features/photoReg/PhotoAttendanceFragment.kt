@@ -10,6 +10,7 @@ import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.*
+import android.speech.tts.TextToSpeech
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
@@ -286,7 +287,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
         dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
-        dialogHeader.text = "Attendance of "+obj_temp!!.user_name +" submitted for today."
+        //dialogHeader.text = "Attendance of "+obj_temp!!.user_name +" submitted for today."
+        dialogHeader.text = "Attendance Successfully marked for "+obj_temp!!.user_name+".Thanks."
+        voiceAttendanceMsg("Attendance for "+obj_temp!!.user_name+" already marked for today.")
         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
             simpleDialog.cancel()
@@ -845,6 +848,15 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             (mContext as DashboardActivity).loadFragment(FragType.PhotoAttendanceFragment, false, "")
         })
         simpleDialog.show()
+    }
+
+
+    private fun voiceAttendanceMsg(msg: String) {
+        if (Pref.isVoiceEnabledForAttendanceSubmit) {
+            val speechStatus = (mContext as DashboardActivity).textToSpeech.speak(msg, TextToSpeech.QUEUE_FLUSH, null)
+            if (speechStatus == TextToSpeech.ERROR)
+                Log.e("Add Day Start", "TTS error in converting Text to Speech!");
+        }
     }
 
 
