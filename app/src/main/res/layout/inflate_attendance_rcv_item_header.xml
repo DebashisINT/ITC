@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
-        android:background="@color/attendance_top_bar_color"
+        android:background="@drawable/shape_custom_border_blue_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"

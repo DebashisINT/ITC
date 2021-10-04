@@ -51,6 +51,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
+import com.breezefsmdsm.CustomStatic;
 import com.breezefsmdsm.R;
 import com.breezefsmdsm.faceRec.env.ImageUtils;
 import com.breezefsmdsm.faceRec.env.Logger;
@@ -58,6 +59,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.nio.ByteBuffer;
+
+import static java.sql.DriverManager.println;
 
 public abstract class CameraActivity extends AppCompatActivity
     implements OnImageAvailableListener,
@@ -112,8 +115,15 @@ public abstract class CameraActivity extends AppCompatActivity
     super.onCreate(null);
 
     Intent intent = getIntent();
-    useFacing = intent.getIntExtra(KEY_USE_FACING, CameraCharacteristics.LENS_FACING_FRONT);
-    //useFacing = intent.getIntExtra(KEY_USE_FACING, CameraCharacteristics.LENS_FACING_BACK);
+
+
+    if(CustomStatic.IsCameraFacingFromTeamAttd==true){
+        CustomStatic.IsCameraFacingFromTeamAttd=false;
+        useFacing = intent.getIntExtra(KEY_USE_FACING, CameraCharacteristics.LENS_FACING_BACK);
+    }else{
+        useFacing = intent.getIntExtra(KEY_USE_FACING, CameraCharacteristics.LENS_FACING_FRONT);
+    }
+
 
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 

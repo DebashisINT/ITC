@@ -78,6 +78,9 @@ import com.breezefsmdsm.features.alarm.presetation.PerformanceReportFragment
 import com.breezefsmdsm.features.alarm.presetation.VisitReportDetailsFragment
 import com.breezefsmdsm.features.alarm.presetation.VisitReportFragment
 import com.breezefsmdsm.features.attendance.AttendanceFragment
+import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
+import com.breezefsmdsm.features.attendance.model.AttendanceRequest
+import com.breezefsmdsm.features.attendance.model.AttendanceResponse
 import com.breezefsmdsm.features.averageshop.presentation.AverageShopFragment
 import com.breezefsmdsm.features.avgorder.presentation.AverageOrderFragment
 import com.breezefsmdsm.features.avgtimespent.presentation.AvgTimespentShopListFragment
@@ -169,8 +172,10 @@ import com.breezefsmdsm.features.performance.PerformanceFragment
 import com.breezefsmdsm.features.performance.api.UpdateGpsStatusRepoProvider
 import com.breezefsmdsm.features.performance.model.UpdateGpsInputParamsModel
 import com.breezefsmdsm.features.permissionList.ViewPermissionFragment
+import com.breezefsmdsm.features.photoReg.PhotoAttendanceFragment
 import com.breezefsmdsm.features.photoReg.ProtoRegistrationFragment
 import com.breezefsmdsm.features.photoReg.RegisTerFaceFragment
+import com.breezefsmdsm.features.photoReg.TeamAttendanceFragment
 import com.breezefsmdsm.features.quotation.presentation.*
 import com.breezefsmdsm.features.reimbursement.presentation.EditReimbursementFragment
 import com.breezefsmdsm.features.reimbursement.presentation.ReimbursementDetailsFragment
@@ -282,6 +287,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
 
         })
+
+        var ttt=AppUtils.getCurrentDateForCons()
 
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
@@ -409,6 +416,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private lateinit var micro_learning_TV: AppCustomTextView
 
     private lateinit var photo_registration: AppCustomTextView
+    private lateinit var photo_team_attendance: AppCustomTextView
 
     private lateinit var alarmCofifDataModel: AlarmConfigDataModel
     private lateinit var quo_TV: AppCustomTextView
@@ -1313,7 +1321,40 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         } else {
                             XLog.e("========Current location is not available========")*/
                         isAddAttendaceAlert = true
-                        loadFragment(FragType.AddAttendanceFragment, true, "")
+
+
+                        val attendanceReq = AttendanceRequest()
+                        attendanceReq.user_id = Pref.user_id!!
+                        attendanceReq.session_token = Pref.session_token
+                        attendanceReq.start_date = AppUtils.getCurrentDateForCons()
+                        attendanceReq.end_date = AppUtils.getCurrentDateForCons()
+
+                        val repository = AttendanceRepositoryProvider.provideAttendanceRepository()
+                        progress_wheel.spin()
+                        BaseActivity.compositeDisposable.add(
+                                repository.getAttendanceList(attendanceReq)
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribeOn(Schedulers.io())
+                                        .subscribe({ result ->
+                                            val attendanceList = result as AttendanceResponse
+                                            if (attendanceList.status == "205"){
+                                                progress_wheel.stopSpinning()
+                                                loadFragment(FragType.AddAttendanceFragment, true, "")
+                                            }else if(attendanceList.status == NetworkConstant.SUCCESS){
+                                                progress_wheel.stopSpinning()
+                                                Pref.isAddAttendence=true
+                                                (mContext as DashboardActivity).showSnackMessage("${AppUtils.hiFirstNameText()}. Attendance already marked for the day.")
+                                            }
+
+                                        }, { error ->
+                                            progress_wheel.stopSpinning()
+                                            error.printStackTrace()
+                                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                        })
+                        )
+
+
+                        //loadFragment(FragType.AddAttendanceFragment, true, "")
                         //}
                     }
                 }
@@ -1676,6 +1717,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         micro_learning_TV = findViewById(R.id.micro_learning_TV)
 
         photo_registration = findViewById(R.id.photo_registration)
+        photo_team_attendance = findViewById(R.id.photo_team_attendance)
 
         home_RL.setOnClickListener(this)
         add_shop_RL.setOnClickListener(this)
@@ -1755,6 +1797,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         micro_learning_TV.setOnClickListener(this)
 
         photo_registration.setOnClickListener(this)
+        photo_team_attendance.setOnClickListener(this)
 
         drawerLL=findViewById(R.id.activity_dashboard_lnr_lyt_slide_view)
         drawerLL.setOnClickListener(this)
@@ -2365,7 +2408,40 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         }
                     } else {
                         XLog.e("========Current location is not available========")*/
-                    loadFragment(FragType.AddAttendanceFragment, false, "")
+
+                    val attendanceReq = AttendanceRequest()
+                    attendanceReq.user_id = Pref.user_id!!
+                    attendanceReq.session_token = Pref.session_token
+                    attendanceReq.start_date = AppUtils.getCurrentDateForCons()
+                    attendanceReq.end_date = AppUtils.getCurrentDateForCons()
+
+                    val repository = AttendanceRepositoryProvider.provideAttendanceRepository()
+                    progress_wheel.spin()
+                    BaseActivity.compositeDisposable.add(
+                            repository.getAttendanceList(attendanceReq)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribeOn(Schedulers.io())
+                                    .subscribe({ result ->
+                                        val attendanceList = result as AttendanceResponse
+                                        if (attendanceList.status == "205"){
+                                            progress_wheel.stopSpinning()
+                                            loadFragment(FragType.AddAttendanceFragment, true, "")
+                                        }else if(attendanceList.status == NetworkConstant.SUCCESS){
+                                            progress_wheel.stopSpinning()
+                                            Pref.isAddAttendence=true
+                                            (mContext as DashboardActivity).showSnackMessage("${AppUtils.hiFirstNameText()}. Attendance already marked for the day.")
+                                        }
+
+                                    }, { error ->
+                                        progress_wheel.stopSpinning()
+                                        error.printStackTrace()
+                                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                    })
+                    )
+
+
+
+                    //loadFragment(FragType.AddAttendanceFragment, false, "")
                     //}
                 }
                 /*} else
@@ -2818,6 +2894,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             R.id.photo_registration -> {
                 if (AppUtils.isOnline(mContext)){
                     loadFragment(FragType.ProtoRegistrationFragment, false, "")
+                }else{
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                }
+
+            }
+            R.id.photo_team_attendance -> {
+                if (AppUtils.isOnline(mContext)){
+                    loadFragment(FragType.PhotoAttendanceFragment, false, "")
                 }else{
                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                 }
@@ -4440,6 +4524,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 setTopBarVisibility(TopBarConfig.HOME)
                 setTopBarVisibility(TopBarConfig.PHOTOREG)
             }
+            FragType.PhotoAttendanceFragment -> {
+                if (enableFragGeneration) {
+                    mFragment = PhotoAttendanceFragment.getInstance(initializeObject)
+                    //mFragment = BaseFragment()
+                }
+                setTopBarTitle(getString(R.string.photo_registration))
+                setTopBarVisibility(TopBarConfig.HOME)
+                setTopBarVisibility(TopBarConfig.PHOTOREG)
+            }
             FragType.RegisTerFaceFragment -> {
                 if (enableFragGeneration) {
                     mFragment = RegisTerFaceFragment.getInstance(initializeObject)
@@ -4447,6 +4540,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 setTopBarTitle(getString(R.string.photo_registration))
                 setTopBarVisibility(TopBarConfig.BACK)
             }
+            FragType.TeamAttendanceFragment -> {
+                if (enableFragGeneration) {
+                    mFragment = TeamAttendanceFragment.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.team_attendance))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+
             FragType.DocumentRepoFeatureNewFragment -> {
                 if (enableFragGeneration) {
                     mFragment = DocumentRepoFeatureNewFragment()
@@ -7318,7 +7419,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         (getFragment() as ViewAllTAListFragment).showPickedFileFromGalleryFetch(data)
                 }
 
-            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            }
+            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == RESULT_OK) {
                     val resultUri = result.uri
@@ -7433,7 +7535,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     var error = result.error
                 }
 //
-            } else if (requestCode == PermissionHelper.REQUEST_CODE_STORAGE) {
+            }
+            else if (requestCode == PermissionHelper.REQUEST_CODE_STORAGE) {
                 if (getCurrentFragType() == FragType.MyProfileFragment) {
                     //AppUtils.getCompressContentImage(data!!.data, this)
 
@@ -7625,7 +7728,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                 }
 
-            } else if (requestCode == REQUEST_CODE_DOCUMENT) {
+            }
+            else if (requestCode == REQUEST_CODE_DOCUMENT) {
                 try {
                     if (data != null && data.data != null) {
                         filePath = NewFileUtils.getRealPath(this@DashboardActivity, data.data)
@@ -7723,6 +7827,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                 }
             }
+            else if(CustomStatic.IsCameraFacingFromTeamAttdCametaStatus){
+                CustomStatic.IsCameraFacingFromTeamAttdCametaStatus=false
+            }
             else {
                 if (data?.action.equals("com.google.zxing.client.android.SCAN")) {
                     /*val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
@@ -7741,7 +7848,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             if (getFragment() != null && getFragment() !is AddAttendanceFragment && !isGpsDisabled)
                                 checkToShowAddAttendanceAlert()
                         } else {
-                            if (getFragment() != null && getFragment() !is AddAttendanceFragment && !isGpsDisabled)
+                            if (getFragment() != null && getFragment() !is AddAttendanceFragment && !isGpsDisabled )
                                 checkToShowAddAttendanceAlert()
 
                             if (intent != null && intent.extras != null && /*!isAttendanceAlertPresent &&*/ !isGpsDisabled) {
@@ -10568,5 +10675,6 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             screen_record_info_TV.text="Screen Recorder"
         }
     }
+
 
 }

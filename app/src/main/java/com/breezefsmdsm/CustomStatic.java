@@ -11,5 +11,8 @@ public class CustomStatic {
     public static Boolean IsDocZero=true;
 
 
+    public static Boolean IsCameraFacingFromTeamAttd=false;
+    public static Boolean IsCameraFacingFromTeamAttdCametaStatus=false;
 
+    public static Boolean IsTeamAttendUserWise=false;
 }

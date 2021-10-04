@@ -32,5 +32,6 @@ enum class FragType {
     UpdateShopStockFragment,AddShopStockFragment,ViewStockDetailsFragment,
     CompetetorStockFragment,AddCompetetorStockFragment,ViewComStockProductDetails,
 
-    ProtoRegistrationFragment,RegisTerFaceFragment,DocumentRepoFeatureNewFragment,FromOrganizationFragment,OwnfilesFragment
+    ProtoRegistrationFragment,RegisTerFaceFragment,DocumentRepoFeatureNewFragment,FromOrganizationFragment,OwnfilesFragment,
+    PhotoAttendanceFragment,TeamAttendanceFragment
 }

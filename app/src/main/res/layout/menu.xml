@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/menu_black_color"
+    android:background="@drawable/shape_custom_side_menu"
     android:gravity="end">
 
     <ScrollView
@@ -178,6 +178,21 @@
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
                     android:text="Photo Registration"
+                    android:textColor="@color/light_gray"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+
+                <com.breezefsmdsm.widgets.AppCustomTextView
+                    android:id="@+id/photo_team_attendance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_15sdp"
+                    android:drawableStart="@drawable/ic_photo_reg"
+                    android:paddingBottom="@dimen/_7sdp"
+                    android:paddingLeft="@dimen/_17sdp"
+                    android:paddingRight="@dimen/_17sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:text="Team Attendance"
                     android:textColor="@color/light_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />

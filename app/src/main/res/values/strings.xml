@@ -30,6 +30,8 @@
     <!--Menu-->
     <string name="add_order" translatable="false">Add Order</string>
     <string name="photo_registration" translatable="false">Photo Registration</string>
+    <string name="team_attendance" translatable="false">Team Attendance</string>
+    <string name="photo_attd" translatable="false">Photo Attendance</string>
     <string name="view_order" translatable="false">View Order</string>
     <string name="add" translatable="false">Add</string>
     <string name="my_allowence_request" translatable="false">My Allowance Request</string>
@@ -1468,5 +1470,7 @@
     <string name="Stop" translatable="false">STOP</string>
     <string name="Start" translatable="false">START</string>
     <string name="dd_visit" translatable="false">Point Visit</string>
+
+    <string name="team_attendance_submited" translatable="false">Attendance submitted for toay.</string>
 
 </resources>

@@ -5,7 +5,7 @@
     android:id="@+id/rl_sync_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/color_silver"
     android:fitsSystemWindows="false">
 
     <ScrollView
@@ -40,7 +40,7 @@
                     android:id="@+id/rl_shop"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_8sdp">
@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -144,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -195,7 +195,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -243,13 +243,12 @@
 
                 </RelativeLayout>
 
-
                 <RelativeLayout
                     android:id="@+id/rl_collection"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -296,12 +295,11 @@
 
                 </RelativeLayout>
 
-
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -352,7 +350,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -404,7 +402,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -456,7 +454,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -508,7 +506,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -560,7 +558,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -612,7 +610,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -665,7 +663,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -717,7 +715,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp">
 
@@ -769,7 +767,7 @@
                     android:id="@+id/rl_current_stock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_8sdp">
@@ -822,7 +820,7 @@
                     android:id="@+id/rl_competetor_stock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rectangular_boarder_bg"
+                    android:background="@drawable/curve_border_bg"
                     android:orientation="horizontal"
                     android:padding="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_8sdp">

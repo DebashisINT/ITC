@@ -26,12 +26,12 @@ class NetworkConstant {
 
 
 
-        //var BASE_URL = "http://fts.indusnettechnologies.com:7007/API/" // live for itc
-        //var ADD_SHOP_BASE_URL = "http://fts.indusnettechnologies.com:7007/" // live for itc
+        var BASE_URL = "http://fts.indusnettechnologies.com:7007/API/" // live for itc
+        var ADD_SHOP_BASE_URL = "http://fts.indusnettechnologies.com:7007/" // live for itc
 
 
-        var BASE_URL = "http://3.7.30.86:82/API/"  // demo local
-        var ADD_SHOP_BASE_URL = "http://3.7.30.86:82/"  // demo local
+        //var BASE_URL = "http://3.7.30.86:82/API/"  // demo local
+        //var ADD_SHOP_BASE_URL = "http://3.7.30.86:82/"  // demo local
 
 
         //LIVE
