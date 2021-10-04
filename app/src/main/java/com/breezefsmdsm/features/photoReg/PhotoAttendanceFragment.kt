@@ -215,8 +215,13 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 if(AppUtils.isOnline(mContext)){
                     if(Pref.isAddAttendence || true){
                         if(obj_temp.isFaceRegistered!!){
-                            progress_wheel.spin()
-                            checkCurrentDayAttdUserWise()
+                            if(AppUtils.isOnline(mContext)){
+                                progress_wheel.spin()
+                                checkCurrentDayAttdUserWise()
+                            }else{
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                            }
+
                             //getLocforDD()
                             //GetImageFromUrl().execute(obj_temp.face_image_link)
                         }else{
