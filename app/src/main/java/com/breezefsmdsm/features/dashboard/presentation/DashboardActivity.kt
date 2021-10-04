@@ -2130,8 +2130,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         if(AppUtils.getSharedPreferencesIsFaceDetectionOn(mContext)){
             photo_registration.visibility=View.VISIBLE
+            photo_team_attendance.visibility=View.VISIBLE
+
         }else{
             photo_registration.visibility=View.GONE
+            photo_team_attendance.visibility=View.GONE
         }
 
         if(AppUtils.getSharedPreferencesIsScreenRecorderEnable(mContext)){

@@ -832,7 +832,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         simpleDialog.setContentView(R.layout.dialog_message)
         val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-        dialog_yes_no_headerTV.text = "Hi "+AppUtils.hiFirstNameText()!!+"!"
+        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()!!+"!"
         dialogHeader.text = "Attendance marked for "+obj_temp.user_name+"."
         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
