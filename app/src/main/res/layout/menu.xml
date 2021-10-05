@@ -187,7 +187,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawablePadding="@dimen/_15sdp"
-                    android:drawableStart="@drawable/ic_photo_reg"
+                    android:drawableStart="@drawable/ic_attendance_machine"
                     android:paddingBottom="@dimen/_7sdp"
                     android:paddingLeft="@dimen/_17sdp"
                     android:paddingRight="@dimen/_17sdp"
