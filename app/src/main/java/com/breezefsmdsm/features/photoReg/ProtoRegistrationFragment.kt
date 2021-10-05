@@ -41,6 +41,7 @@ import com.breezefsmdsm.app.uiaction.IntentActionable
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.PermissionUtils
 import com.breezefsmdsm.app.utils.ProcessImageUtils_v1
+import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
@@ -583,7 +584,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                 submitAadhaarDetails(obj, dialogEtFeedback.text.toString())
                             }
                             else{
-                                (mContext as DashboardActivity).showSnackMessage("Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                Toaster.msgShort(mContext,"Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                //(mContext as DashboardActivity).showSnackMessage("Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
                             }
 
 
