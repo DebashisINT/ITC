@@ -61,6 +61,13 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
                 photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name
                 photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
 
+                if(mList?.get(adapterPosition)?.RegisteredAadhaarNo!=null && mList?.get(adapterPosition)?.RegisteredAadhaarNo!!.isNotEmpty()){
+                    photo_reg_user_adhaar_tv.text = "Aadhaar No : "+mList?.get(adapterPosition)?.RegisteredAadhaarNo
+                }
+               else{
+                    photo_reg_user_adhaar_tv.text = "Aadhaar not Registered."
+                }
+
 
                 if(mList?.get(adapterPosition)!!.isFaceRegistered!!){
                     tv_row_user_list_face_attend_face_not.visibility=View.GONE
