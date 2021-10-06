@@ -538,9 +538,13 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             //Toaster.msgLong(mContext,obj.RegisteredAadhaarDocLink!!.toString())
             iv_takenImg.visibility=View.GONE
             dialogCameraclickCancel.visibility=View.GONE
-            tv_docShow.text="Document Attached."
 
-            tv_docUrl.text = obj.RegisteredAadhaarDocLink
+
+            if(obj.RegisteredAadhaarDocLink!!.contains("CommonFolder")){
+                tv_docShow.text="Document Attached."
+                tv_docUrl.text = obj.RegisteredAadhaarDocLink
+            }
+
 
 
             // download document here
