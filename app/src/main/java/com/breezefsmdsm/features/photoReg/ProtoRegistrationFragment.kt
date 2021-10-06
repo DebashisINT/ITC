@@ -32,6 +32,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
@@ -43,6 +44,7 @@ import com.breezefsmdsm.app.utils.*
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
+import com.breezefsmdsm.features.billing.presentation.BillingDetailsFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
 import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
@@ -445,7 +447,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         simpleDialog.setContentView(R.layout.dialog_adhaar_reg)
 
         val headerName = simpleDialog.findViewById(R.id.dialog_adhaar_reg_adhharTV_header) as AppCustomTextView
-        headerName.text="Enter Aadhar for "+obj.user_name
+        headerName.text="Enter Aadhaar for "+obj.user_name
 
         val dialogEtCardNumber1 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_1) as AppCustomEditText
         val dialogEtCardNumber2 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_2) as AppCustomEditText
@@ -544,7 +546,17 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
             // download document here
             tv_docUrl.setOnClickListener { view ->
-                downloadFile(obj.RegisteredAadhaarDocLink,tv_docUrl.text.toString().trim())
+
+                val file = File(obj.RegisteredAadhaarDocLink!!)
+                var strFileName=""
+                if (!obj.RegisteredAadhaarDocLink!!.startsWith("http")!!) {
+                     strFileName = file.name
+                } else {
+                     strFileName = obj.RegisteredAadhaarDocLink!!.substring(obj.RegisteredAadhaarDocLink!!.lastIndexOf("/")!! + 1)
+                }
+
+                //downloadFile(obj.RegisteredAadhaarDocLink,tv_docUrl.text.toString().trim())
+                downloadFile(obj.RegisteredAadhaarDocLink,strFileName)
             }
 
 
@@ -954,7 +966,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val mimeType = NewFileUtils.getMemeTypeFromFile(file.absolutePath + "." + NewFileUtils.getExtension(file))
 
         if (mimeType?.equals("application/pdf")!!) {
-            val path1 = Uri.fromFile(file)
+//            val path1 = Uri.fromFile(file)
+            val path1 = FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(path1, "application/pdf")
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -965,7 +978,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 (mContext as DashboardActivity).showSnackMessage("No Application Available to View Pdf")
             }
         } else if (mimeType == "application/msword") {
-            val path1 = Uri.fromFile(file)
+            //val path1 = Uri.fromFile(file)
+            val path1 = FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(path1, "application/msword")
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -975,7 +989,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 (mContext as DashboardActivity).showSnackMessage("No Application Available to View Document")
             }
         } else if (mimeType == "application/vnd.ms-excel") {
-            val path1 = Uri.fromFile(file)
+            //val path1 = Uri.fromFile(file)
+            val path1 = FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(path1, "application/vnd.ms-excel")
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -986,7 +1001,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             }
 
         } else if (mimeType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template") {
-            val path1 = Uri.fromFile(file)
+            //val path1 = Uri.fromFile(file)
+            val path1 = FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(path1, "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -996,7 +1012,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 (mContext as DashboardActivity).showSnackMessage("No Application Available to View Document")
             }
         } else if (mimeType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-            val path1 = Uri.fromFile(file)
+            //val path1 = Uri.fromFile(file)
+            val path1 = FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(path1, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -1007,7 +1024,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             }
 
         } else if (mimeType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-            val path1 = Uri.fromFile(file)
+            //val path1 = Uri.fromFile(file)
+            val path1 = FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(path1, "application/vnd.ms-excel")
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -1017,7 +1035,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 (mContext as DashboardActivity).showSnackMessage("No Application Available to View Excel")
             }
         } else if (mimeType == "application/vnd.openxmlformats-officedocument.spreadsheetml.template") {
-            val path1 = Uri.fromFile(file)
+            //val path1 = Uri.fromFile(file)
+            val path1 = FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
             val intent = Intent(Intent.ACTION_VIEW)
             intent.setDataAndType(path1, "application/vnd.ms-excel")
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
