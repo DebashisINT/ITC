@@ -8843,7 +8843,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private fun updatePhotoAadhaarDocument(fileSize: Long) {
         val fileSizeInKB = fileSize / 1024
         Log.e("Dashboard", "image file size after compression==========> $fileSizeInKB KB")
-        Pref.maxFileSize="400"
+        Pref.maxFileSize="500"
         if (!TextUtils.isEmpty(Pref.maxFileSize)) {
             if (fileSizeInKB <= Pref.maxFileSize.toInt()) {
                 val file = File(filePath)

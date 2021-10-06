@@ -98,6 +98,8 @@
     <color name="tfe_color_accent">#425066</color>
     <color name="tfe_semi_transparent">#66000000</color>
     <color name="color_blue_light_dark">#3897AE</color>
+    <color name="color_blue_light_light">#9ADAEA</color>
+    <color name="color_blue_light_light_light">#CEEEF6</color>
 
     <color name="color_deep_blue">#084e8b</color>
     <color name="color_silver">#E8E6E6</color>
