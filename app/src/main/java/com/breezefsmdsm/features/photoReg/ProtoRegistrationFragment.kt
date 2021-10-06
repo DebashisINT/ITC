@@ -432,6 +432,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         simpleDialog.setCancelable(true)
         simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         simpleDialog.setContentView(R.layout.dialog_adhaar_reg)
+
+        val headerName = simpleDialog.findViewById(R.id.dialog_adhaar_reg_adhharTV_header) as AppCustomTextView
+        headerName.text="Enter Aadhar for "+obj.user_name
+
         val dialogEtCardNumber1 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_1) as AppCustomEditText
         val dialogEtCardNumber2 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_2) as AppCustomEditText
         val dialogEtCardNumber3 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_3) as AppCustomEditText
@@ -578,6 +582,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                 }
                             }
 
+                            ///
+                            //tagAadhaar=false
 
                             if(tagAadhaar==false){
                                 simpleDialog.cancel()
@@ -640,6 +646,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                             //(mContext as DashboardActivity).showSnackMessage("Aadhaar registered successfully")
 
                             if (response.status == NetworkConstant.SUCCESS) {
+                                //Toaster.msgShort(mContext,response.status.toString())
                                 if (!TextUtils.isEmpty(et_attachment.text.toString().trim()) || !TextUtils.isEmpty(et_photo.text.toString().trim())) {
                                     val imgList = java.util.ArrayList<WIPImageSubmit>()
 

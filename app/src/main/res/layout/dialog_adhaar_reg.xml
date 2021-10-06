@@ -17,6 +17,17 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <com.breezefsmdsm.widgets.AppCustomTextView
+            android:id="@+id/dialog_adhaar_reg_adhharTV_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_10sdp"
+            android:gravity="center"
+            android:text="Enter Aadhaar for"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_14sdp"
+            android:layout_marginLeft="@dimen/_3sdp"/>
+
 
         <com.breezefsmdsm.widgets.AppCustomTextView
             android:id="@+id/dialog_adhaar_reg_adhharTV"
@@ -25,7 +36,7 @@
             android:padding="@dimen/_10sdp"
             android:text="Aadhaar No :"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_15sdp"
+            android:textSize="@dimen/_13sdp"
             android:layout_marginLeft="@dimen/_3sdp"/>
 
 
@@ -87,9 +98,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/_10sdp"
-            android:text="Attach Documnent:"
+            android:text="Attach Document:"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/_15sdp"
+            android:textSize="@dimen/_13sdp"
             android:layout_marginLeft="@dimen/_3sdp"/>
 
         <LinearLayout
