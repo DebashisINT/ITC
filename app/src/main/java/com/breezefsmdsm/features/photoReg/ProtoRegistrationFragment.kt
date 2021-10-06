@@ -287,12 +287,15 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 simpleDialogg.setContentView(R.layout.view_face_img)
 
 
+
+
                 val faceImg = simpleDialogg.findViewById(R.id.iv_face_img) as ImageView
                 faceImg.setImageDrawable(null)
                 faceImg.setBackgroundDrawable(null)
                 faceImg.invalidate();
                 faceImg.setImageBitmap(null);
                 val faceName = simpleDialogg.findViewById(R.id.face_name) as AppCustomTextView
+                val faceCanel = simpleDialogg.findViewById(R.id.iv_face_reg_cancel) as ImageView
                 faceName.text = name
 
                 //var ppiic=Picasso.setSingletonInstance(getCustomPicasso()!!)
@@ -306,11 +309,12 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
                 val picasso = Picasso.Builder(mContext)
                         .memoryCache(Cache.NONE)
-                        .indicatorsEnabled(true)
+                        .indicatorsEnabled(false)
                         .loggingEnabled(true) //add other settings as needed
                         .build()
                 //Picasso.setSingletonInstance(picasso)
                 picasso.load(Uri.parse(img_link))
+                        .centerCrop()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
                         .resize(500, 500)
@@ -331,6 +335,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
 
                 simpleDialogg.show()
+
+                faceCanel.setOnClickListener({view ->
+                    simpleDialogg.dismiss()
+                })
 
                 simpleDialogg.setOnCancelListener({view ->
                     simpleDialogg.dismiss()
@@ -583,7 +591,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                             }
 
                             ///
-                            //tagAadhaar=false
+                            tagAadhaar=false
 
                             if(tagAadhaar==false){
                                 simpleDialog.cancel()
