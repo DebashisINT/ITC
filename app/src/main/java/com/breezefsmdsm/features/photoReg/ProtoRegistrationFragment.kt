@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
 import android.content.DialogInterface
@@ -34,17 +35,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
-import com.breezefsmdsm.app.AppDatabase
-import com.breezefsmdsm.app.NetworkConstant
-import com.breezefsmdsm.app.Pref
-import com.breezefsmdsm.app.SearchListener
+import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.domain.DocumentListEntity
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.uiaction.IntentActionable
-import com.breezefsmdsm.app.utils.AppUtils
-import com.breezefsmdsm.app.utils.PermissionUtils
-import com.breezefsmdsm.app.utils.ProcessImageUtils_v1
-import com.breezefsmdsm.app.utils.Toaster
+import com.breezefsmdsm.app.utils.*
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
@@ -57,6 +52,7 @@ import com.breezefsmdsm.features.photoReg.model.AadhaarSubmitData
 import com.breezefsmdsm.features.photoReg.model.DeleteUserPicResponse
 import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
+import com.breezefsmdsm.features.reimbursement.presentation.FullImageDialog
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.downloader.Error
@@ -543,11 +539,19 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             if(obj.RegisteredAadhaarDocLink!!.contains("CommonFolder")){
                 tv_docShow.text="Document Attached."
                 tv_docUrl.text = obj.RegisteredAadhaarDocLink
+
+            }
+
+            // download document here
+            tv_docUrl.setOnClickListener { view ->
+                downloadFile(obj.RegisteredAadhaarDocLink,tv_docUrl.text.toString().trim())
             }
 
 
 
-            // download document here
+
+
+
 
 
         }
@@ -887,60 +891,133 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
      }*/
 
 
-//    private fun downloadFile(downloadUrl: String?, fileName: String, document: DocumentListEntity) {
-//        try {
-//
-//            if (!AppUtils.isOnline(mContext)){
-//                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-//                return
-//            }
-//
-//            progress_wheel.spin()
-//
-//
-//
-//            PRDownloader.download(downloadUrl, Environment.getExternalStorageDirectory().toString() + File.separator, fileName)
-//                    .build()
-//                    .setOnProgressListener {
-//                        Log.e("Document List", "Attachment Download Progress======> $it")
-//                    }
-//                    .start(object : OnDownloadListener {
-//                        override fun onDownloadComplete() {
-//
-//                            doAsync {
-//                                AppDatabase.getDBInstance()?.documentListDao()?.updateAttachment(Environment.getExternalStorageDirectory().toString() + File.separator + fileName, document.list_id!!)
-//
-//                                uiThread {
-//                                    progress_wheel.stopSpinning()
-//                                    /*val file = File(Environment.getExternalStorageDirectory().toString() + File.separator + fileName)
-//                                    openFile(file)*/
-//
-//                                    docList = AppDatabase.getDBInstance()?.documentListDao()?.getDataTypeWise(typeId) as ArrayList<DocumentListEntity>?
-//                                    initAdapter()
-//
-//
-//                                    (mContext as DashboardActivity).showSnackMessage("File Downloaded")
-//
-//                                    //val doc_ = AppDatabase.getDBInstance()?.documentListDao()?.getSingleData(document.list_id!!)
-//                                    //shareDoc(doc_?.attachment!!)
-//                                }
-//                            }
-//                        }
-//
-//                        override fun onError(error: Error) {
-//                            progress_wheel.stopSpinning()
-//                            (mContext as DashboardActivity).showSnackMessage("Download failed")
-//                            Log.e("Billing Details", "Attachment download error msg=======> " + error.serverErrorMessage)
-//                        }
-//                    })
-//
-//        } catch (e: Exception) {
-//            (mContext as DashboardActivity).showSnackMessage("Download failed")
-//            progress_wheel.stopSpinning()
-//            e.printStackTrace()
-//        }
-//
-//    }
+    private fun downloadFile(downloadUrl: String?, fileName: String) {
+        try {
+            if (!AppUtils.isOnline(mContext)){
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                return
+            }
+
+            progress_wheel.spin()
+
+            val folder = File(FTStorageUtils.getFolderPath(mContext) + "/", fileName)
+            if (folder.exists()) {
+                folder.delete()
+                if (folder.exists()) {
+                    folder.canonicalFile.delete()
+                    if (folder.exists()) {
+                        mContext.deleteFile(folder.getName())
+                    }
+                }
+            }
+
+            PRDownloader.download(downloadUrl, FTStorageUtils.getFolderPath(mContext) + "/", fileName)
+                    .build()
+                    .setOnProgressListener {
+                        Log.e("Aadhaar Details", "Attachment Download Progress======> $it")
+                    }
+                    .start(object : OnDownloadListener {
+                        override fun onDownloadComplete() {
+                            progress_wheel.stopSpinning()
+                            val file = File(FTStorageUtils.getFolderPath(mContext) + "/" + fileName)
+                            openFile(file)
+                        }
+
+                        override fun onError(error: Error) {
+                            progress_wheel.stopSpinning()
+                            (mContext as DashboardActivity).showSnackMessage("Download failed")
+                            Log.e("Aadhaar Details", "Attachment download error msg=======> " + error.serverErrorMessage)
+                        }
+                    })
+
+        } catch (e: Exception) {
+            (mContext as DashboardActivity).showSnackMessage("Download failed")
+            progress_wheel.stopSpinning()
+            e.printStackTrace()
+        }
+    }
+
+    private fun openFile(file: File) {
+
+        val mimeType = NewFileUtils.getMemeTypeFromFile(file.absolutePath + "." + NewFileUtils.getExtension(file))
+
+        if (mimeType?.equals("application/pdf")!!) {
+            val path1 = Uri.fromFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(path1, "application/pdf")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                (mContext as DashboardActivity).showSnackMessage("No Application Available to View Pdf")
+            }
+        } else if (mimeType == "application/msword") {
+            val path1 = Uri.fromFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(path1, "application/msword")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                (mContext as DashboardActivity).showSnackMessage("No Application Available to View Document")
+            }
+        } else if (mimeType == "application/vnd.ms-excel") {
+            val path1 = Uri.fromFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(path1, "application/vnd.ms-excel")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                (mContext as DashboardActivity).showSnackMessage("No Application Available to View Excel")
+            }
+
+        } else if (mimeType == "application/vnd.openxmlformats-officedocument.wordprocessingml.template") {
+            val path1 = Uri.fromFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(path1, "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                (mContext as DashboardActivity).showSnackMessage("No Application Available to View Document")
+            }
+        } else if (mimeType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+            val path1 = Uri.fromFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(path1, "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                (mContext as DashboardActivity).showSnackMessage("No Application Available to View Document")
+            }
+
+        } else if (mimeType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+            val path1 = Uri.fromFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(path1, "application/vnd.ms-excel")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                (mContext as DashboardActivity).showSnackMessage("No Application Available to View Excel")
+            }
+        } else if (mimeType == "application/vnd.openxmlformats-officedocument.spreadsheetml.template") {
+            val path1 = Uri.fromFile(file)
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.setDataAndType(path1, "application/vnd.ms-excel")
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            try {
+                startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                (mContext as DashboardActivity).showSnackMessage("No Application Available to View Excel")
+            }
+        } else if (mimeType == "image/jpeg" || mimeType == "image/png") {
+            FullImageDialog.getInstance(file.absolutePath).show((mContext as DashboardActivity).supportFragmentManager, "")
+        }
+    }
 
 
 
