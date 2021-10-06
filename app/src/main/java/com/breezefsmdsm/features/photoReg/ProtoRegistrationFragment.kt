@@ -15,6 +15,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -22,6 +23,7 @@ import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +38,7 @@ import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.SearchListener
+import com.breezefsmdsm.app.domain.DocumentListEntity
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.uiaction.IntentActionable
 import com.breezefsmdsm.app.utils.AppUtils
@@ -56,6 +59,9 @@ import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.downloader.Error
+import com.downloader.OnDownloadListener
+import com.downloader.PRDownloader
 import com.elvishew.xlog.XLog
 import com.squareup.picasso.*
 import com.squareup.picasso.Picasso.RequestTransformer
@@ -255,7 +261,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 val dialogHeader = simpleDialogg.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
                 val dialogHeaderHeader = simpleDialogg.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
                 //dialogHeader.text = "Are you sure?"
-                dialogHeader.text = "Wish to Delete Face Registration ?"
+                dialogHeader.text = "Wish to Delete Face Registration?"
                 dialogHeaderHeader.text = "Hi "+Pref.user_name!!+"!"
                 val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
                 val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
@@ -427,6 +433,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     lateinit var dialogCameraclickCancel:ImageView
     lateinit var dialogDocclickCancel:ImageView
     lateinit var tv_docShow:TextView
+    lateinit var tv_docUrl:TextView
     private fun OpenDialogForAdhaarReg(obj: UserListResponseModel) {
         simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(true)
@@ -446,6 +453,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         dialogDocclickCancel = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_cancel_pic_doc) as ImageView
         iv_takenImg = simpleDialog.findViewById(R.id.iv_dialog_aadhaar_reg_pic) as ImageView
         tv_docShow = simpleDialog.findViewById(R.id.tv_dialog_aadhaar_reg_doc) as TextView
+        tv_docUrl = simpleDialog.findViewById(R.id.tv_dialog_aadhaar_reg_doc_url) as TextView
 
         val dialogConfirm = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_confirm) as AppCustomTextView
         val dialogCancel = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_cancel) as AppCustomTextView
@@ -523,6 +531,13 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             iv_takenImg.visibility=View.GONE
             dialogCameraclickCancel.visibility=View.GONE
             tv_docShow.text="Document Attached."
+
+            tv_docUrl.text = obj.RegisteredAadhaarDocLink
+
+
+            // download document here
+
+
         }
 
         dialogCameraclick.setOnClickListener{ v: View? ->
@@ -858,6 +873,62 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
              }
          }
      }*/
+
+
+//    private fun downloadFile(downloadUrl: String?, fileName: String, document: DocumentListEntity) {
+//        try {
+//
+//            if (!AppUtils.isOnline(mContext)){
+//                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+//                return
+//            }
+//
+//            progress_wheel.spin()
+//
+//
+//
+//            PRDownloader.download(downloadUrl, Environment.getExternalStorageDirectory().toString() + File.separator, fileName)
+//                    .build()
+//                    .setOnProgressListener {
+//                        Log.e("Document List", "Attachment Download Progress======> $it")
+//                    }
+//                    .start(object : OnDownloadListener {
+//                        override fun onDownloadComplete() {
+//
+//                            doAsync {
+//                                AppDatabase.getDBInstance()?.documentListDao()?.updateAttachment(Environment.getExternalStorageDirectory().toString() + File.separator + fileName, document.list_id!!)
+//
+//                                uiThread {
+//                                    progress_wheel.stopSpinning()
+//                                    /*val file = File(Environment.getExternalStorageDirectory().toString() + File.separator + fileName)
+//                                    openFile(file)*/
+//
+//                                    docList = AppDatabase.getDBInstance()?.documentListDao()?.getDataTypeWise(typeId) as ArrayList<DocumentListEntity>?
+//                                    initAdapter()
+//
+//
+//                                    (mContext as DashboardActivity).showSnackMessage("File Downloaded")
+//
+//                                    //val doc_ = AppDatabase.getDBInstance()?.documentListDao()?.getSingleData(document.list_id!!)
+//                                    //shareDoc(doc_?.attachment!!)
+//                                }
+//                            }
+//                        }
+//
+//                        override fun onError(error: Error) {
+//                            progress_wheel.stopSpinning()
+//                            (mContext as DashboardActivity).showSnackMessage("Download failed")
+//                            Log.e("Billing Details", "Attachment download error msg=======> " + error.serverErrorMessage)
+//                        }
+//                    })
+//
+//        } catch (e: Exception) {
+//            (mContext as DashboardActivity).showSnackMessage("Download failed")
+//            progress_wheel.stopSpinning()
+//            e.printStackTrace()
+//        }
+//
+//    }
 
 
 

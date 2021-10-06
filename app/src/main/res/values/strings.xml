@@ -195,7 +195,7 @@
     <string name="assigned_to_dd_error" translatable="false">Please select assigned to dd</string>
     <string name="amount_error" translatable="false">Please enter amount</string>
     <string name="valid_amount_error" translatable="false">Please enter valid amount</string>
-    <string name="feedback" translatable="false">Feedback</string>
+    <string name="feedback" translatable="false">Enter Feedback</string>
     <string name="type_your_feedback" translatable="false">Type your Feedback</string>
     <string name="error_enter_valid_phn_no" translatable="false">Mobile number should start only with 6 or 7 or 8 or 9</string>
     <string name="area" translatable="false">Area</string>
