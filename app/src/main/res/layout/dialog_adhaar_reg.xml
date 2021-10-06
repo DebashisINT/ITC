@@ -63,7 +63,8 @@
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textCursorDrawable="@drawable/shape_cursor_white"/>
 
             <com.breezefsmdsm.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_2"
@@ -79,7 +80,8 @@
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:textCursorDrawable="@drawable/shape_cursor_white"/>
 
             <com.breezefsmdsm.widgets.AppCustomEditText
                 android:id="@+id/dialog_adhaar_reg_et_no_et_3"
@@ -93,7 +95,8 @@
                 android:maxLength="4"
                 android:padding="@dimen/_5sdp"
                 android:textSize="@dimen/_12sdp"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:textCursorDrawable="@drawable/shape_cursor_white"/>
 
 
         </LinearLayout>

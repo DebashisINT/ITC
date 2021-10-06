@@ -14,6 +14,7 @@ class UserListResponseModel {
     var IsAadhaarRegistered: Boolean? = false
     var RegisteredAadhaarNo: String? = ""
     var RegisteredAadhaarDocLink: String? = ""
+    var aadhaar_remarks: String? = ""
 
 
 }

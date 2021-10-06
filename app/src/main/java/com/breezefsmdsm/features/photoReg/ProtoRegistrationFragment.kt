@@ -464,6 +464,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         val dialogConfirm = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_confirm) as AppCustomTextView
         val dialogCancel = simpleDialog.findViewById(R.id.tv_dialog_adhaar_reg_cancel) as AppCustomTextView
 
+        dialogEtFeedback.setText(obj.aadhaar_remarks)
+
 
         dialogEtCardNumber1.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
