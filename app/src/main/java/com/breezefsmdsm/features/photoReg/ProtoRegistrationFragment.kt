@@ -607,21 +607,29 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                             // check aadhar unique or not
 
                             var tagAadhaar=false
+
+
+
                             for(j in 0..aadhaarList.size-1){
                                 if(str_aadhaarNo.equals(aadhaarList.get(j))){
                                     tagAadhaar=true
                                 }
                             }
 
-                            ///
-                            tagAadhaar=false
+
+                            if(obj.IsAadhaarRegistered!!){
+                                tagAadhaar=false
+                            }
+
+
 
                             if(tagAadhaar==false){
                                 simpleDialog.cancel()
                                 submitAadhaarDetails(obj, dialogEtFeedback.text.toString())
                             }
                             else{
-                                Toaster.msgShort(mContext,"Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                Toaster.msgShort(mContext,"Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                voiceAttendanceMsg("Duplicate Aaadhaar Number.Please enter Unique for Current Person.")
                                 //(mContext as DashboardActivity).showSnackMessage("Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
                             }
 
@@ -718,6 +726,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                     //voiceAttendanceMsg("Aadhaar registered successfully")
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
                                 }
+                            }else{
+                                progress_wheel.stopSpinning()
+                                (mContext as DashboardActivity).showSnackMessage("Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                voiceAttendanceMsg("Duplicate Aaadhaar Number.Please enter Unique for Current Person.")
                             }
 
                         }, { error ->

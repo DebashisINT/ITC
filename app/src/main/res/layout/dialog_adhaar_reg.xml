@@ -114,18 +114,18 @@
             android:id="@+id/dialog_adhaar_reg_supportTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_2sdp"
             android:layout_marginStart="@dimen/_8sdp"
-            android:text="Supported types : .gif, .jpeg, .png, .pdf (File size limited to 500kb)"
+            android:text="Supported types : .jpeg, .png, .pdf (File size limited to 500kb)"
             android:textColor="@color/color_custom_red"
             android:textSize="@dimen/_8sdp"
-            android:layout_marginLeft="@dimen/_7sdp"/>
+            android:paddingStart="@dimen/_10sdp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/_100sdp"
             android:layout_marginLeft="@dimen/_3sdp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/_5sdp">
 
             <ImageView
                 android:id="@+id/tv_dialog_adhaar_reg_iv_camera"

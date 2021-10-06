@@ -112,8 +112,10 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 //if(mList?.get(adapterPosition)?.IsPhotoDeleteShow!!){
                 if(Pref.IsPhotoDeleteShow){
                     sync_delete_iv_red.visibility=View.VISIBLE
+                    ll_row_user_list_face_regis_tagline.visibility=View.VISIBLE
                 }else{
                     sync_delete_iv_red.visibility=View.GONE
+                    ll_row_user_list_face_regis_tagline.visibility=View.GONE
                 }
 
 
