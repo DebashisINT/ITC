@@ -15,6 +15,10 @@
         android:padding="@dimen/_3sdp"
         android:background="@drawable/shape_cursor_one">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp">
+
 
         <com.breezefsmdsm.widgets.AppCustomTextView
             android:id="@+id/photo_reg_user_name_tv"
@@ -25,6 +29,19 @@
             android:gravity="center|start"
             android:textColor="@color/black"
             android:textSize="@dimen/_11sdp" />
+
+        <com.breezefsmdsm.widgets.AppCustomTextView
+            android:id="@+id/photo_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center|start"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            android:text="photo profile"
+            android:textColor="@color/color_custom_red"
+            android:textSize="@dimen/_8sdp" />
+
+        </FrameLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -51,6 +68,7 @@
 
                 <TextView
                     android:id="@+id/textView5"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/shape_cursor_three"
@@ -67,6 +85,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:src="@drawable/arrow_img_aadhaar"
                     app:tint="@color/color_blue_light_dark"
                     android:layout_marginLeft="@dimen/_50sdp"/>
