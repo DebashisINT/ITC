@@ -69,15 +69,15 @@ import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.FileInputStream
 
-class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
+class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var mContext: Context
     private lateinit var mRv_userList: RecyclerView
     private lateinit var progress_wheel: com.pnikosis.materialishprogress.ProgressWheel
-    var userList:ArrayList<UserListResponseModel> = ArrayList()
-    var userList_temp:ArrayList<UserListResponseModel> = ArrayList()
-    private var adapter: AdapterUserList?= null
-    private var str_aadhaarNo:String=""
+    var userList: ArrayList<UserListResponseModel> = ArrayList()
+    var userList_temp: ArrayList<UserListResponseModel> = ArrayList()
+    private var adapter: AdapterUserList? = null
+    private var str_aadhaarNo: String = ""
 
     private lateinit var et_attachment: AppCustomEditText
     private lateinit var et_photo: AppCustomEditText
@@ -86,7 +86,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     private var dataPath = ""
     private var imagePath = ""
 
-    private var aadhaarList:ArrayList<String> = ArrayList()
+    private var aadhaarList: ArrayList<String> = ArrayList()
 
 
     override fun onAttach(context: Context) {
@@ -94,12 +94,12 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         mContext = context
     }
 
-    companion object{
+    companion object {
         var user_uid: String = ""
         fun getInstance(objects: Any): ProtoRegistrationFragment {
             val protoRegistrationFragment = ProtoRegistrationFragment()
             if (!TextUtils.isEmpty(objects.toString())) {
-                user_uid=objects.toString()
+                user_uid = objects.toString()
             }
             return protoRegistrationFragment
         }
@@ -128,10 +128,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         return view
     }
 
-    private fun initView(view: View){
+    private fun initView(view: View) {
         et_attachment = view!!.findViewById(R.id.et_attachment)
         et_photo = view!!.findViewById(R.id.et_photo)
-        mRv_userList=view!!.findViewById(R.id.rv_frag_photo_reg)
+        mRv_userList = view!!.findViewById(R.id.rv_frag_photo_reg)
         progress_wheel = view.findViewById(R.id.progress_wheel)
 
         mRv_userList.layoutManager = LinearLayoutManager(mContext)
@@ -158,7 +158,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         }, arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
-    private fun callUSerListApi(){
+    private fun callUSerListApi() {
         userList.clear()
         aadhaarList.clear()
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
@@ -175,15 +175,15 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
                                     doAsync {
                                         userList = response.user_list!!
-                                        for(j in 0..userList.size-1){
+                                        /*for(j in 0..userList.size-1){
                                             if(userList.get(j).IsAadhaarRegistered!!){
                                                 aadhaarList.add(userList.get(j).RegisteredAadhaarNo!!)
                                             }
-                                        }
+                                        }*/
 
                                         uiThread {
                                             callAllUserAadhaarDetailsApi()
-                                            setAdapter()
+                                            //setAdapter()
                                         }
                                     }
 
@@ -203,7 +203,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
     }
 
-    private fun callAllUserAadhaarDetailsApi(){
+    private fun callAllUserAadhaarDetailsApi() {
+        aadhaarList.clear()
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -214,24 +215,25 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                             progress_wheel.stopSpinning()
                             var response = result as GetAllAadhaarResponse
                             if (response.status == NetworkConstant.SUCCESS) {
-                                if (true) {
-
-                                    doAsync {
-
-                                        uiThread {
-                                            //setAdapter()
-                                        }
+                                doAsync {
+                                    var allAadhaarList=response.all_aadhaar_list
+                                    for(j in 0..allAadhaarList!!.size-1){
+                                        aadhaarList.add(allAadhaarList.get(j).RegisteredAadhaarNo)
                                     }
-
-                                } else {
-                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                                    uiThread {
+                                        setAdapter()
+                                    }
                                 }
+
+
                             } else {
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                                setAdapter()
+                                //(mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
                             }
                         }, { error ->
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
+                            setAdapter()
                         })
         )
     }
@@ -258,8 +260,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     }
 
 
-
-    private fun setAdapter(){
+    private fun setAdapter() {
 
         //Toast.makeText(mContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
 
@@ -291,7 +292,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 val dialogHeaderHeader = simpleDialogg.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
                 //dialogHeader.text = "Are you sure?"
                 dialogHeader.text = "Wish to Delete Face Registration?"
-                dialogHeaderHeader.text = "Hi "+Pref.user_name!!+"!"
+                dialogHeaderHeader.text = "Hi " + Pref.user_name!! + "!"
                 val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
                 val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
 
@@ -322,8 +323,6 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 simpleDialogg.setContentView(R.layout.view_face_img)
 
 
-
-
                 val faceImg = simpleDialogg.findViewById(R.id.iv_face_img) as ImageView
                 faceImg.setImageDrawable(null)
                 faceImg.setBackgroundDrawable(null)
@@ -337,10 +336,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 //Picasso.get().load(img_link).resize(500, 500).into(faceImg);
 
 
-           /*          Glide.with(mContext)
-                        .load(img_link)
-                        .into(faceImg)
-                             .clearOnDetach()*/
+                /*          Glide.with(mContext)
+                             .load(img_link)
+                             .into(faceImg)
+                                  .clearOnDetach()*/
 
                 val picasso = Picasso.Builder(mContext)
                         .memoryCache(Cache.NONE)
@@ -360,10 +359,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                         .resize(500, 500)
                         .into(faceImg)*/
 
-              /*  Picasso.get()
-                        .load(img_link)
-                        .resize(500, 500)
-                        .into(faceImg)*/
+                /*  Picasso.get()
+                          .load(img_link)
+                          .resize(500, 500)
+                          .into(faceImg)*/
 
 
                 progress_wheel.stopSpinning()
@@ -371,15 +370,15 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
                 simpleDialogg.show()
 
-                faceCanel.setOnClickListener({view ->
+                faceCanel.setOnClickListener({ view ->
                     simpleDialogg.dismiss()
                 })
 
-                simpleDialogg.setOnCancelListener({view ->
+                simpleDialogg.setOnCancelListener({ view ->
                     simpleDialogg.dismiss()
 
                 })
-                simpleDialogg.setOnDismissListener({view ->
+                simpleDialogg.setOnDismissListener({ view ->
                     simpleDialogg.dismiss()
 
                 })
@@ -401,7 +400,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     }
 
 
-    fun deletePicApi(usr_id: String){
+    fun deletePicApi(usr_id: String) {
 
         val repository = GetUserListPhotoRegProvider.providePhotoReg()
         BaseActivity.compositeDisposable.add(
@@ -465,12 +464,12 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     }
 
 
-    lateinit var simpleDialog:Dialog
-    lateinit var iv_takenImg:ImageView
-    lateinit var dialogCameraclickCancel:ImageView
-    lateinit var dialogDocclickCancel:ImageView
-    lateinit var tv_docShow:TextView
-    lateinit var tv_docUrl:TextView
+    lateinit var simpleDialog: Dialog
+    lateinit var iv_takenImg: ImageView
+    lateinit var dialogCameraclickCancel: ImageView
+    lateinit var dialogDocclickCancel: ImageView
+    lateinit var tv_docShow: TextView
+    lateinit var tv_docUrl: TextView
     private fun OpenDialogForAdhaarReg(obj: UserListResponseModel) {
         simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(true)
@@ -478,7 +477,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         simpleDialog.setContentView(R.layout.dialog_adhaar_reg)
 
         val headerName = simpleDialog.findViewById(R.id.dialog_adhaar_reg_adhharTV_header) as AppCustomTextView
-        headerName.text="Enter Aadhaar for "+obj.user_name
+        headerName.text = "Enter Aadhaar for " + obj.user_name
 
         val dialogEtCardNumber1 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_1) as AppCustomEditText
         val dialogEtCardNumber2 = simpleDialog.findViewById(R.id.dialog_adhaar_reg_et_no_et_2) as AppCustomEditText
@@ -501,9 +500,10 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         dialogEtCardNumber1.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
+
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {
-                if(dialogEtCardNumber1.text.toString().length==4){
+                if (dialogEtCardNumber1.text.toString().length == 4) {
                     dialogEtCardNumber2.setSelection(dialogEtCardNumber2.text.toString().length)
                     dialogEtCardNumber2.requestFocus()
                 }
@@ -512,45 +512,46 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         dialogEtCardNumber2.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
             }
+
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {
-                if(dialogEtCardNumber2.text.toString().length==4){
+                if (dialogEtCardNumber2.text.toString().length == 4) {
                     dialogEtCardNumber3.setSelection(dialogEtCardNumber3.text.toString().length)
                     dialogEtCardNumber3.requestFocus()
                 }
             }
         })
 
-       /* val key: OnKeyListener = object : OnKeyListener {
-            override fun onKey(v: View, keyCode: Int, event: KeyEvent?): Boolean {
-                if((v as EditText).length()==4){
-                    if (!(v as EditText).toString().isEmpty()){
-                        v.focusSearch(View.FOCUS_RIGHT).requestFocus()
-                    }
+        /* val key: OnKeyListener = object : OnKeyListener {
+             override fun onKey(v: View, keyCode: Int, event: KeyEvent?): Boolean {
+                 if((v as EditText).length()==4){
+                     if (!(v as EditText).toString().isEmpty()){
+                         v.focusSearch(View.FOCUS_RIGHT).requestFocus()
+                     }
 
-                }
-                return false
-            }
-        }*/
+                 }
+                 return false
+             }
+         }*/
 
         //dialogEtCardNumber1.setOnKeyListener(key)
         //dialogEtCardNumber2.setOnKeyListener(key)
         //dialogEtCardNumber3.setOnKeyListener(key)
 
-              /*  if(dialogEtCardNumber1.getText().toString().length==4)
-                {
-                    if(dialogEtCardNumber1.text.toString().isNotEmpty())
-                    {
-                        dialogEtCardNumber1.requestFocus()
-                    }
-                    else
-                    {
+        /*  if(dialogEtCardNumber1.getText().toString().length==4)
+          {
+              if(dialogEtCardNumber1.text.toString().isNotEmpty())
+              {
+                  dialogEtCardNumber1.requestFocus()
+              }
+              else
+              {
 
-                    }
-                }*/
+              }
+          }*/
 
 
-        if(obj.RegisteredAadhaarNo!=null && obj.RegisteredAadhaarNo!!.length>0){
+        if (obj.RegisteredAadhaarNo != null && obj.RegisteredAadhaarNo!!.length > 0) {
             dialogEtCardNumber1.setText(obj.RegisteredAadhaarNo!!.get(0).toString() + obj.RegisteredAadhaarNo!!.get(1).toString() +
                     obj.RegisteredAadhaarNo!!.get(2).toString() + obj.RegisteredAadhaarNo!!.get(3).toString())
             dialogEtCardNumber2.setText(obj.RegisteredAadhaarNo!!.get(4).toString() + obj.RegisteredAadhaarNo!!.get(5).toString() +
@@ -558,21 +559,21 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             dialogEtCardNumber3.setText(obj.RegisteredAadhaarNo!!.get(8).toString() + obj.RegisteredAadhaarNo!!.get(9).toString() +
                     obj.RegisteredAadhaarNo!!.get(10).toString() + obj.RegisteredAadhaarNo!!.get(11).toString())
         }
-        if(obj.RegisteredAadhaarDocLink!=null && obj.RegisteredAadhaarDocLink!!.length>0 && obj.RegisteredAadhaarDocLink!!.contains("jpg")){
-            iv_takenImg.visibility=View.VISIBLE
-            dialogCameraclickCancel.visibility=View.VISIBLE
+        if (obj.RegisteredAadhaarDocLink != null && obj.RegisteredAadhaarDocLink!!.length > 0 && obj.RegisteredAadhaarDocLink!!.contains("jpg")) {
+            iv_takenImg.visibility = View.VISIBLE
+            dialogCameraclickCancel.visibility = View.VISIBLE
             Picasso.get()
                     .load(obj.RegisteredAadhaarDocLink)
                     .resize(500, 500)
                     .into(iv_takenImg)
-        }else if(obj.RegisteredAadhaarDocLink!=null && obj.RegisteredAadhaarDocLink!!.length>0){
+        } else if (obj.RegisteredAadhaarDocLink != null && obj.RegisteredAadhaarDocLink!!.length > 0) {
             //Toaster.msgLong(mContext,obj.RegisteredAadhaarDocLink!!.toString())
-            iv_takenImg.visibility=View.GONE
-            dialogCameraclickCancel.visibility=View.GONE
+            iv_takenImg.visibility = View.GONE
+            dialogCameraclickCancel.visibility = View.GONE
 
 
-            if(obj.RegisteredAadhaarDocLink!!.contains("CommonFolder")){
-                tv_docShow.text="Document Attached."
+            if (obj.RegisteredAadhaarDocLink!!.contains("CommonFolder")) {
+                tv_docShow.text = "Document Attached."
                 tv_docUrl.text = obj.RegisteredAadhaarDocLink
 
             }
@@ -581,49 +582,43 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             tv_docUrl.setOnClickListener { view ->
 
                 val file = File(obj.RegisteredAadhaarDocLink!!)
-                var strFileName=""
+                var strFileName = ""
                 if (!obj.RegisteredAadhaarDocLink!!.startsWith("http")!!) {
-                     strFileName = file.name
+                    strFileName = file.name
                 } else {
-                     strFileName = obj.RegisteredAadhaarDocLink!!.substring(obj.RegisteredAadhaarDocLink!!.lastIndexOf("/")!! + 1)
+                    strFileName = obj.RegisteredAadhaarDocLink!!.substring(obj.RegisteredAadhaarDocLink!!.lastIndexOf("/")!! + 1)
                 }
 
                 //downloadFile(obj.RegisteredAadhaarDocLink,tv_docUrl.text.toString().trim())
-                downloadFile(obj.RegisteredAadhaarDocLink,strFileName)
+                downloadFile(obj.RegisteredAadhaarDocLink, strFileName)
             }
 
 
-
-
-
-
-
-
         }
 
-        dialogCameraclick.setOnClickListener{ v: View? ->
-            iv_takenImg.visibility=View.GONE
-            dialogCameraclickCancel.visibility=View.GONE
-            dialogDocclickCancel.visibility=View.GONE
-            tv_docShow.visibility=View.GONE
+        dialogCameraclick.setOnClickListener { v: View? ->
+            iv_takenImg.visibility = View.GONE
+            dialogCameraclickCancel.visibility = View.GONE
+            dialogDocclickCancel.visibility = View.GONE
+            tv_docShow.visibility = View.GONE
             showPictureDialog()
         }
-        dialogCameraclickCancel.setOnClickListener{ v: View? ->
+        dialogCameraclickCancel.setOnClickListener { v: View? ->
 
             iv_takenImg.setImageBitmap(null)
-            dialogCameraclickCancel.visibility=View.GONE
-            dataPath=""
-            imagePath=""
+            dialogCameraclickCancel.visibility = View.GONE
+            dataPath = ""
+            imagePath = ""
         }
-        dialogDocclickCancel.setOnClickListener{ v: View? ->
+        dialogDocclickCancel.setOnClickListener { v: View? ->
 
-            tv_docShow.visibility=View.GONE
-            dialogDocclickCancel.visibility=View.GONE
+            tv_docShow.visibility = View.GONE
+            dialogDocclickCancel.visibility = View.GONE
 
-            dataPath=""
-            imagePath=""
+            dataPath = ""
+            imagePath = ""
         }
-        dialogCancel.setOnClickListener{ v: View? ->
+        dialogCancel.setOnClickListener { v: View? ->
             progress_wheel.stopSpinning()
             simpleDialog.cancel()
         }
@@ -651,33 +646,31 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                             str_aadhaarNo = dialogEtCardNumber1.text.toString() + dialogEtCardNumber2.text.toString() + dialogEtCardNumber3.text.toString()
                             // check aadhar unique or not
 
-                            var tagAadhaar=false
+                            var tagAadhaar = false
 
 
 
-                            for(j in 0..aadhaarList.size-1){
-                                if(str_aadhaarNo.equals(aadhaarList.get(j))){
-                                    tagAadhaar=true
+                            for (j in 0..aadhaarList.size - 1) {
+                                if (str_aadhaarNo.equals(aadhaarList.get(j))) {
+                                    tagAadhaar = true
                                 }
                             }
 
 
-                            if(obj.IsAadhaarRegistered!!){
-                                tagAadhaar=false
+                            if (obj.IsAadhaarRegistered!!) {
+                                tagAadhaar = false
                             }
 
 
 
-                            if(tagAadhaar==false){
+                            if (tagAadhaar == false) {
                                 simpleDialog.cancel()
                                 submitAadhaarDetails(obj, dialogEtFeedback.text.toString())
-                            }
-                            else{
-                                Toaster.msgShort(mContext,"Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                            } else {
+                                Toaster.msgShort(mContext, "Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
                                 voiceAttendanceMsg("Duplicate Aaadhaar Number.Please enter Unique for Current Person.")
                                 //(mContext as DashboardActivity).showSnackMessage("Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
                             }
-
 
 
                         })
@@ -707,16 +700,16 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     }
 
 
-    private fun submitAadhaarDetails(obj: UserListResponseModel, feedBac: String){
+    private fun submitAadhaarDetails(obj: UserListResponseModel, feedBac: String) {
         progress_wheel.spin()
-        var aadhaarSubmitData: AadhaarSubmitData=AadhaarSubmitData()
-        aadhaarSubmitData.session_token=Pref.session_token.toString()
-        aadhaarSubmitData.aadhaar_holder_user_id=obj.user_id.toString()
-        aadhaarSubmitData.aadhaar_holder_user_contactid=obj.user_contactid.toString()
-        aadhaarSubmitData.aadhaar_no=str_aadhaarNo
-        aadhaarSubmitData.date=AppUtils.getCurrentDateForShopActi()
-        aadhaarSubmitData.feedback=feedBac
-        aadhaarSubmitData.address=""
+        var aadhaarSubmitData: AadhaarSubmitData = AadhaarSubmitData()
+        aadhaarSubmitData.session_token = Pref.session_token.toString()
+        aadhaarSubmitData.aadhaar_holder_user_id = obj.user_id.toString()
+        aadhaarSubmitData.aadhaar_holder_user_contactid = obj.user_contactid.toString()
+        aadhaarSubmitData.aadhaar_no = str_aadhaarNo
+        aadhaarSubmitData.date = AppUtils.getCurrentDateForShopActi()
+        aadhaarSubmitData.feedback = feedBac
+        aadhaarSubmitData.address = ""
 
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
@@ -771,7 +764,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                     //voiceAttendanceMsg("Aadhaar registered successfully")
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
                                 }
-                            }else{
+                            } else {
                                 progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage("Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
                                 voiceAttendanceMsg("Duplicate Aaadhaar Number.Please enter Unique for Current Person.")
@@ -794,8 +787,8 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         simpleDialogAdhhar.setContentView(R.layout.dialog_message)
         val dialogHeader = simpleDialogAdhhar.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialogHeaderTTV = simpleDialogAdhhar.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-        dialogHeader.text="Aadhaar registered successfully."
-        dialogHeaderTTV.text="Hi "+Pref.user_name+"!"
+        dialogHeader.text = "Aadhaar registered successfully."
+        dialogHeaderTTV.text = "Hi " + Pref.user_name + "!"
         val tv_message_ok = simpleDialogAdhhar.findViewById(R.id.tv_message_ok) as AppCustomTextView
 
         tv_message_ok.setOnClickListener({ view ->
@@ -854,7 +847,6 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
     }
 
 
-
     /*fun setImage(file: File) {
         if (isAttachment) {
             et_attachment.setText(file.name)
@@ -877,13 +869,12 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                 if (newFile != null) {
                     XLog.e("=========Image from new technique==========")
                     val fileSize = AppUtils.getCompressImage(filePath)
-                    var tyy=filePath
+                    var tyy = filePath
 
                     if (isAttachment) {
                         et_attachment.setText(newFile!!.name)
                         dataPath = newFile!!.absolutePath
-                    }
-                    else {
+                    } else {
                         imagePath = newFile!!.absolutePath
                         et_photo.setText(newFile!!.name)
 
@@ -892,19 +883,19 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                         options.inPreferredConfig = Bitmap.Config.ARGB_8888
                         var bitmap = BitmapFactory.decodeStream(FileInputStream(f), null, options)
                         iv_takenImg.setImageBitmap(bitmap)
-                        var tt="asd"
+                        var tt = "asd"
 
                     }
-                    iv_takenImg.visibility=View.VISIBLE
-                    dialogCameraclickCancel.visibility=View.VISIBLE
+                    iv_takenImg.visibility = View.VISIBLE
+                    dialogCameraclickCancel.visibility = View.VISIBLE
                     progress_wheel.stopSpinning()
                 } else {
                     // Image compression
                     val fileSize = AppUtils.getCompressImage(filePath)
-                    var tyy=filePath
+                    var tyy = filePath
                     progress_wheel.stopSpinning()
-                    iv_takenImg.visibility=View.VISIBLE
-                    dialogCameraclickCancel.visibility=View.VISIBLE
+                    iv_takenImg.visibility = View.VISIBLE
+                    dialogCameraclickCancel.visibility = View.VISIBLE
                 }
             }
         }
@@ -914,13 +905,12 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
         if (isAttachment) {
             et_attachment.setText(file.name)
             dataPath = file.absolutePath
-            iv_takenImg.visibility=View.GONE
-            tv_docShow.text="Document Attached."
-            tv_docShow.visibility=View.VISIBLE
-            dialogDocclickCancel.visibility=View.VISIBLE
+            iv_takenImg.visibility = View.GONE
+            tv_docShow.text = "Document Attached."
+            tv_docShow.visibility = View.VISIBLE
+            dialogDocclickCancel.visibility = View.VISIBLE
         }
     }
-
 
 
     /* fun setImage(filePath: String) {
@@ -950,7 +940,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
 
     private fun downloadFile(downloadUrl: String?, fileName: String) {
         try {
-            if (!AppUtils.isOnline(mContext)){
+            if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                 return
             }
@@ -1082,7 +1072,6 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
             FullImageDialog.getInstance(file.absolutePath).show((mContext as DashboardActivity).supportFragmentManager, "")
         }
     }
-
 
 
 }
