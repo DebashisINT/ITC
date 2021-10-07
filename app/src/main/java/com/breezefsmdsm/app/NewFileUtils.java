@@ -390,6 +390,8 @@ public class NewFileUtils {
                 };
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//        Intent intent = new Intent  (Intent.ACTION_CREATE_DOCUMENT);
+
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
