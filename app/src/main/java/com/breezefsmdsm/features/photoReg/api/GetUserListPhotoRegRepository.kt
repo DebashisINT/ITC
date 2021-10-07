@@ -22,6 +22,9 @@ import java.io.File
 
 class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
 
+    fun getAllAadhaar(session_token: String): Observable<GetAllAadhaarResponse> {
+        return apiService.getAllAadhaar(session_token)
+    }
 
     fun getUserListApi(user_id: String, session_token: String): Observable<GetUserListResponse> {
         return apiService.getUserListApi(user_id,session_token)

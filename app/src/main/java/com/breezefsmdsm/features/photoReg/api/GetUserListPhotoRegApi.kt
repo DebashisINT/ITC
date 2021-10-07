@@ -17,6 +17,11 @@ import retrofit2.http.*
 interface GetUserListPhotoRegApi {
 
     @FormUrlEncoded
+    @POST("UserWiseAadharInfo/UserAadharList")
+    fun getAllAadhaar(@Field("session_token") session_token: String):
+            Observable<GetAllAadhaarResponse>
+
+    @FormUrlEncoded
     @POST("FaceRegistration/UserList")
     fun getUserListApi(@Field("user_id") user_id: String,@Field("session_token") session_token: String):
             Observable<GetUserListResponse>

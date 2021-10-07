@@ -50,10 +50,7 @@ import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
 import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
 import com.breezefsmdsm.features.photoReg.adapter.PhotoRegUserListner
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
-import com.breezefsmdsm.features.photoReg.model.AadhaarSubmitData
-import com.breezefsmdsm.features.photoReg.model.DeleteUserPicResponse
-import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
-import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
+import com.breezefsmdsm.features.photoReg.model.*
 import com.breezefsmdsm.features.reimbursement.presentation.FullImageDialog
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
@@ -185,6 +182,7 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                                         }
 
                                         uiThread {
+                                            callAllUserAadhaarDetailsApi()
                                             setAdapter()
                                         }
                                     }
@@ -203,6 +201,39 @@ class ProtoRegistrationFragment:BaseFragment(),View.OnClickListener {
                         })
         )
 
+    }
+
+    private fun callAllUserAadhaarDetailsApi(){
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.getAllAadhaar(Pref.session_token!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as GetAllAadhaarResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                if (true) {
+
+                                    doAsync {
+
+                                        uiThread {
+                                            //setAdapter()
+                                        }
+                                    }
+
+                                } else {
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                                }
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                        })
+        )
     }
 
     private fun getBytesForMemCache(percent: Int): Int {
