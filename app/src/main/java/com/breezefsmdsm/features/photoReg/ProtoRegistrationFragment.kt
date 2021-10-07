@@ -215,17 +215,19 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             var response = result as GetAllAadhaarResponse
                             if (response.status == NetworkConstant.SUCCESS) {
-                                doAsync {
-                                    var allAadhaarList=response.all_aadhaar_list
-                                    for(j in 0..allAadhaarList!!.size-1){
-                                        aadhaarList.add(allAadhaarList.get(j).RegisteredAadhaarNo)
+                                if(response.all_aadhaar_list!=null && response.all_aadhaar_list!!.size>0){
+                                    doAsync {
+                                        var allAadhaarList=response.all_aadhaar_list
+                                        for(j in 0..allAadhaarList!!.size-1){
+                                            aadhaarList.add(allAadhaarList.get(j).RegisteredAadhaarNo)
+                                        }
+                                        uiThread {
+                                            setAdapter()
+                                        }
                                     }
-                                    uiThread {
-                                        setAdapter()
-                                    }
+                                }else{
+                                    setAdapter()
                                 }
-
-
                             } else {
                                 setAdapter()
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))

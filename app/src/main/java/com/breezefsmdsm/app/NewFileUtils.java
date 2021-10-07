@@ -97,10 +97,10 @@ public class NewFileUtils {
                 if ("primary".equalsIgnoreCase(type)) {
                     if (split.length > 1) {
                         //return Environment.getExternalStorageDirectory() + "/" + split[1];
-                        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + split[1];
+                        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/" + split[1];
                     } else {
                         //return Environment.getExternalStorageDirectory() + "/";
-                        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/";
+                        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
                     }
                     // This is for checking SD Card
                 } else {
