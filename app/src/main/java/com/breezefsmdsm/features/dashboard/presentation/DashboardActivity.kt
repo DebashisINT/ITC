@@ -6861,8 +6861,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
-                            CropImage.activity(contentURI)
+                            /*CropImage.activity(contentURI)
                                     .setAspectRatio(40, 21)
+                                    .start(this)*/
+
+                            CropImage.activity(contentURI)
+                                    .setCropShape(CropImageView.CropShape.RECTANGLE)
+                                    .setMinCropWindowSize(500,300)
+                                    .setAspectRatio(1, 1)
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
