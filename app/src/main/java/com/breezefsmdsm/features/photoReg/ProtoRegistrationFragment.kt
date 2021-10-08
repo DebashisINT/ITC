@@ -1,6 +1,8 @@
 package com.breezefsmdsm.features.photoReg
 
 import android.Manifest
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Dialog
@@ -16,6 +18,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.*
+import android.os.Build.VERSION.SDK_INT
 import android.provider.MediaStore
 import android.provider.Settings
 import android.speech.tts.TextToSpeech
@@ -28,8 +31,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -67,7 +72,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.FileInputStream
-import javax.xml.transform.Result
+
 
 class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
@@ -88,7 +93,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
     private var aadhaarList: ArrayList<String> = ArrayList()
 
-    private data class AadhaarListUser(var user_id:String,var RegisteredAadhaarNo:String)
+    private data class AadhaarListUser(var user_id: String, var RegisteredAadhaarNo: String)
     private var aadhaarListUserList:ArrayList<AadhaarListUser> = ArrayList()
 
 
@@ -132,6 +137,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun initView(view: View) {
+        checkPermission()
         et_attachment = view!!.findViewById(R.id.et_attachment)
         et_photo = view!!.findViewById(R.id.et_photo)
         mRv_userList = view!!.findViewById(R.id.rv_frag_photo_reg)
@@ -151,8 +157,10 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     private fun initPermissionCheck() {
         permissionUtils = PermissionUtils(mContext as Activity, object : PermissionUtils.OnPermissionListener {
             override fun onPermissionGranted() {
-                callUSerListApi()
+                requestPermission()
+                //callUSerListApi()
             }
+
             override fun onPermissionNotGranted() {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.accept_permission))
             }
@@ -161,6 +169,17 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     }
 
     fun onRequestPermission(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            175 -> if (grantResults.size > 0) {
+                val READ_EXTERNAL_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                val WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED
+                if (READ_EXTERNAL_STORAGE && WRITE_EXTERNAL_STORAGE) {
+                    // perform action when allow permission success
+                } else {
+                    Toast.makeText(mContext, "Allow permission for storage access!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         permissionUtils?.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
@@ -225,18 +244,18 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             var response = result as GetAllAadhaarResponse
                             if (response.status == NetworkConstant.SUCCESS) {
-                                if(response.all_aadhaar_list!=null && response.all_aadhaar_list!!.size>0){
+                                if (response.all_aadhaar_list != null && response.all_aadhaar_list!!.size > 0) {
                                     doAsync {
-                                        var allAadhaarList=response.all_aadhaar_list
+                                        var allAadhaarList = response.all_aadhaar_list
                                         /*for(j in 0..allAadhaarList!!.size-1){
                                             aadhaarList.add(allAadhaarList.get(j).RegisteredAadhaarNo)
                                         }*/
 
-                                        for(l in 0..response.all_aadhaar_list!!.size-1){
+                                        for (l in 0..response.all_aadhaar_list!!.size - 1) {
                                             aadhaarList.add(allAadhaarList!!.get(l).RegisteredAadhaarNo)
-                                            var obj:AadhaarListUser = AadhaarListUser("","")
-                                            obj.user_id=response.all_aadhaar_list!!.get(l).user_id.toString()
-                                            obj.RegisteredAadhaarNo=response.all_aadhaar_list!!.get(l).RegisteredAadhaarNo
+                                            var obj: AadhaarListUser = AadhaarListUser("", "")
+                                            obj.user_id = response.all_aadhaar_list!!.get(l).user_id.toString()
+                                            obj.RegisteredAadhaarNo = response.all_aadhaar_list!!.get(l).RegisteredAadhaarNo
                                             aadhaarListUserList.add(obj)
                                         }
 
@@ -244,7 +263,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                             setAdapter()
                                         }
                                     }
-                                }else{
+                                } else {
                                     setAdapter()
                                 }
                             } else {
@@ -676,17 +695,17 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                 }
                             }
 */
-                           /* if (obj.IsAadhaarRegistered!!) {
+                            /* if (obj.IsAadhaarRegistered!!) {
                                 tagAadhaar = false
                             }*/
 
-                            if(aadhaarListUserList!!.size>0 && aadhaarListUserList!= null){
-                                for(p in 0..aadhaarListUserList!!.size-1){
-                                    if(str_aadhaarNo.equals(aadhaarListUserList.get(p).RegisteredAadhaarNo)){
-                                        if(obj.user_id!!.toString().equals(aadhaarListUserList.get(p).user_id)){
+                            if (aadhaarListUserList!!.size > 0 && aadhaarListUserList != null) {
+                                for (p in 0..aadhaarListUserList!!.size - 1) {
+                                    if (str_aadhaarNo.equals(aadhaarListUserList.get(p).RegisteredAadhaarNo)) {
+                                        if (obj.user_id!!.toString().equals(aadhaarListUserList.get(p).user_id)) {
                                             tagAadhaar = false
                                             break
-                                        }else{
+                                        } else {
                                             tagAadhaar = true
                                             break
                                         }
@@ -708,7 +727,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                 val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
                                 val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                                 //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
-                                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                dialog_yes_no_headerTV.text = "Hi " + Pref.user_name!! + "!"
                                 dialogHeader.text = "Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks."
                                 val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                                 dialogYes.setOnClickListener({ view ->
@@ -842,7 +861,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
         tv_message_ok.setOnClickListener({ view ->
             simpleDialogAdhhar.cancel()
-            voiceAttendanceMsg("Aadhaar registered successfully for "+obj.user_name)
+            voiceAttendanceMsg("Aadhaar registered successfully for " + obj.user_name)
         })
         simpleDialogAdhhar.show()
     }
@@ -1120,6 +1139,49 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
             }
         } else if (mimeType == "image/jpeg" || mimeType == "image/png") {
             FullImageDialog.getInstance(file.absolutePath).show((mContext as DashboardActivity).supportFragmentManager, "")
+        }
+    }
+
+
+    private fun checkPermission(): Boolean {
+        return if (SDK_INT >= Build.VERSION_CODES.R) {
+            Environment.isExternalStorageManager()
+        } else {
+            val result: Int = ContextCompat.checkSelfPermission(mContext, READ_EXTERNAL_STORAGE)
+            val result1: Int = ContextCompat.checkSelfPermission(mContext, WRITE_EXTERNAL_STORAGE)
+            result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    private fun requestPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            try {
+                val intent: Intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+                intent.addCategory("android.intent.category.DEFAULT")
+                intent.data = Uri.parse(java.lang.String.format("package:%s", mContext.getApplicationContext().getPackageName()))
+                startActivityForResult(intent, 2296)
+            } catch (e: java.lang.Exception) {
+                val intent = Intent()
+                intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+                startActivityForResult(intent, 2296)
+            }
+        } else {
+            //below android 11
+            ActivityCompat.requestPermissions(mContext as Activity, arrayOf(WRITE_EXTERNAL_STORAGE), 175)
+
+        }
+    }
+
+     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 2296) {
+            if (SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    // perform action when allow permission success
+                } else {
+                    Toast.makeText(mContext, "Allow permission for storage access!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
