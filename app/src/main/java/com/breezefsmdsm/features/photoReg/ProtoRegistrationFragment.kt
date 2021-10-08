@@ -15,16 +15,13 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.provider.MediaStore
+import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.text.method.LinkMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,19 +29,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
-import com.breezefsmdsm.app.*
-import com.breezefsmdsm.app.domain.DocumentListEntity
+import com.breezefsmdsm.app.NetworkConstant
+import com.breezefsmdsm.app.NewFileUtils
+import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.app.SearchListener
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.uiaction.IntentActionable
 import com.breezefsmdsm.app.utils.*
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
-import com.breezefsmdsm.features.billing.presentation.BillingDetailsFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
 import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
@@ -68,6 +67,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.FileInputStream
+import javax.xml.transform.Result
 
 class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
@@ -87,6 +87,9 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     private var imagePath = ""
 
     private var aadhaarList: ArrayList<String> = ArrayList()
+
+    private data class AadhaarListUser(var user_id:String,var RegisteredAadhaarNo:String)
+    private var aadhaarListUserList:ArrayList<AadhaarListUser> = ArrayList()
 
 
     override fun onAttach(context: Context) {
@@ -150,13 +153,19 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
             override fun onPermissionGranted() {
                 callUSerListApi()
             }
-
             override fun onPermissionNotGranted() {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.accept_permission))
             }
 
         }, arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
+
+    fun onRequestPermission(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        permissionUtils?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+
+
 
     private fun callUSerListApi() {
         userList.clear()
@@ -205,6 +214,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
     private fun callAllUserAadhaarDetailsApi() {
         aadhaarList.clear()
+        aadhaarListUserList.clear()
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -218,9 +228,18 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                 if(response.all_aadhaar_list!=null && response.all_aadhaar_list!!.size>0){
                                     doAsync {
                                         var allAadhaarList=response.all_aadhaar_list
-                                        for(j in 0..allAadhaarList!!.size-1){
+                                        /*for(j in 0..allAadhaarList!!.size-1){
                                             aadhaarList.add(allAadhaarList.get(j).RegisteredAadhaarNo)
+                                        }*/
+
+                                        for(l in 0..response.all_aadhaar_list!!.size-1){
+                                            aadhaarList.add(allAadhaarList!!.get(l).RegisteredAadhaarNo)
+                                            var obj:AadhaarListUser = AadhaarListUser("","")
+                                            obj.user_id=response.all_aadhaar_list!!.get(l).user_id.toString()
+                                            obj.RegisteredAadhaarNo=response.all_aadhaar_list!!.get(l).RegisteredAadhaarNo
+                                            aadhaarListUserList.add(obj)
                                         }
+
                                         uiThread {
                                             setAdapter()
                                         }
@@ -651,16 +670,28 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             var tagAadhaar = false
 
 
-
-                            for (j in 0..aadhaarList.size - 1) {
+                            /*for (j in 0..aadhaarList.size - 1) {
                                 if (str_aadhaarNo.equals(aadhaarList.get(j))) {
                                     tagAadhaar = true
                                 }
                             }
-
-
-                            if (obj.IsAadhaarRegistered!!) {
+*/
+                           /* if (obj.IsAadhaarRegistered!!) {
                                 tagAadhaar = false
+                            }*/
+
+                            if(aadhaarListUserList!!.size>0 && aadhaarListUserList!= null){
+                                for(p in 0..aadhaarListUserList!!.size-1){
+                                    if(str_aadhaarNo.equals(aadhaarListUserList.get(p).RegisteredAadhaarNo)){
+                                        if(obj.user_id!!.toString().equals(aadhaarListUserList.get(p).user_id)){
+                                            tagAadhaar = false
+                                            break
+                                        }else{
+                                            tagAadhaar = true
+                                            break
+                                        }
+                                    }
+                                }
                             }
 
 
@@ -669,7 +700,23 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                 simpleDialog.cancel()
                                 submitAadhaarDetails(obj, dialogEtFeedback.text.toString())
                             } else {
-                                Toaster.msgShort(mContext, "Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+
+                                val simpleDialog = Dialog(mContext)
+                                simpleDialog.setCancelable(false)
+                                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                simpleDialog.setContentView(R.layout.dialog_message)
+                                val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                dialogHeader.text = "Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks."
+                                val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                dialogYes.setOnClickListener({ view ->
+                                    simpleDialog.cancel()
+                                })
+                                simpleDialog.show()
+
+                                //Toaster.msgShort(mContext, "Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
                                 voiceAttendanceMsg("Duplicate Aaadhaar Number.Please enter Unique for Current Person.")
                                 //(mContext as DashboardActivity).showSnackMessage("Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
                             }
@@ -746,7 +793,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                                         //(mContext as DashboardActivity).showSnackMessage(response.message!!)
                                                         //(mContext as DashboardActivity).showSnackMessage("Aadhar registered successfully")
                                                         if (response.status == NetworkConstant.SUCCESS) {
-                                                            aadharSuccessDialogShow()
+                                                            aadharSuccessDialogShow(obj)
                                                             //voiceAttendanceMsg("Aadhaar registered successfully")
                                                             /* Handler(Looper.getMainLooper()).postDelayed({
                                                                 callUSerListApi()
@@ -762,7 +809,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                     )
                                 } else {
                                     progress_wheel.stopSpinning()
-                                    aadharSuccessDialogShow()
+                                    aadharSuccessDialogShow(obj)
                                     //voiceAttendanceMsg("Aadhaar registered successfully")
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
                                 }
@@ -782,20 +829,20 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
     }
 
-    private fun aadharSuccessDialogShow() {
+    private fun aadharSuccessDialogShow(obj: UserListResponseModel) {
         val simpleDialogAdhhar = Dialog(mContext)
         simpleDialogAdhhar.setCancelable(false)
         simpleDialogAdhhar.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         simpleDialogAdhhar.setContentView(R.layout.dialog_message)
         val dialogHeader = simpleDialogAdhhar.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialogHeaderTTV = simpleDialogAdhhar.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-        dialogHeader.text = "Aadhaar registered successfully."
+        dialogHeader.text = "Aadhaar registered successfully for "+obj.user_name
         dialogHeaderTTV.text = "Hi " + Pref.user_name + "!"
         val tv_message_ok = simpleDialogAdhhar.findViewById(R.id.tv_message_ok) as AppCustomTextView
 
         tv_message_ok.setOnClickListener({ view ->
             simpleDialogAdhhar.cancel()
-            voiceAttendanceMsg("Aadhaar registered successfully.")
+            voiceAttendanceMsg("Aadhaar registered successfully for "+obj.user_name)
         })
         simpleDialogAdhhar.show()
     }
@@ -816,7 +863,8 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     private fun showPictureDialog() {
         val pictureDialog = AlertDialog.Builder(mContext)
         pictureDialog.setTitle("Select Action")
-        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture Image", "Select file from file manager")
+        //val pictureDialogItems = arrayOf("Select photo from gallery", "Capture Image", "Select file from file manager")
+        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture Image")
         pictureDialog.setItems(pictureDialogItems,
                 DialogInterface.OnClickListener { dialog, which ->
                     when (which) {
@@ -828,10 +876,10 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             isAttachment = false
                             launchCamera()
                         }
-                        2 -> {
+                        /*2 -> {
                             isAttachment = true
                             (mContext as DashboardActivity).openFileManager()
-                        }
+                        }*/
                     }
                 })
         pictureDialog.show()

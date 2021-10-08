@@ -37,7 +37,7 @@
             android:gravity="center|start"
             android:layout_weight="1"
             android:layout_gravity="end"
-            android:text="photo profile"
+            android:text="( Photo Profile )"
             android:textColor="@color/color_custom_red"
             android:textSize="@dimen/_8sdp" />
 

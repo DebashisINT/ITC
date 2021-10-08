@@ -37,7 +37,8 @@
         <com.breezefsmdsm.widgets.AppCustomTextView
             android:id="@+id/dialog_message_header_TV"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
+            android:minHeight="@dimen/_40sdp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Do you want to go back ?"
             android:textColor="@color/colorPrimary"
