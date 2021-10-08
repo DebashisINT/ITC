@@ -146,9 +146,9 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
         initPermissionCheck()
         progress_wheel.spin()
-        /*Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             callUSerListApi()
-        }, 300)*/
+        }, 300)
 
     }
 
@@ -166,7 +166,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                     callUSerListApi()
                 }*/
 
-                callUSerListApi()
+                //callUSerListApi()
             }
 
             override fun onPermissionNotGranted() {
