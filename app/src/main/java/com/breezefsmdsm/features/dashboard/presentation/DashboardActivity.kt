@@ -9201,6 +9201,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             (getFragment() as UpdateReviewFragment).onRequestPermission(requestCode, permissions, grantResults)
         else if (getFragment() is DashboardFragment)
             (getFragment() as DashboardFragment).onRequestPermission(requestCode, permissions, grantResults)
+        else if (getFragment() is ProtoRegistrationFragment)
+            (getFragment() as ProtoRegistrationFragment).onRequestPermission(requestCode, permissions, grantResults)
         else {
             if (requestCode == PermissionHelper.REQUEST_CODE_CAMERA) {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

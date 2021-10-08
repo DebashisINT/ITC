@@ -137,7 +137,6 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun initView(view: View) {
-        checkPermission()
         et_attachment = view!!.findViewById(R.id.et_attachment)
         et_photo = view!!.findViewById(R.id.et_photo)
         mRv_userList = view!!.findViewById(R.id.rv_frag_photo_reg)
@@ -147,9 +146,9 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
         initPermissionCheck()
         progress_wheel.spin()
-        Handler(Looper.getMainLooper()).postDelayed({
+        /*Handler(Looper.getMainLooper()).postDelayed({
             callUSerListApi()
-        }, 300)
+        }, 300)*/
 
     }
 
@@ -157,8 +156,17 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     private fun initPermissionCheck() {
         permissionUtils = PermissionUtils(mContext as Activity, object : PermissionUtils.OnPermissionListener {
             override fun onPermissionGranted() {
-                requestPermission()
-                //callUSerListApi()
+                /*if(SDK_INT >= 30){
+                    if (!Environment.isExternalStorageManager()){
+                        requestPermission()
+                    }else{
+                        callUSerListApi()
+                    }
+                }else{
+                    callUSerListApi()
+                }*/
+
+                callUSerListApi()
             }
 
             override fun onPermissionNotGranted() {
@@ -169,21 +177,8 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     }
 
     fun onRequestPermission(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            175 -> if (grantResults.size > 0) {
-                val READ_EXTERNAL_STORAGE = grantResults[0] == PackageManager.PERMISSION_GRANTED
-                val WRITE_EXTERNAL_STORAGE = grantResults[1] == PackageManager.PERMISSION_GRANTED
-                if (READ_EXTERNAL_STORAGE && WRITE_EXTERNAL_STORAGE) {
-                    // perform action when allow permission success
-                } else {
-                    Toast.makeText(mContext, "Allow permission for storage access!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
         permissionUtils?.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
-
-
 
 
     private fun callUSerListApi() {
@@ -895,7 +890,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             isAttachment = false
                             launchCamera()
                         }
-                        /*2 -> {
+                      /*  2 -> {
                             isAttachment = true
                             (mContext as DashboardActivity).openFileManager()
                         }*/
@@ -1165,10 +1160,6 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                 intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
                 startActivityForResult(intent, 2296)
             }
-        } else {
-            //below android 11
-            ActivityCompat.requestPermissions(mContext as Activity, arrayOf(WRITE_EXTERNAL_STORAGE), 175)
-
         }
     }
 
@@ -1177,7 +1168,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         if (requestCode == 2296) {
             if (SDK_INT >= Build.VERSION_CODES.R) {
                 if (Environment.isExternalStorageManager()) {
-                    // perform action when allow permission success
+                    callUSerListApi()
                 } else {
                     Toast.makeText(mContext, "Allow permission for storage access!", Toast.LENGTH_SHORT).show()
                 }
