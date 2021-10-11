@@ -110,6 +110,8 @@ public class MonitorBroadcast extends BroadcastReceiver {
     private void funcc(Context context){
 
         //Uri soundUriAlarm= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+
+
         Uri soundUriAlarm = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ context.getPackageName() + "/" + R.raw.custom_alarm_sound);
         if(soundUriAlarm == null){
             //soundUriAlarm= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -122,6 +124,8 @@ public class MonitorBroadcast extends BroadcastReceiver {
         player = MediaPlayer.create(context, soundUriAlarm);
         player.setLooping(true);
         player.start();
+        
+        player.stop();
 
         vibrator=(Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {0,5,10,20,40,80,120,100,600,700,500,500,500};
