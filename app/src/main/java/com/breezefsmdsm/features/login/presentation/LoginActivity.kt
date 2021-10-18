@@ -3195,7 +3195,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             }
 
             R.id.share_log_login_TV -> {
-                openShareIntents()
+                if(Build.VERSION.SDK_INT>=30){
+                    if (!Environment.isExternalStorageManager()){
+                        fileManagePermi()
+                    }else{
+                        openShareIntents()
+                    }
+                }else{
+                    openShareIntents()
+                }
+               // openShareIntents()
             }
         }
     }
