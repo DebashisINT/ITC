@@ -2645,7 +2645,16 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 //                loadFragment(FragType.LocalShopListFragment, false, "")
 //            }
             R.id.share_log_TV -> {
-                openShareIntents()
+                if(Build.VERSION.SDK_INT>=30){
+                    if (!Environment.isExternalStorageManager()){
+                        fileManagePermi()
+                    }else{
+                        openShareIntents()
+                    }
+                }else{
+                    openShareIntents()
+                }
+
             }
             R.id.iv_search_icon -> {
                 searchView.openSearch()
@@ -3143,7 +3152,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             val shareIntent = Intent(Intent.ACTION_SEND)
 //        val phototUri = Uri.parse(localAbsoluteFilePath)
             //val fileUrl = Uri.parse(File(Environment.getExternalStorageDirectory(), "xbreezefsmdsmlogsample/log").path);
-            val fileUrl = Uri.parse(File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
+            val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
 
             val file = File(fileUrl.path)
             if (!file.exists()) {
@@ -3164,6 +3173,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 //        Uri uri = Uri.fromFile(file);
 //        emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
 //        startActivity(Intent.createChooser(emailIntent,""))
+    }
+
+    private fun fileManagePermi(){
+            val intent = Intent()
+            intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+            val uri = Uri.fromParts("package", this.packageName, null)
+            intent.data = uri
+            startActivity(intent)
+
     }
 
     private fun deSelectAll() {
