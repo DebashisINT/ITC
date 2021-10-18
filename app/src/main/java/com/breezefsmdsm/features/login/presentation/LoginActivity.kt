@@ -193,6 +193,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        mContext = this@LoginActivity
         println("xyz - login oncreate started"+AppUtils.getCurrentDateTime());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             initPermissionCheck()
@@ -3158,7 +3159,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             }
 
             R.id.activity_login_tvappCustomLogs -> {
-                openShareIntents()
+                if(Build.VERSION.SDK_INT>=30){
+                    if (!Environment.isExternalStorageManager()){
+                        fileManagePermi()
+                    }else{
+                        openShareIntents()
+                    }
+                }else{
+                    openShareIntents()
+                }
+//                openShareIntents()
                 activity_login_llList.visibility = View.GONE
             }
 
@@ -3190,8 +3200,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }
     }
 
+    private fun fileManagePermi(){
+        val intent = Intent()
+        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+        val uri = Uri.fromParts("package", this.packageName, null)
+        intent.data = uri
+        startActivity(intent)
 
-
+    }
 
 
     fun openShareIntents() {
