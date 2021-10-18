@@ -1539,7 +1539,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         }else{
                 if (!Pref.isShowOTPVerificationPopup)  {
             (mContext as DashboardActivity).onBackPressed()
-            (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, shop_id)
+                    // change ITC 11-10-2021
+            //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, shop_id)
         }
         else {
             ShopVerificationDialog.getInstance(shop_id, object : ShopVerificationDialog.OnOTPButtonClickListener {
@@ -4192,10 +4193,12 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         if (!(shopAddress.text!!.isBlank()))
             shopDataModel.address = shopAddress.text.toString()
         else {
-            shopAddress.error = getString(R.string.field_cannot_be_blank)
-            (mContext as DashboardActivity).showSnackMessage("Please enter " + Pref.shopText + " address")
-            BaseActivity.isApiInitiated = false
-            return
+            shopDataModel.address="Unknown"
+            //11-10-2021
+            //shopAddress.error = getString(R.string.field_cannot_be_blank)
+            //(mContext as DashboardActivity).showSnackMessage("Please enter " + Pref.shopText + " address")
+            //BaseActivity.isApiInitiated = false
+            //return
         }
 //        if (PermissionHelper.checkLocationPermission((mContext as DashboardActivity), 100)) {
 //            var latlong = getLocationFromAddress(mContext, shopAddress.text.toString().trim())
@@ -4212,6 +4215,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             shopPin.error = getString(R.string.field_cannot_be_blank)
             (mContext as DashboardActivity).showSnackMessage("Please enter " + Pref.shopText + " pin")
             BaseActivity.isApiInitiated = false
+            rl_pincode_root.visibility=View.VISIBLE
             return
         }
 

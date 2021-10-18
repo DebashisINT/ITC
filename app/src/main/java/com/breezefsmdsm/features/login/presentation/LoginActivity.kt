@@ -188,6 +188,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private lateinit var  tvappCustomAnydesk: AppCustomTextView
     private lateinit var  tvappCustomSharelog: AppCustomTextView
 
+    private lateinit var mContext: Context
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -856,7 +858,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         )
     }
 
-
     private fun getPjpListApi() {
         progress_wheel.spin()
         val repository = TeamRepoProvider.teamRepoProvider()
@@ -979,7 +980,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         })
         )
     }
-
 
     private fun checkPrimaryAppList() {
         /*val list = AppDatabase.getDBInstance()?.primaryAppListDao()?.getAll()
@@ -2137,7 +2137,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             getStockList()
     }
 
-
     private fun getStockList() {
         val repository = StockRepositoryProvider.provideStockRepository()
         progress_wheel.spin()
@@ -2902,7 +2901,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 },3000)*/
             }
 
-        }, arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO))
+        }, arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO))
     }
 
     private fun getLastLocation() {
@@ -3207,8 +3206,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 return
             }
 
-            val uri = Uri.fromFile(file)
+            //val uri = Uri.fromFile(file)
 //        shareIntent.data = fileUrl
+            val uri: Uri = FileProvider.getUriForFile(mContext, mContext!!.applicationContext.packageName.toString() + ".provider", file)
             shareIntent.type = "image/png"
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
             startActivity(Intent.createChooser(shareIntent, "Share log using"));
@@ -5817,6 +5817,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         }).show(supportFragmentManager, "")
     }
+
+
 
     fun getShopDummyImageFile(): File {
         var bm: Bitmap? = null
