@@ -58,4 +58,10 @@ class ConfigFetchResponseModel : BaseResponse() {
     var isDDFieldEnabled: Boolean? = null
     var isActivatePJPFeature: Boolean? = null
     var willReimbursementShow: Boolean? = null
+
+
+
+    var GPSAlert: Boolean? = null
+
+
 }

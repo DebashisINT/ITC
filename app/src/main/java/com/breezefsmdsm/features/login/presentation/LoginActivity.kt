@@ -386,6 +386,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.isVoiceEnabledForHelpAndTipsInBot != null)
                                     Pref.isVoiceEnabledForHelpAndTipsInBot = configResponse.isVoiceEnabledForHelpAndTipsInBot!!
 
+                                if (configResponse.GPSAlert != null)
+                                    Pref.GPSAlertGlobal = configResponse.GPSAlert!!
+
 
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
@@ -4873,6 +4876,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 Pref.IsPhotoDeleteShow = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsPhotoDeleteShow = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("GPSAlert", ignoreCase = true)) {
+                                                Pref.GPSAlert = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.GPSAlert = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("GPSAlertwithSound", ignoreCase = true)) {
+                                                Pref.GPSAlertwithSound = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.GPSAlertwithSound = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
 

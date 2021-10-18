@@ -308,6 +308,8 @@ object Pref : PreferenceHolder() {
     var IsPhotoDeleteShow: Boolean by bindToPreferenceField(false, "IsPhotoDeleteShow")
 
 
-
+    var GPSAlertGlobal: Boolean by bindToPreferenceField(false, "GPSAlertGlobal")
+    var GPSAlert: Boolean by bindToPreferenceField(false, "GPSAlert")
+    var GPSAlertwithSound: Boolean by bindToPreferenceField(false, "GPSAlertwithSound")
 
 }

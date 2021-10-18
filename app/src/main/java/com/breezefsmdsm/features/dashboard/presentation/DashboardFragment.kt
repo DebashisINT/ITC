@@ -3192,7 +3192,18 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     Pref.IsPhotoDeleteShow = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
+                                            else if (response.getconfigure?.get(i)?.Key.equals("GPSAlert", ignoreCase = true)) {
+                                                Pref.GPSAlert = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.GPSAlert = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("GPSAlertwithSound", ignoreCase = true)) {
+                                                Pref.GPSAlertwithSound = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.GPSAlertwithSound = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
                                         }
                                     }
                                 } catch (e: Exception) {
@@ -3365,6 +3376,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                                 if (configResponse.isVoiceEnabledForHelpAndTipsInBot != null)
                                     Pref.isVoiceEnabledForHelpAndTipsInBot = configResponse.isVoiceEnabledForHelpAndTipsInBot!!
+
+                                if (configResponse.GPSAlert != null)
+                                    Pref.GPSAlertGlobal = configResponse.GPSAlert!!
 
 
                             }
@@ -4554,10 +4568,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
 
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
+            XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime()+"nearby dd found")
             startDay(finalNearByShop, finalNearByDD, location, false)
         } else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
+            XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime()+"nearby shop found")
             startDay(finalNearByShop, finalNearByDD, location, true)
         } else {
+            XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime()+"no nearby shop/dd "+"user lat: "+location.latitude.toString()+" long :"+location.longitude)
+
             progress_wheel.stopSpinning()
             // 27-08-21 For ITC
             val simpleDialog = Dialog(mContext)
@@ -4784,10 +4802,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         //finalNearByDD=newDDList[5]
 
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
+            XLog.d("DAYEND" + " , " + " Time :" + AppUtils.getCurrentDateTime()+"nearby dd found")
             endDay(finalNearByShop, finalNearByDD, location, false)
         } else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
+            XLog.d("DAYEND" + " , " + " Time :" + AppUtils.getCurrentDateTime()+"nearby shop found")
             endDay(finalNearByShop, finalNearByDD, location, true)
         } else {
+            XLog.d("DAYEND" + " , " + " Time :" + AppUtils.getCurrentDateTime()+"no nearby shop/dd "+"user lat: "+location.latitude.toString()+" long :"+location.longitude)
             progress_wheel.stopSpinning()
             // 27-08-21 For ITC
             val simpleDialog = Dialog(mContext)

@@ -3697,17 +3697,23 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
 
     fun sendGPSOffBroadcast(){
-        if(!gpsStatus) {
-            if (Pref.user_id.toString().length > 0) {
-                //var notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-                //notificationManager.cancel(monitorNotiID)
-                Pref.isLocFuzedBroadPlaying=true
-                val intent: Intent = Intent(this, MonitorBroadcast::class.java)
-                intent.putExtra("notiId", monitorNotiID)
-                intent.putExtra("fuzedLoc", "Fuzed Stop")
-                sendBroadcast(intent)
+        if(Pref.GPSAlertGlobal){
+            if(Pref.GPSAlert){
+                if(!gpsStatus) {
+                    if (Pref.user_id.toString().length > 0) {
+                        //var notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                        //notificationManager.cancel(monitorNotiID)
+                        Pref.isLocFuzedBroadPlaying=true
+                        MonitorBroadcast.isSound=Pref.GPSAlertwithSound
+                        val intent: Intent = Intent(this, MonitorBroadcast::class.java)
+                        intent.putExtra("notiId", monitorNotiID)
+                        intent.putExtra("fuzedLoc", "Fuzed Stop")
+                        sendBroadcast(intent)
+                    }
+                }
             }
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

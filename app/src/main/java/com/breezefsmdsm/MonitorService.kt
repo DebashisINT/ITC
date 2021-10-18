@@ -50,7 +50,7 @@ class MonitorService:Service() {
         timer = Timer()
         val task: TimerTask = object : TimerTask() {
             override fun run() {
-                println("abc - 3 sec method");
+                println("MonitorService_abc - 3 sec method");
                 serviceStatusActionable()
 
             }
@@ -65,7 +65,7 @@ class MonitorService:Service() {
     }
 
     fun serviceStatusActionable(){
-        Log.e("abc", "startabc" )
+        Log.e("MonitorService_abc", "startabc" )
         monitorBroadcast=MonitorBroadcast()
 
         var powerMode:String = ""
@@ -74,11 +74,15 @@ class MonitorService:Service() {
             if(powerManager.isPowerSaveMode){
                 powerMode = "Power Save Mode ON"
 
-                println("abc - Power Save Mode ON");
+                println("MonitorService_abc - Power Save Mode ON");
 
                 Handler(Looper.getMainLooper()).postDelayed({
-                    println("abc - Power Save Mode ON - Post delayed");
-                    SendBrod.sendBrod(this)
+                    println("MonitorService_abc - Power Save Mode ON - Post delayed");
+                    if(Pref.GPSAlertGlobal){
+                        if(Pref.GPSAlert){
+                            SendBrod.sendBrod(this)
+                        }}
+
                 }, 500)
 
                 powerSaver=true
@@ -87,7 +91,7 @@ class MonitorService:Service() {
                 powerMode = "Power Save Mode OFF"
                 powerSaver=false
                 Handler(Looper.getMainLooper()).postDelayed({
-                    println("abc - Power Save Mode ON - Post delayed");
+                    println("MonitorService_abc - Power Save Mode ON - Post delayed");
                     if(!Pref.isLocFuzedBroadPlaying){
                         SendBrod.stopBrod(this)
                     }
@@ -101,7 +105,11 @@ class MonitorService:Service() {
         if(manu.equals("XIAOMI")){
             if(isPowerSaveModeCompat(this) ){
                 powerMode = "Power Save Mode ON"
-                SendBrod.sendBrod(this)
+                if(Pref.GPSAlertGlobal){
+                    if(Pref.GPSAlert){
+                        SendBrod.sendBrod(this)
+                    }}
+
                 //sendGPSOffBroadcast()
             }else{
                 powerMode = "Power Save Mode OFF"
@@ -138,6 +146,7 @@ class MonitorService:Service() {
             XLog.d("MonitorService Called for Battery Broadcast :  Time :" + AppUtils.getCurrentDateTime())
             //var notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             //notificationManager.cancel(monitorNotiID)
+            MonitorBroadcast.isSound=Pref.GPSAlertwithSound
             var intent: Intent = Intent(this, MonitorBroadcast::class.java)
             intent.putExtra("notiId", monitorNotiID)
             intent.putExtra("fuzedLoc", "Fuzed Stop.")

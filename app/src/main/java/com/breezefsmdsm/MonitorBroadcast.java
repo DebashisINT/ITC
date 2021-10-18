@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Vibrator;
 import androidx.core.app.NotificationCompat;
 
+import com.breezefsmdsm.app.Pref;
 import com.breezefsmdsm.app.utils.AppUtils;
 import com.breezefsmdsm.features.splash.presentation.SplashActivity;
 import com.elvishew.xlog.XLog;
@@ -25,13 +26,13 @@ public class MonitorBroadcast extends BroadcastReceiver {
 
     public static MediaPlayer player = null;
     public static Vibrator vibrator = null;
+    public static Boolean isSound = false;
 
     @SuppressLint("NewApi")
     @Override
     public void onReceive(Context context, Intent intent) {
 
-
-        XLog.e("MONITOR BROADCAST GPS_EVENT_STOPPED: " + "Time : " + AppUtils.Companion.getCurrentDateTime());
+        XLog.e("MONITOR BROADCAST onReceive: " + "Time : " + AppUtils.Companion.getCurrentDateTime());
 
         int notiID=intent.getIntExtra("notiId",0);
         String subject=intent.getStringExtra("fuzedLoc");
@@ -124,7 +125,8 @@ public class MonitorBroadcast extends BroadcastReceiver {
         player = MediaPlayer.create(context, soundUriAlarm);
         player.setLooping(true);
         player.start();
-        
+
+        if(!isSound)
         player.stop();
 
         vibrator=(Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
