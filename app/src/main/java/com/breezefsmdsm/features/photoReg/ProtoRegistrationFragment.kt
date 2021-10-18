@@ -814,6 +814,10 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                                             }, 300)*/
                                                             //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
                                                         }
+                                                        else if (response.status ==NetworkConstant.SESSION_MISMATCH){
+                                                            progress_wheel.stopSpinning()
+                                                            (mContext as DashboardActivity).showSnackMessage(message = response.message.toString())
+                                                        }
 
                                                     }, { error ->
                                                         progress_wheel.stopSpinning()
