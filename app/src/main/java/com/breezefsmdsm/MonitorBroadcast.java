@@ -112,7 +112,7 @@ public class MonitorBroadcast extends BroadcastReceiver {
         //Uri soundUriAlarm= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
 
 
-        Uri soundUriAlarm = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ context.getPackageName() + "/" + R.raw.custom_alarm_sound);
+        Uri soundUriAlarm = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ context.getPackageName() + "/" + R.raw.beethoven);
         if(soundUriAlarm == null){
             //soundUriAlarm= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             soundUriAlarm= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
