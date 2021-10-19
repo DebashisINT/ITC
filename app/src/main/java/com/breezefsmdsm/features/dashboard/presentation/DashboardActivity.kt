@@ -4551,7 +4551,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mFragment = PhotoAttendanceFragment.getInstance(initializeObject)
                     //mFragment = BaseFragment()
                 }
-                setTopBarTitle(getString(R.string.photo_registration))
+                setTopBarTitle(getString(R.string.team_attendance))
                 setTopBarVisibility(TopBarConfig.HOME)
                 setTopBarVisibility(TopBarConfig.PHOTOREG)
             }

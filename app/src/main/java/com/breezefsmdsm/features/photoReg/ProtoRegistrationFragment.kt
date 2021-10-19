@@ -881,7 +881,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     private fun showPictureDialog() {
         val pictureDialog = AlertDialog.Builder(mContext)
         pictureDialog.setTitle("Select Action")
-//        val pictureDialogItems = arrayOf("Select photo from gallery", "Capture Image", "Select file from file manager")
+        //val pictureDialogItems = arrayOf("Select photo from gallery", "Capture Image", "Select file from file manager")
         val pictureDialogItems = arrayOf("Select photo from gallery", "Capture Image")
         pictureDialog.setItems(pictureDialogItems,
                 DialogInterface.OnClickListener { dialog, which ->
@@ -894,7 +894,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             isAttachment = false
                             launchCamera()
                         }
-                   /*     2 -> {
+                        /*2 -> {
                             isAttachment = true
                             (mContext as DashboardActivity).openFileManager()
                         }*/
