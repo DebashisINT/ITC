@@ -4502,6 +4502,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     fun getNearyShopList(location: Location) {
+        var nearestDist=50000
         var nearBy: Double = Pref.shopLocAccuracy.toDouble()
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
@@ -4522,6 +4523,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     shopLocation.latitude = shopLat
                     shopLocation.longitude = shopLong
                     val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                    var dist=location.distanceTo(shopLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(shopLocation)) < nearBy) {
                             nearBy = location.distanceTo(shopLocation).toDouble()
@@ -4529,6 +4531,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }
                         //startDay(newList[i], location)
                         //break
+                    }else{
+                        if(dist<nearestDist){
+                            nearestDist=dist
+                        }
                     }
                 }
             }
@@ -4552,6 +4558,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     ddLocation.latitude = ddLat
                     ddLocation.longitude = ddLong
                     val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    var dist=location.distanceTo(ddLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(ddLocation)) < nearBy) {
                             nearBy = location.distanceTo(ddLocation).toDouble()
@@ -4559,6 +4566,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }
                         //startDay(newList[i], location)
                         //break
+                    }else{
+                        if(dist<nearestDist){
+                            nearestDist=dist
+                        }
                     }
                 }
             }
@@ -4585,7 +4596,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-            dialogHeader.text = "No nearby Shop/Point found..."
+            dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
@@ -4733,6 +4744,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     fun getNearyShopListEnd(location: Location) {
+        var nearestDist=50000
         var nearBy: Double = Pref.shopLocAccuracy.toDouble()
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
@@ -4753,6 +4765,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     shopLocation.latitude = shopLat
                     shopLocation.longitude = shopLong
                     val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                    var dist=location.distanceTo(shopLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(shopLocation)) < nearBy) {
                             nearBy = location.distanceTo(shopLocation).toDouble()
@@ -4760,6 +4773,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }
                         //startDay(newList[i], location)
                         //break
+                    }else{
+                        if(dist<nearestDist){
+                            nearestDist=dist
+                        }
                     }
                 }
             }
@@ -4783,6 +4800,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     ddLocation.latitude = ddLat
                     ddLocation.longitude = ddLong
                     val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    var dist=location.distanceTo(ddLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(ddLocation)) < nearBy) {
                             nearBy = location.distanceTo(ddLocation).toDouble()
@@ -4790,6 +4808,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }
                         //startDay(newList[i], location)
                         //break
+                    }else{
+                        if(dist<nearestDist){
+                            nearestDist=dist
+                        }
                     }
                 }
             }
@@ -4818,7 +4840,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
-            dialogHeader.text = "No nearby Shop/Point found..."
+            dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
