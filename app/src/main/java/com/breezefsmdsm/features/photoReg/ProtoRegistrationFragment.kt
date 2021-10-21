@@ -724,16 +724,16 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                 val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                                 //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
                                 dialog_yes_no_headerTV.text = "Hi " + Pref.user_name!! + "!"
-                                dialogHeader.text = "Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks."
+                                dialogHeader.text = "Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks."
                                 val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                                 dialogYes.setOnClickListener({ view ->
                                     simpleDialog.cancel()
                                 })
                                 simpleDialog.show()
 
-                                //Toaster.msgShort(mContext, "Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
-                                voiceAttendanceMsg("Duplicate Aaadhaar Number.Please enter Unique for Current Person.")
-                                //(mContext as DashboardActivity).showSnackMessage("Duplication Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                //Toaster.msgShort(mContext, "Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                voiceAttendanceMsg("Duplicate Aadhaar Number.Please enter Unique for Current Person.")
+                                //(mContext as DashboardActivity).showSnackMessage("Duplication Aadhaar Number.Please enter Unique for Current Person.Thanks.")
                             }
 
 
@@ -834,8 +834,8 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                 }
                             } else {
                                 progress_wheel.stopSpinning()
-                                (mContext as DashboardActivity).showSnackMessage("Duplicate Aaadhaar Number.Please enter Unique for Current Person.Thanks.")
-                                voiceAttendanceMsg("Duplicate Aaadhaar Number.Please enter Unique for Current Person.")
+                                (mContext as DashboardActivity).showSnackMessage("Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                voiceAttendanceMsg("Duplicate Aadhaar Number.Please enter Unique for Current Person.")
                             }
 
                         }, { error ->
