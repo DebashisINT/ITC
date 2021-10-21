@@ -241,6 +241,18 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
             val notificationTitle = "${AppUtils.hiFirstNameText()}, thanks for using FSM App."
 
+
+            //20-10-2021
+            /*var timer : Timer? = null
+            timer = Timer()
+        val task: TimerTask = object : TimerTask() {
+            override fun run() {
+                println("\npoooooop"+timer.toString()+"\n");
+            }
+        }
+        timer!!.schedule(task, 0, 30000*1)*/
+
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channelId = AppUtils.notificationChannelId
 
@@ -267,6 +279,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                 //notificationManager.notify(randInt, notificationBuilder.build());
 
+                //20-10-2021
                 startForeground(AppConstant.FOREGROUND_SERVICE, notification)
 
             } else {
@@ -283,6 +296,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                 //notificationManager.notify(randInt, notificationBuilder.build())
 
+                //20-10-2021
                 startForeground(AppConstant.FOREGROUND_SERVICE, notification)
             }
 

@@ -713,7 +713,8 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             if (tagAadhaar == false) {
                                 simpleDialog.cancel()
                                 submitAadhaarDetails(obj, dialogEtFeedback.text.toString())
-                            } else {
+                            }
+                            else {
 
                                 val simpleDialog = Dialog(mContext)
                                 simpleDialog.setCancelable(false)
