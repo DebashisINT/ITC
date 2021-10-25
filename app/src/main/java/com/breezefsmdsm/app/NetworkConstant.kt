@@ -26,6 +26,7 @@ class NetworkConstant {
 
 
 
+
         var BASE_URL = "http://fts.indusnettechnologies.com:7007/API/" // live for itc
         var ADD_SHOP_BASE_URL = "http://fts.indusnettechnologies.com:7007/" // live for itc
 
