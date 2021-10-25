@@ -4502,7 +4502,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     fun getNearyShopList(location: Location) {
-        var nearestDist=50000
+        var nearestDist=5000
         var nearBy: Double = Pref.shopLocAccuracy.toDouble()
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
@@ -4596,7 +4596,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-            dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
+            if(nearestDist==5000){
+                dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr or more distance from the Distributor or Retail point from your handset GPS."
+            }else{
+                dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
+            }
+
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
@@ -4744,7 +4749,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     fun getNearyShopListEnd(location: Location) {
-        var nearestDist=50000
+        var nearestDist=5000
         var nearBy: Double = Pref.shopLocAccuracy.toDouble()
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
@@ -4840,7 +4845,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
-            dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
+            if(nearestDist==5000){
+                dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr or more distance from the Distributor or Retail point from your handset GPS."
+            }else{
+                dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
+            }
+
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()

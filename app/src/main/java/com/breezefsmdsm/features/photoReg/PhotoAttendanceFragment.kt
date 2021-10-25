@@ -711,7 +711,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         }
     }
 
-
     private fun prepareAddAttendanceInputParams() {
         progress_wheel.stopSpinning()
 
@@ -796,7 +795,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         }
     }
 
-
     private fun doAttendance(){
         BaseActivity.isApiInitiated = true
         val repository = AddAttendenceRepoProvider.addAttendenceRepo()
@@ -850,7 +848,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         })
         simpleDialog.show()
     }
-
 
     private fun voiceAttendanceMsg(msg: String) {
         if (Pref.isVoiceEnabledForAttendanceSubmit) {

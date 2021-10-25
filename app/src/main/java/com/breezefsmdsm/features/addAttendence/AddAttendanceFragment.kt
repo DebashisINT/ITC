@@ -1305,8 +1305,14 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
             dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-            dialogHeader.text = "You must be either in Distributor or Outlet point to mark your attendance"+
-                    ". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
+            if(nearestDist==5000){
+                dialogHeader.text = "You must be either in Distributor or Outlet point to mark your attendance"+
+                        ". Current location has been detected "+nearestDist.toString() +" mtr or more distance from the Distributor or Retail point from your handset GPS."
+            }else{
+                dialogHeader.text = "You must be either in Distributor or Outlet point to mark your attendance"+
+                        ". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
+            }
+
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
