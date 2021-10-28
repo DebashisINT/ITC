@@ -2053,12 +2053,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             }
         }
 
-
+        XLog.d("syncLocationActivity fuzerService : locationList size"+locationList.size.toString() )
         if (locationList.size > 0) {
             locationUpdateReq.location_details = locationList
             val repository = LocationUpdateRepositoryProviders.provideLocationUpdareRepository()
 
-            XLog.d("syncLocationActivity : REQUEST")
+            XLog.d("syncLocationActivity fuzerService : REQUEST")
 
             compositeDisposable.add(
                     repository.sendLocationUpdate(locationUpdateReq)
@@ -2069,7 +2069,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                 isLocationActivityUpdating = false
                                 var updateShopActivityResponse = result as BaseResponse
 
-                                XLog.d("syncLocationActivity : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
+                                XLog.d("syncLocationActivity fuzerService : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
 
                                 if (updateShopActivityResponse.status == NetworkConstant.SUCCESS) {
                                     for (i in 0 until locationListAllId/*locationList*/.size) {
@@ -2095,9 +2095,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                             }, { error ->
                                 isLocationActivityUpdating = false
                                 if (error == null) {
-                                    XLog.d("syncLocationActivity : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
+                                    XLog.d("syncLocationActivity fuzerService : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
                                 } else {
-                                    XLog.d("syncLocationActivity : ERROR : " + error.localizedMessage)
+                                    XLog.d("syncLocationActivity fuzerService : ERROR : " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
 

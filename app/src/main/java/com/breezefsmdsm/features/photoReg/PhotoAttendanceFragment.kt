@@ -480,8 +480,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             //finish()
         }
         val options = FaceDetectorOptions.Builder()
-                //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
-                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+                .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+                //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
                 .setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
                 .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                 .build()

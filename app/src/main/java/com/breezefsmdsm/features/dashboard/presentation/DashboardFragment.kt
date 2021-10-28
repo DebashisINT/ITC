@@ -557,7 +557,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
         start_TV.setOnClickListener({ view ->
-
+            //faceDetectorSetUp()
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
 
@@ -663,6 +663,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         })
 
         end_TV.setOnClickListener({ view ->
+            //faceDetectorSetUp()
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             } else if(isEndCall==false && Pref.DayEndMarked == false && Pref.DayStartMarked ==true){
@@ -5525,7 +5526,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
         val options = FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
-                .setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
+                //.setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
+                .setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
                 .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                 .build()
 

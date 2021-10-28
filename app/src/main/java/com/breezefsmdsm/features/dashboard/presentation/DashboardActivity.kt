@@ -2648,7 +2648,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 //                loadFragment(FragType.LocalShopListFragment, false, "")
 //            }
             R.id.share_log_TV -> {
-                if(Build.VERSION.SDK_INT>=30){
+                openShareIntents()
+                /*if(Build.VERSION.SDK_INT>=30){
                     if (!Environment.isExternalStorageManager()){
                         fileManagePermi()
                     }else{
@@ -2656,7 +2657,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                 }else{
                     openShareIntents()
-                }
+                }*/
 
             }
             R.id.iv_search_icon -> {
@@ -3179,11 +3180,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
     private fun fileManagePermi(){
-            val intent = Intent()
+           /* val intent = Intent()
             intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
             val uri = Uri.fromParts("package", this.packageName, null)
             intent.data = uri
-            startActivity(intent)
+            startActivity(intent)*/
 
     }
 

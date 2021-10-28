@@ -1154,7 +1154,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun requestPermission() {
-        if (SDK_INT >= Build.VERSION_CODES.R) {
+        /*if (SDK_INT >= Build.VERSION_CODES.R) {
             try {
                 val intent: Intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
                 intent.addCategory("android.intent.category.DEFAULT")
@@ -1165,7 +1165,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                 intent.action = Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
                 startActivityForResult(intent, 2296)
             }
-        }
+        }*/
     }
 
      override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -24,9 +24,9 @@ android {
     defaultConfig {
         applicationId "com.breezefsmdsm"
         minSdkVersion 24
-        targetSdkVersion 30
-        versionCode 88
-        versionName "3.9.7"
+        targetSdkVersion 29
+        versionCode 91
+        versionName "3.9.8"
         //versionName "2.3.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'

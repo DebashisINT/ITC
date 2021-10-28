@@ -2889,7 +2889,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             override fun onPermissionGranted() {
                 getIMEI()
 
-                if(Build.VERSION.SDK_INT>=30){
+                /*if(Build.VERSION.SDK_INT>=30){
                     if (!Environment.isExternalStorageManager()){
                         fileManagePermii()
                     }else{
@@ -2905,13 +2905,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             getOverlayPermission()
                         }
                     }, 1000)
-                }
+                }*/
 
-             /*   Handler().postDelayed(Runnable {
+                Handler().postDelayed(Runnable {
                     if (!Settings.canDrawOverlays(this@LoginActivity)) {
                         getOverlayPermission()
                     }
-                }, 1000)*/
+                }, 1000)
             }
 
             override fun onPermissionNotGranted() {
@@ -2939,12 +2939,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }*/
 
 
-        val intent = Intent()
+     /*   val intent = Intent()
         intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
         val uri = Uri.fromParts("package", this.packageName, null)
         intent.data = uri
         //startActivity(intent)
-        startActivityForResult(intent,777)
+        startActivityForResult(intent,777)*/
     }
 
     private fun getLastLocation() {
@@ -3201,7 +3201,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             }
 
             R.id.activity_login_tvappCustomLogs -> {
-                if(Build.VERSION.SDK_INT>=30){
+                /*if(Build.VERSION.SDK_INT>=30){
                     if (!Environment.isExternalStorageManager()){
                         fileManagePermi()
                     }else{
@@ -3209,8 +3209,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     }
                 }else{
                     openShareIntents()
-                }
-//                openShareIntents()
+                }*/
+                openShareIntents()
                 activity_login_llList.visibility = View.GONE
             }
 
@@ -3237,7 +3237,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             }
 
             R.id.share_log_login_TV -> {
-                if(Build.VERSION.SDK_INT>=30){
+                /*if(Build.VERSION.SDK_INT>=30){
                     if (!Environment.isExternalStorageManager()){
                         fileManagePermi()
                     }else{
@@ -3245,18 +3245,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     }
                 }else{
                     openShareIntents()
-                }
-               // openShareIntents()
+                }*/
+                openShareIntents()
             }
         }
     }
 
     private fun fileManagePermi(){
-        val intent = Intent()
+       /* val intent = Intent()
         intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
         val uri = Uri.fromParts("package", this.packageName, null)
         intent.data = uri
-        startActivity(intent)
+        startActivity(intent)*/
 
     }
 
