@@ -312,4 +312,6 @@ object Pref : PreferenceHolder() {
     var GPSAlert: Boolean by bindToPreferenceField(false, "GPSAlert")
     var GPSAlertwithSound: Boolean by bindToPreferenceField(false, "GPSAlertwithSound")
 
+    var IsTeamAttendance: Boolean by bindToPreferenceField(false, "IsTeamAttendance")/*29-10-2021 Team Attendance*/
+
 }

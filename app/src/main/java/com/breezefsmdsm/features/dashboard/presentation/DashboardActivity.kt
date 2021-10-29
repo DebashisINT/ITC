@@ -283,12 +283,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
             // Get new FCM registration token
             val token = task.result
-            println("fcm_token "+token.toString());
+            println("fcm_token " + token.toString());
 
 
         })
 
-        var ttt=AppUtils.getCurrentDateForCons()
+        var ttt = AppUtils.getCurrentDateForCons()
 
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
@@ -489,7 +489,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     var isChangedPassword = false
     var isChatFromDrawer = false
     var isRefreshChatUserList = false
-    var newUserModel: GroupUserDataModel?= null
+    var newUserModel: GroupUserDataModel? = null
     var isCodeScaneed = false
 
     /*********************Geofence*****************/
@@ -553,8 +553,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     var isSubmit = false
     var isCalledJobApi = false
 
-    private var feedBackDialogCompetetorImg=false
-    lateinit var drawerLL :LinearLayout
+    private var feedBackDialogCompetetorImg = false
+    lateinit var drawerLL: LinearLayout
 
 
     @SuppressLint("NewApi")
@@ -606,7 +606,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         val notification = NotificationUtils(getString(R.string.app_name), "", "", "")
                         val shop = AppDatabase.getDBInstance()?.addShopEntryDao()?.getShopByIdN(it.shopid)
                         val body = "${AppUtils.hiFirstNameText()}, your visit to " + it.shop_name + " whose contact no. is: " + shop?.ownerContactNumber + " & address is " +
-                                shop?.address +" due today as per next visit date. Thanks."
+                                shop?.address + " due today as per next visit date. Thanks."
                         notification.sendRevisitDueNotification(this, body)
                     }
 
@@ -770,8 +770,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         try {
                             fl_net_status.background = getDrawable(R.drawable.green_round)
                             netStatus = "Online"
-                        }
-                        catch (e: java.lang.Exception) {
+                        } catch (e: java.lang.Exception) {
                             e.printStackTrace()
                         }
                     }
@@ -780,27 +779,24 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         try {
                             fl_net_status.background = getDrawable(R.drawable.red_round)
                             netStatus = "Offline"
-                        }
-                        catch (e: java.lang.Exception) {
+                        } catch (e: java.lang.Exception) {
                             e.printStackTrace()
                         }
                     }
                 })
             }
-        }
-        else {
+        } else {
             val builder = NetworkRequest.Builder()
             builder.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             val networkRequest = builder.build()
             connectivityManager?.registerNetworkCallback(networkRequest,
-                    object : ConnectivityManager.NetworkCallback () {
+                    object : ConnectivityManager.NetworkCallback() {
                         override fun onAvailable(network: Network) {
                             super.onAvailable(network)
                             try {
                                 fl_net_status.background = getDrawable(R.drawable.green_round)
                                 netStatus = "Online"
-                            }
-                            catch (e: java.lang.Exception) {
+                            } catch (e: java.lang.Exception) {
                                 e.printStackTrace()
                             }
                         }
@@ -810,8 +806,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             try {
                                 fl_net_status.background = getDrawable(R.drawable.red_round)
                                 netStatus = "Offline"
-                            }
-                            catch (e: java.lang.Exception) {
+                            } catch (e: java.lang.Exception) {
                                 e.printStackTrace()
                             }
                         }
@@ -983,12 +978,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             else if (intent.getStringExtra("TYPE").equals("DUE", ignoreCase = true)) {
                                 if (getFragment() != null && getFragment() !is NearByShopsListFragment)
                                     loadFragment(FragType.NearByShopsListFragment, false, "")
-                            }
-                            else if (intent.getStringExtra("TYPE").equals("TASK", ignoreCase = true)) {
+                            } else if (intent.getStringExtra("TYPE").equals("TASK", ignoreCase = true)) {
                                 if (getFragment() != null && getFragment() !is TaskListFragment)
                                     loadFragment(FragType.TaskListFragment, false, "")
-                            }
-                            else if (intent.getStringExtra("TYPE").equals("Msg", ignoreCase = true)) {
+                            } else if (intent.getStringExtra("TYPE").equals("Msg", ignoreCase = true)) {
                                 val chatUser = intent.getSerializableExtra("chatUser") as ChatUserDataModel
                                 Handler().postDelayed(Runnable {
                                     if (getFragment() != null && getFragment() is ChatListFragment)
@@ -997,26 +990,22 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     userName = chatUser.name
                                     loadFragment(FragType.ChatListFragment, true, chatUser)
                                 }, 500)
-                            }
-                            else if (intent.getStringExtra("TYPE").equals("TIMESHEET", ignoreCase = true)) {
+                            } else if (intent.getStringExtra("TYPE").equals("TIMESHEET", ignoreCase = true)) {
                                 Handler().postDelayed(Runnable {
                                     if (getFragment() != null && getFragment() !is TimeSheetListFragment)
                                         loadFragment(FragType.TimeSheetListFragment, false, "")
                                 }, 500)
-                            }
-                            else if (intent.getStringExtra("TYPE").equals("REIMBURSEMENT", ignoreCase = true)) {
+                            } else if (intent.getStringExtra("TYPE").equals("REIMBURSEMENT", ignoreCase = true)) {
                                 Handler().postDelayed(Runnable {
                                     if (getFragment() != null && getFragment() !is ReimbursementListFragment)
                                         loadFragment(FragType.ReimbursementListFragment, false, "")
                                 }, 500)
-                            }
-                            else if (intent.getStringExtra("TYPE").equals("VIDEO", ignoreCase = true)) {
+                            } else if (intent.getStringExtra("TYPE").equals("VIDEO", ignoreCase = true)) {
                                 Handler().postDelayed(Runnable {
                                     if (getFragment() != null && getFragment() !is MicroLearningListFragment)
                                         loadFragment(FragType.MicroLearningListFragment, false, "")
                                 }, 500)
-                            }
-                            else if (intent.getStringExtra("TYPE").equals("clearData", ignoreCase = true)) {
+                            } else if (intent.getStringExtra("TYPE").equals("clearData", ignoreCase = true)) {
                                 isClearData = true
 
                                 Handler().postDelayed(Runnable {
@@ -1082,10 +1071,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         super.onResume()
 
         var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
-        if(launchIntent!=null){
-            anydesk_info_TV.text="Open Anydesk"
-        }else{
-            anydesk_info_TV.text="Install Anydesk"
+        if (launchIntent != null) {
+            anydesk_info_TV.text = "Open Anydesk"
+        } else {
+            anydesk_info_TV.text = "Install Anydesk"
         }
 
 /*        if(DashboardFragment.hbRecorder ==null){
@@ -1098,10 +1087,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
         }*/
 
-        if(DashboardFragment.isRecordRootVisible){
-            screen_record_info_TV.text="Stop Recording"
-        }else{
-            screen_record_info_TV.text="Screen Recorder"
+        if (DashboardFragment.isRecordRootVisible) {
+            screen_record_info_TV.text = "Stop Recording"
+        } else {
+            screen_record_info_TV.text = "Screen Recorder"
         }
 
 
@@ -1337,12 +1326,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                         .subscribeOn(Schedulers.io())
                                         .subscribe({ result ->
                                             val attendanceList = result as AttendanceResponse
-                                            if (attendanceList.status == "205"){
+                                            if (attendanceList.status == "205") {
                                                 progress_wheel.stopSpinning()
                                                 loadFragment(FragType.AddAttendanceFragment, true, "")
-                                            }else if(attendanceList.status == NetworkConstant.SUCCESS){
+                                            } else if (attendanceList.status == NetworkConstant.SUCCESS) {
                                                 progress_wheel.stopSpinning()
-                                                Pref.isAddAttendence=true
+                                                Pref.isAddAttendence = true
                                                 (mContext as DashboardActivity).showSnackMessage("${AppUtils.hiFirstNameText()}. Attendance already marked for the day.")
                                             }
 
@@ -1406,7 +1395,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     override fun onDestroy() {
 
-        DashboardFragment.isRecordRootVisible=false
+        DashboardFragment.isRecordRootVisible = false
 
         textToSpeech?.let {
             it.stop()
@@ -1459,7 +1448,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         if (revisitReceiver != null)
             LocalBroadcastManager.getInstance(this).unregisterReceiver(revisitReceiver)
 
-        if(updatePJP!=null)
+        if (updatePJP != null)
             LocalBroadcastManager.getInstance(this).unregisterReceiver(updatePJP)
 
         super.onDestroy()
@@ -1500,31 +1489,25 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             } else if (intent.getStringExtra("TYPE").equals("DUE", ignoreCase = true)) {
                 if (getFragment() != null && getFragment() !is NearByShopsListFragment)
                     loadFragment(FragType.NearByShopsListFragment, false, "")
-            }
-            else if (intent.getStringExtra("TYPE").equals("TASK", ignoreCase = true)) {
+            } else if (intent.getStringExtra("TYPE").equals("TASK", ignoreCase = true)) {
                 if (getFragment() != null && getFragment() !is TaskListFragment)
                     loadFragment(FragType.TaskListFragment, false, "")
-            }
-            else if (intent.getStringExtra("TYPE").equals("Msg", ignoreCase = true)) {
+            } else if (intent.getStringExtra("TYPE").equals("Msg", ignoreCase = true)) {
                 if (getFragment() != null && getFragment() is ChatListFragment)
                     onBackPressed()
                 val chatUser = intent.getSerializableExtra("chatUser") as ChatUserDataModel
                 userName = chatUser.name
                 loadFragment(FragType.ChatListFragment, true, chatUser)
-            }
-            else if (intent.getStringExtra("TYPE").equals("TIMESHEET", ignoreCase = true)) {
+            } else if (intent.getStringExtra("TYPE").equals("TIMESHEET", ignoreCase = true)) {
                 if (getFragment() != null && getFragment() !is TimeSheetListFragment)
                     loadFragment(FragType.TimeSheetListFragment, false, "")
-            }
-            else if (intent.getStringExtra("TYPE").equals("REIMBURSEMENT", ignoreCase = true)) {
+            } else if (intent.getStringExtra("TYPE").equals("REIMBURSEMENT", ignoreCase = true)) {
                 if (getFragment() != null && getFragment() !is ReimbursementListFragment)
                     loadFragment(FragType.ReimbursementListFragment, false, "")
-            }
-            else if (intent.getStringExtra("TYPE").equals("VIDEO", ignoreCase = true)) {
+            } else if (intent.getStringExtra("TYPE").equals("VIDEO", ignoreCase = true)) {
                 if (getFragment() != null && getFragment() !is MicroLearningListFragment)
                     loadFragment(FragType.MicroLearningListFragment, false, "")
-            }
-            else if (intent.getStringExtra("TYPE").equals("clearData", ignoreCase = true)) {
+            } else if (intent.getStringExtra("TYPE").equals("clearData", ignoreCase = true)) {
                 isClearData = true
                 Handler().postDelayed(Runnable {
                     if (getFragment() != null && getFragment() !is LogoutSyncFragment) {
@@ -1799,7 +1782,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         photo_registration.setOnClickListener(this)
         photo_team_attendance.setOnClickListener(this)
 
-        drawerLL=findViewById(R.id.activity_dashboard_lnr_lyt_slide_view)
+        drawerLL = findViewById(R.id.activity_dashboard_lnr_lyt_slide_view)
         drawerLL.setOnClickListener(this)
 
         toolbar.contentInsetStartWithNavigation = 0
@@ -1993,9 +1976,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             else
                 nearbyShops.visibility = View.GONE
 
-            if(Pref.IsShowDayStart){
+            if (Pref.IsShowDayStart) {
                 addTravelAllowenceTV.visibility = View.GONE
-            }else{
+            } else {
                 addTravelAllowenceTV.visibility = View.VISIBLE
             }
             addTravelAllowenceTV.visibility = View.VISIBLE
@@ -2089,14 +2072,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         else
             chat_bot_TV.visibility = View.GONE
 
-        if (Pref.isShowTimeline){
-            if(Pref.IsShowDayStart){
+        if (Pref.isShowTimeline) {
+            if (Pref.IsShowDayStart) {
                 orderHistoryTV.visibility = View.GONE
-            }else{
+            } else {
                 orderHistoryTV.visibility = View.VISIBLE
             }
-        }
-        else
+        } else
             orderHistoryTV.visibility = View.GONE
 
         if (Pref.isAppInfoEnable)
@@ -2115,113 +2097,114 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             nearby_user_TV.visibility = View.GONE
 
         var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
-        if(launchIntent!=null){
-            anydesk_info_TV.text="Open Anydesk"
-        }else{
-            anydesk_info_TV.text="Install Anydesk"
+        if (launchIntent != null) {
+            anydesk_info_TV.text = "Open Anydesk"
+        } else {
+            anydesk_info_TV.text = "Install Anydesk"
         }
 
-        if(AppUtils.getSharedPreferenceslogShareinLogin(mContext)){
-            shareLogs.visibility=View.VISIBLE
-        }else{
-            shareLogs.visibility=View.GONE
-        }
-
-
-        if(AppUtils.getSharedPreferencesIsFaceDetectionOn(mContext)){
-            photo_registration.visibility=View.VISIBLE
-        }else{
-            photo_registration.visibility=View.GONE
-        }
-        if(Pref.willLeaveApprovalEnable){
-            photo_team_attendance.visibility=View.VISIBLE
-
-        }else{
-            photo_team_attendance.visibility=View.GONE
-        }
-
-        if(AppUtils.getSharedPreferencesIsScreenRecorderEnable(mContext)){
-            screen_record_info_TV.visibility=View.VISIBLE
-        }else{
-            screen_record_info_TV.visibility=View.GONE
+        if (AppUtils.getSharedPreferenceslogShareinLogin(mContext)) {
+            shareLogs.visibility = View.VISIBLE
+        } else {
+            shareLogs.visibility = View.GONE
         }
 
 
-        if(Pref.IsShowMenuAddAttendance){
-            add_attendence_tv.visibility=View.VISIBLE
-        }else{
-            add_attendence_tv.visibility=View.GONE
+        if (AppUtils.getSharedPreferencesIsFaceDetectionOn(mContext)) {
+            photo_registration.visibility = View.VISIBLE
+        } else {
+            photo_registration.visibility = View.GONE
         }
-        if(Pref.IsShowMenuAttendance){
-            myAllowRequest.visibility=View.VISIBLE
-        }else{
-            myAllowRequest.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuMIS_Report){
-            mis_TV.visibility=View.VISIBLE
-        }else{
-            mis_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuAnyDesk){
-            anydesk_info_TV.visibility=View.VISIBLE
-        }else{
-            anydesk_info_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuPermission_Info){
-            permission_info_TV.visibility=View.VISIBLE
-        }else{
-            permission_info_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuScan_QR_Code){
-            scan_TV.visibility=View.VISIBLE
-        }else{
-            scan_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuChat){
-            chat_TV.visibility=View.VISIBLE
-        }else{
-            chat_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuWeather_Details){
-            weather_TV.visibility=View.VISIBLE
-        }else{
-            weather_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuHome_Location){
-            home_loc_TV.visibility=View.VISIBLE
-        }else{
-            home_loc_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuShare_Location){
-            share_loc_TV.visibility=View.VISIBLE
-        }else{
-            share_loc_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuMap_View){
-            maps_TV.visibility=View.VISIBLE
-        }else{
-            maps_TV.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuReimbursement){
-            reimbursement_tv.visibility=View.VISIBLE
-        }else{
-            reimbursement_tv.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuOutstanding_Details_PP_DD){
-            tv_pp_dd_outstanding.visibility=View.VISIBLE
-        }else{
-            tv_pp_dd_outstanding.visibility=View.GONE
-        }
-        if(Pref.IsShowMenuStock_Details_PP_DD){
-            view_pp_dd_tv.visibility=View.VISIBLE
-        }else{
-            view_pp_dd_tv.visibility=View.GONE
+        /*29-10-2021 Team Attendance*/
+        //if (Pref.willLeaveApprovalEnable) {
+        if (Pref.IsTeamAttendance) {
+            photo_team_attendance.visibility = View.VISIBLE
+
+        } else {
+            photo_team_attendance.visibility = View.GONE
         }
 
+
+        if (AppUtils.getSharedPreferencesIsScreenRecorderEnable(mContext)) {
+            screen_record_info_TV.visibility = View.VISIBLE
+        } else {
+            screen_record_info_TV.visibility = View.GONE
+        }
+
+
+        if (Pref.IsShowMenuAddAttendance) {
+            add_attendence_tv.visibility = View.VISIBLE
+        } else {
+            add_attendence_tv.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuAttendance) {
+            myAllowRequest.visibility = View.VISIBLE
+        } else {
+            myAllowRequest.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuMIS_Report) {
+            mis_TV.visibility = View.VISIBLE
+        } else {
+            mis_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuAnyDesk) {
+            anydesk_info_TV.visibility = View.VISIBLE
+        } else {
+            anydesk_info_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuPermission_Info) {
+            permission_info_TV.visibility = View.VISIBLE
+        } else {
+            permission_info_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuScan_QR_Code) {
+            scan_TV.visibility = View.VISIBLE
+        } else {
+            scan_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuChat) {
+            chat_TV.visibility = View.VISIBLE
+        } else {
+            chat_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuWeather_Details) {
+            weather_TV.visibility = View.VISIBLE
+        } else {
+            weather_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuHome_Location) {
+            home_loc_TV.visibility = View.VISIBLE
+        } else {
+            home_loc_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuShare_Location) {
+            share_loc_TV.visibility = View.VISIBLE
+        } else {
+            share_loc_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuMap_View) {
+            maps_TV.visibility = View.VISIBLE
+        } else {
+            maps_TV.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuReimbursement) {
+            reimbursement_tv.visibility = View.VISIBLE
+        } else {
+            reimbursement_tv.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuOutstanding_Details_PP_DD) {
+            tv_pp_dd_outstanding.visibility = View.VISIBLE
+        } else {
+            tv_pp_dd_outstanding.visibility = View.GONE
+        }
+        if (Pref.IsShowMenuStock_Details_PP_DD) {
+            view_pp_dd_tv.visibility = View.VISIBLE
+        } else {
+            view_pp_dd_tv.visibility = View.GONE
+        }
 
 
         //val frag: DashboardFragment? = supportFragmentManager.findFragmentByTag("DashboardFragment") as DashboardFragment?
-
 
 
         Handler().postDelayed(Runnable {
@@ -2305,8 +2288,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     override fun onClick(p0: View?) {
         when (p0!!.id) {
 
-            R.id.activity_dashboard_lnr_lyt_slide_view ->{
-                Toast.makeText(this,"asdasf",Toast.LENGTH_LONG).show()
+            R.id.activity_dashboard_lnr_lyt_slide_view -> {
+                Toast.makeText(this, "asdasf", Toast.LENGTH_LONG).show()
             }
 
             R.id.home_RL -> {
@@ -2355,8 +2338,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         loadFragment(FragType.NearByShopsListFragment, false, "")
                     else
                         loadFragment(FragType.CustomerListFragment, false, "")
-                }
-                else
+                } else
                     loadFragment(FragType.BeatListFragment, false, "")
             }
 
@@ -2429,12 +2411,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .subscribeOn(Schedulers.io())
                                     .subscribe({ result ->
                                         val attendanceList = result as AttendanceResponse
-                                        if (attendanceList.status == "205"){
+                                        if (attendanceList.status == "205") {
                                             progress_wheel.stopSpinning()
                                             loadFragment(FragType.AddAttendanceFragment, true, "")
-                                        }else if(attendanceList.status == NetworkConstant.SUCCESS){
+                                        } else if (attendanceList.status == NetworkConstant.SUCCESS) {
                                             progress_wheel.stopSpinning()
-                                            Pref.isAddAttendence=true
+                                            Pref.isAddAttendence = true
                                             (mContext as DashboardActivity).showSnackMessage("${AppUtils.hiFirstNameText()}. Attendance already marked for the day.")
                                         }
 
@@ -2444,7 +2426,6 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                                     })
                     )
-
 
 
                     //loadFragment(FragType.AddAttendanceFragment, false, "")
@@ -2482,10 +2463,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
             R.id.logout_TV -> {
                 //performLogout()
-                if(Pref.DayEndMarked == false && Pref.IsShowDayEnd==true && Pref.DayStartMarked){
+                if (Pref.DayEndMarked == false && Pref.IsShowDayEnd == true && Pref.DayStartMarked) {
                     showSnackMessage("Please mark Day End before logout. Thanks.")
-                }
-                else{
+                } else {
                     if (Pref.isAttendanceFeatureOnly)
                         performLogout()
                     else {
@@ -2521,8 +2501,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 //showSnackMessage("Under Development")
             }
             R.id.iv_home_icon -> {
-                if(getFragment() != null && (getFragment() is ViewAllOrderListFragment || getFragment() is NotificationFragment) && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed)
-                        && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)){
+                if (getFragment() != null && (getFragment() is ViewAllOrderListFragment || getFragment() is NotificationFragment) && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed)
+                        && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)) {
 
 
                     val simpleDialog = Dialog(mContext)
@@ -2532,7 +2512,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
                     val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
 
-                    dialogYes.setOnClickListener( { view ->
+                    dialogYes.setOnClickListener({ view ->
                         simpleDialog.cancel()
                         val dialog = Dialog(mContext)
                         //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -2540,42 +2520,42 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         dialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                         dialog.setContentView(R.layout.dialog_cancel_order_status)
 
-                        val user_name=dialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                        val user_name = dialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
                         val order_status = dialog.findViewById(R.id.tv_cancel_order_status) as AppCustomTextView
                         val cancel_remarks = dialog.findViewById(R.id.et_cancel_order_remarks) as AppCustomEditText
                         val submitRemarks = dialog.findViewById(R.id.tv_cancel_order_submit_remarks) as AppCustomTextView
 
-                        order_status.text="Failure"
-                        user_name.text="Hi"+Pref.user_name+"!"
+                        order_status.text = "Failure"
+                        user_name.text = "Hi" + Pref.user_name + "!"
 
                         submitRemarks.setOnClickListener(View.OnClickListener { view ->
-                            if(!TextUtils.isEmpty(cancel_remarks.text.toString().trim())){
+                            if (!TextUtils.isEmpty(cancel_remarks.text.toString().trim())) {
                                 //Toast.makeText(mContext,cancel_remarks.text.toString(),Toast.LENGTH_SHORT).show()
-                                val obj=OrderStatusRemarksModelEntity()
+                                val obj = OrderStatusRemarksModelEntity()
                                 //obj.shop_id= mShopId
-                                obj.shop_id=ViewAllOrderListFragment.mSShopID_Str.toString()
-                                obj.user_id=Pref.user_id
-                                obj.order_status=order_status.text.toString()
-                                obj.order_remarks=cancel_remarks!!.text!!.toString()
-                                obj.visited_date_time=AppUtils.getCurrentDateTime()
-                                obj.visited_date=AppUtils.getCurrentDateForShopActi()
-                                obj.isUploaded=false
+                                obj.shop_id = ViewAllOrderListFragment.mSShopID_Str.toString()
+                                obj.user_id = Pref.user_id
+                                obj.order_status = order_status.text.toString()
+                                obj.order_remarks = cancel_remarks!!.text!!.toString()
+                                obj.visited_date_time = AppUtils.getCurrentDateTime()
+                                obj.visited_date = AppUtils.getCurrentDateForShopActi()
+                                obj.isUploaded = false
 
-                                var shopAll=AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
-                                if(shopAll.size == 1){
-                                    obj.shop_revisit_uniqKey=shopAll.get(0).shop_revisit_uniqKey
-                                }else{
-                                    obj.shop_revisit_uniqKey=shopAll.get(shopAll.size-1).shop_revisit_uniqKey
+                                var shopAll = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
+                                if (shopAll.size == 1) {
+                                    obj.shop_revisit_uniqKey = shopAll.get(0).shop_revisit_uniqKey
+                                } else {
+                                    obj.shop_revisit_uniqKey = shopAll.get(shopAll.size - 1).shop_revisit_uniqKey
                                 }
 
                                 AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.insert(obj)
                                 dialog.dismiss()
 
-                                if(ShopDetailFragment.isOrderEntryPressed){
-                                    ShopDetailFragment.isOrderEntryPressed=false
+                                if (ShopDetailFragment.isOrderEntryPressed) {
+                                    ShopDetailFragment.isOrderEntryPressed = false
                                 }
-                                if(AddShopFragment.isOrderEntryPressed){
-                                    AddShopFragment.isOrderEntryPressed=false
+                                if (AddShopFragment.isOrderEntryPressed) {
+                                    AddShopFragment.isOrderEntryPressed = false
                                 }
 
 
@@ -2585,7 +2565,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     (getFragment() as DashboardFragment).updateItem()
                                 }, 500)
 
-                            }else{
+                            } else {
                                 submitRemarks.setError("Enter Remarks")
                                 submitRemarks.requestFocus()
                             }
@@ -2593,13 +2573,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         })
                         dialog.show()
                     })
-                    dialogNo.setOnClickListener( { view ->
+                    dialogNo.setOnClickListener({ view ->
                         simpleDialog.cancel()
                     })
                     simpleDialog.show()
 
 
-                }else{
+                } else {
                     loadFragment(FragType.DashboardFragment, false, "")
 
                     Handler().postDelayed(Runnable {
@@ -2609,15 +2589,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
             }
             //19-08-21 nearBy shop visit stop untill daystart
-            R.id.nearby_shop_TV ->{
+            R.id.nearby_shop_TV -> {
                 isChatBotLocalShop = false
-                if(Pref.IsShowDayStart){
+                if (Pref.IsShowDayStart) {
                     if (!Pref.isAddAttendence) {
                         (mContext as DashboardActivity).checkToShowAddAttendanceAlert()
                         return
-                    }
-                    else{
-                        if(!Pref.DayStartMarked){
+                    } else {
+                        if (!Pref.DayStartMarked) {
                             // 27-08-21 For ITC
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
@@ -2633,13 +2612,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             })
                             simpleDialog.show()
 //                            (mContext as DashboardActivity).showSnackMessage("Please start your day")
-                        }
-                        else{
+                        } else {
                             loadFragment(FragType.LocalShopListFragment, false, "")
                         }
                     }
-                }
-                else{
+                } else {
                     loadFragment(FragType.LocalShopListFragment, false, "")
                 }
             }
@@ -2769,8 +2746,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             R.id.iv_map -> {
                 if (getCurrentFragType() == FragType.WeatherFragment) {
                     loadFragment(FragType.SearchLocationFragment, true, "")
-                }
-                else if (getCurrentFragType() == FragType.LocalShopListFragment) {
+                } else if (getCurrentFragType() == FragType.LocalShopListFragment) {
                     if (nearbyShopList != null && nearbyShopList!!.size > 0)
                         loadFragment(FragType.LocalShopListMapFragment, true, nearbyShopList!!)
                     else
@@ -2783,8 +2759,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             } ?: let {
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_data_available))
                             }
-                        }
-                        else {
+                        } else {
                             activityLocationList?.takeIf { it.size > 0 }?.let {
                                 loadFragment(FragType.ActivityMapFragment, true, it)
                             } ?: let {
@@ -2894,10 +2869,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 //            }
 
             R.id.doc_TV -> {
-                if(Pref.IsFromPortal){
+                if (Pref.IsFromPortal) {
                     loadFragment(FragType.DocumentRepoFeatureNewFragment, false, "")
-                }
-                else{
+                } else {
                     CustomStatic.IsDocZero = false
                     loadFragment(FragType.DocumentTypeListFragment, false, "")
                 }
@@ -2908,17 +2882,17 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
 
             R.id.photo_registration -> {
-                if (AppUtils.isOnline(mContext)){
+                if (AppUtils.isOnline(mContext)) {
                     loadFragment(FragType.ProtoRegistrationFragment, false, "")
-                }else{
+                } else {
                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                 }
 
             }
             R.id.photo_team_attendance -> {
-                if (AppUtils.isOnline(mContext)){
+                if (AppUtils.isOnline(mContext)) {
                     loadFragment(FragType.PhotoAttendanceFragment, false, "")
-                }else{
+                } else {
                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                 }
 
@@ -2962,8 +2936,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             isCodeScan = true
                             initPermissionCheck()
-                        }
-                        else
+                        } else
                             loadFragment(FragType.CodeScannerFragment, true, "")
                     }
                 }
@@ -2994,8 +2967,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     isCodeScan = true
                     initPermissionCheck()
-                }
-                else
+                } else
                     loadFragment(FragType.CodeScannerFragment, true, "")
             }
 
@@ -3025,10 +2997,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
             R.id.anydesk_info_TV -> {
                 var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
-                if(launchIntent!=null){
+                if (launchIntent != null) {
                     drawerLayout.closeDrawers()
                     startActivity(launchIntent)
-                }else{
+                } else {
                     drawerLayout.closeDrawers()
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid"))
                     startActivity(intent)
@@ -3040,34 +3012,33 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 permissionUtils = PermissionUtils(this, object : PermissionUtils.OnPermissionListener {
                     override fun onPermissionGranted() {
 
-                        if(DashboardFragment.hbRecorder != null){
+                        if (DashboardFragment.hbRecorder != null) {
 
-                            if(DashboardFragment.hbRecorder!!.isBusyRecording && DashboardFragment.hbRecorder != null){
-                                Toast.makeText(this@DashboardActivity,"Please Stop Recording",Toast.LENGTH_SHORT).show()
-                            }else{
-                                if(DashboardFragment.isRecordRootVisible){
-                                    screen_record_info_TV.text="Screen Recorder"
-                                    DashboardFragment.ll_recorder_root.visibility=View.GONE
-                                    DashboardFragment.isRecordRootVisible=false
+                            if (DashboardFragment.hbRecorder!!.isBusyRecording && DashboardFragment.hbRecorder != null) {
+                                Toast.makeText(this@DashboardActivity, "Please Stop Recording", Toast.LENGTH_SHORT).show()
+                            } else {
+                                if (DashboardFragment.isRecordRootVisible) {
+                                    screen_record_info_TV.text = "Screen Recorder"
+                                    DashboardFragment.ll_recorder_root.visibility = View.GONE
+                                    DashboardFragment.isRecordRootVisible = false
                                     drawerLayout.closeDrawers()
-                                }else{
-                                    screen_record_info_TV.text="Stop Recording"
-                                    DashboardFragment.ll_recorder_root.visibility=View.VISIBLE
-                                    DashboardFragment.isRecordRootVisible=true
+                                } else {
+                                    screen_record_info_TV.text = "Stop Recording"
+                                    DashboardFragment.ll_recorder_root.visibility = View.VISIBLE
+                                    DashboardFragment.isRecordRootVisible = true
                                     drawerLayout.closeDrawers()
                                 }
                             }
-                        }
-                        else{
-                            if(DashboardFragment.isRecordRootVisible){
-                                screen_record_info_TV.text="Screen Recorder"
-                                DashboardFragment.ll_recorder_root.visibility=View.GONE
-                                DashboardFragment.isRecordRootVisible=false
+                        } else {
+                            if (DashboardFragment.isRecordRootVisible) {
+                                screen_record_info_TV.text = "Screen Recorder"
+                                DashboardFragment.ll_recorder_root.visibility = View.GONE
+                                DashboardFragment.isRecordRootVisible = false
                                 drawerLayout.closeDrawers()
-                            }else{
-                                screen_record_info_TV.text="Stop Recording"
-                                DashboardFragment.ll_recorder_root.visibility=View.VISIBLE
-                                DashboardFragment.isRecordRootVisible=true
+                            } else {
+                                screen_record_info_TV.text = "Stop Recording"
+                                DashboardFragment.ll_recorder_root.visibility = View.VISIBLE
+                                DashboardFragment.isRecordRootVisible = true
                                 drawerLayout.closeDrawers()
                             }
                         }
@@ -3078,25 +3049,21 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.accept_permission_storage))
                     }
 
-                }, arrayOf<String>( Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+                }, arrayOf<String>(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
 
 
-
-
-
-
-              /*  if(DashboardFragment.hbRecorder ==null){
-                    screen_record_info_TV.text="Start Screen Recorder"
-                    DashboardFragment.ll_recorder_root.visibility=View.VISIBLE
-                }else{
-                    if(DashboardFragment.hbRecorder!!.isBusyRecording){
-                        screen_record_info_TV.text="Stop Recording"
-                        DashboardFragment.ll_recorder_root.visibility=View.GONE
-                    }else{
-                        screen_record_info_TV.text="Start Screen Recorder"
-                        DashboardFragment.ll_recorder_root.visibility=View.VISIBLE
-                    }
-                }*/
+                /*  if(DashboardFragment.hbRecorder ==null){
+                      screen_record_info_TV.text="Start Screen Recorder"
+                      DashboardFragment.ll_recorder_root.visibility=View.VISIBLE
+                  }else{
+                      if(DashboardFragment.hbRecorder!!.isBusyRecording){
+                          screen_record_info_TV.text="Stop Recording"
+                          DashboardFragment.ll_recorder_root.visibility=View.GONE
+                      }else{
+                          screen_record_info_TV.text="Start Screen Recorder"
+                          DashboardFragment.ll_recorder_root.visibility=View.VISIBLE
+                      }
+                  }*/
             }
 
             R.id.micro_learning_TV -> {
@@ -3106,7 +3073,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
     fun showLanguageAlert(mIsChatFromDrawer: Boolean) {
-        SelectLanguageDialog.newInstance(object : SelectLanguageDialog.OnItemSelectedListener{
+        SelectLanguageDialog.newInstance(object : SelectLanguageDialog.OnItemSelectedListener {
             override fun onItemSelect(language: String) {
                 isChatFromDrawer = mIsChatFromDrawer
                 if (isChatFromDrawer)
@@ -3179,12 +3146,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 //        startActivity(Intent.createChooser(emailIntent,""))
     }
 
-    private fun fileManagePermi(){
-           /* val intent = Intent()
-            intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-            val uri = Uri.fromParts("package", this.packageName, null)
-            intent.data = uri
-            startActivity(intent)*/
+    private fun fileManagePermi() {
+        /* val intent = Intent()
+         intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+         val uri = Uri.fromParts("package", this.packageName, null)
+         intent.data = uri
+         startActivity(intent)*/
 
     }
 
@@ -3466,8 +3433,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 if (isChatBotAttendance) {
                     //isChatBotAttendance = false
                     setTopBarVisibility(TopBarConfig.ATTENDENCEBACKLIST)
-                }
-                else
+                } else
                     setTopBarVisibility(TopBarConfig.ATTENDENCELIST)
             }
 
@@ -3657,8 +3623,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 if (AppUtils.stockStatus == 0) {
                     setTopBarTitle(getString(R.string.cart_details))
                     tv_confirm_btn.text = "Place Order"
-                }
-                else if (AppUtils.stockStatus == 1) {
+                } else if (AppUtils.stockStatus == 1) {
                     setTopBarTitle(getString(R.string.opening_stock))
                     tv_confirm_btn.text = "Place Stock"
                 }
@@ -4090,7 +4055,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 }
                 setTopBarTitle(getString(R.string.targ_achv_report))
 
-                if(isTargAchvFromDrawer)
+                if (isTargAchvFromDrawer)
                     setTopBarVisibility(TopBarConfig.HOME)
                 else
                     setTopBarVisibility(TopBarConfig.BACK)
@@ -4423,8 +4388,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     else
                         setTopBarTitle("Order Analysis ${Pref.shopText}wise")
                     setTopBarVisibility(TopBarConfig.CHATBOTSHOP)
-                }
-                catch (e: java.lang.Exception) {
+                } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
             }
@@ -4771,8 +4735,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mDrawerToggle.isDrawerIndicatorEnabled = true
                     toolbar.setNavigationIcon(R.drawable.ic_header_menu_icon)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                }
-                else {
+                } else {
                     // Show back button
                     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
                     mDrawerToggle.isDrawerIndicatorEnabled = false
@@ -4891,8 +4854,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mDrawerToggle.isDrawerIndicatorEnabled = true
                     toolbar.setNavigationIcon(R.drawable.ic_header_menu_icon)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                }
-                else {
+                } else {
                     // Show back button
                     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
                     mDrawerToggle.isDrawerIndicatorEnabled = false
@@ -4930,8 +4892,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mDrawerToggle.isDrawerIndicatorEnabled = false
                     mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_header_back_arrow)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                }
-                else {
+                } else {
                     supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                     // Show hamburger
                     mDrawerToggle.isDrawerIndicatorEnabled = true
@@ -5002,8 +4963,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mDrawerToggle.isDrawerIndicatorEnabled = false
                     mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_header_back_arrow)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                }
-                else {
+                } else {
                     supportActionBar!!.setDisplayHomeAsUpEnabled(false)
                     // Show hamburger
                     mDrawerToggle.isDrawerIndicatorEnabled = true
@@ -5061,8 +5021,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mDrawerToggle.isDrawerIndicatorEnabled = true
                     toolbar.setNavigationIcon(R.drawable.ic_header_menu_icon)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                }
-                else {
+                } else {
                     // Show back button
                     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
                     mDrawerToggle.isDrawerIndicatorEnabled = false
@@ -5587,8 +5546,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     iv_view_text.visibility = View.VISIBLE
                     iv_home_icon.visibility = View.GONE
                     logo.visibility = View.GONE
-                }
-                else {
+                } else {
                     iv_scan.visibility = View.GONE
                     iv_view_text.visibility = View.GONE
                     iv_home_icon.visibility = View.VISIBLE
@@ -5621,8 +5579,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     iv_view_text.visibility = View.VISIBLE
                     iv_home_icon.visibility = View.GONE
                     logo.visibility = View.GONE
-                }
-                else {
+                } else {
                     iv_scan.visibility = View.GONE
                     iv_view_text.visibility = View.GONE
                     iv_home_icon.visibility = View.VISIBLE
@@ -5840,8 +5797,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mDrawerToggle.isDrawerIndicatorEnabled = true
                     toolbar.setNavigationIcon(R.drawable.ic_header_menu_icon)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                }
-                else {
+                } else {
                     // Show back button
                     supportActionBar!!.setDisplayHomeAsUpEnabled(true)
                     mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_header_back_arrow)
@@ -6026,11 +5982,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         (getFragment() as DashboardFragment).updateItem()
                     }, 500)
                 }
-            }
-            else {
+            } else {
                 loadFragment(FragType.DashboardFragment, false, Any())
                 //Added Saheli 27-07-21
-                AppUtils.changeLanguage(this,"en")
+                AppUtils.changeLanguage(this, "en")
                 Handler().postDelayed(Runnable {
                     (getFragment() as DashboardFragment).updateItem()
                 }, 500)
@@ -6054,14 +6009,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         (getFragment() as DashboardFragment).sendHomeLoc(locationInfoModel)
                     else
                         checkToShowHomeLocationAlert()
-                }
-                else if (getFragment() is WeatherFragment) {
+                } else if (getFragment() is WeatherFragment) {
                     if (locationInfoModel != null) {
                         (getFragment() as WeatherFragment).getLocationFromMap(locationInfoModel)
                         locationInfoModel = null
                     }
-                }
-                else {
+                } else {
                     super.onBackPressed()
                     if (locationInfoModel != null) {
                         loadFragment(FragType.AddShopFragment, true, locationInfoModel!!)
@@ -6245,8 +6198,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 if (getFragment() != null && getFragment() is DynamicListFragment)
                     (getFragment() as DynamicListFragment).updateList()
             }
-        }
-        else if (getFragment() != null && (getFragment() is AddGroupFragment || getFragment() is AddNewMsgFragment ||
+        } else if (getFragment() != null && (getFragment() is AddGroupFragment || getFragment() is AddNewMsgFragment ||
                         getFragment() is ChatListFragment)) {
 
             if (getFragment() is AddNewMsgFragment) {
@@ -6264,19 +6216,16 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         loadFragment(FragType.ChatListFragment, true, it)
                     }
                     newUserModel = null
-                }
-                else {
+                } else {
                     if (getFragment() != null && getFragment() is ChatUserListFragment)
                         (getFragment() as ChatUserListFragment).updateList()
                 }
-            }
-            else {
+            } else {
                 super.onBackPressed()
                 if (getFragment() != null && getFragment() is ChatUserListFragment)
                     (getFragment() as ChatUserListFragment).updateList()
             }
-        }
-        else if (getFragment() != null && getFragment() is ScanImageFragment) {
+        } else if (getFragment() != null && getFragment() is ScanImageFragment) {
 
             val picTexts = (getFragment() as ScanImageFragment).stringArrays
             val isCopy = (getFragment() as ScanImageFragment).isCopy
@@ -6289,8 +6238,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             if (getFragment() != null && getFragment() is AddShopFragment) {
                 (getFragment() as AddShopFragment).processImage(/*File(resultUri.path!!)*/picTexts, isCopy)
             }
-        }
-        else if (getFragment() != null && getFragment() is CodeScannerFragment) {
+        } else if (getFragment() != null && getFragment() is CodeScannerFragment) {
             super.onBackPressed()
 
             if (!isCodeScaneed)
@@ -6302,8 +6250,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     CodeScannerTextDialog.newInstance(qrCodeText).show(supportFragmentManager, "")
                 else
                     showSnackMessage("Scan QR Code has been cancelled.")
-            }
-            else {
+            } else {
                 if (!Pref.isAddAttendence) {
                     checkToShowAddAttendanceAlert()
                     return
@@ -6351,27 +6298,23 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                         }
                     }
-                }
-                catch (e: java.lang.Exception) {
+                } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                     showSnackMessage("Invalid QR Code")
                 }
             }
-        }
-        else if (getFragment() != null && getFragment() is MicroLearningListFragment) {
+        } else if (getFragment() != null && getFragment() is MicroLearningListFragment) {
             if ((getFragment() as MicroLearningListFragment).isFilterSelected)
                 (getFragment() as MicroLearningListFragment).showAllList()
             else
                 super.onBackPressed()
-        }
-        else if (getFragment() != null && getFragment() is JobsCustomerFragment) {
-            if((getFragment() as JobsCustomerFragment).isUpdateStatusClicked) {
+        } else if (getFragment() != null && getFragment() is JobsCustomerFragment) {
+            if ((getFragment() as JobsCustomerFragment).isUpdateStatusClicked) {
                 (getFragment() as JobsCustomerFragment).isUpdateStatusClicked = false
                 val mCustomerdata = (getFragment() as JobsCustomerFragment).customerdata
                 super.onBackPressed()
                 loadFragment(FragType.JobsCustomerFragment, true, mCustomerdata!!)
-            }
-            else {
+            } else {
                 super.onBackPressed()
 
                 if (getFragment() != null && getFragment() is MyJobsFragment) {
@@ -6381,7 +6324,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                 }
             }
-        }else if(getFragment() != null && getFragment() is ViewAllOrderListFragment && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed) && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)){
+        } else if (getFragment() != null && getFragment() is ViewAllOrderListFragment && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed) && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)) {
 
             val simpleDialog = Dialog(mContext)
             simpleDialog.setCancelable(false)
@@ -6390,63 +6333,62 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
             val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
 
-            dialogYes.setOnClickListener( { view ->
+            dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
-                if(true){
+                if (true) {
                     val dialog = Dialog(mContext)
                     //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                     dialog.setCancelable(false)
                     dialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                     dialog.setContentView(R.layout.dialog_cancel_order_status)
 
-                    val user_name=dialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                    val user_name = dialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
                     val order_status = dialog.findViewById(R.id.tv_cancel_order_status) as AppCustomTextView
                     val cancel_remarks = dialog.findViewById(R.id.et_cancel_order_remarks) as AppCustomEditText
                     val submitRemarks = dialog.findViewById(R.id.tv_cancel_order_submit_remarks) as AppCustomTextView
 
-                    order_status.text="Failure"
-                    user_name.text="Hi "+Pref.user_name+"!"
+                    order_status.text = "Failure"
+                    user_name.text = "Hi " + Pref.user_name + "!"
 
                     submitRemarks.setOnClickListener(View.OnClickListener { view ->
-                        if(!TextUtils.isEmpty(cancel_remarks.text.toString().trim())){
-                            Toast.makeText(mContext,cancel_remarks.text.toString(),Toast.LENGTH_SHORT).show()
-                            val obj=OrderStatusRemarksModelEntity()
+                        if (!TextUtils.isEmpty(cancel_remarks.text.toString().trim())) {
+                            Toast.makeText(mContext, cancel_remarks.text.toString(), Toast.LENGTH_SHORT).show()
+                            val obj = OrderStatusRemarksModelEntity()
                             //obj.shop_id= mShopId
 
-                                obj.shop_id=ViewAllOrderListFragment.mSShopID_Str.toString()
-                                obj.user_id=Pref.user_id
-                                obj.order_status=order_status.text.toString()
-                                obj.order_remarks=cancel_remarks!!.text!!.toString()
-                                obj.visited_date_time=AppUtils.getCurrentDateTime()
-                                obj.visited_date=AppUtils.getCurrentDateForShopActi()
-                                obj.isUploaded=false
+                            obj.shop_id = ViewAllOrderListFragment.mSShopID_Str.toString()
+                            obj.user_id = Pref.user_id
+                            obj.order_status = order_status.text.toString()
+                            obj.order_remarks = cancel_remarks!!.text!!.toString()
+                            obj.visited_date_time = AppUtils.getCurrentDateTime()
+                            obj.visited_date = AppUtils.getCurrentDateForShopActi()
+                            obj.isUploaded = false
 
 
-
-                            var shopAll=AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
-                            if(shopAll.size == 1){
-                                obj.shop_revisit_uniqKey=shopAll.get(0).shop_revisit_uniqKey
-                            }else{
-                                obj.shop_revisit_uniqKey=shopAll.get(shopAll.size-1).shop_revisit_uniqKey
+                            var shopAll = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
+                            if (shopAll.size == 1) {
+                                obj.shop_revisit_uniqKey = shopAll.get(0).shop_revisit_uniqKey
+                            } else {
+                                obj.shop_revisit_uniqKey = shopAll.get(shopAll.size - 1).shop_revisit_uniqKey
                             }
 
 
                             AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.insert(obj)
                             dialog.dismiss()
 
-                            if(ShopDetailFragment.isOrderEntryPressed){
-                                ShopDetailFragment.isOrderEntryPressed=false
+                            if (ShopDetailFragment.isOrderEntryPressed) {
+                                ShopDetailFragment.isOrderEntryPressed = false
                             }
-                            if(AddShopFragment.isOrderEntryPressed){
-                                AddShopFragment.isOrderEntryPressed=false
+                            if (AddShopFragment.isOrderEntryPressed) {
+                                AddShopFragment.isOrderEntryPressed = false
                             }
 
 
                             super.onBackPressed()
-                            when{
+                            when {
                                 getFragment() is ShopDetailFragment -> (getFragment() as ShopDetailFragment).updateItem()
                             }
-                        }else{
+                        } else {
                             submitRemarks.setError("Enter Remarks")
                             submitRemarks.requestFocus()
                         }
@@ -6455,13 +6397,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     dialog.show()
                 }
             })
-            dialogNo.setOnClickListener( { view ->
+            dialogNo.setOnClickListener({ view ->
                 simpleDialog.cancel()
             })
             simpleDialog.show()
 
-        }
-        else {
+        } else {
             super.onBackPressed()
 
             when {
@@ -6487,7 +6428,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 getFragment() is UpdateShopStockFragment -> (getFragment() as UpdateShopStockFragment).update()
                 getFragment() is CompetetorStockFragment -> (getFragment() as CompetetorStockFragment).update()
 
-                        getFragment() is MicroLearningListFragment -> {
+                getFragment() is MicroLearningListFragment -> {
                     val intent = Intent(this, FileOpeningTimeIntentService::class.java)
                     intent.also {
                         it.putExtra("id", (getFragment() as MicroLearningListFragment).selectedFile?.id)
@@ -6557,8 +6498,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             showLogoutLocReasonDialog()
                         else
                             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                    }
-                    else
+                    } else
                         calllogoutApi(Pref.user_id!!, Pref.session_token!!)
 
 
@@ -6615,8 +6555,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 reason = ""
                                 calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                            }
-                            else {
+                            } else {
                                 reason = mReason
                                 showLogoutLocReasonDialog()
                                 Toaster.msgShort(mContext, result.message!!)
@@ -6825,8 +6764,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             }
                         }).show((mContext as DashboardActivity).supportFragmentManager, "OTPVerificationDialog")*/
                     }
-                }
-                else if (Pref.isSefieAlarmed) {
+                } else if (Pref.isSefieAlarmed) {
                     getCameraImage(data)
                     val fileSize = AppUtils.getCompressImage(filePath)
 
@@ -6835,8 +6773,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     uploadSelfie(File(filePath))
 
-                }
-                else if(isVisitCardScan) {
+                } else if (isVisitCardScan) {
                     getCameraImage(data)
                     /*val fileSize = AppUtils.getCompressImage(filePath)
 
@@ -6865,8 +6802,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.AddShopFragment /*&& FTStorageUtils.IMG_URI != null*/) {
+                } else if (getCurrentFragType() == FragType.AddShopFragment /*&& FTStorageUtils.IMG_URI != null*/) {
                     /*CropImage.activity(FTStorageUtils.IMG_URI)
                             .setAspectRatio(40, 21)
                             .start(this)*/
@@ -6889,7 +6825,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                             CropImage.activity(contentURI)
                                     .setCropShape(CropImageView.CropShape.RECTANGLE)
-                                    .setMinCropWindowSize(500,300)
+                                    .setMinCropWindowSize(500, 300)
                                     .setAspectRatio(1, 1)
                                     .start(this)
                         } catch (e: Exception) {
@@ -6898,8 +6834,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         }
                     }
 
-                }
-                else if (getCurrentFragType() == FragType.ProtoRegistrationFragment) {
+                } else if (getCurrentFragType() == FragType.ProtoRegistrationFragment) {
                     // request for camera image
                     getCameraImage(data)
                     if (!TextUtils.isEmpty(filePath)) {
@@ -6912,8 +6847,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     }
 
-                }
-                else if (getCurrentFragType() == FragType.MyProfileFragment /*&& FTStorageUtils.IMG_URI != null*/) {
+                } else if (getCurrentFragType() == FragType.MyProfileFragment /*&& FTStorageUtils.IMG_URI != null*/) {
                     /*AppUtils.getCompressContentImage(FTStorageUtils.IMG_URI, this)
                     (getFragment() as MyProfileFragment).setImage(FTStorageUtils.IMG_URI)*/
 
@@ -6937,7 +6871,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                             CropImage.activity(contentURI)
                                     .setCropShape(CropImageView.CropShape.RECTANGLE)
-                                    .setMinCropWindowSize(500,300)
+                                    .setMinCropWindowSize(500, 300)
                                     .setAspectRatio(1, 1)
                                     .start(this)
 
@@ -6948,8 +6882,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
 
 
-                }
-                else if (getCurrentFragType() == FragType.ReimbursementFragment) {
+                } else if (getCurrentFragType() == FragType.ReimbursementFragment) {
                     /*AppUtils.getCompressContentImage(FTStorageUtils.IMG_URI, this)
                     (getFragment() as MyProfileFragment).setImage(FTStorageUtils.IMG_URI)*/
 
@@ -6980,8 +6913,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     (getFragment() as ReimbursementFragment).setImage(filePath)
 
-                }
-                else if (getCurrentFragType() == FragType.EditReimbursementFragment) {
+                } else if (getCurrentFragType() == FragType.EditReimbursementFragment) {
                     /*AppUtils.getCompressContentImage(FTStorageUtils.IMG_URI, this)
                     (getFragment() as MyProfileFragment).setImage(FTStorageUtils.IMG_URI)*/
 
@@ -7012,18 +6944,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     (getFragment() as EditReimbursementFragment).setImage(filePath)
 
-                }
-                else if (getCurrentFragType() == FragType.MarketingPagerFragment && FTStorageUtils.IMG_URI != null) {
+                } else if (getCurrentFragType() == FragType.MarketingPagerFragment && FTStorageUtils.IMG_URI != null) {
                     AppUtils.getCompressImage(FTStorageUtils.IMG_URI.toString())
                     (getFragment() as MarketingPagerFragment).setImage(FTStorageUtils.IMG_URI)
-                }
-                else if (getCurrentFragType() == FragType.ViewAllTAListFragment && FTStorageUtils.IMG_URI != null) {
+                } else if (getCurrentFragType() == FragType.ViewAllTAListFragment && FTStorageUtils.IMG_URI != null) {
 
                     AppUtils.getCompressImage(FTStorageUtils.IMG_URI.toString())
                     (getFragment() as ViewAllTAListFragment).getCaptureImage(FTStorageUtils.IMG_URI)
 
-                }
-                else if (getCurrentFragType() == FragType.AddBillingFragment) {
+                } else if (getCurrentFragType() == FragType.AddBillingFragment) {
 
                     getCameraImage(data)
 
@@ -7069,8 +6998,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
 
 
-                }
-                else if (getCurrentFragType() == FragType.NearByShopsListFragment || getCurrentFragType() == FragType.NewDateWiseOrderListFragment ||
+                } else if (getCurrentFragType() == FragType.NearByShopsListFragment || getCurrentFragType() == FragType.NewDateWiseOrderListFragment ||
                         getCurrentFragType() == FragType.NewOrderListFragment || getCurrentFragType() == FragType.ShopBillingListFragment ||
                         getCurrentFragType() == FragType.ViewAllOrderListFragment) {
 
@@ -7095,8 +7023,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
 
 
-                }
-                else if (getCurrentFragType() == FragType.AddDynamicFragment) {
+                } else if (getCurrentFragType() == FragType.AddDynamicFragment) {
 
                     getCameraImage(data)
 
@@ -7117,8 +7044,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.EditDynamicFragment) {
+                } else if (getCurrentFragType() == FragType.EditDynamicFragment) {
 
                     getCameraImage(data)
 
@@ -7139,8 +7065,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.AddActivityFragment) {
+                } else if (getCurrentFragType() == FragType.AddActivityFragment) {
 
                     getCameraImage(data)
 
@@ -7161,8 +7086,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.EditActivityFragment) {
+                } else if (getCurrentFragType() == FragType.EditActivityFragment) {
 
                     getCameraImage(data)
 
@@ -7183,8 +7107,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.ShopDetailFragment /*&& FTStorageUtils.IMG_URI != null*/) {
+                } else if (getCurrentFragType() == FragType.ShopDetailFragment /*&& FTStorageUtils.IMG_URI != null*/) {
                     /*CropImage.activity(FTStorageUtils.IMG_URI)
                             .setAspectRatio(40, 21)
                             .start(this)*/
@@ -7216,8 +7139,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
 
 
-                }
-                else if (getCurrentFragType() == FragType.AddAttendanceFragment /*&& FTStorageUtils.IMG_URI != null*/) {
+                } else if (getCurrentFragType() == FragType.AddAttendanceFragment /*&& FTStorageUtils.IMG_URI != null*/) {
                     /*CropImage.activity(FTStorageUtils.IMG_URI)
                             .setAspectRatio(40, 21)
                             .start(this)*/
@@ -7247,8 +7169,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     val fileSize = AppUtils.getCompressImage(filePath)
                     addAttendanceImg(fileSize, true)
 
-                }
-                else if (getCurrentFragType() == FragType.DailyPlanListFragment /*&& FTStorageUtils.IMG_URI != null*/) {
+                } else if (getCurrentFragType() == FragType.DailyPlanListFragment /*&& FTStorageUtils.IMG_URI != null*/) {
                     /*CropImage.activity(FTStorageUtils.IMG_URI)
                             .setAspectRatio(40, 21)
                             .start(this)*/
@@ -7278,22 +7199,18 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     val fileSize = AppUtils.getCompressImage(filePath)
                     addAttendanceImg(fileSize, false)
 
-                }
-                else if (getCurrentFragType() == FragType.AddTimeSheetFragment) {
+                } else if (getCurrentFragType() == FragType.AddTimeSheetFragment) {
                     getCameraImage(data)
                     (getFragment() as AddTimeSheetFragment).setImage(filePath)
 
-                }
-                else if (getCurrentFragType() == FragType.EditTimeSheetFragment) {
+                } else if (getCurrentFragType() == FragType.EditTimeSheetFragment) {
                     getCameraImage(data)
                     (getFragment() as EditTimeSheetFragment).setImage(filePath)
 
-                }
-                else if (getCurrentFragType() == FragType.DocumentListFragment) {
+                } else if (getCurrentFragType() == FragType.DocumentListFragment) {
                     getCameraImage(data)
                     (getFragment() as DocumentListFragment).setImage(filePath)
-                }
-                else if (getCurrentFragType() == FragType.WorkInProgressFragment) {
+                } else if (getCurrentFragType() == FragType.WorkInProgressFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7313,8 +7230,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.WorkOnHoldFragment) {
+                } else if (getCurrentFragType() == FragType.WorkOnHoldFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7334,8 +7250,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.WorkCompletedFragment) {
+                } else if (getCurrentFragType() == FragType.WorkCompletedFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7355,8 +7270,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.WorkCancelledFragment) {
+                } else if (getCurrentFragType() == FragType.WorkCancelledFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7376,8 +7290,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.UpdateReviewFragment) {
+                } else if (getCurrentFragType() == FragType.UpdateReviewFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7397,8 +7310,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if(getCurrentFragType() == FragType.RegisTerFaceFragment){
+                } else if (getCurrentFragType() == FragType.RegisTerFaceFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7412,7 +7324,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         try {
                             CropImage.activity(contentURI)
                                     .setCropShape(CropImageView.CropShape.RECTANGLE)
-                                    .setMinCropWindowSize(500,500)
+                                    .setMinCropWindowSize(500, 500)
                                     .setAspectRatio(1, 1)
                                     .setGuidelines(CropImageView.Guidelines.ON)
                                     .setOutputCompressQuality(100)
@@ -7422,68 +7334,62 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.DashboardFragment) {
+                } else if (getCurrentFragType() == FragType.DashboardFragment) {
                     getCameraImage(data)
                     if (!TextUtils.isEmpty(filePath)) {
-             /*           val fileSize = AppUtils.getCompressBillingImage(filePath, this)
-                        val fileSizeee = AppUtils.getCompressBillingImage(File(Uri.parse(filePath).path).absolutePath, this)
-                        (getFragment() as DashboardFragment).setCameraImage(filePath)*/
+                        /*           val fileSize = AppUtils.getCompressBillingImage(filePath, this)
+                                   val fileSizeee = AppUtils.getCompressBillingImage(File(Uri.parse(filePath).path).absolutePath, this)
+                                   (getFragment() as DashboardFragment).setCameraImage(filePath)*/
 
                         (getFragment() as DashboardFragment).setImage(filePath)
 
 
+                        /*   XLog.e("===========Update Review Image (DashboardActivity)===========")
+                           XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
-                     /*   XLog.e("===========Update Review Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                           val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
+                           XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
-
-                        try {
-                            CropImage.activity(contentURI)
-                                    .setAspectRatio(40, 21)
-                                    .start(this)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
-                        }*/
+                           try {
+                               CropImage.activity(contentURI)
+                                       .setAspectRatio(40, 21)
+                                       .start(this)
+                           } catch (e: Exception) {
+                               e.printStackTrace()
+                               XLog.e("Error: " + e.localizedMessage)
+                           }*/
                     }
                 }
-            }
-            else if (ImagePickerManager.REQUEST_GET_GALLERY_PHOTO == requestCode && null != data) {
+            } else if (ImagePickerManager.REQUEST_GET_GALLERY_PHOTO == requestCode && null != data) {
                 //val filePath = ImagePickerManager.getImagePathFromData(data, this)
                 if (getCurrentFragType() == FragType.ViewAllTAListFragment) {
                     if (data != null)
                         (getFragment() as ViewAllTAListFragment).showPickedFileFromGalleryFetch(data)
                 }
 
-            }
-            else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            } else if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == RESULT_OK) {
                     val resultUri = result.uri
 
 
-                    if(feedBackDialogCompetetorImg){
+                    if (feedBackDialogCompetetorImg) {
                         val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
-                        feedbackDialog?.setImage(resultUri,fileSize/1024)
-                        feedBackDialogCompetetorImg=false
+                        feedbackDialog?.setImage(resultUri, fileSize / 1024)
+                        feedBackDialogCompetetorImg = false
                         return
                     }
 
                     if (AppUtils.isRevisit!!) {
                         callFeedbackDialog(resultUri.toString())
                         //revisitShop(resultUri.toString())
-                    }
-                    else if(isVisitCardScan) {
+                    } else if (isVisitCardScan) {
                         isVisitCardScan = false
                         if (getFragment() != null && getFragment() is AddShopFragment) {
                             //(getFragment() as AddShopFragment).processImage(/*File(resultUri.path!!)*/)
                         }
-                    }
-                    else {
+                    } else {
                         when {
                             getCurrentFragType() == FragType.RegisTerFaceFragment -> {
                                 val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
@@ -7575,8 +7481,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     var error = result.error
                 }
 //
-            }
-            else if (requestCode == PermissionHelper.REQUEST_CODE_STORAGE) {
+            } else if (requestCode == PermissionHelper.REQUEST_CODE_STORAGE) {
                 if (getCurrentFragType() == FragType.MyProfileFragment) {
                     //AppUtils.getCompressContentImage(data!!.data, this)
 
@@ -7628,16 +7533,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
-                }
-                else if (getCurrentFragType() == FragType.NearByShopsListFragment || getCurrentFragType() == FragType.NewDateWiseOrderListFragment ||
+                } else if (getCurrentFragType() == FragType.NearByShopsListFragment || getCurrentFragType() == FragType.NewDateWiseOrderListFragment ||
                         getCurrentFragType() == FragType.NewOrderListFragment || getCurrentFragType() == FragType.ShopBillingListFragment ||
                         getCurrentFragType() == FragType.ViewAllOrderListFragment) {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
-                }
-                else if (getCurrentFragType() == FragType.ReimbursementFragment) {
+                } else if (getCurrentFragType() == FragType.ReimbursementFragment) {
                     //AppUtils.getCompressContentImage(data!!.data, this)
 
                     getGalleryImage(this, data)
@@ -7670,8 +7573,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     (getFragment() as ReimbursementFragment).setImage(filePath)
 
                     //(getFragment() as MyProfileFragment).setImage(data.data)
-                }
-                else if (getCurrentFragType() == FragType.EditReimbursementFragment) {
+                } else if (getCurrentFragType() == FragType.EditReimbursementFragment) {
                     //AppUtils.getCompressContentImage(data!!.data, this)
 
                     getGalleryImage(this, data)
@@ -7703,53 +7605,46 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     (getFragment() as EditReimbursementFragment).setImage(filePath)
 
                     //(getFragment() as MyProfileFragment).setImage(data.data)
-                }
-                else if (getCurrentFragType() == FragType.DocumentListFragment) {
+                } else if (getCurrentFragType() == FragType.DocumentListFragment) {
                     getGalleryImage(this, data)
                     (getFragment() as DocumentListFragment).setImage(filePath)
-                }
-                else if (getCurrentFragType() == FragType.WorkInProgressFragment) {
+                } else if (getCurrentFragType() == FragType.WorkInProgressFragment) {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
-                }
-                else if (getCurrentFragType() == FragType.WorkOnHoldFragment) {
+                } else if (getCurrentFragType() == FragType.WorkOnHoldFragment) {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
-                }
-                else if (getCurrentFragType() == FragType.WorkCompletedFragment) {
+                } else if (getCurrentFragType() == FragType.WorkCompletedFragment) {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
-                }
-                else if (getCurrentFragType() == FragType.WorkCancelledFragment) {
+                } else if (getCurrentFragType() == FragType.WorkCancelledFragment) {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
-                }
-                else if (getCurrentFragType() == FragType.UpdateReviewFragment) {
+                } else if (getCurrentFragType() == FragType.UpdateReviewFragment) {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
-                }else if(getCurrentFragType() == FragType.RegisTerFaceFragment){
+                } else if (getCurrentFragType() == FragType.RegisTerFaceFragment) {
                     CropImage.activity(data?.data)
                             .setCropShape(CropImageView.CropShape.RECTANGLE)
-                            .setMinCropWindowSize(400,400)
+                            .setMinCropWindowSize(400, 400)
                             .setAspectRatio(1, 1)
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setAllowRotation(false)
                             .setOutputCompressQuality(100)
                             .start(this)
-                }
-                else if(getCurrentFragType() == FragType.ProtoRegistrationFragment){
+                } else if (getCurrentFragType() == FragType.ProtoRegistrationFragment) {
                     // for gallary image
-                    getGalleryImage(this,data)
+                    getGalleryImage(this, data)
                     if (!TextUtils.isEmpty(filePath)) {
                         //val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, filePath)
                         //XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
@@ -7759,8 +7654,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         (getFragment() as ProtoRegistrationFragment).setImage(filePath)
 
                     }
-                }
-                else {
+                } else {
                     XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
@@ -7768,8 +7662,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                 }
 
-            }
-            else if (requestCode == REQUEST_CODE_DOCUMENT) {
+            } else if (requestCode == REQUEST_CODE_DOCUMENT) {
                 try {
                     if (data != null && data.data != null) {
                         filePath = NewFileUtils.getRealPath(this@DashboardActivity, data.data)
@@ -7802,8 +7695,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 if (getCurrentFragType() == FragType.DocumentListFragment) {
                                     getGalleryImage(this, data)
                                     (getFragment() as DocumentListFragment).setImage(filePath)
-                                }
-                                else {
+                                } else {
                                     CropImage.activity(data.data)
                                             .setAspectRatio(40, 21)
                                             .start(this)
@@ -7854,8 +7746,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         (getFragment() as AddShopFragment).saveAudio()
                 } else
                     feedbackDialog?.setAudio()
-            }
-            else if (requestCode == PermissionHelper.REQUEST_CODE_EXO_PLAYER) {
+            } else if (requestCode == PermissionHelper.REQUEST_CODE_EXO_PLAYER) {
                 if (getFragment() != null && getFragment() is MicroLearningListFragment) {
                     (getFragment() as MicroLearningListFragment).getLearningList()
 
@@ -7866,11 +7757,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         startService(it)
                     }
                 }
-            }
-            else if(CustomStatic.IsCameraFacingFromTeamAttdCametaStatus){
-                CustomStatic.IsCameraFacingFromTeamAttdCametaStatus=false
-            }
-            else {
+            } else if (CustomStatic.IsCameraFacingFromTeamAttdCametaStatus) {
+                CustomStatic.IsCameraFacingFromTeamAttdCametaStatus = false
+            } else {
                 if (data?.action.equals("com.google.zxing.client.android.SCAN")) {
                     /*val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
                     val contents = result.contents
@@ -7878,8 +7767,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         CodeScannerTextDialog.newInstance(contents).show(supportFragmentManager, "")
                     else
                         showSnackMessage("QrCode scan cancel")*/
-                }
-                else {
+                } else {
                     checkLocationMode()
                     try {
                         if (getFragment() != null && getFragment() is GpsDisableFragment) {
@@ -7888,7 +7776,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             if (getFragment() != null && getFragment() !is AddAttendanceFragment && !isGpsDisabled)
                                 checkToShowAddAttendanceAlert()
                         } else {
-                            if (getFragment() != null && getFragment() !is AddAttendanceFragment && !isGpsDisabled )
+                            if (getFragment() != null && getFragment() !is AddAttendanceFragment && !isGpsDisabled)
                                 checkToShowAddAttendanceAlert()
 
                             if (intent != null && intent.extras != null && /*!isAttendanceAlertPresent &&*/ !isGpsDisabled) {
@@ -7921,12 +7809,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     } else if (intent.getStringExtra("TYPE").equals("REIMBURSEMENT", ignoreCase = true)) {
                                         if (getFragment() != null && getFragment() !is ReimbursementListFragment)
                                             loadFragment(FragType.ReimbursementListFragment, false, "")
-                                    }
-                                    else if (intent.getStringExtra("TYPE").equals("VIDEO", ignoreCase = true)) {
+                                    } else if (intent.getStringExtra("TYPE").equals("VIDEO", ignoreCase = true)) {
                                         if (getFragment() != null && getFragment() !is MicroLearningListFragment)
                                             loadFragment(FragType.MicroLearningListFragment, false, "")
-                                    }
-                                    else if (intent.getStringExtra("TYPE").equals("clearData", ignoreCase = true)) {
+                                    } else if (intent.getStringExtra("TYPE").equals("clearData", ignoreCase = true)) {
                                         isClearData = true
                                         Handler().postDelayed(Runnable {
                                             if (getFragment() != null && getFragment() !is LogoutSyncFragment) {
@@ -8012,8 +7898,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateTotalMinuteForDayOfShop(shopList[i].shopid!!, totalMinute, AppUtils.getCurrentDateForShopActi())
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateTimeDurationForDayOfShop(shopList[i].shopid!!, duration, AppUtils.getCurrentDateForShopActi())
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
-                    }
-                    else {
+                    } else {
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateEndTimeOfShop(endTimeStamp, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateTotalMinuteForDayOfShop(shopList[i].shopid!!, totalMinute, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateTimeDurationForDayOfShop(shopList[i].shopid!!, duration, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
@@ -8035,8 +7920,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     if (!Pref.isMultipleVisitEnable) {
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
                                 AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
-                    }
-                    else {
+                    } else {
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
                                 AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
                     }
@@ -8192,7 +8076,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             mShopActivityEntity.distance_travelled = distance.toString()
 
 //            AppUtils.isShopVisited = true
-            Pref.isShopVisited=true
+            Pref.isShopVisited = true
 
             if (!TextUtils.isEmpty(feedback))
                 mShopActivityEntity.feedback = feedback
@@ -8219,8 +8103,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             mShopActivityEntity.in_loc = shopGpsAddress
 
 
-            var shopAll=AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
-            mShopActivityEntity.shop_revisit_uniqKey=Pref.user_id+System.currentTimeMillis().toString()
+            var shopAll = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
+            mShopActivityEntity.shop_revisit_uniqKey = Pref.user_id + System.currentTimeMillis().toString()
 
             /*if(shopAll==null || shopAll.isEmpty()){
                 mShopActivityEntity.shop_revisit_uniqKey = Pref.user_id+AppUtils.getCurrentDateMonth()+"10001"
@@ -8516,7 +8400,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     NetworkConstant.SUCCESS -> {
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
                                         progress_wheel.stopSpinning()
-                        //                                (mContext as DashboardActivity).showSnackMessage("SUCCESS")
+                                        //                                (mContext as DashboardActivity).showSnackMessage("SUCCESS")
                                         (mContext as DashboardActivity).updateFence()
 
                                         showShopVerificationDialog()
@@ -8540,8 +8424,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
                             })
             )
-        }
-        else {
+        } else {
             val repository = EditShopRepoProvider.provideEditShopRepository()
             BaseActivity.compositeDisposable.add(
                     repository.addShopWithImage(addShopReqData, shopImageLocalPath, doc_degree, mContext)
@@ -8554,7 +8437,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     NetworkConstant.SUCCESS -> {
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
                                         progress_wheel.stopSpinning()
-                        //                                (mContext as DashboardActivity).showSnackMessage("SUCCESS")
+                                        //                                (mContext as DashboardActivity).showSnackMessage("SUCCESS")
                                         (mContext as DashboardActivity).updateFence()
 
                                         showShopVerificationDialog()
@@ -8879,7 +8762,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private fun updatePhotoAadhaarDocument(fileSize: Long) {
         val fileSizeInKB = fileSize / 1024
         Log.e("Dashboard", "image file size after compression==========> $fileSizeInKB KB")
-        Pref.maxFileSize="500"
+        Pref.maxFileSize = "500"
         if (!TextUtils.isEmpty(Pref.maxFileSize)) {
             if (fileSizeInKB <= Pref.maxFileSize.toInt()) {
                 val file = File(filePath)
@@ -9170,8 +9053,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         else if (isCodeScan) {
             isCodeScan = false
             loadFragment(FragType.CodeScannerFragment, true, "")
-        }
-        else if (getFragment() is MyProfileFragment)
+        } else if (getFragment() is MyProfileFragment)
             (getFragment() as MyProfileFragment).onRequestPermission(requestCode, permissions, grantResults)
         else if (getFragment() is AddShopFragment)
             (getFragment() as AddShopFragment).onRequestPermission(requestCode, permissions, grantResults)
@@ -9420,7 +9302,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private fun callFeedbackDialog(image: String) {
         revisitImage = image
 
-        feedbackDialog = AddFeedbackSingleBtnDialog.getInstance(shopName + "\n" + contactNumber, getString(R.string.confirm_revisit),mShopId, object : AddFeedbackSingleBtnDialog.OnOkClickListener {
+        feedbackDialog = AddFeedbackSingleBtnDialog.getInstance(shopName + "\n" + contactNumber, getString(R.string.confirm_revisit), mShopId, object : AddFeedbackSingleBtnDialog.OnOkClickListener {
             override fun onOkClick(mFeedback: String, mNextVisitDate: String, filePath: String) {
                 if (!TextUtils.isEmpty(mFeedback))
                     feedback = mFeedback
@@ -9448,7 +9330,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
 
             override fun onClickCompetitorImg() {
-                feedBackDialogCompetetorImg=true
+                feedBackDialogCompetetorImg = true
             }
         })
         feedbackDialog?.show((mContext as DashboardActivity).supportFragmentManager, "AddFeedbackSingleBtnDialog")
@@ -10126,7 +10008,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun updateFence() {
 
-        if(Pref.IsLeavePressed==true && Pref.IsLeaveGPSTrack == false){
+        if (Pref.IsLeavePressed == true && Pref.IsLeaveGPSTrack == false) {
             return
         }
 
@@ -10174,8 +10056,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         val bytes = ByteArrayOutputStream()
         bm!!.compress(Bitmap.CompressFormat.JPEG, 90, bytes)
 
-      /*  var destination = File(Environment.getExternalStorageDirectory(),
-                System.currentTimeMillis().toString() + ".jpg")*/
+        /*  var destination = File(Environment.getExternalStorageDirectory(),
+                  System.currentTimeMillis().toString() + ".jpg")*/
 
         var destination = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                 System.currentTimeMillis().toString() + ".jpg")
@@ -10491,12 +10373,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     if ((getFragment() as ChatListFragment).toID != chatUser.id) {
                         notification.msgNotification(this@DashboardActivity, intent.getStringExtra("body") as String, intent.getSerializableExtra("chatData") as ChatListDataModel,
                                 chatUser)
-                    }
-                    else
+                    } else
                         (getFragment() as ChatListFragment).updateUi(intent)
 
-                }
-                else
+                } else
                     notification.msgNotification(this@DashboardActivity, intent.getStringExtra("body") as String, intent.getSerializableExtra("chatData") as ChatListDataModel,
                             intent.getSerializableExtra("chatUser") as ChatUserDataModel)
 
@@ -10554,9 +10434,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private val updatePJP = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             try {
-                 if(getCurrentFragType() == FragType.DashboardFragment){
-                     (getFragment() as DashboardFragment).initBottomAdapter()
-                 }
+                if (getCurrentFragType() == FragType.DashboardFragment) {
+                    (getFragment() as DashboardFragment).initBottomAdapter()
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -10589,7 +10469,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 Pref.isShowHomeLocReason = false
                                 reason = ""
-                                AppUtils.changeLanguage(this,"en")
+                                AppUtils.changeLanguage(this, "en")
                                 Pref.homeLocEndTimeStamp = System.currentTimeMillis().toString()
 
                                 if (getFragment() != null && getFragment() is ChatBotFragment)
@@ -10653,7 +10533,6 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
 
-
 /*    override fun HBRecorderOnError(errorCode: Int, reason: String?) {
 
     }
@@ -10710,11 +10589,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
 
     fun updateScreenRecStatus() {
-        Log.e("xcv","updateScreenRecStatus")
-        if(DashboardFragment.isRecordRootVisible){
-            screen_record_info_TV.text="Stop Recording"
-        }else{
-            screen_record_info_TV.text="Screen Recorder"
+        Log.e("xcv", "updateScreenRecStatus")
+        if (DashboardFragment.isRecordRootVisible) {
+            screen_record_info_TV.text = "Stop Recording"
+        } else {
+            screen_record_info_TV.text = "Screen Recorder"
         }
     }
 
