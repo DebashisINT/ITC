@@ -4515,7 +4515,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun getNearyShopList(location: Location) {
         var nearestDist=5000
-        var nearBy: Double = Pref.shopLocAccuracy.toDouble()
+        //var nearBy: Double = Pref.shopLocAccuracy.toDouble()
+        var nearBy: Double = 4000.00
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
         var finalNearByDD: AssignToDDEntity = AssignToDDEntity()
@@ -4534,7 +4535,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     val shopLocation = Location("")
                     shopLocation.latitude = shopLat
                     shopLocation.longitude = shopLong
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, 4000)
                     var dist=location.distanceTo(shopLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(shopLocation)) < nearBy) {
@@ -4569,7 +4571,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     val ddLocation = Location("")
                     ddLocation.latitude = ddLat
                     ddLocation.longitude = ddLong
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, 4000)
                     var dist=location.distanceTo(ddLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(ddLocation)) < nearBy) {
@@ -4762,7 +4765,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun getNearyShopListEnd(location: Location) {
         var nearestDist=5000
-        var nearBy: Double = Pref.shopLocAccuracy.toDouble()
+        //var nearBy: Double = Pref.shopLocAccuracy.toDouble()
+        var nearBy: Double = 4000.00
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
         var finalNearByDD: AssignToDDEntity = AssignToDDEntity()
@@ -4781,7 +4785,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     val shopLocation = Location("")
                     shopLocation.latitude = shopLat
                     shopLocation.longitude = shopLong
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, 4000)
                     var dist=location.distanceTo(shopLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(shopLocation)) < nearBy) {
@@ -4816,7 +4821,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     val ddLocation = Location("")
                     ddLocation.latitude = ddLat
                     ddLocation.longitude = ddLong
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, 4000)
                     var dist=location.distanceTo(ddLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(ddLocation)) < nearBy) {
@@ -5336,7 +5342,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun getNearyShopListDD(location: Location) {
-        var nearBy: Double = Pref.shopLocAccuracy.toDouble()
+        //var nearBy: Double = Pref.shopLocAccuracy.toDouble()
+        var nearBy: Double = 4000.00
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
         var finalNearByDD: AssignToDDEntity = AssignToDDEntity()
@@ -5385,7 +5392,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     val ddLocation = Location("")
                     ddLocation.latitude = ddLat
                     ddLocation.longitude = ddLong
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, 4000)
                     if (isShopNearby) {
                         if ((location.distanceTo(ddLocation)) < nearBy) {
                             nearBy = location.distanceTo(ddLocation).toDouble()

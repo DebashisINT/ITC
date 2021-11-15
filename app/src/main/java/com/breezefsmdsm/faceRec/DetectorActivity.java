@@ -638,8 +638,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
           float conf = result.getDistance();
 
           Log.v("face_D",String.valueOf(conf));
-          //if (conf>0.73f && conf < .93f) {
-          if (conf>0.60f && conf < 1.0f) {
+          //if (conf>0.73f && conf < .85f) {
+          if (conf>0.57f && conf < 1.0f) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
             confidence = conf;
             label = result.getTitle();
