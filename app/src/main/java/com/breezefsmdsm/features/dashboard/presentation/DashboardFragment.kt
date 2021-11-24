@@ -4634,7 +4634,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             simpleDialog.setContentView(R.layout.dialog_message)
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
             if(nearestDist==5000){
                 dialogHeader.text = "No nearby Shop/Point found..."+". Current location has been detected "+nearestDist.toString() +" mtr or more distance from the Distributor or Retail point from your handset GPS."
             }else{
