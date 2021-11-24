@@ -659,6 +659,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
           //println("Face_Value "+lowerLi.toString() + " : "+upperLi.toString());
           //Log.v("Face_Value",lowerLi.toString() + " : "+upperLi.toString());
           if (conf>lowerLi && conf < 0.98f) {
+          //if (conf>lowerLi && conf < upperLi) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
             confidence = conf;
             label = result.getTitle();
