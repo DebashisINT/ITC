@@ -3220,12 +3220,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.FaceDetectionAccuracyUpper = response.getconfigure?.get(i)?.Value!!
                                                 }
+                                                CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                                             }
                                             else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyLower", ignoreCase = true)) {
                                                 Pref.FaceDetectionAccuracyLower = response.getconfigure!![i].Value!!
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.FaceDetectionAccuracyLower = response.getconfigure?.get(i)?.Value!!
                                                 }
+                                                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
                                             }
 
                                             else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy", ignoreCase = true)) {

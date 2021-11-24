@@ -31,6 +31,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.FileProvider
+import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.AlarmReceiver.Companion.setAlarm
@@ -4943,12 +4944,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.FaceDetectionAccuracyUpper = response.getconfigure?.get(i)?.Value!!
                                                 }
+                                                CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                                             }
                                             else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyLower")) {
                                                 Pref.FaceDetectionAccuracyLower = response.getconfigure!![i].Value!!
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.FaceDetectionAccuracyLower = response.getconfigure?.get(i)?.Value!!
                                                 }
+                                                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
                                             }
 
                                             else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy")) {

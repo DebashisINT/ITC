@@ -640,7 +640,25 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
           Log.v("face_D",String.valueOf(conf));
           //if (conf>0.73f && conf < .85f) {
-          if (conf>0.57f && conf < 1.0f) {
+          Float lowerLi,upperLi;
+          try{
+             lowerLi= Float.parseFloat(CustomStatic.FaceDetectionAccuracyLower);
+             upperLi= Float.parseFloat(CustomStatic.FaceDetectionAccuracyUpper);
+            if(lowerLi==0.00){
+               lowerLi= 0.57f;
+            }
+            if(upperLi==0.00){
+              upperLi=1.0f;
+            }
+          }
+          catch (Exception e){
+            e.printStackTrace();
+             lowerLi= 0.57f;
+             upperLi=1.0f;
+          }
+          //println("Face_Value "+lowerLi.toString() + " : "+upperLi.toString());
+          //Log.v("Face_Value",lowerLi.toString() + " : "+upperLi.toString());
+          if (conf>lowerLi && conf < 1.0f) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
             confidence = conf;
             label = result.getTitle();
