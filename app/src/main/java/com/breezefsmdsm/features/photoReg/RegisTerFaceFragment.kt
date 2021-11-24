@@ -70,6 +70,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
     private lateinit var nameTV: AppCustomTextView
     private lateinit var phoneTV: AppCustomTextView
     private lateinit var registerTV: Button
+    private lateinit var proceedNextTV: Button
     private lateinit var progress_wheel: ProgressWheel
     private lateinit var ll_phone : LinearLayout
 
@@ -102,12 +103,13 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         var user_name: String? = null
         var user_login_id: String? = null
         var user_contactid: String? = null
+        var valueData:UserListResponseModel = UserListResponseModel()
         fun getInstance(objects: Any): RegisTerFaceFragment {
             val regisTerFaceFragment = RegisTerFaceFragment()
             if (!TextUtils.isEmpty(objects.toString())) {
 
                 var obj = objects as UserListResponseModel
-
+                valueData=obj
                 user_id=obj!!.user_id.toString()
                 user_name=obj!!.user_name
                 user_login_id=obj!!.user_login_id
@@ -133,9 +135,12 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         nameTV = view.findViewById(R.id.tv_frag_reg_face_name)
         phoneTV = view.findViewById(R.id.tv_frag_reg_face_phone)
         registerTV = view.findViewById(R.id.btn_frag_reg_face_register)
+        proceedNextTV = view.findViewById(R.id.btn_frag_reg_face_proceed_next)
+
         progress_wheel = view.findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
         registerTV.setOnClickListener(this)
+        proceedNextTV.setOnClickListener(this)
 
         nameTV.text = user_name!!
         phoneTV.text = user_login_id!!
@@ -243,8 +248,8 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.face_reg_success))
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     progress_wheel.stopSpinning()
-                                    (mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
-
+                                    //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
+                                    afterFaceRegistered()
                                 }, 500)
 
                                 XLog.d(" RegisTerFaceFragment : FaceImageDetection/FaceImage" +response.status.toString() +", : "  + ", Success: "+AppUtils.getCurrentDateTime().toString())
@@ -260,6 +265,25 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                             }
                         })
         )
+    }
+
+    fun afterFaceRegistered(){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_ok_cancel_new)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+        dialogHeader.text = "Face Registered successfully. Proceed Next for Aadhaar verification."
+        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+        val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+            (mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
+        })
+        dialogNo.setOnClickListener({ view ->
+            simpleDialog.cancel()
+        })
+        simpleDialog.show()
     }
 
     override fun onClick(p0: View?) {
@@ -303,6 +327,10 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
                 R.id.ll_regis_face_phone ->{
                     IntentActionable.initiatePhoneCall(mContext, phoneTV.text.toString())
+                }
+
+                R.id.btn_frag_reg_face_proceed_next -> {
+
                 }
 
             }

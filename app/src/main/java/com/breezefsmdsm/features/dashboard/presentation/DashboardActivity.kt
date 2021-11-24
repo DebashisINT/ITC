@@ -172,10 +172,7 @@ import com.breezefsmdsm.features.performance.PerformanceFragment
 import com.breezefsmdsm.features.performance.api.UpdateGpsStatusRepoProvider
 import com.breezefsmdsm.features.performance.model.UpdateGpsInputParamsModel
 import com.breezefsmdsm.features.permissionList.ViewPermissionFragment
-import com.breezefsmdsm.features.photoReg.PhotoAttendanceFragment
-import com.breezefsmdsm.features.photoReg.ProtoRegistrationFragment
-import com.breezefsmdsm.features.photoReg.RegisTerFaceFragment
-import com.breezefsmdsm.features.photoReg.TeamAttendanceFragment
+import com.breezefsmdsm.features.photoReg.*
 import com.breezefsmdsm.features.quotation.presentation.*
 import com.breezefsmdsm.features.reimbursement.presentation.EditReimbursementFragment
 import com.breezefsmdsm.features.reimbursement.presentation.ReimbursementDetailsFragment
@@ -4528,6 +4525,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mFragment = RegisTerFaceFragment.getInstance(initializeObject)
                 }
                 setTopBarTitle(getString(R.string.photo_registration))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.PhotoRegAadhaarFragment -> {
+                if (enableFragGeneration) {
+                    mFragment = PhotoRegAadhaarFragment.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.aadhaar_registration))
                 setTopBarVisibility(TopBarConfig.BACK)
             }
             FragType.TeamAttendanceFragment -> {
