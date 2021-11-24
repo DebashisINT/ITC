@@ -314,4 +314,12 @@ object Pref : PreferenceHolder() {
 
     var IsTeamAttendance: Boolean by bindToPreferenceField(false, "IsTeamAttendance")/*29-10-2021 Team Attendance*/
 
+
+    /*24-11-2021 ITC face And Distributoraccu*/
+    var FaceDetectionAccuracyUpper: String by bindToPreferenceField("0.93", "FaceDetectionAccuracyUpper")
+    var FaceDetectionAccuracyLower: String by bindToPreferenceField("0.73", "FaceDetectionAccuracyLower")
+    var DistributorGPSAccuracy: String by bindToPreferenceField("5000", "DistributorGPSAccuracy")
+
+
+
 }

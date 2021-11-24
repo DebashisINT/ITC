@@ -3214,6 +3214,27 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 }
                                             }
 
+                                            /*24-11-2021 ITC face And Distributoraccu*/
+                                            else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyUpper", ignoreCase = true)) {
+                                                Pref.FaceDetectionAccuracyUpper = response.getconfigure!![i].Value!!
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.FaceDetectionAccuracyUpper = response.getconfigure?.get(i)?.Value!!
+                                                }
+                                            }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyLower", ignoreCase = true)) {
+                                                Pref.FaceDetectionAccuracyLower = response.getconfigure!![i].Value!!
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.FaceDetectionAccuracyLower = response.getconfigure?.get(i)?.Value!!
+                                                }
+                                            }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy", ignoreCase = true)) {
+                                                Pref.DistributorGPSAccuracy = response.getconfigure!![i].Value!!
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
+                                                }
+                                            }
+
 
 
                                         }
