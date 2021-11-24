@@ -4937,6 +4937,26 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.IsTeamAttendance = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
+                                            /*24-11-2021 ITC face And Distributoraccu*/
+                                            else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyUpper")) {
+                                                Pref.FaceDetectionAccuracyUpper = response.getconfigure!![i].Value!!
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.FaceDetectionAccuracyUpper = response.getconfigure?.get(i)?.Value!!
+                                                }
+                                            }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyLower")) {
+                                                Pref.FaceDetectionAccuracyLower = response.getconfigure!![i].Value!!
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.FaceDetectionAccuracyLower = response.getconfigure?.get(i)?.Value!!
+                                                }
+                                            }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy")) {
+                                                Pref.DistributorGPSAccuracy = response.getconfigure!![i].Value!!
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
+                                                }
+                                            }
 
 
 

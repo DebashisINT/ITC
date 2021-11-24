@@ -51,6 +51,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.breezefsmdsm.CustomStatic;
 import com.breezefsmdsm.R;
+
+import com.breezefsmdsm.app.Pref;
 import com.breezefsmdsm.app.types.FragType;
 import com.breezefsmdsm.app.utils.Toaster;
 import com.breezefsmdsm.faceRec.customview.OverlayView;
