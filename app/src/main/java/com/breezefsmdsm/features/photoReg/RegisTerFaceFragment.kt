@@ -242,7 +242,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             val response = result as FaceRegResponse
                             if(response.status== NetworkConstant.SUCCESS){
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.face_reg_success))
+                                //(mContext as DashboardActivity).showSnackMessage(getString(R.string.face_reg_success))
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     progress_wheel.stopSpinning()
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
@@ -297,6 +297,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                     }
 
                     if(imagePath.length>0 && imagePath!="") {
+                        registerFaceApi()
                         val simpleDialogg = Dialog(mContext)
                         simpleDialogg.setCancelable(false)
                         simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -318,7 +319,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                         dialogNo.setOnClickListener( { view ->
                             simpleDialogg.cancel()
                         })
-                        simpleDialogg.show()
+                        //simpleDialogg.show()
                     }
 
 

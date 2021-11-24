@@ -93,7 +93,7 @@
                 android:background="@drawable/selector_blue_botton_bg"
                 android:gravity="center"
                 android:padding="@dimen/_8sdp"
-                android:text="Click now to Register Aadhaar"
+                android:text="Click now to \nRegister Aadhaar >>"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/_12sdp"
                 android:textAllCaps="false"/>
