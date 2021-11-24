@@ -30,6 +30,7 @@
     <!--Menu-->
     <string name="add_order" translatable="false">Add Order</string>
     <string name="photo_registration" translatable="false">Photo Registration</string>
+    <string name="aadhaar_registration" translatable="false">Aadhaar Registration</string>
     <string name="team_attendance" translatable="false">Team Attendance</string>
     <string name="photo_attd" translatable="false">Photo Attendance</string>
     <string name="view_order" translatable="false">View Order</string>
