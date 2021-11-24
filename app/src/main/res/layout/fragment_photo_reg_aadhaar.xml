@@ -64,7 +64,7 @@
                 android:background="@drawable/selector_blue_botton_bg"
                 android:gravity="center"
                 android:padding="@dimen/_8sdp"
-                android:text="Upload Aadhaar Pic"
+                android:text="Submit"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/_12sdp"
                 android:textAllCaps="false"/>

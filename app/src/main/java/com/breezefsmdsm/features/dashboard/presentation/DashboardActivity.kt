@@ -7338,7 +7338,32 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                } else if (getCurrentFragType() == FragType.DashboardFragment) {
+                }else if (getCurrentFragType() == FragType.PhotoRegAadhaarFragment) {
+                    getCameraImage(data)
+
+                    if (!TextUtils.isEmpty(filePath)) {
+                        XLog.e("===========Update Review Image (DashboardActivity)===========")
+                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+
+                        val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
+
+                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+
+                        try {
+                            CropImage.activity(contentURI)
+                                    .setCropShape(CropImageView.CropShape.RECTANGLE)
+                                    //.setMinCropWindowSize(500, 400)
+                                    .setAspectRatio(40, 30)
+                                    .setGuidelines(CropImageView.Guidelines.ON)
+                                    .setOutputCompressQuality(100)
+                                    .start(this)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            XLog.e("Error: " + e.localizedMessage)
+                        }
+                    }
+                }
+                else if (getCurrentFragType() == FragType.DashboardFragment) {
                     getCameraImage(data)
                     if (!TextUtils.isEmpty(filePath)) {
                         /*           val fileSize = AppUtils.getCompressBillingImage(filePath, this)
@@ -7400,7 +7425,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 getAddFacePic(fileSize, resultUri)
                             }
 
-
+                            getCurrentFragType() == FragType.PhotoRegAadhaarFragment -> {
+                                val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
+                                getAddAadhaarVerifyPic(fileSize, resultUri)
+                            }
                             getCurrentFragType() == FragType.AddShopFragment -> {
                                 val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
                                 getAddShopPic(fileSize, resultUri)
@@ -8924,6 +8952,16 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         Log.e("Dashboard", "image file size after compression-----------------> $fileSizeInKB KB")
         //if (fileSizeInKB <= 200)
         (getFragment() as RegisTerFaceFragment).setImage(resultUri, fileSizeInKB)
+        /*else {
+            getAddShopPic(AppUtils.getCompressOldImage(resultUri.toString(), this), resultUri)
+        }*/
+    }
+
+    private fun getAddAadhaarVerifyPic(fileSize: Long, resultUri: Uri) {
+        val fileSizeInKB = fileSize / 1024
+        Log.e("Dashboard", "image file size after compression-----------------> $fileSizeInKB KB")
+        //if (fileSizeInKB <= 200)
+        (getFragment() as PhotoRegAadhaarFragment).setImage(resultUri, fileSizeInKB)
         /*else {
             getAddShopPic(AppUtils.getCompressOldImage(resultUri.toString(), this), resultUri)
         }*/

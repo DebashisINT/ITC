@@ -93,26 +93,11 @@
                 android:background="@drawable/selector_blue_botton_bg"
                 android:gravity="center"
                 android:padding="@dimen/_8sdp"
-                android:text="Register"
+                android:text="Click now to Register Aadhaar"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/_12sdp"
                 android:textAllCaps="false"/>
 
-            <Button
-                android:id="@+id/btn_frag_reg_face_proceed_next"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_60sdp"
-                android:layout_marginRight="@dimen/_60sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:background="@drawable/selector_blue_botton_bg"
-                android:gravity="center"
-                android:padding="@dimen/_8sdp"
-                android:text="Next"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/_12sdp"
-                android:textAllCaps="false"
-                android:visibility="gone"/>
 
         </LinearLayout>
 

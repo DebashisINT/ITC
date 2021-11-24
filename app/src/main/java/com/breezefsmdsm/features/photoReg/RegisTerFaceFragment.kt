@@ -70,7 +70,6 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
     private lateinit var nameTV: AppCustomTextView
     private lateinit var phoneTV: AppCustomTextView
     private lateinit var registerTV: Button
-    private lateinit var proceedNextTV: Button
     private lateinit var progress_wheel: ProgressWheel
     private lateinit var ll_phone : LinearLayout
 
@@ -135,12 +134,10 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         nameTV = view.findViewById(R.id.tv_frag_reg_face_name)
         phoneTV = view.findViewById(R.id.tv_frag_reg_face_phone)
         registerTV = view.findViewById(R.id.btn_frag_reg_face_register)
-        proceedNextTV = view.findViewById(R.id.btn_frag_reg_face_proceed_next)
 
         progress_wheel = view.findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
         registerTV.setOnClickListener(this)
-        proceedNextTV.setOnClickListener(this)
 
         nameTV.text = user_name!!
         phoneTV.text = user_login_id!!
@@ -249,7 +246,10 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     progress_wheel.stopSpinning()
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
-                                    afterFaceRegistered()
+
+
+                                    //afterFaceRegistered()
+                                    (mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
                                 }, 500)
 
                                 XLog.d(" RegisTerFaceFragment : FaceImageDetection/FaceImage" +response.status.toString() +", : "  + ", Success: "+AppUtils.getCurrentDateTime().toString())
@@ -329,9 +329,6 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                     IntentActionable.initiatePhoneCall(mContext, phoneTV.text.toString())
                 }
 
-                R.id.btn_frag_reg_face_proceed_next -> {
-
-                }
 
             }
         }
