@@ -4955,7 +4955,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             }
 
                                             else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy")) {
-                                                Pref.DistributorGPSAccuracy = response.getconfigure!![i].Value!!
+                                                Pref.DistributorGPSAccuracy =  response.getconfigure!![i].Value!!
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
                                                 }

@@ -318,7 +318,7 @@ object Pref : PreferenceHolder() {
     /*24-11-2021 ITC face And Distributoraccu*/
     var FaceDetectionAccuracyUpper: String by bindToPreferenceField("0.93", "FaceDetectionAccuracyUpper")
     var FaceDetectionAccuracyLower: String by bindToPreferenceField("0.73", "FaceDetectionAccuracyLower")
-    var DistributorGPSAccuracy: String by bindToPreferenceField("5000", "DistributorGPSAccuracy")
+    var DistributorGPSAccuracy: String by bindToPreferenceField("500", "DistributorGPSAccuracy")
 
 
 

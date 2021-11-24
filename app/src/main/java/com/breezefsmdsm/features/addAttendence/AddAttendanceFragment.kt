@@ -1213,7 +1213,8 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     fun getNearyShopListDD(location: Location) {
         var nearestDist=5000
         //var nearBy: Double = Pref.shopLocAccuracy.toDouble()
-        var nearBy: Double = 4000.00
+        //var nearBy: Double = 4000.00
+        var nearBy: Double = Pref.DistributorGPSAccuracy.toDouble()
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
         var finalNearByDD: AssignToDDEntity = AssignToDDEntity()
@@ -1233,7 +1234,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     shopLocation.latitude = shopLat
                     shopLocation.longitude = shopLong
                     //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, 4000)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, Pref.DistributorGPSAccuracy.toInt())
                     var dist=location.distanceTo(shopLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(shopLocation)) < nearBy) {
@@ -1269,7 +1270,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     ddLocation.latitude = ddLat
                     ddLocation.longitude = ddLong
                     //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, 4000)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, Pref.DistributorGPSAccuracy.toInt())
                     var dist=location.distanceTo(ddLocation).toInt()  //21-10-2021
                     if (isShopNearby) {
                         if ((location.distanceTo(ddLocation)) < nearBy) {
