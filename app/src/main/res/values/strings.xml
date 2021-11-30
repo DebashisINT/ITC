@@ -1474,4 +1474,12 @@
 
     <string name="team_attendance_submited" translatable="false">Attendance submitted for toay.</string>
 
+    <string name="battery_setting_message" translatable="false">Device Battery Percentage is low.\n
+    GPS Tracking or detection may not be working Properly.</string>
+    <string name="power_setting_message" translatable="false">"Device Power Saver is ON.\n
+    GPS Tracking or detection may not be working Properly."</string>
+
+    <string name="power_off_msg" translatable="false">Device Power Saver is ON.
+    GPS Tracking or detection may not be working Properly.</string>
+
 </resources>

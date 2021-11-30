@@ -98,6 +98,8 @@ import com.breezefsmdsm.features.timesheet.model.TimeSheetDropDownResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import com.breezefsmdsm.CustomStatic
+import com.breezefsmdsm.Customdialog.CustomDialog
+import com.breezefsmdsm.Customdialog.OnDialogCustomClickListener
 import com.breezefsmdsm.faceRec.DetectorActivity
 import com.breezefsmdsm.faceRec.FaceStartActivity
 import com.breezefsmdsm.faceRec.tflite.SimilarityClassifier
@@ -554,9 +556,27 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
         start_shop = view.findViewById(R.id.start_shop)
         enddate_TV = view.findViewById(R.id.enddate_TV)
-
-
         start_TV.setOnClickListener({ view ->
+        if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+            if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                    override fun onOkClick() {
+
+                        startTvClick()
+
+                    }
+                    override fun onYesClick() {
+
+                    }
+                    override fun onNoClick() {
+                    }
+                }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+            }else{
+                startTvClick()
+            }
+        }else {
+            startTvClick()
+            /* start_TV.setOnClickListener({ view ->
             //faceDetectorSetUp()
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
@@ -618,7 +638,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                             getLocforStart()
 
-                            /*val simpleDialog = Dialog(mContext)
+                            *//*val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                             simpleDialog.setContentView(R.layout.dialog_yes_no)
@@ -635,7 +655,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             dialogNo.setOnClickListener({ view ->
                                 simpleDialog.cancel()
                             })
-                            simpleDialog.show()*/
+                            simpleDialog.show()*//*
 
                         } else {
                             // 27-08-21 For ITC
@@ -658,11 +678,61 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     }
                 }
             }
-
-
+        })
+*/
+        }
         })
 
-        end_TV.setOnClickListener({ view ->
+            end_TV.setOnClickListener({ view ->
+
+                if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                    if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                        CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                            override fun onOkClick() {
+
+                                endTvClick()
+
+                            }
+                            override fun onYesClick() {
+
+                            }
+                            override fun onNoClick() {
+                            }
+                        }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                    }else{
+                        endTvClick()
+                    }
+                }else{
+                    endTvClick()
+                }
+
+
+
+
+            })
+
+            DDVisit_TV.setOnClickListener({ view ->
+                if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                    if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                        CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                            override fun onOkClick() {
+                                pointTvClick()
+                            }
+                            override fun onYesClick() {
+
+                            }
+                            override fun onNoClick() {
+                            }
+                        }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                    }else{
+                        pointTvClick()
+                    }
+                }else{
+                    pointTvClick()
+                }
+
+            })
+     /*   end_TV.setOnClickListener({ view ->
             //faceDetectorSetUp()
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
@@ -718,7 +788,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         getLocforEnd()
 
 //                        if (Pref.IsDDvistedOnceByDay) {// 01-09-2021  end date time , point visit not checking
-                            /*val simpleDialog = Dialog(mContext)
+                            *//*val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                             simpleDialog.setContentView(R.layout.dialog_yes_no)
@@ -739,14 +809,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             dialogNo.setOnClickListener({ view ->
                                 simpleDialog.cancel()
                             })
-                            simpleDialog.show()*/
+                            simpleDialog.show()*//*
 
 
 
 
 
 //                        }
-                       /* else {
+                       *//* else {
                             // 27-08-21 For ITC
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
@@ -761,7 +831,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 simpleDialog.cancel()
                             })
                             simpleDialog.show()
-                        }*/
+                        }*//*
 
                     } else {
                         // 27-08-21 For ITC
@@ -846,7 +916,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 }
             }
         })
-
+*/
         faceDetectorSetUp()
 
         /*if (Pref.isReplaceShopText)
@@ -3241,6 +3311,23 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 XLog.d("DistributorGPSAccuracy " + Pref.DistributorGPSAccuracy+"")
                                             }
 
+                                            else if (response.getconfigure?.get(i)?.Key.equals("BatterySetting", ignoreCase = true)) {
+                                                Pref.BatterySetting = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.BatterySetting = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("PowerSaverSetting", ignoreCase = true)) {
+                                                Pref.PowerSaverSetting = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.PowerSaverSetting = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+
+
+
 
 
                                         }
@@ -3418,6 +3505,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                                 if (configResponse.GPSAlert != null)
                                     Pref.GPSAlertGlobal = configResponse.GPSAlert!!
+
+                                if (configResponse.BatterySetting != null)
+                                    Pref.BatterySettingGlobal = configResponse.BatterySetting!!
+
+                                if (configResponse.PowerSaverSetting != null)
+                                    Pref.PowerSaverSettingGlobal = configResponse.PowerSaverSetting!!
 
 
                             }
@@ -5861,5 +5954,297 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
         return matrix
     }
+
+        private fun startTvClick(){
+            if (!AppUtils.isOnline(mContext)) {
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+
+            }
+            else if(isStartCall==false && Pref.DayStartMarked == false && Pref.isAddAttendence){
+
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_yes_no)
+                val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                dialogHeader.text = "Are you sure ?"
+                val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                dialogYes.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                    //if(Pref.IsshowDayStartSelfie){
+                    //isCameraDayStart=true
+                    //initPermissionCheck()
+                    //}else{
+                    progress_wheel.spin()
+                    isCalledFromStart=true
+                    getPicUrl()
+                    //}
+                })
+                dialogNo.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                })
+                simpleDialog.show()
+            }
+            else{
+                println("reg_face - start_tv"+AppUtils.getCurrentDateTime());
+                if (!AppUtils.isOnline(mContext)) {
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                }
+                else {
+                    if (!Pref.isAddAttendence) {
+                        // 27-08-21 For ITC
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                        dialogHeader.text = "Please mark your attendance."
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+//                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
+                    } else {
+                        if (!Pref.DayStartMarked) {
+
+                            getLocforStart()
+
+                            /*val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_yes_no)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Are you sure ?"
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                            val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                                getLocforStart()
+                            })
+                            dialogNo.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()*/
+
+                        } else {
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                            dialogHeader.text = "Your Day started already."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                        (mContext as DashboardActivity).showSnackMessage("Day started already")
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun endTvClick(){
+            if (!AppUtils.isOnline(mContext)) {
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            }
+            else if(isEndCall==false && Pref.DayEndMarked == false && Pref.DayStartMarked ==true){
+
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_yes_no)
+                val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
+                dialogHeader.text = "Are you sure to Exit for the Day?"
+                val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                dialogYes.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                    //if(Pref.IsshowDayStartSelfie){
+                    //isCameraDayStart=true
+                    //initPermissionCheck()
+                    //}else{
+                    progress_wheel.spin()
+                    isCalledFromStart=false
+                    getPicUrl()
+                    //}
+                })
+                dialogNo.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                })
+                simpleDialog.show()
+            }
+            else {
+                if (Pref.DayEndMarked) {
+                    // 27-08-21 For ITC
+                    val simpleDialog = Dialog(mContext)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                    dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                    dialogHeader.text = "Your Day already ended..."
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+                    })
+                    simpleDialog.show()
+//                    (mContext as DashboardActivity).showSnackMessage("Day already ended")
+                } else {
+                    //Pref.IsDDvistedOnceByDay=true
+                    if (Pref.DayStartMarked) {
+
+                        getLocforEnd()
+
+//                        if (Pref.IsDDvistedOnceByDay) {// 01-09-2021  end date time , point visit not checking
+                        /*val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_yes_no)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialogHeader.text = "Are you sure to Exit for the Day?"
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                        val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+    
+                            getLocforEnd()
+    
+    
+    
+                        })
+                        dialogNo.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()*/
+
+
+
+
+
+//                        }
+                        /* else {
+                             // 27-08-21 For ITC
+                             val simpleDialog = Dialog(mContext)
+                             simpleDialog.setCancelable(false)
+                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                             simpleDialog.setContentView(R.layout.dialog_message)
+                             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                             dialogHeader.text = "Please visit Point at once..."
+                             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                             dialogYes.setOnClickListener({ view ->
+                                 simpleDialog.cancel()
+                             })
+                             simpleDialog.show()
+                         }*/
+
+                    } else {
+                        // 27-08-21 For ITC
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
+                        dialogHeader.text = "Please start your day..."
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+//                        (mContext as DashboardActivity).showSnackMessage("Please start your day")
+                        //test
+                    }
+                }
+            }
+        }
+
+        private fun pointTvClick(){
+            if (!AppUtils.isOnline(mContext) && false) {
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            }
+            else {
+                if (!Pref.isAddAttendence) {
+                    // 27-08-21 For ITC
+                    val simpleDialog = Dialog(mContext)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
+                    dialogHeader.text = "Please Marked Your Attendance First..."
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+                    })
+                    simpleDialog.show()
+//                    (mContext as DashboardActivity).showSnackMessage("Please Marked Your Attendance First")
+                } else {
+                    if (!Pref.IsDDvistedOnceByDay) {
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_yes_no)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
+                        dialogHeader.text = "Wish to Visit Distributor Location Right Now?"
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                        val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                            getLocforDD()
+                        })
+                        dialogNo.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+                    } else {
+                        // 27-08-21 For ITC
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
+                        dialogHeader.text = "You are already visited once..."
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+
+                    }
+
+                }
+            }
+        }
+
 
 }

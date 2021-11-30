@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.borax12.materialdaterangepicker.date.DatePickerDialog
 import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.CustomStatic
+import com.breezefsmdsm.Customdialog.CustomDialog
+import com.breezefsmdsm.Customdialog.OnDialogCustomClickListener
 import com.breezefsmdsm.MonitorService
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
@@ -38,6 +40,7 @@ import com.breezefsmdsm.app.Pref.willShowUpdateDayPlan
 import com.breezefsmdsm.app.domain.*
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.AppUtils
+import com.breezefsmdsm.app.utils.AppUtils.Companion.hiFirstNameText
 import com.breezefsmdsm.app.utils.FTStorageUtils
 import com.breezefsmdsm.app.utils.NotificationUtils
 import com.breezefsmdsm.app.utils.PermissionUtils
@@ -334,6 +337,21 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         cv_mark_attendance_root = view.findViewById(R.id.cv_mark_attendance_root)
 
         faceDetectorSetUp()
+
+        if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+            if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                CustomDialog.getInstance(hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                    override fun onOkClick() {
+                        //Toaster.msgShort(mContext, "OK")
+                    }
+                    override fun onYesClick() {
+
+                    }
+                    override fun onNoClick() {
+                    }
+                }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+            }
+        }
     }
 
     override fun onResume() {

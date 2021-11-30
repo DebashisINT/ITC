@@ -322,4 +322,12 @@ object Pref : PreferenceHolder() {
 
 
 
+    var BatterySettingGlobal: Boolean by bindToPreferenceField(false, "BatterySettingGlobal")
+    var PowerSaverSettingGlobal: Boolean by bindToPreferenceField(false, "PowerSaverSettingGlobal")
+
+    var BatterySetting: Boolean by bindToPreferenceField(false, "BatterySetting")
+    var PowerSaverSetting: Boolean by bindToPreferenceField(false, "PowerSaverSetting")
+
+
+
 }

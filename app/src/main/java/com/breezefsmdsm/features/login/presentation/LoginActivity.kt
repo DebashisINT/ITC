@@ -391,6 +391,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     Pref.GPSAlertGlobal = configResponse.GPSAlert!!
 
 
+                                if (configResponse.BatterySetting != null)
+                                    Pref.BatterySettingGlobal = configResponse.BatterySetting!!
+
+                                if (configResponse.PowerSaverSetting != null)
+                                    Pref.PowerSaverSettingGlobal = configResponse.PowerSaverSetting!!
+
+
+
+
+
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
 
@@ -4964,6 +4974,22 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 }
                                                 XLog.d("DistributorGPSAccuracy " + Pref.DistributorGPSAccuracy)
                                             }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("BatterySetting", ignoreCase = true)) {
+                                                Pref.BatterySetting = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.BatterySetting = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("PowerSaverSetting", ignoreCase = true)) {
+                                                Pref.PowerSaverSetting = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.PowerSaverSetting = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+
 
 
 

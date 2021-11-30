@@ -63,5 +63,9 @@ class ConfigFetchResponseModel : BaseResponse() {
 
     var GPSAlert: Boolean? = null
 
+    var BatterySetting: Boolean? = null
+    var PowerSaverSetting: Boolean? = null
+
+
 
 }
