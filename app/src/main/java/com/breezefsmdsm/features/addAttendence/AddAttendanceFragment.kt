@@ -1214,7 +1214,13 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         var nearestDist=5000
         //var nearBy: Double = Pref.shopLocAccuracy.toDouble()
         //var nearBy: Double = 4000.00
-        var nearBy: Double = Pref.DistributorGPSAccuracy.toDouble()
+        var nearBy: Double = 500.0
+        try {
+            nearBy = Pref.DistributorGPSAccuracy.toDouble()
+        }catch (e:java.lang.Exception){
+            nearBy = 500.0
+            Pref.DistributorGPSAccuracy="500"
+        }
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
         var finalNearByDD: AssignToDDEntity = AssignToDDEntity()

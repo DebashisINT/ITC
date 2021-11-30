@@ -244,7 +244,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                             if(response.status== NetworkConstant.SUCCESS){
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.face_reg_success))
                                 Handler(Looper.getMainLooper()).postDelayed({
-                                    progress_wheel.stopSpinning()
+                                    //progress_wheel.stopSpinning()
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
 
 

@@ -3235,6 +3235,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
                                                 }
+                                                if(Pref.DistributorGPSAccuracy.length==0 || Pref.DistributorGPSAccuracy.equals("")){
+                                                    Pref.DistributorGPSAccuracy="500"
+                                                }
+                                                XLog.d("DistributorGPSAccuracy " + Pref.DistributorGPSAccuracy+"")
                                             }
 
 
