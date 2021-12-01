@@ -6092,7 +6092,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     fun getPicUrl(loginResponse: LoginResponse){
-        BaseActivity.isApiInitiated=false
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
                 repository.getUserFacePicUrlApi(loginResponse.user_details!!.user_id!!,loginResponse.session_token!!)
