@@ -1482,4 +1482,8 @@
     <string name="power_off_msg" translatable="false">Device Power Saver is ON.
     GPS Tracking or detection may not be working Properly.</string>
 
+    <string name="face_not_msg" translatable="false">Your registration is pending. Please talk to your head to get this done to login in the system.Thanks.</string>
+
+
+
 </resources>
