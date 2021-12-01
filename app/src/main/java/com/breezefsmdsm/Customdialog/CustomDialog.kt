@@ -8,12 +8,8 @@ import android.view.Window
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import com.demo.R
-import com.demo.app.utils.AppUtils
-import com.demo.base.presentation.BaseActivity
-import com.demo.features.commondialogsinglebtn.CommonDialogSingleBtn
-import com.demo.features.commondialogsinglebtn.OnDialogClickListener
-import com.demo.widgets.AppCustomTextView
+import com.breezefsmdsm.R
+import com.breezefsmdsm.widgets.AppCustomTextView
 
 
 class CustomDialog : DialogFragment(), View.OnClickListener{

@@ -4,14 +4,13 @@ package com.breezefsmdsm.features.login.presentation
 import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
-import android.app.Activity
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.location.Criteria
 import android.location.Location
 import android.location.LocationListener
@@ -36,6 +35,7 @@ import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.AlarmReceiver.Companion.setAlarm
 import com.breezefsmdsm.app.domain.*
+import com.breezefsmdsm.app.uiaction.DisplayAlert.Companion.showSnackMessage
 import com.breezefsmdsm.app.utils.*
 import com.breezefsmdsm.app.utils.AppUtils.Companion.getCurrentTimeInMintes
 import com.breezefsmdsm.base.BaseResponse
@@ -99,6 +99,8 @@ import com.breezefsmdsm.features.newcollection.model.PaymentModeResponseModel
 import com.breezefsmdsm.features.newcollection.newcollectionlistapi.NewCollectionListRepoProvider
 import com.breezefsmdsm.features.orderList.api.neworderlistapi.NewOrderListRepoProvider
 import com.breezefsmdsm.features.orderList.model.NewOrderListResponseModel
+import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
+import com.breezefsmdsm.features.photoReg.model.UserFacePicUrlResponse
 import com.breezefsmdsm.features.quotation.api.QuotationRepoProvider
 import com.breezefsmdsm.features.quotation.model.BSListResponseModel
 import com.breezefsmdsm.features.quotation.model.QuotationListResponseModel
@@ -3173,34 +3175,118 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     override fun onClick(p0: View?) {
         when (p0!!.id) {
             R.id.login_TV -> {
-                login_TV.isEnabled = false
-                println("xyzy - login called" + AppUtils.getCurrentDateTime());
-                //Crashlytics.getInstance().crash()
-                if (TextUtils.isEmpty(username_EDT.text.toString().trim())){
-                    showSnackMessage(getString(R.string.error_enter_username))
-                    login_TV.isEnabled = true
-                }
 
-                else if (TextUtils.isEmpty(password_EDT.text.toString().trim())){
-                    showSnackMessage(getString(R.string.error_enter_pwd))
-                    login_TV.isEnabled = true
+                  val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                val bytesAvailable: Long
+                bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    stat.blockSizeLong * stat.availableBlocksLong
+                } else {
+                    stat.blockSize.toLong() * stat.availableBlocks.toLong()
                 }
+                val megAvailable = bytesAvailable / (1024 * 1024)
+                println("storage "+megAvailable.toString());
+                XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
 
-                else {
-                    AppUtils.hideSoftKeyboard(this)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (Settings.canDrawOverlays(this)) {
-                            initiateLogin()
-                        } else {
-                            //Permission is not available. Display error text.
-                            getOverlayPermission()
-                        }
-                    } else {
-                        initiateLogin()
+
+                if(megAvailable<5000){
+                    val simpleDialog = Dialog(this)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    if(Pref.user_name!=null){
+                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                    }else{
+                        dialog_yes_no_headerTV.text = "Hi User"+"!"
                     }
+                    //dialogHeader.text = "You have only "+megAvailable.toString()+ " MB available to store data. It is not sufficient\n" +
+                            //"to proceed. Please clear memory and Retry Login again. Thanks."
+
+                    dialogHeader.text = "Please note that memory available is less than 5 GB. App may not function properly. Please make available memory greater than 5 GB."
+
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+                        login_TV.isEnabled = false
+                        println("xyzy - login called" + AppUtils.getCurrentDateTime());
+                        if (TextUtils.isEmpty(username_EDT.text.toString().trim())){
+                            showSnackMessage(getString(R.string.error_enter_username))
+                            login_TV.isEnabled = true
+                        }
+                        else if (TextUtils.isEmpty(password_EDT.text.toString().trim())){
+                            showSnackMessage(getString(R.string.error_enter_pwd))
+                            login_TV.isEnabled = true
+                        }
+                        else {
+                            AppUtils.hideSoftKeyboard(this)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (Settings.canDrawOverlays(this)) {
+                                    initiateLogin()
+                                } else {
+                                    //Permission is not available. Display error text.
+                                    getOverlayPermission()
+                                }
+                            } else {
+                                initiateLogin()
+                            }
 
 
+                        }
+                    })
+                    simpleDialog.show()
+                }else {
+                    login_TV.isEnabled = false
+                    println("xyzy - login called" + AppUtils.getCurrentDateTime());
+                    //Crashlytics.getInstance().crash()
+                    if (TextUtils.isEmpty(username_EDT.text.toString().trim())) {
+                        showSnackMessage(getString(R.string.error_enter_username))
+                        login_TV.isEnabled = true
+                    } else if (TextUtils.isEmpty(password_EDT.text.toString().trim())) {
+                        showSnackMessage(getString(R.string.error_enter_pwd))
+                        login_TV.isEnabled = true
+                    } else {
+                        AppUtils.hideSoftKeyboard(this)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (Settings.canDrawOverlays(this)) {
+                                initiateLogin()
+                            } else {
+                                //Permission is not available. Display error text.
+                                getOverlayPermission()
+                            }
+                        } else {
+                            initiateLogin()
+                        }
+                    }
                 }
+//                login_TV.isEnabled = false
+//                println("xyzy - login called" + AppUtils.getCurrentDateTime());
+//                //Crashlytics.getInstance().crash()
+//                if (TextUtils.isEmpty(username_EDT.text.toString().trim())){
+//                    showSnackMessage(getString(R.string.error_enter_username))
+//                    login_TV.isEnabled = true
+//                }
+//
+//                else if (TextUtils.isEmpty(password_EDT.text.toString().trim())){
+//                    showSnackMessage(getString(R.string.error_enter_pwd))
+//                    login_TV.isEnabled = true
+//                }
+//
+//                else {
+//                    AppUtils.hideSoftKeyboard(this)
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        if (Settings.canDrawOverlays(this)) {
+//                            initiateLogin()
+//                        } else {
+//                            //Permission is not available. Display error text.
+//                            getOverlayPermission()
+//                        }
+//                    } else {
+//                        initiateLogin()
+//                    }
+//
+//
+//                }
                 /*gotoHomeActivity()
                 isLoginLoaded = true*/
             }
@@ -3603,9 +3689,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     Pref.isAddAttendence = false
                                 }*/
 
-                                if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
+                                    /*Face Url get or not*/
+                                getPicUrl(loginResponse)
+
+                            /*    if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
                                     doAfterLoginFunctionality(loginResponse)
-                                } else {
+                                }
+                                else {
                                     doAsync {
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
                                         AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
@@ -3613,9 +3703,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                         AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
                                         AppDatabase.getDBInstance()!!.stateDao().deleteAll()
                                         AppDatabase.getDBInstance()!!.cityDao().deleteAll()
-                                        /*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
+                                        *//*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
                                         AppDatabase.getDBInstance()!!.marketingDetailImageDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().deleteAll()*/
+                                        AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().deleteAll()*//*
                                         AppDatabase.getDBInstance()!!.ppListDao().delete()
                                         AppDatabase.getDBInstance()!!.ddListDao().delete()
                                         AppDatabase.getDBInstance()!!.workTypeDao().delete()
@@ -3693,7 +3783,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 }
 
                                 XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
-
+*/
                             } else if (loginResponse.status == "220") {
                                 progress_wheel.stopSpinning()
                                 login_TV.isEnabled = true
@@ -5999,5 +6089,126 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             e.printStackTrace()
         }
         return destination
+    }
+
+    fun getPicUrl(loginResponse: LoginResponse){
+        BaseActivity.isApiInitiated=false
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        BaseActivity.compositeDisposable.add(
+                repository.getUserFacePicUrlApi(loginResponse.user_details!!.user_id!!,loginResponse.session_token!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as UserFacePicUrlResponse
+                            if(response.status== NetworkConstant.SUCCESS){
+                                XLog.d(" LoginActivity : FaceRegistration/FaceMatch" +response.status.toString() +", : "  + ", Success: ")
+                                if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
+                                    doAfterLoginFunctionality(loginResponse)
+                                }
+                                else {
+                                    doAsync {
+                                        AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.userAttendanceDataDao().delete()
+                                        AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.stateDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.cityDao().deleteAll()
+                                        /*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.marketingDetailImageDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().deleteAll()*/
+                                        AppDatabase.getDBInstance()!!.ppListDao().delete()
+                                        AppDatabase.getDBInstance()!!.ddListDao().delete()
+                                        AppDatabase.getDBInstance()!!.workTypeDao().delete()
+                                        AppDatabase.getDBInstance()!!.orderListDao().delete()
+                                        AppDatabase.getDBInstance()!!.orderDetailsListDao().delete()
+                                        AppDatabase.getDBInstance()!!.shopVisitImageDao().delete()
+                                        AppDatabase.getDBInstance()!!.updateStockDao().delete()
+                                        AppDatabase.getDBInstance()!!.performanceDao().delete()
+                                        AppDatabase.getDBInstance()!!.gpsStatusDao().delete()
+                                        AppDatabase.getDBInstance()!!.collectionDetailsDao().delete()
+                                        AppDatabase.getDBInstance()!!.inaccurateLocDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.leaveTypeDao().delete()
+                                        AppDatabase.getDBInstance()!!.routeDao().deleteRoute()
+                                        AppDatabase.getDBInstance()!!.productListDao().deleteAllProduct()
+                                        AppDatabase.getDBInstance()!!.orderProductListDao().delete()
+                                        AppDatabase.getDBInstance()!!.stockListDao().delete()
+                                        AppDatabase.getDBInstance()!!.routeShopListDao().deleteData()
+                                        AppDatabase.getDBInstance()!!.selectedWorkTypeDao().delete()
+                                        AppDatabase.getDBInstance()!!.selectedRouteListDao().deleteRoute()
+                                        AppDatabase.getDBInstance()!!.selectedRouteShopListDao().deleteData()
+                                        AppDatabase.getDBInstance()!!.updateOutstandingDao().delete()
+                                        AppDatabase.getDBInstance()!!.idleLocDao().delete()
+                                        AppDatabase.getDBInstance()!!.billingDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.billProductDao().delete()
+                                        AppDatabase.getDBInstance()!!.addMeetingDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.addMeetingTypeDao().deleteAll()
+                                        AppDatabase.getDBInstance()!!.productRateDao().deleteAll()
+                                        AppDatabase.getDBInstance()?.areaListDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.shopTypeDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.modelListDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.primaryAppListDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.secondaryAppListDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.leadTypeDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.stageDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.funnelStageDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.bsListDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.quotDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.typeListDao()?.delete()
+                                        AppDatabase.getDBInstance()?.memberAreaDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.memberShopDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.memberDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.clientDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.projectDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.activityDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.productDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.shopVisitAudioDao()?.delete()
+                                        AppDatabase.getDBInstance()?.taskDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.batteryNetDao()?.delete()
+                                        AppDatabase.getDBInstance()?.timesheetDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.activityDropdownDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.typeDao()?.delete()
+                                        AppDatabase.getDBInstance()?.priorityDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.activDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.addDocProductDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.addDocDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.addChemistProductDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.addChemistDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.documentTypeDao()?.delete()
+                                        AppDatabase.getDBInstance()?.documentListDao()?.deleteAll()
+                                        AppDatabase.getDBInstance()?.paymenttDao()?.delete()
+                                        AppDatabase.getDBInstance()?.entityDao()?.delete()
+                                        AppDatabase.getDBInstance()?.partyStatusDao()?.delete()
+                                        AppDatabase.getDBInstance()?.retailerDao()?.delete()
+                                        AppDatabase.getDBInstance()?.dealerDao()?.delete()
+                                        AppDatabase.getDBInstance()?.beatDao()?.delete()
+                                        AppDatabase.getDBInstance()?.assignToShopDao()?.delete()
+                                        AppDatabase.getDBInstance()!!.shopVisitCompetetorImageDao().deleteUnSyncedCopetetorImg()
+                                        Pref.isLocationActivitySynced = false
+                                        Pref.prevOrderCollectionCheckTimeStamp = 0L
+
+                                        uiThread {
+                                            doAfterLoginFunctionality(loginResponse)
+                                        }
+                                    }
+                                }
+                                XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
+
+
+                            }else{
+                                BaseActivity.isApiInitiated = false
+                                showSnackMessage(getString(R.string.face_not_msg))
+                                progress_wheel.stopSpinning()
+                                XLog.d("LoginActivity : FaceRegistration/FaceMatch : " + response.status.toString() +", : "  + ", Failed: ")
+                                login_TV.isEnabled = true
+                            }
+                        },{
+            error ->
+            if (error != null) {
+                progress_wheel.stopSpinning()
+                XLog.d("AddAttendanceFragment : FaceRegistration/FaceMatch : " + " : "  + ", ERROR: " + error.localizedMessage)
+                login_TV.isEnabled = true
+            }
+            BaseActivity.isApiInitiated = false
+        }))
     }
 }
