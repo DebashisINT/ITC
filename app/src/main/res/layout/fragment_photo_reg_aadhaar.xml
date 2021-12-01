@@ -80,8 +80,7 @@
             android:layout_centerVertical="true"
             wheel:matProg_barColor="@color/default_text_color"
             wheel:matProg_progressIndeterminate="true"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:layout_gravity="center" />
 
     </RelativeLayout>
 

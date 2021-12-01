@@ -242,6 +242,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             val response = result as FaceRegResponse
                             if(response.status== NetworkConstant.SUCCESS){
+                                XLog.d("Face Reg Url : "+response.face_image_link)
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.face_reg_success))
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     //progress_wheel.stopSpinning()
