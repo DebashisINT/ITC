@@ -8,6 +8,7 @@ import android.view.Window
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.breezefsmdsm.R
 import com.breezefsmdsm.widgets.AppCustomTextView
 
 
