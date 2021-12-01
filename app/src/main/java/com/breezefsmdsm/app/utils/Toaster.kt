@@ -88,7 +88,8 @@ object Toaster {
                 toast = Toast(context)
                 toast!!.view = layout
 
-                toast!!.duration = Toast.LENGTH_SHORT
+                //toast!!.duration = Toast.LENGTH_SHORT
+                toast!!.duration = Toast.LENGTH_LONG
 
 
                 toast!!.show()
