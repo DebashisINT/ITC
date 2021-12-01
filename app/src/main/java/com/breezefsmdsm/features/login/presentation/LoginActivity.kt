@@ -6099,6 +6099,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as UserFacePicUrlResponse
+//                            response.status = "200"
                             if(response.status== NetworkConstant.SUCCESS){
                                 XLog.d(" LoginActivity : FaceRegistration/FaceMatch" +response.status.toString() +", : "  + ", Success: ")
                                 if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
