@@ -30,6 +30,10 @@ interface GetUserListPhotoRegApi {
     @POST("FaceImageDetection/FaceImage")
     fun getAddUserFaceImage(@Query("data") face: String, @Part attachments: MultipartBody.Part?): Observable<FaceRegResponse>
 
+    @Multipart
+    @POST("AadharImageDetection/AadharImageSave")
+    fun getAddUserAadhaarImage(@Query("data") face: String, @Part attachments: MultipartBody.Part?): Observable<AadhaarPicRegResponse>
+
     @FormUrlEncoded
     @POST("FaceRegistration/FaceMatch")
     fun getUserFacePic(@Field("user_id") user_id: String,@Field("session_token") session_token: String ): Observable<UserFacePicUrlResponse>
@@ -48,6 +52,8 @@ interface GetUserListPhotoRegApi {
     @POST("UserWiseAadharInfo/UserAadharInfo")
     fun submitAadhaarDetailsSingle(@Body aadhaarSubmitData: AadhaarSubmitData): Observable<BaseResponse>
 
+    @POST("AadharImageDetectionInfo/UserAadharInfoSave")
+    fun submitAadhaarDetailsNewSingle(@Body aadhaarSubmitData: AadhaarSubmitDataNew): Observable<BaseResponse>
 
     companion object Factory {
         fun create(): GetUserListPhotoRegApi {

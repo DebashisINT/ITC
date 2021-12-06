@@ -473,6 +473,19 @@ class AppUtils {
             return f.format(convertedDate)
         }
 
+        fun convertLoginTimeToAutoLogoutTimeFormatyymmdd(loginDate: String): String {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            var convertedDate = Date()
+            try {
+                convertedDate = dateFormat.parse(loginDate) //"20130526160000"
+            } catch (e: ParseException) {
+                // TODO Auto-generated catch block
+                e.printStackTrace()
+            }
+            val f = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            return f.format(convertedDate)
+        }
+
         fun getDateFormat(loginDate: String): Date {
 //           loginDate: "dd-MMM-yy"
             val dateFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)

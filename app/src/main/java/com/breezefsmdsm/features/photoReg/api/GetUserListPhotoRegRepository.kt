@@ -42,6 +42,10 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
         return apiService.submitAadhaarDetailsSingle(aadhaarSubmitData)
     }
 
+    fun sendUserAadhaarInfoNewApi(aadhaarSubmitData:AadhaarSubmitDataNew): Observable<BaseResponse> {
+        return apiService.submitAadhaarDetailsNewSingle(aadhaarSubmitData)
+    }
+
     fun addUserFaceRegImg(obj: UserPhotoRegModel, user_image: String?, context: Context,user_contactid:String?): Observable<FaceRegResponse> {
         var profile_img_data: MultipartBody.Part? = null
         if (!TextUtils.isEmpty(user_image)){
@@ -62,6 +66,28 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
         }
 
         return  apiService.getAddUserFaceImage(jsonInString, profile_img_data)
+    }
+
+    fun addUserAadhaarImg(obj: UserPhotoRegModel, user_image: String?, context: Context,user_contactid:String?): Observable<AadhaarPicRegResponse> {
+        var profile_img_data: MultipartBody.Part? = null
+        if (!TextUtils.isEmpty(user_image)){
+            val profile_img_file = FileUtils.getFile(context, Uri.parse(user_image))
+            if (profile_img_file != null && profile_img_file.exists()) {
+                val profileImgBody = RequestBody.create(MediaType.parse("multipart/form-data"), profile_img_file)
+                profile_img_data = MultipartBody.Part.createFormData("attachments", profile_img_file.name.replaceAfter("cropped",user_contactid.toString()).replace("cropped","")+".jpg", profileImgBody)
+            }
+        }
+
+
+        var jsonInString = ""
+        try {
+            jsonInString = Gson().toJson(obj)
+            //  shopObject = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonInString)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
+
+        return  apiService.getAddUserAadhaarImage(jsonInString, profile_img_data)
     }
 
 

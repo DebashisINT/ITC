@@ -18,4 +18,8 @@ public class CustomStatic {
 
     public static String FaceDetectionAccuracyLower="";
     public static String FaceDetectionAccuracyUpper="";
+
+    public static String FacePicRegUrl="";
+    public static String AadhaarPicRegUrl="";
+
 }

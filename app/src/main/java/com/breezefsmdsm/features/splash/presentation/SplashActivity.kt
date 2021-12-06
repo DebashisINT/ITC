@@ -2,17 +2,17 @@ package com.breezefsmdsm.features.splash.presentation
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.PowerManager
+import android.os.*
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
@@ -38,6 +38,7 @@ import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.splash.presentation.api.VersionCheckingRepoProvider
 import com.breezefsmdsm.features.splash.presentation.model.VersionCheckingReponseModel
+import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -45,6 +46,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_splash.*
 import net.alexandroid.gps.GpsStatusDetector
 import kotlin.system.exitProcess
@@ -89,32 +91,15 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         progress_wheel = findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
 
+    storageSpace()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+      /*  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             if (Pref.isLocationPermissionGranted){
-                /*if (hasLocPermission()) {
-                    //locationProcess()
-                    var ttt="asd"
-                } else {
-                    requestLocPermission()
-                }*/
                 initPermissionCheck()
             }
-
-            ////
-
-            ////
             else {
-
-
                 LocationPermissionDialog.newInstance(object : LocationPermissionDialog.OnItemSelectedListener {
                     override fun onOkClick() {
-                      /*  if (hasLocPermission()) {
-                            //locationProcess()
-                            var ttt="asd"
-                        } else {
-                            requestLocPermission()
-                        }*/
                         initPermissionCheck()
                     }
 
@@ -126,7 +111,95 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         else {
             checkGPSProvider()
         }
-        permissionCheck()
+        permissionCheck()*/
+    }
+
+    private fun storageSpace(){
+        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+        val bytesAvailable: Long
+        bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            stat.blockSizeLong * stat.availableBlocksLong
+        } else {
+            stat.blockSize.toLong() * stat.availableBlocks.toLong()
+        }
+        val megAvailable = bytesAvailable / (1024 * 1024)
+        println("storage "+megAvailable.toString());
+        XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+
+        if(megAvailable<5000){
+            val simpleDialog = Dialog(this)
+            simpleDialog.setCancelable(false)
+            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialog.setContentView(R.layout.dialog_message)
+            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+            if(Pref.user_name!=null){
+                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+            }else{
+                dialog_yes_no_headerTV.text = "Hi User"+"!"
+            }
+            dialogHeader.text = "Please note that memory available is less than 5 GB. App may not function properly. Please make available memory greater than 5 GB."
+
+            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    if (Pref.isLocationPermissionGranted){
+                        initPermissionCheck()
+                    }
+                    else {
+                        LocationPermissionDialog.newInstance(object : LocationPermissionDialog.OnItemSelectedListener {
+                            override fun onOkClick() {
+                                initPermissionCheck()
+                            }
+
+                            override fun onCrossClick() {
+                                finish()
+                            }
+                        }).show(supportFragmentManager, "")
+                    }
+                else {
+                    checkGPSProvider()
+                }
+                permissionCheck()
+
+            })
+            simpleDialog.show()
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                if (Pref.isLocationPermissionGranted){
+                    /*if (hasLocPermission()) {
+                        //locationProcess()
+                        var ttt="asd"
+                    } else {
+                        requestLocPermission()
+                    }*/
+                    initPermissionCheck()
+                }
+                else {
+                    LocationPermissionDialog.newInstance(object : LocationPermissionDialog.OnItemSelectedListener {
+                        override fun onOkClick() {
+                            /*  if (hasLocPermission()) {
+                                  //locationProcess()
+                                  var ttt="asd"
+                              } else {
+                                  requestLocPermission()
+                              }*/
+                            initPermissionCheck()
+                        }
+
+                        override fun onCrossClick() {
+                            finish()
+                        }
+                    }).show(supportFragmentManager, "")
+                }
+            else {
+                checkGPSProvider()
+            }
+            permissionCheck()
+        }
+
     }
 
     private fun permissionCheck() {
@@ -180,16 +253,23 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         var permissionLists : Array<String> ?= null
 
         permissionLists = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-            arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            //arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
         else
             arrayOf<String>(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
         permissionUtils = PermissionUtils(this, object : PermissionUtils.OnPermissionListener {
            // @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
             override fun onPermissionGranted() {
-                Pref.isLocationPermissionGranted = true
 
-                checkGPSProvider()
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                   accessBackLoc()
+               }else{
+                   Pref.isLocationPermissionGranted = true
+                   checkGPSProvider()
+               }
+
+                //checkGPSProvider()
             }
 
             override fun onPermissionNotGranted() {
@@ -205,6 +285,28 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         }, permissionLists)
     }
 
+    private fun accessBackLoc(){
+        var permissionLists : Array<String> ?= null
+
+        permissionLists = arrayOf<String>( Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        permissionUtils = PermissionUtils(this, object : PermissionUtils.OnPermissionListener {
+            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+            override fun onPermissionGranted() {
+                Pref.isLocationPermissionGranted = true
+                checkGPSProvider()
+            }
+
+            override fun onPermissionNotGranted() {
+                //AppUtils.showButtonSnackBar(this@SplashActivity, rl_splash_main, getString(R.string.error_loc_permission_request_msg))
+                DisplayAlert.showSnackMessage(this@SplashActivity, alert_splash_snack_bar, getString(R.string.accept_permission))
+                Handler().postDelayed(Runnable {
+                    finish()
+                    exitProcess(0)
+                }, 3000)
+            }
+
+        }, permissionLists)
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

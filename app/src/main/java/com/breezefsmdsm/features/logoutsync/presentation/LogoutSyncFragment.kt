@@ -81,6 +81,7 @@ import com.breezefsmdsm.features.timesheet.model.AddTimeSheetInputModel
 import com.breezefsmdsm.features.viewAllOrder.api.addorder.AddOrderRepoProvider
 import com.breezefsmdsm.features.viewAllOrder.model.AddOrderInputParamsModel
 import com.breezefsmdsm.features.viewAllOrder.model.AddOrderInputProductList
+import com.breezefsmdsm.mappackage.SendBrod
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -4659,7 +4660,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private fun checkToCallActivity() {
 
-
+        SendBrod.stopBrod(mContext)
         var intent = Intent(mContext, MonitorService::class.java)
         intent.action = CustomConstants.STOP_MONITOR_SERVICE
         //mContext.startService(intent)

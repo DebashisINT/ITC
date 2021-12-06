@@ -3188,7 +3188,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
 
 
-                if(megAvailable<5000){
+                if(megAvailable<5000 && false){
                     val simpleDialog = Dialog(this)
                     simpleDialog.setCancelable(false)
                     simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -3690,7 +3690,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 }*/
 
                                     /*Face Url get or not*/
-                                getPicUrl(loginResponse)
+                                checkPhotoRegPermission(loginResponse)
 
                             /*    if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
                                     doAfterLoginFunctionality(loginResponse)
@@ -3808,7 +3808,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-    private fun doAfterLoginFunctionality(loginResponse: LoginResponse) {
+     fun doAfterLoginFunctionality(loginResponse: LoginResponse) {
         println("xyz - doLogin end"+AppUtils.getCurrentDateTime());
         println("xyz - doAfterLoginFunctionality started"+AppUtils.getCurrentDateTime());
         // setEveningAlarm(this, 15, 9)
@@ -6091,6 +6091,52 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         return destination
     }
 
+
+    private fun checkPhotoRegPermission(loginResponse: LoginResponse){
+        val repository = UserConfigRepoProvider.provideUserConfigRepository()
+        //progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.userConfig(loginResponse.user_details!!.user_id!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as UserConfigResponseModel
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                try {
+                                    if (response.getconfigure != null && response.getconfigure!!.size > 0) {
+                                        for (i in response.getconfigure!!.indices) {
+                                            if(response.getconfigure!![i].Key.equals("ShowFaceRegInMenu", ignoreCase = true)){
+                                                Pref.IsFaceDetectionOn = response.getconfigure!![i].Value == "1"
+                                                if (Pref.IsFaceDetectionOn) {
+                                                    proceedLoginProcess(loginResponse)
+                                                    break
+                                                } else {
+                                                    getPicUrl(loginResponse)
+                                                    break
+                                                }
+                                            }
+                                        }
+                                    }
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    proceedLoginProcess(loginResponse)
+                                }
+                            }else{
+                                Log.e("Login", "willLeaveApprovalEnable================> " + Pref.willLeaveApprovalEnable)
+                                println("xyz - callUserConfigApi ended"+AppUtils.getCurrentDateTime());
+                                progress_wheel.stopSpinning()
+                                proceedLoginProcess(loginResponse)
+                                //gotoHomeActivity()
+                            }
+                        }, { error ->
+                            error.printStackTrace()
+                            progress_wheel.stopSpinning()
+                            proceedLoginProcess(loginResponse)
+                            //gotoHomeActivity()
+                        })
+        )
+    }
+
     fun getPicUrl(loginResponse: LoginResponse){
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
@@ -6101,100 +6147,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             val response = result as UserFacePicUrlResponse
 //                            response.status = "200"
                             if(response.status== NetworkConstant.SUCCESS){
+
                                 XLog.d(" LoginActivity : FaceRegistration/FaceMatch" +response.status.toString() +", : "  + ", Success: ")
-                                if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
-                                    doAfterLoginFunctionality(loginResponse)
-                                }
-                                else {
-                                    doAsync {
-                                        AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.userAttendanceDataDao().delete()
-                                        AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.stateDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.cityDao().deleteAll()
-                                        /*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.marketingDetailImageDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().deleteAll()*/
-                                        AppDatabase.getDBInstance()!!.ppListDao().delete()
-                                        AppDatabase.getDBInstance()!!.ddListDao().delete()
-                                        AppDatabase.getDBInstance()!!.workTypeDao().delete()
-                                        AppDatabase.getDBInstance()!!.orderListDao().delete()
-                                        AppDatabase.getDBInstance()!!.orderDetailsListDao().delete()
-                                        AppDatabase.getDBInstance()!!.shopVisitImageDao().delete()
-                                        AppDatabase.getDBInstance()!!.updateStockDao().delete()
-                                        AppDatabase.getDBInstance()!!.performanceDao().delete()
-                                        AppDatabase.getDBInstance()!!.gpsStatusDao().delete()
-                                        AppDatabase.getDBInstance()!!.collectionDetailsDao().delete()
-                                        AppDatabase.getDBInstance()!!.inaccurateLocDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.leaveTypeDao().delete()
-                                        AppDatabase.getDBInstance()!!.routeDao().deleteRoute()
-                                        AppDatabase.getDBInstance()!!.productListDao().deleteAllProduct()
-                                        AppDatabase.getDBInstance()!!.orderProductListDao().delete()
-                                        AppDatabase.getDBInstance()!!.stockListDao().delete()
-                                        AppDatabase.getDBInstance()!!.routeShopListDao().deleteData()
-                                        AppDatabase.getDBInstance()!!.selectedWorkTypeDao().delete()
-                                        AppDatabase.getDBInstance()!!.selectedRouteListDao().deleteRoute()
-                                        AppDatabase.getDBInstance()!!.selectedRouteShopListDao().deleteData()
-                                        AppDatabase.getDBInstance()!!.updateOutstandingDao().delete()
-                                        AppDatabase.getDBInstance()!!.idleLocDao().delete()
-                                        AppDatabase.getDBInstance()!!.billingDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.billProductDao().delete()
-                                        AppDatabase.getDBInstance()!!.addMeetingDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.addMeetingTypeDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.productRateDao().deleteAll()
-                                        AppDatabase.getDBInstance()?.areaListDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.shopTypeDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.modelListDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.primaryAppListDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.secondaryAppListDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.leadTypeDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.stageDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.funnelStageDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.bsListDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.quotDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.typeListDao()?.delete()
-                                        AppDatabase.getDBInstance()?.memberAreaDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.memberShopDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.memberDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.clientDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.projectDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.activityDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.productDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.shopVisitAudioDao()?.delete()
-                                        AppDatabase.getDBInstance()?.taskDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.batteryNetDao()?.delete()
-                                        AppDatabase.getDBInstance()?.timesheetDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.activityDropdownDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.typeDao()?.delete()
-                                        AppDatabase.getDBInstance()?.priorityDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.activDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.addDocProductDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.addDocDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.addChemistProductDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.addChemistDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.documentTypeDao()?.delete()
-                                        AppDatabase.getDBInstance()?.documentListDao()?.deleteAll()
-                                        AppDatabase.getDBInstance()?.paymenttDao()?.delete()
-                                        AppDatabase.getDBInstance()?.entityDao()?.delete()
-                                        AppDatabase.getDBInstance()?.partyStatusDao()?.delete()
-                                        AppDatabase.getDBInstance()?.retailerDao()?.delete()
-                                        AppDatabase.getDBInstance()?.dealerDao()?.delete()
-                                        AppDatabase.getDBInstance()?.beatDao()?.delete()
-                                        AppDatabase.getDBInstance()?.assignToShopDao()?.delete()
-                                        AppDatabase.getDBInstance()!!.shopVisitCompetetorImageDao().deleteUnSyncedCopetetorImg()
-                                        Pref.isLocationActivitySynced = false
-                                        Pref.prevOrderCollectionCheckTimeStamp = 0L
-
-                                        uiThread {
-                                            doAfterLoginFunctionality(loginResponse)
-                                        }
-                                    }
-                                }
-                                XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
-
-
-                            }else{
+                                proceedLoginProcess(loginResponse)
+                            }
+                            else{
                                 BaseActivity.isApiInitiated = false
                                 showSnackMessage(getString(R.string.face_not_msg))
                                 progress_wheel.stopSpinning()
@@ -6210,5 +6167,182 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             }
             BaseActivity.isApiInitiated = false
         }))
+    }
+    fun proceedLoginProcess(loginResponse: LoginResponse){
+        try{
+            if (Pref.temp_user_id!! == loginResponse.user_details!!.user_id!! && Pref.temp_user_id!=null ) {
+                doAfterLoginFunctionality(loginResponse)
+            }
+            else {
+                doAsync {
+                    AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.userAttendanceDataDao().delete()
+                    AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.stateDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.cityDao().deleteAll()
+                    /*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.marketingDetailImageDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().deleteAll()*/
+                    AppDatabase.getDBInstance()!!.ppListDao().delete()
+                    AppDatabase.getDBInstance()!!.ddListDao().delete()
+                    AppDatabase.getDBInstance()!!.workTypeDao().delete()
+                    AppDatabase.getDBInstance()!!.orderListDao().delete()
+                    AppDatabase.getDBInstance()!!.orderDetailsListDao().delete()
+                    AppDatabase.getDBInstance()!!.shopVisitImageDao().delete()
+                    AppDatabase.getDBInstance()!!.updateStockDao().delete()
+                    AppDatabase.getDBInstance()!!.performanceDao().delete()
+                    AppDatabase.getDBInstance()!!.gpsStatusDao().delete()
+                    AppDatabase.getDBInstance()!!.collectionDetailsDao().delete()
+                    AppDatabase.getDBInstance()!!.inaccurateLocDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.leaveTypeDao().delete()
+                    AppDatabase.getDBInstance()!!.routeDao().deleteRoute()
+                    AppDatabase.getDBInstance()!!.productListDao().deleteAllProduct()
+                    AppDatabase.getDBInstance()!!.orderProductListDao().delete()
+                    AppDatabase.getDBInstance()!!.stockListDao().delete()
+                    AppDatabase.getDBInstance()!!.routeShopListDao().deleteData()
+                    AppDatabase.getDBInstance()!!.selectedWorkTypeDao().delete()
+                    AppDatabase.getDBInstance()!!.selectedRouteListDao().deleteRoute()
+                    AppDatabase.getDBInstance()!!.selectedRouteShopListDao().deleteData()
+                    AppDatabase.getDBInstance()!!.updateOutstandingDao().delete()
+                    AppDatabase.getDBInstance()!!.idleLocDao().delete()
+                    AppDatabase.getDBInstance()!!.billingDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.billProductDao().delete()
+                    AppDatabase.getDBInstance()!!.addMeetingDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.addMeetingTypeDao().deleteAll()
+                    AppDatabase.getDBInstance()!!.productRateDao().deleteAll()
+                    AppDatabase.getDBInstance()?.areaListDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.shopTypeDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.modelListDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.primaryAppListDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.secondaryAppListDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.leadTypeDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.stageDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.funnelStageDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.bsListDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.quotDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.typeListDao()?.delete()
+                    AppDatabase.getDBInstance()?.memberAreaDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.memberShopDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.memberDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.clientDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.projectDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.activityDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.productDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.shopVisitAudioDao()?.delete()
+                    AppDatabase.getDBInstance()?.taskDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.batteryNetDao()?.delete()
+                    AppDatabase.getDBInstance()?.timesheetDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.activityDropdownDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.typeDao()?.delete()
+                    AppDatabase.getDBInstance()?.priorityDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.activDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.addDocProductDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.addDocDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.addChemistProductDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.addChemistDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.documentTypeDao()?.delete()
+                    AppDatabase.getDBInstance()?.documentListDao()?.deleteAll()
+                    AppDatabase.getDBInstance()?.paymenttDao()?.delete()
+                    AppDatabase.getDBInstance()?.entityDao()?.delete()
+                    AppDatabase.getDBInstance()?.partyStatusDao()?.delete()
+                    AppDatabase.getDBInstance()?.retailerDao()?.delete()
+                    AppDatabase.getDBInstance()?.dealerDao()?.delete()
+                    AppDatabase.getDBInstance()?.beatDao()?.delete()
+                    AppDatabase.getDBInstance()?.assignToShopDao()?.delete()
+                    AppDatabase.getDBInstance()!!.shopVisitCompetetorImageDao().deleteUnSyncedCopetetorImg()
+                    Pref.isLocationActivitySynced = false
+                    Pref.prevOrderCollectionCheckTimeStamp = 0L
+                    uiThread {
+                        doAfterLoginFunctionality(loginResponse)
+                    }
+                }
+            }
+        }catch (ex:Exception){
+            doAsync {
+                AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
+                AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
+                AppDatabase.getDBInstance()!!.userAttendanceDataDao().delete()
+                AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
+                AppDatabase.getDBInstance()!!.stateDao().deleteAll()
+                AppDatabase.getDBInstance()!!.cityDao().deleteAll()
+                /*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
+                AppDatabase.getDBInstance()!!.marketingDetailImageDao().deleteAll()
+                AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().deleteAll()*/
+                AppDatabase.getDBInstance()!!.ppListDao().delete()
+                AppDatabase.getDBInstance()!!.ddListDao().delete()
+                AppDatabase.getDBInstance()!!.workTypeDao().delete()
+                AppDatabase.getDBInstance()!!.orderListDao().delete()
+                AppDatabase.getDBInstance()!!.orderDetailsListDao().delete()
+                AppDatabase.getDBInstance()!!.shopVisitImageDao().delete()
+                AppDatabase.getDBInstance()!!.updateStockDao().delete()
+                AppDatabase.getDBInstance()!!.performanceDao().delete()
+                AppDatabase.getDBInstance()!!.gpsStatusDao().delete()
+                AppDatabase.getDBInstance()!!.collectionDetailsDao().delete()
+                AppDatabase.getDBInstance()!!.inaccurateLocDao().deleteAll()
+                AppDatabase.getDBInstance()!!.leaveTypeDao().delete()
+                AppDatabase.getDBInstance()!!.routeDao().deleteRoute()
+                AppDatabase.getDBInstance()!!.productListDao().deleteAllProduct()
+                AppDatabase.getDBInstance()!!.orderProductListDao().delete()
+                AppDatabase.getDBInstance()!!.stockListDao().delete()
+                AppDatabase.getDBInstance()!!.routeShopListDao().deleteData()
+                AppDatabase.getDBInstance()!!.selectedWorkTypeDao().delete()
+                AppDatabase.getDBInstance()!!.selectedRouteListDao().deleteRoute()
+                AppDatabase.getDBInstance()!!.selectedRouteShopListDao().deleteData()
+                AppDatabase.getDBInstance()!!.updateOutstandingDao().delete()
+                AppDatabase.getDBInstance()!!.idleLocDao().delete()
+                AppDatabase.getDBInstance()!!.billingDao().deleteAll()
+                AppDatabase.getDBInstance()!!.billProductDao().delete()
+                AppDatabase.getDBInstance()!!.addMeetingDao().deleteAll()
+                AppDatabase.getDBInstance()!!.addMeetingTypeDao().deleteAll()
+                AppDatabase.getDBInstance()!!.productRateDao().deleteAll()
+                AppDatabase.getDBInstance()?.areaListDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.shopTypeDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.modelListDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.primaryAppListDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.secondaryAppListDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.leadTypeDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.stageDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.funnelStageDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.bsListDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.quotDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.typeListDao()?.delete()
+                AppDatabase.getDBInstance()?.memberAreaDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.memberShopDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.memberDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.clientDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.projectDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.activityDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.productDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.shopVisitAudioDao()?.delete()
+                AppDatabase.getDBInstance()?.taskDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.batteryNetDao()?.delete()
+                AppDatabase.getDBInstance()?.timesheetDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.activityDropdownDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.typeDao()?.delete()
+                AppDatabase.getDBInstance()?.priorityDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.activDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.addDocProductDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.addDocDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.addChemistProductDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.addChemistDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.documentTypeDao()?.delete()
+                AppDatabase.getDBInstance()?.documentListDao()?.deleteAll()
+                AppDatabase.getDBInstance()?.paymenttDao()?.delete()
+                AppDatabase.getDBInstance()?.entityDao()?.delete()
+                AppDatabase.getDBInstance()?.partyStatusDao()?.delete()
+                AppDatabase.getDBInstance()?.retailerDao()?.delete()
+                AppDatabase.getDBInstance()?.dealerDao()?.delete()
+                AppDatabase.getDBInstance()?.beatDao()?.delete()
+                AppDatabase.getDBInstance()?.assignToShopDao()?.delete()
+                AppDatabase.getDBInstance()!!.shopVisitCompetetorImageDao().deleteUnSyncedCopetetorImg()
+                Pref.isLocationActivitySynced = false
+                Pref.prevOrderCollectionCheckTimeStamp = 0L
+                uiThread {
+                    doAfterLoginFunctionality(loginResponse)
+                }
+            }
+        }
+        XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
     }
 }

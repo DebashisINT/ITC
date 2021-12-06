@@ -152,6 +152,12 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
     }
 
+    fun loadUpdateList(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            callUSerListApi()
+        }, 300)
+    }
+
     private var permissionUtils: PermissionUtils? = null
     private fun initPermissionCheck() {
         permissionUtils = PermissionUtils(mContext as Activity, object : PermissionUtils.OnPermissionListener {
@@ -303,7 +309,9 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         adapter = AdapterUserList(mContext, userList!!, object : PhotoRegUserListner {
 
             override fun getUserInfoOnLick(obj: UserListResponseModel) {
-                (mContext as DashboardActivity).loadFragment(FragType.RegisTerFaceFragment, true, obj)
+                (mContext as DashboardActivity).loadFragment(FragType.RegisTerFaceFragment, false, obj)
+                //(mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment, true, obj)
+
             }
 
             override fun getPhoneOnLick(phone: String) {
@@ -367,37 +375,18 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                 val faceCanel = simpleDialogg.findViewById(R.id.iv_face_reg_cancel) as ImageView
                 faceName.text = name
 
-                //var ppiic=Picasso.setSingletonInstance(getCustomPicasso()!!)
-                //Picasso.get().load(img_link).resize(500, 500).into(faceImg);
-
-
-                /*          Glide.with(mContext)
-                             .load(img_link)
-                             .into(faceImg)
-                                  .clearOnDetach()*/
-
                 val picasso = Picasso.Builder(mContext)
                         .memoryCache(Cache.NONE)
                         .indicatorsEnabled(false)
-                        .loggingEnabled(true) //add other settings as needed
+                        .loggingEnabled(true)
                         .build()
-                //Picasso.setSingletonInstance(picasso)
+
                 picasso.load(Uri.parse(img_link))
                         .centerCrop()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
                         .resize(500, 500)
                         .into(faceImg)
-
-                /*Picasso.get()
-                        .load(Uri.parse(img_link))
-                        .resize(500, 500)
-                        .into(faceImg)*/
-
-                /*  Picasso.get()
-                          .load(img_link)
-                          .resize(500, 500)
-                          .into(faceImg)*/
 
 
                 progress_wheel.stopSpinning()
@@ -420,7 +409,57 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
             }
 
             override fun getAadhaarOnLick(obj: UserListResponseModel) {
-                OpenDialogForAdhaarReg(obj)
+                //OpenDialogForAdhaarReg(obj)
+                if(!obj.aadhar_image_link!!.contains("CommonFolder"))
+                    return
+
+                progress_wheel.spin()
+                val simpleDialogg = Dialog(mContext)
+                simpleDialogg.setCancelable(true)
+                simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogg.setContentView(R.layout.view_face_img)
+
+
+                val faceImg = simpleDialogg.findViewById(R.id.iv_face_img) as ImageView
+                faceImg.setImageDrawable(null)
+                faceImg.setBackgroundDrawable(null)
+                faceImg.invalidate();
+                faceImg.setImageBitmap(null);
+                val faceName = simpleDialogg.findViewById(R.id.face_name) as AppCustomTextView
+                val faceCanel = simpleDialogg.findViewById(R.id.iv_face_reg_cancel) as ImageView
+                faceName.text = obj.user_name!!
+
+                val picasso = Picasso.Builder(mContext)
+                        .memoryCache(Cache.NONE)
+                        .indicatorsEnabled(false)
+                        .loggingEnabled(true)
+                        .build()
+
+                picasso.load(Uri.parse(obj.aadhar_image_link))
+                        .centerCrop()
+                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                        .resize(500, 500)
+                        .into(faceImg)
+
+
+                progress_wheel.stopSpinning()
+
+
+                simpleDialogg.show()
+
+                faceCanel.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                })
+
+                simpleDialogg.setOnCancelListener({ view ->
+                    simpleDialogg.dismiss()
+
+                })
+                simpleDialogg.setOnDismissListener({ view ->
+                    simpleDialogg.dismiss()
+
+                })
             }
         }, {
             it

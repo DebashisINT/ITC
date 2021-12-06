@@ -160,6 +160,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         //startActivity(Intent(mContext, CustomCameraActivity::class.java))
 
         launchCamera()
+        //(mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
     }
 
     fun showPictureDialog() {
@@ -245,21 +246,25 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                                 XLog.d("Face Reg Url : "+response.face_image_link)
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.face_reg_success))
                                 Handler(Looper.getMainLooper()).postDelayed({
-                                    //progress_wheel.stopSpinning()
+                                    progress_wheel.stopSpinning()
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
 
-
+                                    CustomStatic.FacePicRegUrl=response.face_image_link
                                     //afterFaceRegistered()
-                                    (mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
+                                    (mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,false,valueData)
                                 }, 500)
 
                                 XLog.d(" RegisTerFaceFragment : FaceImageDetection/FaceImage" +response.status.toString() +", : "  + ", Success: "+AppUtils.getCurrentDateTime().toString())
                             }else{
+                                progress_wheel.stopSpinning()
+                                CustomStatic.FacePicRegUrl=""
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_reg_face))
                                 XLog.d("RegisTerFaceFragment : FaceImageDetection/FaceImage : " + response.status.toString() +", : "  + ", Failed: "+AppUtils.getCurrentDateTime().toString())
                             }
                         },{
                             error ->
+                            progress_wheel.stopSpinning()
+                            CustomStatic.FacePicRegUrl=""
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_reg_face))
                             if (error != null) {
                                 XLog.d("RegisTerFaceFragment : FaceImageDetection/FaceImage : " + " : "  + ", ERROR: " + error.localizedMessage)

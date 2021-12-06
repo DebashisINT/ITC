@@ -60,6 +60,7 @@ import com.breezefsmdsm.faceRec.env.ImageUtils;
 import com.breezefsmdsm.faceRec.env.Logger;
 import com.breezefsmdsm.faceRec.tflite.SimilarityClassifier;
 import com.breezefsmdsm.faceRec.tracking.MultiBoxTracker;
+import com.elvishew.xlog.XLog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.mlkit.vision.common.InputImage;
@@ -658,9 +659,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
           }
           //println("Face_Value "+lowerLi.toString() + " : "+upperLi.toString());
           //Log.v("Face_Value",lowerLi.toString() + " : "+upperLi.toString());
-          println("Face_Value "+String.valueOf(conf));
-          Log.v("Face_Value",String.valueOf(conf));
-          if (conf>lowerLi && conf < 0.98f) {
+          XLog.d("DetectorActivity lowerLi: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
+          if (conf>lowerLi && conf < 0.99f) {
           //if (conf>lowerLi && conf < upperLi) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
             confidence = conf;

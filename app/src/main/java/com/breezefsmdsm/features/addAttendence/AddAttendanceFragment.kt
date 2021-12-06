@@ -1281,8 +1281,15 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
         val allDDList = AppDatabase.getDBInstance()!!.ddListDao().getAll()
         val newDDList = java.util.ArrayList<AssignToDDEntity>()
+
+
+        var isDDLatLongNull=true
+
         for (i in allDDList.indices) {
             newDDList.add(allDDList[i])
+            if(!allDDList[i].dd_latitude.toString().equals("0") && !allDDList[i].dd_longitude.toString().equals("0")){
+                isDDLatLongNull=false
+            }
         }
 
         if (newDDList != null && newDDList.size > 0) {
@@ -1311,19 +1318,13 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                 }
             }
 
-        } else {
+        }
+        else {
             //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
         }
-        //visibilityCheck()
-        if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
-            //attendance given
-            visibilityCheck()
-            //callAddAttendanceApi(addAttendenceModel)
-        } else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
-            //attendance given
-            visibilityCheck()
-           // callAddAttendanceApi(addAttendenceModel)
-        } else {
+
+
+        if(isDDLatLongNull){
             progress_wheel.stopSpinning()
             val simpleDialog = Dialog(mContext)
             simpleDialog.setCancelable(false)
@@ -1331,32 +1332,64 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             simpleDialog.setContentView(R.layout.dialog_message_broad)
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-            //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
             dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-            if(nearestDist==5000){
-                dialogHeader.text = "You must be either in Distributor or Outlet point to mark your attendance"+
-                        ". Current location has been detected "+nearestDist.toString() +" mtr or more distance from the Distributor or Retail point from your handset GPS."
-            }else{
-                dialogHeader.text = "You must be either in Distributor or Outlet point to mark your attendance"+
-                        ". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
-            }
+            dialogHeader.text="Attendance is not possible. Distributor/Nearest Shop address is not updated in this app. Talk to your head."
 
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
             })
             simpleDialog.show()
-            //(mContext as DashboardActivity).showSnackMessage("You must be either in Distributor or Outlet point to mark your attendance"+
-                    //". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS." )
+        }else{
+            if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
+                //attendance given
+                visibilityCheck()
+                //callAddAttendanceApi(addAttendenceModel)
+            }
+            else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
+                //attendance given
+                visibilityCheck()
+                // callAddAttendanceApi(addAttendenceModel)
+            }
+            else {
+                progress_wheel.stopSpinning()
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_message_broad)
+                val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                if(nearestDist==5000){
+                    dialogHeader.text = "You must be either in Distributor or Outlet point to mark your attendance"+
+                            ". Current location has been detected "+nearestDist.toString() +" mtr or more distance from the Distributor or Retail point from your handset GPS."
+                }else{
+                    dialogHeader.text = "You must be either in Distributor or Outlet point to mark your attendance"+
+                            ". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS."
+                }
+
+                val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                dialogYes.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                })
+                simpleDialog.show()
+                //(mContext as DashboardActivity).showSnackMessage("You must be either in Distributor or Outlet point to mark your attendance"+
+                //". Current location has been detected "+nearestDist.toString() +" mtr distance from the Distributor or Retail point from your handset GPS." )
+            }
         }
+
+
+
 
     }
 
     override fun onClick(view: View?) {
         when (view?.id) {
             R.id.tv_attendance_submit -> {
+                //getLocforStart()
+
                 AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
-                //01-09-2021
                 workTypeId="9"
                 if(Pref.IsShowDayStart){
                     getLocforStart()

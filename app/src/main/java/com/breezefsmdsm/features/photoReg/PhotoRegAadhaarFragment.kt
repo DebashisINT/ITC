@@ -8,7 +8,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.speech.tts.TextToSpeech
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,16 +23,27 @@ import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Response
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
+import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.MySingleton
 import com.breezefsmdsm.R
+import com.breezefsmdsm.app.NetworkConstant
+import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.Toaster
+import com.breezefsmdsm.base.BaseResponse
+import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
-import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
+import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
+import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
+import com.breezefsmdsm.features.photoReg.model.*
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.elvishew.xlog.XLog
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.themechangeapp.pickimage.PermissionHelper
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -129,7 +144,9 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                         simpleDialogg.setContentView(R.layout.dialog_yes_no)
                         val dialogHeader = simpleDialogg.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-                        dialogHeader.text="Do you want to submit ?"
+                        val dialogHead = simpleDialogg.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                        dialogHeader.text="Submit for verification"
+                        dialogHead.text="Hi "+Pref.user_name!!+"!"
                         val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
                         val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
 
@@ -145,6 +162,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         dialogNo.setOnClickListener( { view ->
                             simpleDialogg.cancel()
                         })
+                        simpleDialogg.show()
                     }
                 }
             }
@@ -153,11 +171,53 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
 
 
     private fun uploadAadhaarPic(){
+        XLog.d("PhotoRegAadhaarFragment uploadAadhaarPic initiate")
         progress_wheel.spin()
+        var obj= UserPhotoRegModel()
+        obj.user_id= user_id
+        obj.session_token= Pref.session_token
+        obj.registration_date_time=AppUtils.getCurrentDateTime()
 
-        //after success
-        //faceAadhaarCompareParam()
+        val repository = GetUserListPhotoRegProvider.providePhotoReg()
+        BaseActivity.compositeDisposable.add(
+                repository.addUserAadhaarImg(obj,imagePath,mContext, user_contactid)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as AadhaarPicRegResponse
+                            if(response.status.toString() == NetworkConstant.SUCCESS){
+                                XLog.d("PhotoRegAadhaarFragment AadharImageDetection/AadharImageSave response : "+response.status+" link : "+response.aadhaar_image_link+" "+AppUtils.getCurrentDateTime().toString())
+                                //(mContext as DashboardActivity).showSnackMessage(getString(R.string.face_reg_success))
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    progress_wheel.stopSpinning()
+                                    CustomStatic.AadhaarPicRegUrl=response.aadhaar_image_link
+                                    if(CustomStatic.FacePicRegUrl!="" && CustomStatic.AadhaarPicRegUrl!=""){
+                                        XLog.d("PhotoRegAadhaarFragment face url: "+CustomStatic.FacePicRegUrl+" aadhaar url : "+CustomStatic.AadhaarPicRegUrl+AppUtils.getCurrentDateTime().toString())
+                                        faceAadhaarCompareParam(CustomStatic.FacePicRegUrl,CustomStatic.AadhaarPicRegUrl)
+                                    }else{
+                                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                        deletePicApi(user_id!!)
+                                    }
+                                }, 500)
 
+                            }else{
+                                progress_wheel.stopSpinning()
+                                CustomStatic.AadhaarPicRegUrl=""
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                XLog.d("PhotoRegAadhaarFragment : AadharImageDetection/AadharImageSave : " + response.status.toString() +", : "  + ", Failed: "+AppUtils.getCurrentDateTime().toString())
+                                deletePicApi(user_id!!)
+                            }
+                        },{
+                            error ->
+                            CustomStatic.AadhaarPicRegUrl=""
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            progress_wheel.stopSpinning()
+                            if (error != null) {
+                                XLog.d("PhotoRegAadhaarFragment : AadharImageDetection/AadharImageSave : " + " : "  + ", ERROR: " + error.localizedMessage)
+                            }
+                            deletePicApi(user_id!!)
+                        })
+        )
     }
 
     private fun faceAadhaarCompareParam( doc1:String, doc2:String) {
@@ -168,8 +228,8 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
             notificationBody.put("document2", doc2)
             jsonObject.put("data", notificationBody)
             val jsonArray = JSONArray()
-            jsonObject.put("task_id", "11986")
-            jsonObject.put("group_id", "11986")
+            jsonObject.put("task_id", user_id)
+            jsonObject.put("group_id", user_id)
             faceAadhaarCompare(jsonObject)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -177,6 +237,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
     }
 
     fun faceAadhaarCompare(notification: JSONObject) {
+        progress_wheel.spin()
         val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest("https://eve.idfy.com/v3/tasks/sync/compare/face", notification,
                 object : Response.Listener<JSONObject?> {
                     override fun onResponse(response: JSONObject?) {
@@ -184,13 +245,25 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         jObj=response!!.getJSONObject("result")
                         var isMatch=jObj.getBoolean("is_a_match")
                         var matchScore=jObj.getDouble("match_score")
-                        extractAadhaarDtls()
+                        //(mContext as DashboardActivity).showSnackMessage(matchScore.toString())
+                        progress_wheel.stopSpinning()
+
+                        if(isMatch){
+                            if(matchScore>60.00){
+                                extractAadhaarDtls(CustomStatic.AadhaarPicRegUrl)
+                            }else{
+                                (mContext as DashboardActivity).showSnackMessage("Face Not Match")
+                            }
+                        }else{
+                            (mContext as DashboardActivity).showSnackMessage("Face Not Match")
+                        }
+
                     }
                 },
                 object : Response.ErrorListener {
                     override fun onErrorResponse(error: VolleyError?) {
-                        var yy="wre"
-
+                        progress_wheel.stopSpinning()
+                        deletePicApi(user_id!!)
                     }
                 }) {
             @Throws(AuthFailureError::class)
@@ -210,36 +283,37 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
 
     }
 
-    fun extractAadhaarDtls(){
+    fun extractAadhaarDtls(doc:String){
+        progress_wheel.spin()
         try {
             val jsonObject = JSONObject()
             val notificationBody = JSONObject()
-            notificationBody.put("document1", "http://3.7.30.86:82/CommonFolder/AadharImage/119842021-11-22image_1637569676078.jpg")
+            notificationBody.put("document1", doc)
             notificationBody.put("consent", "yes")
             jsonObject.put("data", notificationBody)
             val jsonArray = JSONArray()
-            jsonObject.put("task_id", "11986")
-            jsonObject.put("group_id", "11986")
+            jsonObject.put("task_id", user_id)
+            jsonObject.put("group_id", user_id)
 
 
             val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest("https://eve.idfy.com/v3/tasks/sync/extract/ind_aadhaar", jsonObject,
                     object : Response.Listener<JSONObject?> {
                         override fun onResponse(response: JSONObject?) {
+                            progress_wheel.stopSpinning()
                             var jObj:JSONObject= JSONObject()
                             jObj=response!!.getJSONObject("result")
                             var tt=jObj.getJSONObject("extraction_output")
-                            var ttt=tt.getString("date_of_birth")
-                            var tttt=tt.getString("name_on_card")
-                            var aad_no=tt.getString("id_number")
-                            var gg="asd"
-                            Toaster.msgShort(mContext,"DOB "+ttt.toString()+" Name "+tttt.toString()+" aadhaar No "+aad_no.toString())
-                            //checkCustom("http://3.7.30.86:82/CommonFolder/FaceImageDetection/EMS0000070.jpg","http://3.7.30.86:82/CommonFolder/FaceImageDetection/EMS0000070.jpg")
+                            var dob_aadhaar=tt.getString("date_of_birth")
+                            var name_aadhaar=tt.getString("name_on_card")
+                            var aadhaar_no_aadhaar=tt.getString("id_number")
+                            XLog.d("PhotoRegAadhaarFragment : idfy response : user_id:"+ user_id+" name:"+name_aadhaar+" aarhaarDOB:"+dob_aadhaar+" aadhaar_no:"+aadhaar_no_aadhaar)
+                            submitCheckAadhaarData(name_aadhaar,dob_aadhaar,aadhaar_no_aadhaar)
                         }
                     },
                     object : Response.ErrorListener {
                         override fun onErrorResponse(error: VolleyError?) {
-                            var yy="wre"
-
+                            progress_wheel.stopSpinning()
+                            deletePicApi(user_id!!)
                         }
                     }) {
                 @Throws(AuthFailureError::class)
@@ -261,6 +335,113 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
+            progress_wheel.stopSpinning()
+        }
+    }
+
+    private fun submitCheckAadhaarData(aadhaar_name:String,aarhaarDOB:String,aadhaar_no:String){
+        XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData : user_id:"+ user_id+" name:"+aadhaar_name+" aarhaarDOB:"+aarhaarDOB+" aadhaar_no:"+aadhaar_no)
+        progress_wheel.spin()
+        var aadhaarSubmitData: AadhaarSubmitDataNew = AadhaarSubmitDataNew()
+        aadhaarSubmitData.user_id= user_id!!
+        aadhaarSubmitData.session_token= Pref.session_token!!
+        aadhaarSubmitData.name_on_aadhaar= aadhaar_name!!
+        aadhaarSubmitData.DOB_on_aadhaar= aarhaarDOB!!
+        aadhaarSubmitData.Aadhaar_number= aadhaar_no!!
+
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        BaseActivity.compositeDisposable.add(
+                repository.sendUserAadhaarInfoNewApi(aadhaarSubmitData)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as BaseResponse
+                            progress_wheel.stopSpinning()
+                            XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData response: "+response.status)
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                dialogSuccess()
+                                //(mContext as DashboardActivity).showSnackMessage("Registration Success.")
+                            } else {
+
+                                //(mContext as DashboardActivity).showSnackMessage("Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                deletePicApi(user_id!!)
+                            }
+
+                        }, { error ->
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData error: "+error.message)
+                            deletePicApi(user_id!!)
+                        })
+        )
+    }
+
+    fun deletePicApi(usr_id: String) {
+        progress_wheel.spin()
+        val repository = GetUserListPhotoRegProvider.providePhotoReg()
+        BaseActivity.compositeDisposable.add(
+                repository.deleteUserPicApi(usr_id, Pref.session_token!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as DeleteUserPicResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                dialogFailed()
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            XLog.d("PhotoRegAadhaarFragment : deletePicApi error: "+error.message)
+//                            (mContext as DashboardActivity).showSnackMessage("ERROR")
+                        })
+        )
+
+    }
+
+    fun dialogSuccess(){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_message)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+        dialogHeader.text = "Registration Success."
+        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+            (mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
+        })
+        simpleDialog.show()
+        voiceAttendanceMsg(AppUtils.hiFirstNameText() +" Registration Success.")
+    }
+
+    fun dialogFailed(){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_message)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+        dialogHeader.text = "Duplicate Aadhaar Number. Please enter Unique Aadhaar number for current person. Thanks."
+        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+            (mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
+        })
+        simpleDialog.show()
+        voiceAttendanceMsg(AppUtils.hiFirstNameText() +" Duplicate Aadhaar Number.")
+    }
+
+    private fun voiceAttendanceMsg(msg: String) {
+        if (Pref.isVoiceEnabledForAttendanceSubmit) {
+            val speechStatus = (mContext as DashboardActivity).textToSpeech.speak(msg, TextToSpeech.QUEUE_FLUSH, null)
+            if (speechStatus == TextToSpeech.ERROR)
+                Log.e("Add Day Start", "TTS error in converting Text to Speech!");
         }
     }
 

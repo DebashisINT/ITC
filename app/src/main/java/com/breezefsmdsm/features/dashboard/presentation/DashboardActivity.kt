@@ -6406,7 +6406,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             })
             simpleDialog.show()
 
-        } else {
+        }/*else if (getFragment() != null && getFragment() is RegisTerFaceFragment) {
+            super.onBackPressed()
+            if (getFragment() != null && getFragment() is ProtoRegistrationFragment){
+                (getFragment() as ProtoRegistrationFragment).loadUpdateList()
+            }
+        }*/ else {
             super.onBackPressed()
 
             when {
