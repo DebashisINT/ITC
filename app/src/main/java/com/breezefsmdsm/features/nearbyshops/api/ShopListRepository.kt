@@ -45,6 +45,10 @@ class ShopListRepository(val apiService: ShopListApi) {
         return apiService.getStageList(Pref.session_token!!, Pref.user_id!!)
     }
 
+    fun getProsList(): Observable<ProsListResponseModel> {
+        return apiService.getProsList(Pref.session_token!!, Pref.user_id!!)
+    }
+
     fun getFunnelStageList(): Observable<FunnelStageListResponseModel> {
         return apiService.getFunnelStageList(Pref.session_token!!, Pref.user_id!!)
     }

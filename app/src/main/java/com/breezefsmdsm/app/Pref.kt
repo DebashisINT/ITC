@@ -324,6 +324,8 @@ object Pref : PreferenceHolder() {
 
     var BatterySettingGlobal: Boolean by bindToPreferenceField(false, "BatterySettingGlobal")
     var PowerSaverSettingGlobal: Boolean by bindToPreferenceField(false, "PowerSaverSettingGlobal")
+    var Show_App_Logout_Notification_Global: Boolean by bindToPreferenceField(false, "Show_App_Logout_Notification_Global")
+    var Show_App_Logout_Notification: Boolean by bindToPreferenceField(false, "Show_App_Logout_Notification")
 
     var BatterySetting: Boolean by bindToPreferenceField(false, "BatterySetting")
     var PowerSaverSetting: Boolean by bindToPreferenceField(false, "PowerSaverSetting")

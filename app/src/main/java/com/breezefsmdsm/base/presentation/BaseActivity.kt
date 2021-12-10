@@ -684,11 +684,13 @@ private fun calllogoutApi(user_id: String, session_id: String) {
 
 
     Handler().postDelayed(Runnable {
-        SendBrod.stopBrod(this)
+
     var intent = Intent(this, MonitorService::class.java)
     intent.action = CustomConstants.STOP_MONITOR_SERVICE
     //mContext.startService(intent)
     stopService(intent)
+
+        SendBrod.stopBrod(this)
 
     var distance = 0.0
     val list = AppDatabase.getDBInstance()!!.userLocationDataDao().all

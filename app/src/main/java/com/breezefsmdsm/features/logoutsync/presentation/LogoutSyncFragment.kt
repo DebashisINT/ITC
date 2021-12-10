@@ -4660,11 +4660,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private fun checkToCallActivity() {
 
-        SendBrod.stopBrod(mContext)
+
         var intent = Intent(mContext, MonitorService::class.java)
         intent.action = CustomConstants.STOP_MONITOR_SERVICE
         //mContext.startService(intent)
         mContext.stopService(intent)
+
+        SendBrod.stopBrod(mContext)
+        XLog.d("==============checkToCallActivity (Logout Sync)====================" + "   MonitorService Stop , MonitorBrodcastStop")
 
         if (Pref.willActivityShow) {
             val list = AppDatabase.getDBInstance()?.activDao()?.getDataSyncWise(false)
@@ -5704,6 +5707,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun logoutYesClick() {
+        var intent = Intent(mContext, MonitorService::class.java)
+        intent.action = CustomConstants.STOP_MONITOR_SERVICE
+        //mContext.startService(intent)
+        mContext.stopService(intent)
+
+        SendBrod.stopBrod(mContext)
+        XLog.d("==============logoutYesClick (Logout Sync)====================" + "   MonitorService Stop , MonitorBrodcastStop")
+
         val list = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationNotUploaded(false)
 
         if (AppUtils.isOnline(mContext)) {

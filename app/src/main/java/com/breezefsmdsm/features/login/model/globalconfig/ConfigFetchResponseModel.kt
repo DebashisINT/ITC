@@ -65,6 +65,7 @@ class ConfigFetchResponseModel : BaseResponse() {
 
     var BatterySetting: Boolean? = null
     var PowerSaverSetting: Boolean? = null
+    var Show_App_Logout_Notification: Boolean? = null
 
 
 

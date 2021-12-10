@@ -10,6 +10,7 @@ import io.reactivex.Observable
  */
 class TeamRepo(val apiService: TeamApi) {
     fun teamList(userId: String, isFirstScreen: Boolean, isAllTeam: Boolean): Observable<TeamListResponseModel> {
+        println("teamList isFirstScreen :"+isFirstScreen+" isAllTeam :"+isAllTeam);
         return apiService.getTeamList(Pref.session_token!!, userId, isFirstScreen, isAllTeam)
     }
 

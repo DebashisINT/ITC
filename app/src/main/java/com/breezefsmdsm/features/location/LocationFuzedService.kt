@@ -569,8 +569,15 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             return
         }
 
+        if(Pref.Show_App_Logout_Notification_Global){
+            if(Pref.Show_App_Logout_Notification){
+                println("checkForceLogoutNotification() checked LocationFuzerService");
+                checkForceLogoutNotification()
+            }
+        }
 
-        checkForceLogoutNotification()
+
+
 
         calculateOrderCollectionAlertTime()
 

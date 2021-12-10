@@ -104,6 +104,8 @@ public interface AppConstant {
     String STOPFOREGROUND_ACTION = "stop_foreground";
     String MAIN_ACTION = "main_actionable";
 
+    String PROSPECT_TABLE_MASTER = "prospect_list_master";
+
 
     /*Foreground service intent*/
     int FOREGROUND_SERVICE = 911;

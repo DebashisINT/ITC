@@ -52,6 +52,10 @@ interface ShopListApi {
     fun getFunnelStageList(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<FunnelStageListResponseModel>
 
     @FormUrlEncoded
+    @POST("RubyFoodLead/ProspectList")
+    fun getProsList(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<ProsListResponseModel>
+
+    @FormUrlEncoded
     @POST("Shoplist/AllShopTypeWithSettings")
     fun getShopTypeListStockView(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<ShopTypeStockViewResponseModel>
 

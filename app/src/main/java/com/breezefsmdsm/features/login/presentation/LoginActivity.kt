@@ -400,7 +400,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     Pref.PowerSaverSettingGlobal = configResponse.PowerSaverSetting!!
 
 
-
+                                if (configResponse.Show_App_Logout_Notification != null)
+                                    Pref.Show_App_Logout_Notification_Global = configResponse.Show_App_Logout_Notification!!
 
 
                                 /*if (configResponse.willShowUpdateDayPlan != null)
@@ -5055,14 +5056,21 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             }
 
                                             else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy")) {
-                                                Pref.DistributorGPSAccuracy =  response.getconfigure!![i].Value!!
-                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
-                                                    Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
-                                                }
-                                                if(Pref.DistributorGPSAccuracy.length==0 || Pref.DistributorGPSAccuracy.equals("")){
+                                                try{
+                                                    Pref.DistributorGPSAccuracy =  response.getconfigure!![i].Value!!
+                                                    if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                        Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
+                                                    }
+                                                    if(Pref.DistributorGPSAccuracy.length==0 || Pref.DistributorGPSAccuracy.equals("")){
+                                                        Pref.DistributorGPSAccuracy="500"
+                                                    }
+                                                    XLog.d("LoginActivity DistributorGPSAccuracy (try): " + Pref.DistributorGPSAccuracy)
+                                                }catch (e: Exception) {
+                                                    e.printStackTrace()
                                                     Pref.DistributorGPSAccuracy="500"
+                                                    XLog.d("LoginActivity DistributorGPSAccuracy (catch): " + Pref.DistributorGPSAccuracy)
                                                 }
-                                                XLog.d("DistributorGPSAccuracy " + Pref.DistributorGPSAccuracy)
+
                                             }
 
                                             else if (response.getconfigure?.get(i)?.Key.equals("BatterySetting", ignoreCase = true)) {
@@ -5079,7 +5087,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 }
                                             }
 
-
+                                            else if (response.getconfigure?.get(i)?.Key.equals("Show_App_Logout_Notification", ignoreCase = true)) {
+                                                Pref.Show_App_Logout_Notification = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.Show_App_Logout_Notification = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
 
 
@@ -5818,29 +5831,77 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                             uiThread {
                                                 progress_wheel.stopSpinning()
-                                                gotoHomeActivity()
+                                                //gotoHomeActivity()
+                                                getProspectApi()
                                             }
                                         }
                                     } else {
                                         progress_wheel.stopSpinning()
-                                        gotoHomeActivity()
+                                        //gotoHomeActivity()
+                                        getProspectApi()
                                     }
                                 } else {
                                     progress_wheel.stopSpinning()
-                                    gotoHomeActivity()
+                                    //gotoHomeActivity()
+                                    getProspectApi()
                                 }
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
                                 error.printStackTrace()
-                                gotoHomeActivity()
+                                //gotoHomeActivity()
+                                getProspectApi()
                             })
             )
 
         }catch (ex:java.lang.Exception){
             ex.printStackTrace()
-            gotoHomeActivity()
+            //gotoHomeActivity()
+            getProspectApi()
         }
+    }
+
+    private fun getProspectApi() {
+        try {
+            val list = AppDatabase.getDBInstance()?.prosDao()?.getAll()
+            if (list!!.size == 0) {
+                val repository = ShopListRepositoryProvider.provideShopListRepository()
+                BaseActivity.compositeDisposable.add(
+                        repository.getProsList()
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ result ->
+                                    val response = result as ProsListResponseModel
+                                    XLog.d("GET PROS DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                    if (response.status == NetworkConstant.SUCCESS) {
+                                        if (response.Prospect_list != null && response.Prospect_list!!.isNotEmpty()) {
+                                            doAsync {
+                                                AppDatabase.getDBInstance()?.prosDao()?.insertAll(response.Prospect_list!!)
+                                                uiThread {
+                                                    gotoHomeActivity()
+                                                }
+                                            }
+                                        } else {
+                                            progress_wheel.stopSpinning()
+                                        }
+                                    } else {
+                                        gotoHomeActivity()
+                                    }
+
+                                }, { error ->
+                                    progress_wheel.stopSpinning()
+                                    gotoHomeActivity()
+                                })
+                )
+            } else {
+                gotoHomeActivity()
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            gotoHomeActivity()
+
+        }
+
     }
 
 

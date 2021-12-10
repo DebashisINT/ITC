@@ -55,6 +55,7 @@ import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
 import com.breezefsmdsm.features.photoReg.adapter.PhotoRegUserListner
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.*
+import com.breezefsmdsm.features.photoReg.present.UpdateDSTypeStatusDialog
 import com.breezefsmdsm.features.reimbursement.presentation.FullImageDialog
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
@@ -460,6 +461,20 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                     simpleDialogg.dismiss()
 
                 })
+            }
+
+            override fun updateTypeOnClick(obj: UserListResponseModel) {
+                UpdateDSTypeStatusDialog.getInstance(obj.user_name!!, "Cancel", "Confirm", true,
+                        object : UpdateDSTypeStatusDialog.OnDSButtonClickListener {
+                    override fun onLeftClick() {
+
+                    }
+
+                    override fun onRightClick(typeId: String, typeName: String) {
+                        if(!typeName.equals("") && typeName.length>0)
+                            Toaster.msgShort(mContext,typeName)
+                    }
+                }).show((mContext as DashboardActivity).supportFragmentManager, "")
             }
         }, {
             it

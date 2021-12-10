@@ -2,6 +2,7 @@ package com.breezefsmdsm.features.nearbyshops.model
 
 import com.breezefsmdsm.app.domain.ModelEntity
 import com.breezefsmdsm.app.domain.ProductListEntity
+import com.breezefsmdsm.app.domain.ProspectEntity
 import com.breezefsmdsm.base.BaseResponse
 import java.io.Serializable
 
@@ -45,4 +46,6 @@ data class StateCityResponseModel(var city_id: String = "",
 data class NewOrderModel(var amount: Double = 0.0,
                          var month: String = "",
                          var year: String = "") : Serializable
+
+data class ProsListResponseModel(var Prospect_list: ArrayList<ProspectEntity>? = null) : Serializable, BaseResponse()
 

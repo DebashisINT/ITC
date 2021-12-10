@@ -3301,14 +3301,20 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             }
 
                                             else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy", ignoreCase = true)) {
-                                                Pref.DistributorGPSAccuracy = response.getconfigure!![i].Value!!
-                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
-                                                    Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
-                                                }
-                                                if(Pref.DistributorGPSAccuracy.length==0 || Pref.DistributorGPSAccuracy.equals("")){
+                                                try{
+                                                    Pref.DistributorGPSAccuracy =  response.getconfigure!![i].Value!!
+                                                    if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                        Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
+                                                    }
+                                                    if(Pref.DistributorGPSAccuracy.length==0 || Pref.DistributorGPSAccuracy.equals("")){
+                                                        Pref.DistributorGPSAccuracy="500"
+                                                    }
+                                                    XLog.d("Dashboard DistributorGPSAccuracy (try): " + Pref.DistributorGPSAccuracy)
+                                                }catch (e: Exception) {
+                                                    e.printStackTrace()
                                                     Pref.DistributorGPSAccuracy="500"
+                                                    XLog.d("Dashboard DistributorGPSAccuracy (catch): " + Pref.DistributorGPSAccuracy)
                                                 }
-                                                XLog.d("DistributorGPSAccuracy " + Pref.DistributorGPSAccuracy+"")
                                             }
 
                                             else if (response.getconfigure?.get(i)?.Key.equals("BatterySetting", ignoreCase = true)) {
@@ -3326,7 +3332,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             }
 
 
-
+                                            else if (response.getconfigure?.get(i)?.Key.equals("Show_App_Logout_Notification", ignoreCase = true)) {
+                                                Pref.Show_App_Logout_Notification = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.Show_App_Logout_Notification = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
 
 
@@ -3511,6 +3522,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                                 if (configResponse.PowerSaverSetting != null)
                                     Pref.PowerSaverSettingGlobal = configResponse.PowerSaverSetting!!
+
+                                if (configResponse.Show_App_Logout_Notification != null)
+                                    Pref.Show_App_Logout_Notification_Global = configResponse.Show_App_Logout_Notification!!
 
 
                             }

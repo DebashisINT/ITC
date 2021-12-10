@@ -219,7 +219,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_5sdp">
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:orientation="horizontal">
+
+            <com.breezefsmdsm.widgets.AppCustomTextView
+                android:id="@+id/click_for_update_type_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:paddingStart="@dimen/_10sdp"
+                android:text="Update Type"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/_11sdp" />
 
             <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/click_for_photo_reg_tv"
