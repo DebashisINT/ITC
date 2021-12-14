@@ -16,7 +16,7 @@ class UserListResponseModel {
     var RegisteredAadhaarDocLink: String? = ""
     var aadhaar_remarks: String? = ""
     var aadhar_image_link: String? = ""
-
-
+    var type_id: Int? = 0
+    var type_name: String? = ""
 }
 

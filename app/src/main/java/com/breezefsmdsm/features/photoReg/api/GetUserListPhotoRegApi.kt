@@ -52,6 +52,10 @@ interface GetUserListPhotoRegApi {
     @POST("UserWiseAadharInfo/UserAadharInfo")
     fun submitAadhaarDetailsSingle(@Body aadhaarSubmitData: AadhaarSubmitData): Observable<BaseResponse>
 
+    @FormUrlEncoded
+    @POST("FaceRegistration/FaceRegTypeIDSave")
+    fun updateUserTypeApi(@Field("user_id") user_id: String,@Field("session_token") session_token: String,@Field("type_id") type_id: String): Observable<BaseResponse>
+
     @POST("AadharImageDetectionInfo/UserAadharInfoSave")
     fun submitAadhaarDetailsNewSingle(@Body aadhaarSubmitData: AadhaarSubmitDataNew): Observable<BaseResponse>
 

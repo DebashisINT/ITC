@@ -119,6 +119,11 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                     ll_row_user_list_face_regis_tagline.visibility=View.GONE
                 }
 
+                if(Pref.IsShowTypeInRegistration){
+                    click_for_update_type_tv.visibility=View.VISIBLE
+                }else{
+                    click_for_update_type_tv.visibility=View.GONE
+                }
 
 
             }

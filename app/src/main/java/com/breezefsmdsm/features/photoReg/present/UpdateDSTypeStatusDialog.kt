@@ -25,6 +25,7 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
 
     private lateinit var dialogHeader: AppCustomTextView
     private lateinit var dialogCancel: AppCustomTextView
+    private lateinit var selType: AppCustomTextView
     private lateinit var dialogOk: AppCustomTextView
     private lateinit var tv_ds_type_dropdown: AppCustomTextView
     private lateinit var cv_ds_type_main: CardView
@@ -40,15 +41,17 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         private lateinit var mHeader: String
         private lateinit var mLeftBtn: String
         private lateinit var mRightBtn: String
+        private lateinit var mSelType: String
         private var mIsCancelable: Boolean = true
         private lateinit var mListener: OnDSButtonClickListener
 
-        fun getInstance(header: String, leftCancel: String, rightOk: String, isCancelable: Boolean, listener: OnDSButtonClickListener): UpdateDSTypeStatusDialog {
+        fun getInstance(header: String, leftCancel: String, rightOk: String, isCancelable: Boolean,selectedType:String, listener: OnDSButtonClickListener): UpdateDSTypeStatusDialog {
             val cardFragment = UpdateDSTypeStatusDialog()
             mHeader = header
             mLeftBtn = leftCancel
             mRightBtn = rightOk
             mIsCancelable = isCancelable
+            mSelType=selectedType
             mListener = listener
             return cardFragment
         }
@@ -74,12 +77,14 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         dialogOk.isSelected = true
         tv_ds_type_dropdown= v.findViewById(R.id.tv_ds_type_dropdown)
         cv_ds_type_main= v.findViewById(R.id.cv_ds_type_main)
+        selType= v.findViewById(R.id.tv_dialog_frag_add_update_ds_selected_type)
 
         dialogOk.text=mRightBtn
         dialogCancel.text= mLeftBtn
 
         dialogHeader.text="Type for "+mHeader
-        tv_ds_type_dropdown.hint = "Select Type"
+        tv_ds_type_dropdown.hint = "Select/Update Type"
+        selType.text=mSelType
         tv_ds_type_dropdown.setOnClickListener(this)
         dialogCancel.setOnClickListener(this)
         dialogOk.setOnClickListener(this)
@@ -154,4 +159,8 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
             }
         }
     }
+
+
+
+
 }

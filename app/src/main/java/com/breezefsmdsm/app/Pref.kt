@@ -329,6 +329,7 @@ object Pref : PreferenceHolder() {
 
     var BatterySetting: Boolean by bindToPreferenceField(false, "BatterySetting")
     var PowerSaverSetting: Boolean by bindToPreferenceField(false, "PowerSaverSetting")
+    var IsShowTypeInRegistration: Boolean by bindToPreferenceField(false, "IsShowTypeInRegistration")
 
 
 

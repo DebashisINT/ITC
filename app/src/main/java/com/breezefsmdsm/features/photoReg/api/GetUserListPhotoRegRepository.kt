@@ -42,6 +42,11 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
         return apiService.submitAadhaarDetailsSingle(aadhaarSubmitData)
     }
 
+    fun updateUserType(user_id: String, session_token: String,type_id:String): Observable<BaseResponse> {
+        return apiService.updateUserTypeApi(user_id,session_token,type_id)
+    }
+
+
     fun sendUserAadhaarInfoNewApi(aadhaarSubmitData:AadhaarSubmitDataNew): Observable<BaseResponse> {
         return apiService.submitAadhaarDetailsNewSingle(aadhaarSubmitData)
     }

@@ -5079,22 +5079,24 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.BatterySetting = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
                                             else if (response.getconfigure?.get(i)?.Key.equals("PowerSaverSetting", ignoreCase = true)) {
                                                 Pref.PowerSaverSetting = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.PowerSaverSetting = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
                                             else if (response.getconfigure?.get(i)?.Key.equals("Show_App_Logout_Notification", ignoreCase = true)) {
                                                 Pref.Show_App_Logout_Notification = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.Show_App_Logout_Notification = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
-
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowTypeInRegistration", ignoreCase = true)) {
+                                                Pref.IsShowTypeInRegistration = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowTypeInRegistration = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {

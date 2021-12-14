@@ -464,7 +464,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
             }
 
             override fun updateTypeOnClick(obj: UserListResponseModel) {
-                UpdateDSTypeStatusDialog.getInstance(obj.user_name!!, "Cancel", "Confirm", true,
+                UpdateDSTypeStatusDialog.getInstance(obj.user_name!!, "Cancel", "Confirm", true,obj.type_name.toString(),
                         object : UpdateDSTypeStatusDialog.OnDSButtonClickListener {
                     override fun onLeftClick() {
 
@@ -472,7 +472,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
                     override fun onRightClick(typeId: String, typeName: String) {
                         if(!typeName.equals("") && typeName.length>0)
-                            Toaster.msgShort(mContext,typeName)
+                           updateUserType(typeId)
                     }
                 }).show((mContext as DashboardActivity).supportFragmentManager, "")
             }
@@ -1233,6 +1233,32 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                 }
             }
         }
+    }
+
+
+    private fun updateUserType(typeID:String){
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.updateUserType(Pref.user_id!!, Pref.session_token!!,typeID!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as BaseResponse
+                            println("xxxx "+response.status);
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                (mContext as DashboardActivity).showSnackMessage("Success")
+                                voiceAttendanceMsg("Type updation successful.")
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage("ERROR")
+                        })
+        )
     }
 
 

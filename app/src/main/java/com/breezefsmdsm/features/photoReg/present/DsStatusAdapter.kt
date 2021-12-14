@@ -31,4 +31,5 @@ class DsStatusAdapter(var context: Context,var dsList:ArrayList<ProspectEntity>,
         val tv_ds = itemView.tv_ds_status
     }
 
+
 }
