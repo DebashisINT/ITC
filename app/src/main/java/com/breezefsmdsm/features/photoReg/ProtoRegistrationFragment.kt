@@ -1246,9 +1246,9 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             var response = result as BaseResponse
-                            println("xxxx "+response.status);
+
                             if (response.status == NetworkConstant.SUCCESS) {
-                                (mContext as DashboardActivity).showSnackMessage("Success")
+                                (mContext as DashboardActivity).showSnackMessage("Type updation successful.")
                                 voiceAttendanceMsg("Type updation successful.")
                             } else {
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
@@ -1256,7 +1256,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                         }, { error ->
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
-                            (mContext as DashboardActivity).showSnackMessage("ERROR")
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )
     }
