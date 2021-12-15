@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.Pref
@@ -67,7 +68,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 sync_delete_iv_red.setOnClickListener{listner?.deletePicOnLick(mList?.get(adapterPosition)!!)}
 
                 iv_aadhaar_ion.setOnClickListener{listner?.getAadhaarOnLick(mList?.get(adapterPosition)!!)}
-                if(mList?.get(adapterPosition)?.IsAadhaarRegistered!!){
+                //if(mList?.get(adapterPosition)?.IsAadhaarRegistered!!){
+                if(mList?.get(adapterPosition)?.aadhar_image_link!!.contains("CommonFolder")){
                     iv_aadhaar_ion.setImageResource(R.drawable.ic_aadhaar_icon_done)
                 }else{
                     iv_aadhaar_ion.setImageResource(R.drawable.ic_aadhaar_icon)
@@ -125,6 +127,20 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                     click_for_update_type_tv.visibility=View.GONE
                 }
 
+                if(!mList?.get(adapterPosition)?.type_name.equals(""))
+                    photo_reg_user_type_name_tv.text= "Employee Type : "+ mList?.get(adapterPosition)?.type_name!!
+
+                if(!mList?.get(adapterPosition)?.aadhar_image_link!!.contains("CommonFolder") && mList?.get(adapterPosition)?.isFaceRegistered!!){
+                    photo_reg_user_old_reg_tv.visibility=View.VISIBLE
+                }else{
+                    photo_reg_user_old_reg_tv.visibility=View.GONE
+                }
+
+                if(mList?.get(adapterPosition)?.isFaceRegistered!!){
+
+                }else{
+                    sync_image_view.setColorFilter(ContextCompat.getColor(getContext(), R.color.black_50))
+                }
 
             }
         }

@@ -1409,6 +1409,8 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
             XLog.d("doctor degree image path=======> $degree_imgPath")
         XLog.d("=================================================================================")
 
+
+
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
@@ -2091,6 +2093,8 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
         progress_wheel.spin()
 
+
+
         //if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(doc_degree)) {
         if (true) {
             val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
@@ -2447,6 +2451,8 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
         if (degree_imgPath != null)
             XLog.d("doctor degree image path=======> $degree_imgPath")
         XLog.d("====================================================")
+
+
 
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()

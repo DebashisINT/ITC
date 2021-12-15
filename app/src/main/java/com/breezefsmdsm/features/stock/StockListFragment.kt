@@ -570,6 +570,8 @@ class StockListFragment : BaseFragment(), View.OnClickListener {
             XLog.d("doctor degree image path=======> $degree_imgPath")
         XLog.d("==============================================================")
 
+
+
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(

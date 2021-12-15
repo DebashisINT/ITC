@@ -840,6 +840,8 @@ class NewOrderListFragment : BaseFragment() {
             XLog.d("doctor degree image path=======> $degree_imgPath")
         XLog.d("=================================================================================")
 
+
+
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
@@ -1409,6 +1411,8 @@ class NewOrderListFragment : BaseFragment() {
         if (doc_degree != null)
             XLog.d("doctor degree image path=======> $doc_degree")
         XLog.d("======================================================================")
+
+
 
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(doc_degree)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
@@ -2099,6 +2103,8 @@ class NewOrderListFragment : BaseFragment() {
         if (doc_degree != null)
             XLog.d("doctor degree image path=======> $doc_degree")
         XLog.d("======================================================================")
+
+
 
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(doc_degree)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()

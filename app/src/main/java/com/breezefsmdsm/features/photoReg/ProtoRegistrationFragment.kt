@@ -9,6 +9,7 @@ import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Context.ACTIVITY_SERVICE
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -16,11 +17,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.*
 import android.os.Build.VERSION.SDK_INT
 import android.provider.MediaStore
-import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextUtils
@@ -33,7 +35,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -149,7 +150,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         progress_wheel.spin()
         Handler(Looper.getMainLooper()).postDelayed({
             callUSerListApi()
-        }, 300)
+        }, 3000)
 
     }
 
@@ -310,9 +311,8 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         adapter = AdapterUserList(mContext, userList!!, object : PhotoRegUserListner {
 
             override fun getUserInfoOnLick(obj: UserListResponseModel) {
-                (mContext as DashboardActivity).loadFragment(FragType.RegisTerFaceFragment, false, obj)
-                //(mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment, true, obj)
-
+                showFaceIns(obj)
+                //(mContext as DashboardActivity).loadFragment(FragType.RegisTerFaceFragment, true, obj)
             }
 
             override fun getPhoneOnLick(phone: String) {
@@ -464,23 +464,73 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
             }
 
             override fun updateTypeOnClick(obj: UserListResponseModel) {
-                UpdateDSTypeStatusDialog.getInstance(obj.user_name!!, "Cancel", "Confirm", true,obj.type_name.toString(),
+                UpdateDSTypeStatusDialog.getInstance(obj.user_name!!, "Cancel", "Confirm", true,obj.type_name.toString(),obj.user_id.toString()!!,
                         object : UpdateDSTypeStatusDialog.OnDSButtonClickListener {
                     override fun onLeftClick() {
 
                     }
 
-                    override fun onRightClick(typeId: String, typeName: String) {
-                        if(!typeName.equals("") && typeName.length>0)
-                           updateUserType(typeId)
-                    }
-                }).show((mContext as DashboardActivity).supportFragmentManager, "")
+                            override fun onRightClick(typeId: String, typeName: String, usrId: String) {
+                                if(!typeName.equals("") && typeName.length>0)
+                                    updateUserType(typeId,usrId)
+                            }
+                        }).show((mContext as DashboardActivity).supportFragmentManager, "")
             }
         }, {
             it
         })
 
         mRv_userList.adapter = adapter
+    }
+
+    private fun showFaceIns(obj: UserListResponseModel){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(true)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_message_face_aadhaar_guide)
+        val body = simpleDialog.findViewById(R.id.dialog_message_header_TV) as TextView
+        val header = simpleDialog.findViewById(R.id.dialog_message_headerTV) as TextView
+        val iv_photo = simpleDialog.findViewById(R.id.iv_dialog_msg_face_aadhaar_g) as ImageView
+
+
+        iv_photo.setImageDrawable(getResources().getDrawable(R.drawable.face_sample));
+
+        header.text = "Face/Photo Registration Guide:"
+        body.text = "1. Avoid Background area.\n" +
+                "2. Take Only Face Area, check the below photo face area.\n" +
+                "3. Don't take any side face.\n" +
+                "4. Take Photo in Normal daylight.\n" +
+                "5. Take Photo of Normal Face look / Expression which you have 99% times.\n" +
+                "6. Important : Always take photo of Front Face and Closure Look."
+
+
+        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            //simpleDialog.cancel()
+
+            val simpleDialogYN = Dialog(mContext)
+            simpleDialogYN.setCancelable(false)
+            simpleDialogYN.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialogYN.setContentView(R.layout.dialog_yes_no)
+            val dialogHeader = simpleDialogYN.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialogYN.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+            dialogHeader.text = "Have you read the instruction?"
+            val dialogYes = simpleDialogYN.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+            val dialogNo = simpleDialogYN.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+                simpleDialogYN.cancel()
+                (mContext as DashboardActivity).loadFragment(FragType.RegisTerFaceFragment, true, obj)
+            })
+            dialogNo.setOnClickListener({ view ->
+                simpleDialogYN.cancel()
+            })
+            simpleDialogYN.show()
+
+
+        })
+        simpleDialog.show()
     }
 
 
@@ -1236,11 +1286,11 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     }
 
 
-    private fun updateUserType(typeID:String){
+    private fun updateUserType(typeID:String,usrId:String){
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
-                repository.updateUserType(Pref.user_id!!, Pref.session_token!!,typeID!!)
+                repository.updateUserType(usrId!!, Pref.session_token!!,typeID!!)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->

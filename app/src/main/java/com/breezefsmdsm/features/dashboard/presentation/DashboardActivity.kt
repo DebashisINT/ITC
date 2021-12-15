@@ -286,7 +286,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         })
 
         var ttt = AppUtils.getCurrentDateForCons()
-        println("load frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification);
+        println("load frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
@@ -6328,7 +6328,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                 }
             }
-        } else if (getFragment() != null && getFragment() is ViewAllOrderListFragment && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed) && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)) {
+        }
+        else if (getFragment() != null && getFragment() is PhotoRegAadhaarFragment) {
+            println("PhotoRegAadhaarFragment backpressed");
+            super.onBackPressed()
+        }
+        else if (getFragment() != null && getFragment() is ViewAllOrderListFragment && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed) && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)) {
 
             val simpleDialog = Dialog(mContext)
             simpleDialog.setCancelable(false)
@@ -8423,6 +8428,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     private fun callEditShopApi(addShopReqData: AddShopRequestData, shopImageLocalPath: String?, doc_degree: String?) {
         progress_wheel.spin()
+
+
 
         if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(doc_degree)) {
             val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()

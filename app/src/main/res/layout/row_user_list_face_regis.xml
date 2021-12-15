@@ -17,7 +17,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp">
+            android:layout_height="@dimen/_30sdp">
 
 
         <com.breezefsmdsm.widgets.AppCustomTextView
@@ -43,20 +43,50 @@
 
         </FrameLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_28sdp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.breezefsmdsm.widgets.AppCustomTextView
+                android:id="@+id/photo_reg_user_type_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_weight="1"
+                android:text="Employee Type : "
+                android:gravity="center|start"
+                android:textColor="@color/login_txt_color"
+                android:textSize="@dimen/_10sdp" />
+
+            <com.breezefsmdsm.widgets.AppCustomTextView
+                android:id="@+id/photo_reg_user_old_reg_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center|end"
+                android:layout_weight="2"
+                android:text="Old Registration"
+                android:textColor="@color/color_custom_red"
+                android:textSize="@dimen/_9sdp" />
+
+
+        </LinearLayout>
+
+
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp">
+            android:layout_height="@dimen/_30sdp">
 
             <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/photo_reg_dd_name_tv"
                 android:layout_width="200dp"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:textColor="@color/login_txt_color"
-                android:textSize="@dimen/_11sdp" />
-
+                android:textSize="@dimen/_10sdp" />
 
             <LinearLayout
                 android:id="@+id/ll_row_user_list_face_regis_tagline"
@@ -94,11 +124,7 @@
 
             </LinearLayout>
 
-
         </FrameLayout>
-
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,15 +157,15 @@
 
             <ImageView
                 android:id="@+id/sync_image_view"
-                android:layout_width="@dimen/_20sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/_4sdp"
+                android:layout_marginRight="@dimen/_4sdp"
                 android:contentDescription="@null"
                 android:gravity="center"
                 android:src="@drawable/ic_dashboard_attendance_icon_deselect"
-                android:textSize="@dimen/_11sdp"
-                android:layout_marginLeft="@dimen/_4sdp"
-                android:layout_marginRight="@dimen/_4sdp"/>
+                android:textSize="@dimen/_11sdp" />
 
             <ImageView
                 android:id="@+id/sync_whatsapp_iv"
@@ -206,7 +232,6 @@
 
         </LinearLayout>
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -230,9 +255,9 @@
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:paddingStart="@dimen/_10sdp"
-                android:text="Update Type"
+                android:text="Update Employee Type"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_10sdp" />
 
             <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/click_for_photo_reg_tv"
@@ -244,7 +269,7 @@
                 android:paddingEnd="@dimen/_10sdp"
                 android:text="Click for Registration"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_10sdp" />
 
 
         </LinearLayout>

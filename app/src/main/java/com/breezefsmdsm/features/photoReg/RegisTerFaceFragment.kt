@@ -16,10 +16,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.R
@@ -251,7 +248,8 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
                                     CustomStatic.FacePicRegUrl=response.face_image_link
                                     //afterFaceRegistered()
-                                    (mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,false,valueData)
+                                    showAadhaarIns(valueData)
+                                    //(mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
                                 }, 500)
 
                                 XLog.d(" RegisTerFaceFragment : FaceImageDetection/FaceImage" +response.status.toString() +", : "  + ", Success: "+AppUtils.getCurrentDateTime().toString())
@@ -271,6 +269,56 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                             }
                         })
         )
+    }
+
+    private fun showAadhaarIns(valueData: UserListResponseModel){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(true)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_message_face_aadhaar_guide)
+        val body = simpleDialog.findViewById(R.id.dialog_message_header_TV) as TextView
+        val header = simpleDialog.findViewById(R.id.dialog_message_headerTV) as TextView
+        val iv_photo = simpleDialog.findViewById(R.id.iv_dialog_msg_face_aadhaar_g) as ImageView
+
+        iv_photo.setImageDrawable(getResources().getDrawable(R.drawable.aadhar_sample));
+
+        header.text = "Aadhar Registration Guide:"
+        body.text ="1. Avoid Background area\n" +
+                "2. Take Only Aadhar Card Area, check the below sample photo.\n" +
+                "3. Take Photo in Normal daylight\n" +
+                "4. Make sure all the information is showing clearly in Aadhar Card\n" +
+                "5. Take Closure Look photo of Aadhar Card\n" +
+                "6. Please only Capture Aadhaar image and dont try with any other image. It will block your registration."
+
+
+
+        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            //simpleDialog.cancel()
+
+            val simpleDialogYN = Dialog(mContext)
+            simpleDialogYN.setCancelable(false)
+            simpleDialogYN.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialogYN.setContentView(R.layout.dialog_yes_no)
+            val dialogHeader = simpleDialogYN.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialogYN.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+            dialogHeader.text = "Have you read the instruction?"
+            val dialogYes = simpleDialogYN.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+            val dialogNo = simpleDialogYN.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+                simpleDialogYN.cancel()
+                (mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
+            })
+            dialogNo.setOnClickListener({ view ->
+                simpleDialogYN.cancel()
+            })
+            simpleDialogYN.show()
+
+
+        })
+        simpleDialog.show()
     }
 
     fun afterFaceRegistered(){

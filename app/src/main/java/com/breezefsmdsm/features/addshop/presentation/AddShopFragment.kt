@@ -1321,6 +1321,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
         progress_wheel.spin()
 
+
+
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(doc_degree)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(

@@ -912,6 +912,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             XLog.d("doctor degree image path=======> $degree_imgPath")
         XLog.d("=================================================")
 
+
+
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
@@ -1459,6 +1461,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 address = "Unknown"
             addShopData.actual_address = address
         }
+
 
         //if (TextUtils.isEmpty(mAddShopDBModelEntity.shopImageLocalPath) && TextUtils.isEmpty(mAddShopDBModelEntity.doc_degree)) {
         if (true) {

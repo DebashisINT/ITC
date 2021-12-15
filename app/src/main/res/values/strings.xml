@@ -23,8 +23,11 @@
     <string name="select_login" translatable="false">Select to Login</string>
     <string name="forgot_password" translatable="false">Forgot Password?</string>
     <string name="login_logout_msg" translatable="false">Good Internet connectivity is mandatory for Login &amp; Logout</string>
+    <string name="login_logout_reg_msg" translatable="false">Good Internet connectivity is mandatory for Registration</string>
     <string name="login_net_connected" translatable="false">Internet connection strength is good, you can login now.</string>
+    <string name="registration_net_connected" translatable="false">Internet connection strength is good, you can Register now.</string>
     <string name="login_net_disconnected" translatable="false">Internet is disconnected, you cannot login, please switch on the internet</string>
+    <string name="reg_net_disconnected" translatable="false">Internet is disconnected, you cannot Register, please switch on the internet</string>
     <string name="remember_me" translatable="false">Remember me</string>
 
     <!--Menu-->

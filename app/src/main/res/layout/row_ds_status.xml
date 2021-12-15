@@ -6,7 +6,7 @@
     android:layout_margin="@dimen/_2sdp"
     app:cardBackgroundColor="@color/color_silver_light"
     app:cardCornerRadius="@dimen/_5sdp"
-    app:cardElevation="@dimen/_5sdp">
+    app:cardElevation="@dimen/_1sdp">
 
     <com.breezefsmdsm.widgets.AppCustomTextView
         android:id="@+id/tv_ds_status"

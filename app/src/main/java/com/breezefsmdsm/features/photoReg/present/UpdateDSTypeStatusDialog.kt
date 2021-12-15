@@ -42,16 +42,18 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         private lateinit var mLeftBtn: String
         private lateinit var mRightBtn: String
         private lateinit var mSelType: String
+        private lateinit var muserIdForTypeUpdate: String
         private var mIsCancelable: Boolean = true
         private lateinit var mListener: OnDSButtonClickListener
 
-        fun getInstance(header: String, leftCancel: String, rightOk: String, isCancelable: Boolean,selectedType:String, listener: OnDSButtonClickListener): UpdateDSTypeStatusDialog {
+        fun getInstance(header: String, leftCancel: String, rightOk: String, isCancelable: Boolean,selectedType:String, usrId:String,listener: OnDSButtonClickListener): UpdateDSTypeStatusDialog {
             val cardFragment = UpdateDSTypeStatusDialog()
             mHeader = header
             mLeftBtn = leftCancel
             mRightBtn = rightOk
             mIsCancelable = isCancelable
             mSelType=selectedType
+            muserIdForTypeUpdate=usrId
             mListener = listener
             return cardFragment
         }
@@ -82,8 +84,8 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         dialogOk.text=mRightBtn
         dialogCancel.text= mLeftBtn
 
-        dialogHeader.text="Type for "+mHeader
-        tv_ds_type_dropdown.hint = "Select/Update Type"
+        dialogHeader.text="Select Type for\n"+mHeader
+        tv_ds_type_dropdown.hint = "Select Employee Type"
         selType.text=mSelType
         tv_ds_type_dropdown.setOnClickListener(this)
         dialogCancel.setOnClickListener(this)
@@ -99,7 +101,7 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
 
     interface OnDSButtonClickListener {
         fun onLeftClick()
-        fun onRightClick(typeId: String,typeName:String)
+        fun onRightClick(typeId: String,typeName:String,usrId:String)
     }
 
     override fun onClick(v: View?) {
@@ -120,7 +122,7 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
                 dismiss()
             }
             R.id.ok_TV ->{
-                mListener.onRightClick(selectedTypeID,selectedTypeName)
+                mListener.onRightClick(selectedTypeID,selectedTypeName,muserIdForTypeUpdate)
                 dismiss()
             }
         }
@@ -152,7 +154,7 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         if (dsTypePopupWindow != null && !dsTypePopupWindow?.isShowing!!) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 cv_ds_type_main.post(Runnable {
-                    dsTypePopupWindow?.showAsDropDown(tv_ds_type_dropdown, resources.getDimensionPixelOffset(R.dimen._1sdp), resources.getDimensionPixelOffset(R.dimen._10sdp), Gravity.BOTTOM)
+                    dsTypePopupWindow?.showAsDropDown(tv_ds_type_dropdown, resources.getDimensionPixelOffset(R.dimen._10sdp), resources.getDimensionPixelOffset(R.dimen._20sdp), Gravity.BOTTOM)
                 })
             } else {
                 dsTypePopupWindow?.showAsDropDown(tv_ds_type_dropdown, tv_ds_type_dropdown.width - tv_ds_type_dropdown?.width!!, 0)

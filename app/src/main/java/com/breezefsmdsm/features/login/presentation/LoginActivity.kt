@@ -3189,7 +3189,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
 
 
-                if(megAvailable<5000 && false){
+                if(megAvailable<5000){
                     val simpleDialog = Dialog(this)
                     simpleDialog.setCancelable(false)
                     simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

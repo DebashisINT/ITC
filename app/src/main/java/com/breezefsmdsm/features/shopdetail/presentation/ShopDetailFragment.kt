@@ -5046,6 +5046,9 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
 
         //if (TextUtils.isEmpty(shopImageLocalPath) && TextUtils.isEmpty(degreeImgLink)) {
+
+
+
         if (true) {
             val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(

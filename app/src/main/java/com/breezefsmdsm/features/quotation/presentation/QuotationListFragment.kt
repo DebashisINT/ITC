@@ -699,6 +699,7 @@ class QuotationListFragment : BaseFragment() {
         XLog.d("======================================================================")
 
 
+
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(doc_degree)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
             BaseActivity.compositeDisposable.add(
