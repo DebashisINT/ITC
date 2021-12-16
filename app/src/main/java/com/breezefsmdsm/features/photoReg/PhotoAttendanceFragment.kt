@@ -13,10 +13,15 @@ import android.os.*
 import android.speech.tts.TextToSpeech
 import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.CustomStatic
@@ -51,13 +56,14 @@ import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
 import com.breezefsmdsm.features.login.UserLoginDataEntity
 import com.breezefsmdsm.features.login.presentation.LoginActivity
-import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
-import com.breezefsmdsm.features.photoReg.adapter.AdapterUserListAttenD
-import com.breezefsmdsm.features.photoReg.adapter.PhotoAttendanceListner
-import com.breezefsmdsm.features.photoReg.adapter.PhotoRegUserListner
+import com.breezefsmdsm.features.photoReg.adapter.*
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
+import com.breezefsmdsm.features.photoReg.model.ProsCustom
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
+import com.breezefsmdsm.features.photoReg.present.UpdateDSTypeStatusDialog
+import com.breezefsmdsm.features.reimbursement.presentation.MonthListAdapter
+import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import com.google.android.gms.tasks.OnSuccessListener
@@ -80,7 +86,9 @@ import kotlin.collections.ArrayList
 class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
     private lateinit var mContext: Context
+    private lateinit var tv_prospect: AppCustomTextView
     private lateinit var rvUserDtls:RecyclerView
+    private lateinit var ll_type_view_root:LinearLayout
     private lateinit var progress_wheel: com.pnikosis.materialishprogress.ProgressWheel
     var userList:ArrayList<UserListResponseModel> = ArrayList()
     private var adapter: AdapterUserListAttenD?= null
@@ -97,6 +105,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     val TF_OD_API_IS_QUANTIZED = false
     val TF_OD_API_LABELS_FILE = "file:///android_asset/labelmap.txt"
     val TF_OD_API_INPUT_SIZE = 112
+
+    var prosCusList:ArrayList<ProsCustom> = ArrayList()
+
+    var prosPopupWindow: PopupWindow? = null
 
     private val addAttendenceModel: AddAttendenceInpuModel by lazy {
         AddAttendenceInpuModel()
@@ -144,18 +156,116 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     private fun initView(view: View){
         rvUserDtls = view.findViewById(R.id.rv_frag_photo_attend_user_details)
         progress_wheel = view.findViewById(R.id.progress_wheel_frag_photo_attend)
+        tv_prospect = view.findViewById(R.id.tv_prospect)
+        ll_type_view_root = view.findViewById(R.id.ll_type_view_root)
+        tv_prospect.setOnClickListener(this)
+        ll_type_view_root.setOnClickListener(this)
 
         faceDetectorSetUp()
 
         initPermissionCheck()
+
+
+        var prospectList = AppDatabase.getDBInstance()!!.prosDao().getAll() as ArrayList<ProspectEntity>
+        prosCusList.clear()
+        prosCusList.add(ProsCustom("0","All"))
+        for(i in 0..prospectList.size-1){
+            prosCusList.add(ProsCustom(prospectList.get(i).pros_id!!,prospectList.get(i).pros_name!!))
+        }
+        tv_prospect.text=prosCusList.get(0).prosName
+
+
         progress_wheel.spin()
         Handler(Looper.getMainLooper()).postDelayed({
             callUSerListApi()
-        }, 300)
+        }, 1000)
     }
 
     override fun onClick(v: View?) {
+        when(v?.id){
+            R.id.ll_type_view_root,R.id.tv_prospect->{
+                if (prosPopupWindow != null && prosPopupWindow!!.isShowing)
+                    prosPopupWindow?.dismiss()
+                else
+                    showProsTypePopup()
+            }
+        }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun showProsTypePopup(){
+        val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
+        val customView = inflater!!.inflate(R.layout.dialog_months, null)
+        prosPopupWindow = PopupWindow(customView, resources.getDimensionPixelOffset(R.dimen._110sdp), resources.getDimensionPixelOffset(R.dimen._100sdp))
+        val rv_pros_list = customView.findViewById(R.id.rv_months) as RecyclerView
+        rv_pros_list.layoutManager = LinearLayoutManager(mContext)
+        val et_search = customView.findViewById<AppCustomEditText>(R.id.et_search)
+        et_search.visibility = View.GONE
+
+        prosPopupWindow?.elevation = 200f
+        rv_pros_list.adapter = ProsListSelectionAdapter(mContext, prosCusList, object : ProsListSelectionListner {
+            override fun getInfo(obj: ProsCustom) {
+                prosPopupWindow?.dismiss()
+                tv_prospect.text=obj.prosName
+                if(obj.prosid.equals("0")){
+                    callUSerListApi()
+                }else{
+                    loadFilteredList(obj.prosid)
+                }
+
+            }
+        })
+
+        if (prosPopupWindow != null && !prosPopupWindow?.isShowing!!) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                prosPopupWindow?.showAsDropDown(ll_type_view_root, resources.getDimensionPixelOffset(R.dimen._10sdp), 0, Gravity.BOTTOM)
+            } else {
+                prosPopupWindow?.showAsDropDown(ll_type_view_root, ll_type_view_root.width - prosPopupWindow?.width!!, 0)
+            }
+        }
+
+    }
+
+    private fun loadFilteredList(typeId:String){
+        userList.clear()
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.getUserListApi(Pref.user_id!!, Pref.session_token!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as GetUserListResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                if (response.user_list!!.size > 0 && response.user_list!! != null) {
+
+                                    doAsync {
+                                        var list=response.user_list
+
+                                        for(i in 0..list!!.size-1){
+                                            if(list.get(i).type_id == typeId.toInt())
+                                                userList.add(list.get(i))
+                                        }
+
+                                        uiThread {
+                                            setAdapter()
+                                        }
+                                    }
+
+                                } else {
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                                }
+//
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+//                            (mContext as DashboardActivity).showSnackMessage("ERROR")
+                        })
+        )
     }
 
     private var permissionUtils: PermissionUtils? = null
@@ -219,6 +329,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             if(AppUtils.isOnline(mContext)){
                                 progress_wheel.spin()
                                 checkCurrentDayAttdUserWise()
+                                //prepareAddAttendanceInputParams()
                             }else{
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                             }

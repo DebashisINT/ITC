@@ -83,20 +83,73 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 />
 
-            <Button
-                android:id="@+id/btn_frag_reg_face_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_60sdp"
-                android:layout_marginRight="@dimen/_60sdp"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:background="@drawable/selector_blue_botton_bg"
+                android:background="@drawable/curve_border_bg_blue"
+                android:text="Select registration supporting documents:"
                 android:gravity="center"
-                android:padding="@dimen/_8sdp"
-                android:text="Click now to \nRegister Aadhaar >>"
-                android:textColor="@android:color/white"
-                android:textSize="@dimen/_12sdp"
-                android:textAllCaps="false"/>
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="@dimen/_10sdp"
+                android:layout_marginLeft="@dimen/_15sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:padding="@dimen/_5sdp"
+                android:layout_gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_35sdp"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/_10sdp">
+
+                <Button
+                    android:id="@+id/btn_frag_reg_face_register_aadhaar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_custom_border_blue_button"
+                    android:gravity="center"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Aadhaar"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textAllCaps="false"
+                    android:layout_marginRight="@dimen/_3sdp"/>
+
+                <Button
+                    android:id="@+id/btn_frag_reg_face_register_voter"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_custom_border_blue_button"
+                    android:gravity="center"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Voter"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginRight="@dimen/_3sdp"/>
+
+                <Button
+                    android:id="@+id/btn_frag_reg_face_register_pan"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_custom_border_blue_button"
+                    android:gravity="center"
+                    android:padding="@dimen/_8sdp"
+                    android:text="Pan"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:textAllCaps="false"
+                    android:layout_marginLeft="@dimen/_3sdp"/>
+
+            </LinearLayout>
+
+
 
 
         </LinearLayout>

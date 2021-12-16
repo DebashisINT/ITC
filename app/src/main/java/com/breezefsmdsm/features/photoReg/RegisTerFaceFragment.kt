@@ -67,6 +67,8 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
     private lateinit var nameTV: AppCustomTextView
     private lateinit var phoneTV: AppCustomTextView
     private lateinit var registerTV: Button
+    private lateinit var registerTV_voter: Button
+    private lateinit var registerTV_pan: Button
     private lateinit var progress_wheel: ProgressWheel
     private lateinit var ll_phone : LinearLayout
 
@@ -130,11 +132,15 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
     private fun initView(view:View){
         nameTV = view.findViewById(R.id.tv_frag_reg_face_name)
         phoneTV = view.findViewById(R.id.tv_frag_reg_face_phone)
-        registerTV = view.findViewById(R.id.btn_frag_reg_face_register)
+        registerTV = view.findViewById(R.id.btn_frag_reg_face_register_aadhaar)
+        registerTV_voter = view.findViewById(R.id.btn_frag_reg_face_register_voter)
+        registerTV_pan = view.findViewById(R.id.btn_frag_reg_face_register_pan)
 
         progress_wheel = view.findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
         registerTV.setOnClickListener(this)
+        registerTV_voter.setOnClickListener(this)
+        registerTV_pan.setOnClickListener(this)
 
         nameTV.text = user_name!!
         phoneTV.text = user_login_id!!
@@ -245,10 +251,15 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     progress_wheel.stopSpinning()
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
-
                                     CustomStatic.FacePicRegUrl=response.face_image_link
                                     //afterFaceRegistered()
-                                    showAadhaarIns(valueData)
+                                    if(CustomStatic.IsAadhaarForPhotoReg)
+                                        showAadhaarIns(valueData,getString(R.string.aadhaar_reg_guide_header),getString(R.string.aadhaar_reg_guide_body))
+                                    else if(CustomStatic.IsVoterForPhotoReg)
+                                        showAadhaarIns(valueData,getString(R.string.voter_reg_guide_header),getString(R.string.voter_reg_guide_body))
+                                    else if(CustomStatic.IsPanForPhotoReg)
+                                        showAadhaarIns(valueData,getString(R.string.pan_reg_guide_header),getString(R.string.pan_reg_guide_body))
+
                                     //(mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
                                 }, 500)
 
@@ -271,7 +282,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         )
     }
 
-    private fun showAadhaarIns(valueData: UserListResponseModel){
+    private fun showAadhaarIns(valueData: UserListResponseModel,headerTxt:String,bodyTxt:String){
         val simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(true)
         simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -280,17 +291,16 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         val header = simpleDialog.findViewById(R.id.dialog_message_headerTV) as TextView
         val iv_photo = simpleDialog.findViewById(R.id.iv_dialog_msg_face_aadhaar_g) as ImageView
 
-        iv_photo.setImageDrawable(getResources().getDrawable(R.drawable.aadhar_sample));
 
-        header.text = "Aadhar Registration Guide:"
-        body.text ="1. Avoid Background area\n" +
-                "2. Take Only Aadhar Card Area, check the below sample photo.\n" +
-                "3. Take Photo in Normal daylight\n" +
-                "4. Make sure all the information is showing clearly in Aadhar Card\n" +
-                "5. Take Closure Look photo of Aadhar Card\n" +
-                "6. Please only Capture Aadhaar image and dont try with any other image. It will block your registration."
+        if(CustomStatic.IsAadhaarForPhotoReg)
+            iv_photo.setImageDrawable(getResources().getDrawable(R.drawable.aadhar_sample));
+        else if(CustomStatic.IsVoterForPhotoReg)
+            iv_photo.setImageDrawable(getResources().getDrawable(R.drawable.voter_sample));
+        else if(CustomStatic.IsPanForPhotoReg)
+            iv_photo.setImageDrawable(getResources().getDrawable(R.drawable.pan_sample));
 
-
+        header.text = headerTxt
+        body.text = bodyTxt
 
         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
@@ -343,41 +353,23 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
         if(p0!=null){
             when(p0.id){
-                R.id.btn_frag_reg_face_register -> {
-                    //if(registerTV.isEnabled==false){
-                    if(!facePicTag){
-                        Toaster.msgShort(mContext,"Please capture valid image")
-                        return
-                    }
-
-                    if(imagePath.length>0 && imagePath!="") {
-                        registerFaceApi()
-                        val simpleDialogg = Dialog(mContext)
-                        simpleDialogg.setCancelable(false)
-                        simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        simpleDialogg.setContentView(R.layout.dialog_yes_no)
-                        val dialogHeader = simpleDialogg.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-                        dialogHeader.text="Do you want to Register ?"
-                        val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
-                        val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
-
-                        dialogYes.setOnClickListener( { view ->
-                            simpleDialogg.cancel()
-                            if (AppUtils.isOnline(mContext)){
-                                registerFaceApi()
-                            }else{
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-                            }
-
-                        })
-                        dialogNo.setOnClickListener( { view ->
-                            simpleDialogg.cancel()
-                        })
-                        //simpleDialogg.show()
-                    }
-
-
-                       // registerFaceApi()
+                R.id.btn_frag_reg_face_register_aadhaar -> {
+                    CustomStatic.IsAadhaarForPhotoReg=true
+                    CustomStatic.IsVoterForPhotoReg=false
+                    CustomStatic.IsPanForPhotoReg=false
+                    registerClick()
+                }
+                R.id.btn_frag_reg_face_register_voter -> {
+                    CustomStatic.IsAadhaarForPhotoReg=false
+                    CustomStatic.IsVoterForPhotoReg=true
+                    CustomStatic.IsPanForPhotoReg=false
+                    registerClick()
+                }
+                R.id.btn_frag_reg_face_register_pan -> {
+                    CustomStatic.IsAadhaarForPhotoReg=false
+                    CustomStatic.IsVoterForPhotoReg=false
+                    CustomStatic.IsPanForPhotoReg=true
+                    registerClick()
                 }
 
                 R.id.ll_regis_face_phone ->{
@@ -387,6 +379,42 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
             }
         }
+    }
+
+    private fun registerClick(){
+        //if(registerTV.isEnabled==false){
+        if(!facePicTag){
+            Toaster.msgShort(mContext,"Please capture valid image")
+            return
+        }
+
+        if(imagePath.length>0 && imagePath!="") {
+            registerFaceApi()
+            val simpleDialogg = Dialog(mContext)
+            simpleDialogg.setCancelable(false)
+            simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialogg.setContentView(R.layout.dialog_yes_no)
+            val dialogHeader = simpleDialogg.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+            dialogHeader.text="Do you want to Register ?"
+            val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+            val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+
+            dialogYes.setOnClickListener( { view ->
+                simpleDialogg.cancel()
+                if (AppUtils.isOnline(mContext)){
+                    registerFaceApi()
+                }else{
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                }
+
+            })
+            dialogNo.setOnClickListener( { view ->
+                simpleDialogg.cancel()
+            })
+            //simpleDialogg.show()
+        }
+
+        // registerFaceApi()
     }
 
 

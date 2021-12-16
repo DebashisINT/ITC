@@ -22,4 +22,8 @@ public class CustomStatic {
     public static String FacePicRegUrl="";
     public static String AadhaarPicRegUrl="";
 
+
+    public static Boolean IsAadhaarForPhotoReg=false;
+    public static Boolean IsVoterForPhotoReg=false;
+    public static Boolean IsPanForPhotoReg=false;
 }

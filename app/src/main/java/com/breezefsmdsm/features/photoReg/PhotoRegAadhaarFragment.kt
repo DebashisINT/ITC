@@ -265,7 +265,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         var matchScore=jObj.getDouble("match_score")
                         //(mContext as DashboardActivity).showSnackMessage(matchScore.toString())
                         progress_wheel.stopSpinning()
-
+                        XLog.d("face-doc-Compare : idfy response : isMatch "+isMatch.toString() + " matchScore : "+matchScore.toString() )
                         if(isMatch){
                             if(matchScore>60.00){
                                 extractAadhaarDtls(CustomStatic.AadhaarPicRegUrl)
@@ -323,7 +323,15 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
             jsonObject.put("group_id", user_id)
 
 
-            val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest("https://eve.idfy.com/v3/tasks/sync/extract/ind_aadhaar", jsonObject,
+            var apiStr=""
+            if(CustomStatic.IsAadhaarForPhotoReg)
+                apiStr="https://eve.idfy.com/v3/tasks/sync/extract/ind_aadhaar"
+            else if(CustomStatic.IsVoterForPhotoReg)
+                apiStr="https://eve.idfy.com/v3/tasks/sync/extract/ind_voter_id"
+            else if(CustomStatic.IsPanForPhotoReg)
+                apiStr="https://eve.idfy.com/v3/tasks/sync/extract/ind_pan"
+
+            val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest(apiStr, jsonObject,
                     object : Response.Listener<JSONObject?> {
                         override fun onResponse(response: JSONObject?) {
                             progress_wheel.stopSpinning()

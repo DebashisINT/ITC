@@ -4531,7 +4531,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 if (enableFragGeneration) {
                     mFragment = PhotoRegAadhaarFragment.getInstance(initializeObject)
                 }
-                setTopBarTitle(getString(R.string.aadhaar_registration))
+                if(CustomStatic.IsAadhaarForPhotoReg)
+                    setTopBarTitle(getString(R.string.aadhaar_registration))
+                else if(CustomStatic.IsVoterForPhotoReg)
+                    setTopBarTitle(getString(R.string.voter_registration))
+                else if(CustomStatic.IsPanForPhotoReg)
+                    setTopBarTitle(getString(R.string.pan_registration))
                 setTopBarVisibility(TopBarConfig.BACK)
             }
             FragType.TeamAttendanceFragment -> {
