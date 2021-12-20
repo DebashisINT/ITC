@@ -18,5 +18,6 @@ class UserListResponseModel {
     var aadhar_image_link: String? = ""
     var type_id: Int? = 0
     var type_name: String? = ""
+    var Registered_with: String? = ""
 }
 

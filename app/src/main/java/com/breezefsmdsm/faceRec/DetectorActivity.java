@@ -53,6 +53,7 @@ import com.breezefsmdsm.CustomStatic;
 import com.breezefsmdsm.R;
 import com.breezefsmdsm.app.Pref;
 import com.breezefsmdsm.app.types.FragType;
+import com.breezefsmdsm.app.utils.AppUtils;
 import com.breezefsmdsm.app.utils.Toaster;
 import com.breezefsmdsm.faceRec.customview.OverlayView;
 import com.breezefsmdsm.faceRec.env.BorderedText;
@@ -646,7 +647,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
              lowerLi= Float.parseFloat(CustomStatic.FaceDetectionAccuracyLower);
              upperLi= Float.parseFloat(CustomStatic.FaceDetectionAccuracyUpper);
             if(lowerLi==0.00){
-               lowerLi= 0.57f;
+               lowerLi= 0.40f;
             }
             if(upperLi==0.00){
               upperLi=1.0f;
@@ -654,7 +655,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
           }
           catch (Exception e){
             e.printStackTrace();
-             lowerLi= 0.57f;
+             lowerLi= 0.40f;
              upperLi=1.0f;
           }
           //println("Face_Value "+lowerLi.toString() + " : "+upperLi.toString());

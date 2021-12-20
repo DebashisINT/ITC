@@ -558,7 +558,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         start_shop = view.findViewById(R.id.start_shop)
         enddate_TV = view.findViewById(R.id.enddate_TV)
         start_TV.setOnClickListener({ view ->
-
+            CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
         //////
             val stat = StatFs(Environment.getExternalStorageDirectory().path)
             val bytesAvailable: Long
@@ -849,7 +849,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         })
 
             end_TV.setOnClickListener({ view ->
-
+                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
                 //////
                 val stat = StatFs(Environment.getExternalStorageDirectory().path)
                 val bytesAvailable: Long
@@ -931,7 +931,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             })
 
             DDVisit_TV.setOnClickListener({ view ->
-
+                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
 
                 val stat = StatFs(Environment.getExternalStorageDirectory().path)
                 val bytesAvailable: Long

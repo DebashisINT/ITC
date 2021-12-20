@@ -294,11 +294,11 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
             @Throws(AuthFailureError::class)
             override fun getHeaders(): Map<String, String> {
                 val params: MutableMap<String, String> = HashMap()
-                params["api-key"] = "dfe0a602-7e79-4a5b-af00-509fc0e8349a"
-                //params["api-key"] = "cebc560a-855d-429e-a050-8882b9debf60"
+                //params["api-key"] = "dfe0a602-7e79-4a5b-af00-509fc0e8349a" //test
+                params["api-key"] = "cebc560a-855d-429e-a050-8882b9debf60"
                 params["Content-Type"] = "application/json"
-                params["account-id"] = "aaa73f1c1bdb/fa4cf738-2dda-41db-b0e5-0b406ebe6d2f"
-                //params["account-id"] = "1a3ae2d3a141/68665e20-bc63-4bb8-b725-f126521f3264"
+                //params["account-id"] = "aaa73f1c1bdb/fa4cf738-2dda-41db-b0e5-0b406ebe6d2f"  //test
+                params["account-id"] = "1a3ae2d3a141/68665e20-bc63-4bb8-b725-f126521f3264"
                 return params
             }
         }
@@ -360,11 +360,11 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                 @Throws(AuthFailureError::class)
                 override fun getHeaders(): Map<String, String> {
                     val params: MutableMap<String, String> = HashMap()
-                    params["api-key"] = "dfe0a602-7e79-4a5b-af00-509fc0e8349a"
-                    //params["api-key"] = "cebc560a-855d-429e-a050-8882b9debf60"
+                    //params["api-key"] = "dfe0a602-7e79-4a5b-af00-509fc0e8349a"  //test
+                    params["api-key"] = "cebc560a-855d-429e-a050-8882b9debf60"
                     params["Content-Type"] = "application/json"
-                    params["account-id"] = "aaa73f1c1bdb/fa4cf738-2dda-41db-b0e5-0b406ebe6d2f"
-                    //params["account-id"] = "1a3ae2d3a141/68665e20-bc63-4bb8-b725-f126521f3264"
+                    //params["account-id"] = "aaa73f1c1bdb/fa4cf738-2dda-41db-b0e5-0b406ebe6d2f"  //test
+                    params["account-id"] = "1a3ae2d3a141/68665e20-bc63-4bb8-b725-f126521f3264"
                     return params
                 }
             }
@@ -391,6 +391,13 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
         aadhaarSubmitData.name_on_aadhaar= aadhaar_name!!
         aadhaarSubmitData.DOB_on_aadhaar= aarhaarDOB!!
         aadhaarSubmitData.Aadhaar_number= aadhaar_no!!
+
+        if(CustomStatic.IsAadhaarForPhotoReg)
+            aadhaarSubmitData.REG_DOC_TYP="Aadhaar"
+        else if(CustomStatic.IsVoterForPhotoReg)
+            aadhaarSubmitData.REG_DOC_TYP="VOTER"
+        else if(CustomStatic.IsPanForPhotoReg)
+            aadhaarSubmitData.REG_DOC_TYP="PAN"
 
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(

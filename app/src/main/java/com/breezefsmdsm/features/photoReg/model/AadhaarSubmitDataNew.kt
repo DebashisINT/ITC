@@ -6,4 +6,5 @@ class AadhaarSubmitDataNew {
     var name_on_aadhaar: String = ""
     var DOB_on_aadhaar: String = ""
     var Aadhaar_number: String = ""
+    var REG_DOC_TYP: String = ""
 }

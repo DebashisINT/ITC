@@ -133,7 +133,13 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 if(!mList?.get(adapterPosition)?.aadhar_image_link!!.contains("CommonFolder") && mList?.get(adapterPosition)?.isFaceRegistered!!){
                     photo_reg_user_old_reg_tv.visibility=View.VISIBLE
                 }else{
-                    photo_reg_user_old_reg_tv.visibility=View.GONE
+                    //photo_reg_user_old_reg_tv.visibility=View.GONE
+                    if(mList?.get(adapterPosition)?.Registered_with!!.length>0){
+                        photo_reg_user_old_reg_tv.visibility=View.VISIBLE
+                        photo_reg_user_old_reg_tv.setTextColor(resources.getColor(R.color.color_custom_green))
+                        photo_reg_user_old_reg_tv.text= "Registered with\n"+mList?.get(adapterPosition)?.Registered_with!!+"     "
+                    }
+
                 }
 
                 if(mList?.get(adapterPosition)?.isFaceRegistered!!){

@@ -68,7 +68,8 @@
                 android:layout_weight="2"
                 android:text="Old Registration"
                 android:textColor="@color/color_custom_red"
-                android:textSize="@dimen/_9sdp" />
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"/>
 
 
         </LinearLayout>

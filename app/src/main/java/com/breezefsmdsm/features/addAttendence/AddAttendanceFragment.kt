@@ -1016,6 +1016,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 171) {
             if (resultCode == Activity.RESULT_OK) {
+                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
                 if (data != null) {
                     //var faceMatchStatus:Boolean = data.getBooleanExtra("value",false)
                     var faceMatchStatus:Boolean = data.getBooleanExtra("valueD",false)
