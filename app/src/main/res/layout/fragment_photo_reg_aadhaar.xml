@@ -6,7 +6,9 @@
     android:orientation="vertical"
     xmlns:wheel="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    android:padding="@dimen/_5sdp">
+    android:padding="@dimen/_5sdp"
+    android:clickable="true"
+    android:focusable="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,12 +48,28 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/iv_frag_photo_reg_aadhaar_pic"
+            <FrameLayout
                 android:layout_width="@dimen/_200sdp"
                 android:layout_height="@dimen/_200sdp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_10sdp" />
+                android:layout_marginTop="@dimen/_10sdp" >
+
+                <ImageView
+                    android:id="@+id/iv_frag_photo_reg_aadhaar_pic"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_200sdp"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:id="@+id/iv_frag_photo_reg_aadhaar_camera_icon"
+                    android:layout_width="@dimen/_55sdp"
+                    android:layout_height="@dimen/_55sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_camera_icon"/>
+
+            </FrameLayout>
+
+
 
 
 

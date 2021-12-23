@@ -286,6 +286,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         })
 
         var ttt = AppUtils.getCurrentDateForCons()
+        println("curr_time "+AppUtils.getCurrentDateTime())
         println("load frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
@@ -10555,40 +10556,47 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         if (Pref.isAttendanceFeatureOnly)
             return
 
-        Handler().postDelayed(Runnable {
+        if(Pref.Show_App_Logout_Notification_Global){
+            if(Pref.Show_App_Logout_Notification){
+                println("checkForceLogoutNotification() checked LocationFuzerService");
+                Handler().postDelayed(Runnable {
 
-            if (getFragment() != null && getFragment() !is LogoutSyncFragment && !Pref.isAutoLogout) {
+                    if (getFragment() != null && getFragment() !is LogoutSyncFragment && !Pref.isAutoLogout) {
 
-                if (orderCollectionAlertDialog != null) {
-                    orderCollectionAlertDialog?.dismissAllowingStateLoss()
-                    orderCollectionAlertDialog = null
-                }
+                        if (orderCollectionAlertDialog != null) {
+                            orderCollectionAlertDialog?.dismissAllowingStateLoss()
+                            orderCollectionAlertDialog = null
+                        }
 
-                if (idealLocAlertDialog != null) {
-                    idealLocAlertDialog?.dismissAllowingStateLoss()
-                    idealLocAlertDialog = null
-                }
+                        if (idealLocAlertDialog != null) {
+                            idealLocAlertDialog?.dismissAllowingStateLoss()
+                            idealLocAlertDialog = null
+                        }
 
-                if (forceLogoutDialog != null) {
-                    forceLogoutDialog?.dismissAllowingStateLoss()
-                    forceLogoutDialog = null
-                }
+                        if (forceLogoutDialog != null) {
+                            forceLogoutDialog?.dismissAllowingStateLoss()
+                            forceLogoutDialog = null
+                        }
 
-                forceLogoutDialog = CommonDialogSingleBtn.getInstance(AppUtils.hiFirstNameText(), "Final logout time of the day is ${Pref.approvedOutTime}. Click on Ok to " +
-                        "logout now & complete the automated data sync. Thanks.", getString(R.string.ok), object : OnDialogClickListener {
+                        forceLogoutDialog = CommonDialogSingleBtn.getInstance(AppUtils.hiFirstNameText(), "Final logout time of the day is ${Pref.approvedOutTime}. Click on Ok to " +
+                                "logout now & complete the automated data sync. Thanks.", getString(R.string.ok), object : OnDialogClickListener {
 
-                    override fun onOkClick() {
-                        if (AppUtils.isOnline(this@DashboardActivity)) {
-                            isForceLogout = true
-                            loadFragment(FragType.LogoutSyncFragment, true, "")
-                        } else
-                            Toaster.msgShort(this@DashboardActivity, getString(R.string.no_internet))
+                            override fun onOkClick() {
+                                if (AppUtils.isOnline(this@DashboardActivity)) {
+                                    isForceLogout = true
+                                    loadFragment(FragType.LogoutSyncFragment, true, "")
+                                } else
+                                    Toaster.msgShort(this@DashboardActivity, getString(R.string.no_internet))
+                            }
+                        })//.show(supportFragmentManager, "CommonDialogSingleBtn")
+                        forceLogoutDialog?.show(supportFragmentManager, "CommonDialogSingleBtn")
                     }
-                })//.show(supportFragmentManager, "CommonDialogSingleBtn")
-                forceLogoutDialog?.show(supportFragmentManager, "CommonDialogSingleBtn")
-            }
 
-        }, 200)
+                }, 200)
+            }
+        }
+
+
     }
 
 

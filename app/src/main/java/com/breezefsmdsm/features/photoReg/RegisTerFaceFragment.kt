@@ -73,6 +73,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
     private lateinit var ll_phone : LinearLayout
 
     private lateinit var shopLargeImg:ImageView
+    private lateinit var photoRegCameraIcon:ImageView
 
     var takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
@@ -135,12 +136,14 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         registerTV = view.findViewById(R.id.btn_frag_reg_face_register_aadhaar)
         registerTV_voter = view.findViewById(R.id.btn_frag_reg_face_register_voter)
         registerTV_pan = view.findViewById(R.id.btn_frag_reg_face_register_pan)
+        photoRegCameraIcon = view.findViewById(R.id.iv_frag_photo_reg_face_camera_icon)
 
         progress_wheel = view.findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
         registerTV.setOnClickListener(this)
         registerTV_voter.setOnClickListener(this)
         registerTV_pan.setOnClickListener(this)
+        photoRegCameraIcon.setOnClickListener(this)
 
         nameTV.text = user_name!!
         phoneTV.text = user_login_id!!
@@ -218,6 +221,10 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         imgUri=imgRealPath
         imagePath = imgRealPath.toString()
 
+        if(imagePath!=""){
+            photoRegCameraIcon.visibility=View.GONE
+        }
+
         getBitmap(imgRealPath.path)
 
 
@@ -228,7 +235,19 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
     }
 
+
+    private fun registerFaceApiNewFlow(){
+        CustomStatic.FaceRegFaceImgPath=imagePath
+        if(CustomStatic.IsAadhaarForPhotoReg)
+            showAadhaarIns(valueData,getString(R.string.aadhaar_reg_guide_header),getString(R.string.aadhaar_reg_guide_body))
+        else if(CustomStatic.IsVoterForPhotoReg)
+            showAadhaarIns(valueData,getString(R.string.voter_reg_guide_header),getString(R.string.voter_reg_guide_body))
+        else if(CustomStatic.IsPanForPhotoReg)
+            showAadhaarIns(valueData,getString(R.string.pan_reg_guide_header),getString(R.string.pan_reg_guide_body))
+    }
+
     private fun registerFaceApi(){
+
         progress_wheel.spin()
         var obj= UserPhotoRegModel()
         //obj.user_id= Pref.user_id
@@ -375,6 +394,9 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                 R.id.ll_regis_face_phone ->{
                     IntentActionable.initiatePhoneCall(mContext, phoneTV.text.toString())
                 }
+                R.id.iv_frag_photo_reg_face_camera_icon->{
+                    launchCamera()
+                }
 
 
             }
@@ -389,7 +411,8 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         }
 
         if(imagePath.length>0 && imagePath!="") {
-            registerFaceApi()
+            //registerFaceApi()
+            registerFaceApiNewFlow()
             val simpleDialogg = Dialog(mContext)
             simpleDialogg.setCancelable(false)
             simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))

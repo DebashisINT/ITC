@@ -142,7 +142,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 if (query.isBlank()) {
                     userList?.let {
                         adapter?.refreshList(it)
-                        tv_cust_no.text = "Total customer(s): " + it.size
+                        //tv_cust_no.text = "Total customer(s): " + it.size
                     }
                 } else {
                     adapter?.filter?.filter(query)
@@ -203,6 +203,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         et_search.visibility = View.GONE
 
         prosPopupWindow?.elevation = 200f
+        prosPopupWindow!!.width=resources.getDimensionPixelOffset(R.dimen._200sdp)
+        prosPopupWindow!!.height=resources.getDimensionPixelOffset(R.dimen._200sdp)
         rv_pros_list.adapter = ProsListSelectionAdapter(mContext, prosCusList, object : ProsListSelectionListner {
             override fun getInfo(obj: ProsCustom) {
                 prosPopupWindow?.dismiss()

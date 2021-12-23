@@ -39,7 +39,7 @@
             android:orientation="vertical">
 
             <com.breezefsmdsm.widgets.AppCustomTextView
-                android:id="@+id/tv_cust_no"
+                android:id="@+id/tv_cust_no_frag_reg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -54,7 +54,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_frag_photo_reg"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
         </LinearLayout>
 
 

@@ -8,6 +8,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.AddShopDBModelEntity

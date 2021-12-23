@@ -39,6 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.NewFileUtils
@@ -88,6 +89,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var et_attachment: AppCustomEditText
     private lateinit var et_photo: AppCustomEditText
+    private lateinit var tv_cust_no_frag_reg: TextView
 
     private var isAttachment = false
     private var dataPath = ""
@@ -127,10 +129,12 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                 if (query.isBlank()) {
                     userList?.let {
                         adapter?.refreshList(it)
-                        tv_cust_no.text = "Total customer(s): " + it.size
+                        //tv_cust_no_frag_reg.text = "Total customer(s) : " + it.size
                     }
                 } else {
                     adapter?.filter?.filter(query)
+                    //tv_cust_no_frag_reg.text = "Total customer(s) : "+ CustomStatic.PhotoRegUserSearchCount.toString()
+
                 }
             }
         })
@@ -143,6 +147,9 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         et_photo = view!!.findViewById(R.id.et_photo)
         mRv_userList = view!!.findViewById(R.id.rv_frag_photo_reg)
         progress_wheel = view.findViewById(R.id.progress_wheel)
+        tv_cust_no_frag_reg = view.findViewById(R.id.tv_cust_no_frag_reg)
+
+        tv_cust_no_frag_reg.visibility=View.GONE
 
         mRv_userList.layoutManager = LinearLayoutManager(mContext)
 
@@ -211,7 +218,6 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                                 aadhaarList.add(userList.get(j).RegisteredAadhaarNo!!)
                                             }
                                         }*/
-
                                         uiThread {
                                             callAllUserAadhaarDetailsApi()
                                             //setAdapter()
@@ -306,7 +312,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
     private fun setAdapter() {
 
         //Toast.makeText(mContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
-
+        //tv_cust_no_frag_reg.text = "Total customer(s) : " + userList!!.size
 
         adapter = AdapterUserList(mContext, userList!!, object : PhotoRegUserListner {
 
@@ -389,9 +395,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                         .resize(500, 500)
                         .into(faceImg)
 
-
                 progress_wheel.stopSpinning()
-
 
                 simpleDialogg.show()
 
@@ -440,7 +444,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                         .centerCrop()
                         .memoryPolicy(MemoryPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.NO_CACHE)
-                        .resize(500, 500)
+                        .resize(700, 400)
                         .into(faceImg)
 
 

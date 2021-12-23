@@ -1505,12 +1505,12 @@
                                             5. Take Closure Look photo of Voter Card\n
                                             6. Please only Capture Voter image and dont try with any other image. It will block your registration.</string>
 
-    <string name="pan_reg_guide_header" translatable="false">Pan Registration Guide:</string>
+    <string name="pan_reg_guide_header" translatable="false">PAN Registration Guide:</string>
     <string name="pan_reg_guide_body" translatable="false">1. Avoid Background area\n
-                                            2. Take Only Pan Card Area, check the below sample photo.\n
+                                            2. Take Only PAN Card Area, check the below sample photo.\n
                                             3. Take Photo in Normal daylight\n
-                                            4. Make sure all the information is showing clearly in Pan Card\n
-                                            5. Take Closure Look photo of Pan Card\n
-                                            6. Please only Capture Pan image and dont try with any other image. It will block your registration.</string>
+                                            4. Make sure all the information is showing clearly in PAN Card\n
+                                            5. Take Closure Look photo of PAN Card\n
+                                            6. Please only Capture PAN image and dont try with any other image. It will block your registration.</string>
 
 </resources>
