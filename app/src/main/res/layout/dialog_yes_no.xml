@@ -73,6 +73,7 @@
                 android:backgroundTint="#f8424e"
                 android:layout_marginRight="@dimen/_1sdp"/>
 
+
             <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/tv_dialog_yes_no_yes"
                 android:layout_width="match_parent"

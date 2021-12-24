@@ -197,6 +197,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
         val customView = inflater!!.inflate(R.layout.dialog_months, null)
         prosPopupWindow = PopupWindow(customView, resources.getDimensionPixelOffset(R.dimen._110sdp), resources.getDimensionPixelOffset(R.dimen._100sdp))
+        prosPopupWindow?.isFocusable=true
         val rv_pros_list = customView.findViewById(R.id.rv_months) as RecyclerView
         rv_pros_list.layoutManager = LinearLayoutManager(mContext)
         val et_search = customView.findViewById<AppCustomEditText>(R.id.et_search)

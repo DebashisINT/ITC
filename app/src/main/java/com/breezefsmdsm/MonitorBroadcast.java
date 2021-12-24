@@ -131,7 +131,7 @@ public class MonitorBroadcast extends BroadcastReceiver {
 
         vibrator=(Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         long[] pattern = {0,5,10,20,40,80,120,100,600,700,500,500,500};
-        vibrator.vibrate(pattern,1);
+        //vibrator.vibrate(pattern,1);
         //vibrator.vibrate(10*60*1000);
 
     }
