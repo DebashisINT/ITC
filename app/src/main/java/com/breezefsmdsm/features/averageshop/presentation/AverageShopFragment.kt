@@ -1941,21 +1941,30 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         ////////
         revisitStatusList.clear()
         var key:String = ""
-        for(i in 0..list_?.size-1){
-            if(list_.get(i).shopid.equals(shopId)){
-                key=list_.get(i).shop_revisit_uniqKey!!.toString()
+        try {
+            for(i in 0..list_?.size-1){
+                if(list_.get(i).shopid.equals(shopId)){
+                    key=list_.get(i).shop_revisit_uniqKey!!.toString()
+                }
             }
+        }catch (ex:Exception){
+
+        }
+        try {
+            var revisitStatusObj= ShopRevisitStatusRequestData()
+            var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(key)
+            if(data!=null ){
+                revisitStatusObj.shop_id=data.shop_id
+                revisitStatusObj.order_status=data.order_status
+                revisitStatusObj.order_remarks=data.order_remarks
+                revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                revisitStatusList.add(revisitStatusObj)
+            }
+        }catch (ex:java.lang.Exception){
+
         }
 
-        var revisitStatusObj= ShopRevisitStatusRequestData()
-        var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(key)
-        if(data!=null ){
-            revisitStatusObj.shop_id=data.shop_id
-            revisitStatusObj.order_status=data.order_status
-            revisitStatusObj.order_remarks=data.order_remarks
-            revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
-            revisitStatusList.add(revisitStatusObj)
-        }
+
         ///////////
 
         progress_wheel.spin()

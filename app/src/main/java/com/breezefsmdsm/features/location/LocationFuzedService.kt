@@ -1057,6 +1057,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                 Pref.isShopVisited=true
 
+                var shopAll = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
+                mShopActivityEntity.shop_revisit_uniqKey = Pref.user_id + System.currentTimeMillis().toString()
+
                 AppDatabase.getDBInstance()!!.shopActivityDao().insertAll(mShopActivityEntity)
 
                 /*Terminate All other Shop Visit*/

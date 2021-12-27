@@ -822,9 +822,13 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         addShopData.assigned_to_shop_id = mAddShopDBModelEntity.assigned_to_shop_id
         addShopData.actual_address = mAddShopDBModelEntity.actual_address
 
+        try{
+            var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id,false)
+            addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
+        }catch (ex:Exception){
 
-        var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id,false)
-        addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
+        }
+
 
         callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, mAddShopDBModelEntity.doc_degree, shopList)
         //callAddShopApi(addShopData, "")
@@ -1176,7 +1180,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             shopDurationData.start_timestamp = shopActivity.startTimeStamp
             shopDurationData.in_location = shopActivity.in_loc
             shopDurationData.out_location = shopActivity.out_loc
-            shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+            try{
+                shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+            }catch (ex:Exception){
+
+            }
+
 
             shopDataList.add(shopDurationData)
         }
@@ -1233,7 +1242,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 shopDurationData.start_timestamp = shopActivity.startTimeStamp
                 shopDurationData.in_location = shopActivity.in_loc
                 shopDurationData.out_location = shopActivity.out_loc
-                shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+                try{
+                    shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+                }catch (ex:Exception){
+
+                }
+
 
                 shopDataList.add(shopDurationData)
             }
@@ -2513,21 +2527,31 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         shopDurationData.start_timestamp = shopActivity.startTimeStamp
                         shopDurationData.in_location = shopActivity.in_loc
                         shopDurationData.out_location = shopActivity.out_loc
-                        shopDurationData.shop_revisit_uniqKey=shopActivity.shop_revisit_uniqKey
+                        try{
+                            shopDurationData.shop_revisit_uniqKey=shopActivity.shop_revisit_uniqKey
+                        }catch (ex:java.lang.Exception){
+
+                        }
+
 
                         shopDataList.add(shopDurationData)
 
 
                         //////////////////////////
-                        var revisitStatusObj=ShopRevisitStatusRequestData()
-                        var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
-                        if(data != null){
-                            revisitStatusObj.shop_id=data.shop_id
-                            revisitStatusObj.order_status=data.order_status
-                            revisitStatusObj.order_remarks=data.order_remarks
-                            revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
-                            revisitStatusList.add(revisitStatusObj)
+                        try{
+                            var revisitStatusObj=ShopRevisitStatusRequestData()
+                            var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                            if(data != null){
+                                revisitStatusObj.shop_id=data.shop_id
+                                revisitStatusObj.order_status=data.order_status
+                                revisitStatusObj.order_remarks=data.order_remarks
+                                revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                                revisitStatusList.add(revisitStatusObj)
+                            }
+                        }catch (ex:java.lang.Exception){
+
                         }
+
                     }
                 }
                 else {
@@ -2574,21 +2598,35 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         shopDurationData.start_timestamp = it.startTimeStamp
                         shopDurationData.in_location = it.in_loc
                         shopDurationData.out_location = it.out_loc
-                        shopDurationData.shop_revisit_uniqKey=it.shop_revisit_uniqKey
+
+                        try{
+                            shopDurationData.shop_revisit_uniqKey=it.shop_revisit_uniqKey
+                        }catch (ex:Exception){
+
+                        }
+
+
 
                         shopDataList.add(shopDurationData)
 
 
                         //////////////////////////
-                        var revisitStatusObj=ShopRevisitStatusRequestData()
-                        var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
-                        if(data != null ){
-                            revisitStatusObj.shop_id=data.shop_id
-                            revisitStatusObj.order_status=data.order_status
-                            revisitStatusObj.order_remarks=data.order_remarks
-                            revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
-                            revisitStatusList.add(revisitStatusObj)
+
+                        try{
+                            var revisitStatusObj=ShopRevisitStatusRequestData()
+                            var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                            if(data != null ){
+                                revisitStatusObj.shop_id=data.shop_id
+                                revisitStatusObj.order_status=data.order_status
+                                revisitStatusObj.order_remarks=data.order_remarks
+                                revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                                revisitStatusList.add(revisitStatusObj)
+                            }
+                        }catch (ex:Exception){
+
                         }
+
+
                     }
                 }
             }
@@ -2669,18 +2707,25 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                 XLog.d("callShopDurationApi (Logout Sync): REQUEST")
 
-                revisitStatusList.clear()
-                var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getUnsyncedList()
-                if(data != null ){
-                    for(i in data?.indices){
-                        var revisitStatusObj=ShopRevisitStatusRequestData()
-                        revisitStatusObj.shop_id=data?.get(i)?.shop_id!!
-                        revisitStatusObj.order_status=data?.get(i)?.order_status!!
-                        revisitStatusObj.order_remarks=data?.get(i)?.order_remarks!!
-                        revisitStatusObj.shop_revisit_uniqKey=data?.get(i)?.shop_revisit_uniqKey!!
-                        revisitStatusList.add(revisitStatusObj)
+
+                try{
+                    revisitStatusList.clear()
+                    var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getUnsyncedList()
+                    if(data != null ){
+                        for(i in data?.indices){
+                            var revisitStatusObj=ShopRevisitStatusRequestData()
+                            revisitStatusObj.shop_id=data?.get(i)?.shop_id!!
+                            revisitStatusObj.order_status=data?.get(i)?.order_status!!
+                            revisitStatusObj.order_remarks=data?.get(i)?.order_remarks!!
+                            revisitStatusObj.shop_revisit_uniqKey=data?.get(i)?.shop_revisit_uniqKey!!
+                            revisitStatusList.add(revisitStatusObj)
+                        }
                     }
+                }catch (ex:Exception){
+
                 }
+
+
 
                 BaseActivity.compositeDisposable.add(
                         repository.shopDuration(shopDurationApiReq)
@@ -2919,7 +2964,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity?.shopid).totalVisitCount
                         else
                             shopDurationData.total_visit_count = "1"
-                        shopDurationData.shop_revisit_uniqKey=shopActivity?.shop_revisit_uniqKey
+                        try{
+                            shopDurationData.shop_revisit_uniqKey=shopActivity?.shop_revisit_uniqKey
+                        }catch (ex:Exception){
+
+                        }
+
                         shopDataList.add(shopDurationData)
                     }
                 }
@@ -2937,7 +2987,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid).totalVisitCount
                         else
                             shopDurationData.total_visit_count = "1"
-                        shopDurationData.shop_revisit_uniqKey=it?.shop_revisit_uniqKey
+                        try{
+                            shopDurationData.shop_revisit_uniqKey=it?.shop_revisit_uniqKey
+                        }catch (ex:Exception){
+
+                        }
+
                         shopDataList.add(shopDurationData)
                     }
                 }

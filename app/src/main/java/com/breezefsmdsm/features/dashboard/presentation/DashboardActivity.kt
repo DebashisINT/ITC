@@ -2114,8 +2114,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             photo_registration.visibility = View.GONE
         }
         /*29-10-2021 Team Attendance*/
-        if (Pref.willLeaveApprovalEnable) {
-        //if (Pref.IsTeamAttendance) {
+        //if (Pref.willLeaveApprovalEnable) {
+         if (Pref.IsTeamAttendance) {
             photo_team_attendance.visibility = View.VISIBLE
 
         } else {

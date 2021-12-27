@@ -101,22 +101,20 @@ class MonitorService:Service() {
             }
         }
 
-        var manu= Build.MANUFACTURER.toUpperCase(Locale.getDefault())
+  /*      var manu= Build.MANUFACTURER.toUpperCase(Locale.getDefault())
         if(manu.equals("XIAOMI")){
             if(isPowerSaveModeCompat(this) ){
                 powerMode = "Power Save Mode ON"
                 if(Pref.GPSAlertGlobal){
                     if(Pref.GPSAlert){
                         SendBrod.sendBrod(this)
-                    }}
-
-                //sendGPSOffBroadcast()
+                    }
+                }
             }else{
                 powerMode = "Power Save Mode OFF"
                 SendBrod.stopBrod(this)
-                //cancelGpsBroadcast()
             }
-        }
+        }*/
 
         if(shouldShopActivityUpdate()){
             if (FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, this)) {
