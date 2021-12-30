@@ -1240,6 +1240,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             nearBy = 500.0
             Pref.DistributorGPSAccuracy="500"
         }
+        println("curr_time "+AppUtils.getCurrentDateTime()+"   gps_accuracy "+Pref.DistributorGPSAccuracy)
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
         var finalNearByDD: AssignToDDEntity = AssignToDDEntity()
