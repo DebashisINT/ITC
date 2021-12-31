@@ -35,7 +35,6 @@ import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.AlarmReceiver.Companion.setAlarm
 import com.breezefsmdsm.app.domain.*
-import com.breezefsmdsm.app.uiaction.DisplayAlert.Companion.showSnackMessage
 import com.breezefsmdsm.app.utils.*
 import com.breezefsmdsm.app.utils.AppUtils.Companion.getCurrentTimeInMintes
 import com.breezefsmdsm.base.BaseResponse
@@ -187,9 +186,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private lateinit var cb_remember_me: CheckBox
     private lateinit var share_log_login_TV: AppCustomTextView
 
-    private lateinit var  tvappCustomAnydeskInfo: AppCustomTextView
-    private lateinit var  tvappCustomAnydesk: AppCustomTextView
-    private lateinit var  tvappCustomSharelog: AppCustomTextView
+    private lateinit var tvappCustomAnydeskInfo: AppCustomTextView
+    private lateinit var tvappCustomAnydesk: AppCustomTextView
+    private lateinit var tvappCustomSharelog: AppCustomTextView
 
     private lateinit var mContext: Context
 
@@ -197,7 +196,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         mContext = this@LoginActivity
-        println("xyz - login oncreate started"+AppUtils.getCurrentDateTime());
+        println("xyz - login oncreate started" + AppUtils.getCurrentDateTime());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             initPermissionCheck()
         else
@@ -729,21 +728,21 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                         AppDatabase.getDBInstance()?.productRateDao()?.insertAll(productRateList)
 
 
-                                      /*  productRateList.forEach {
-                                            val productRate = ProductRateEntity()
-                                            AppDatabase.getDBInstance()?.productRateDao()?.insert(productRate.apply {
-                                                product_id = it.product_id
-                                                rate1 = it.rate1
-                                                rate2 = it.rate2
-                                                rate3 = it.rate3
-                                                rate4 = it.rate4
-                                                rate5 = it.rate5
-                                                stock_amount = it.stock_amount
-                                                stock_unit = it.stock_unit
-                                                isStockShow = it.isStockShow
-                                                isRateShow = it.isRateShow
-                                            })
-                                        }*/
+                                        /*  productRateList.forEach {
+                                              val productRate = ProductRateEntity()
+                                              AppDatabase.getDBInstance()?.productRateDao()?.insert(productRate.apply {
+                                                  product_id = it.product_id
+                                                  rate1 = it.rate1
+                                                  rate2 = it.rate2
+                                                  rate3 = it.rate3
+                                                  rate4 = it.rate4
+                                                  rate5 = it.rate5
+                                                  stock_amount = it.stock_amount
+                                                  stock_unit = it.stock_unit
+                                                  isStockShow = it.isStockShow
+                                                  isRateShow = it.isRateShow
+                                              })
+                                          }*/
 
                                         uiThread {
                                             progress_wheel.stopSpinning()
@@ -942,7 +941,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getModelListApi() {
-        println("xyzzz - getModelListApi called"+AppUtils.getCurrentDateTime());
+        println("xyzzz - getModelListApi called" + AppUtils.getCurrentDateTime());
         progress_wheel.spin()
         //checkPrimaryAppList()
         val repository = ShopListRepositoryProvider.provideShopListRepository()
@@ -960,19 +959,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (response.model_list != null && response.model_list!!.isNotEmpty()) {
 
                                     doAsync {
-                                        println("xyzzz - getModelListApi db_______started"+AppUtils.getCurrentDateTime());
+                                        println("xyzzz - getModelListApi db_______started" + AppUtils.getCurrentDateTime());
                                         AppDatabase.getDBInstance()?.modelListDao()?.insertAllLarge(response.model_list!!)
                                         //AppDatabase.getDBInstance()?.modelListDao()?.getSinglepe()
-                                        println("xyzzz - getModelListApi db_______started"+AppUtils.getCurrentDateTime());
-                             /*           response.model_list?.forEach {
+                                        println("xyzzz - getModelListApi db_______started" + AppUtils.getCurrentDateTime());
+                                        /*           response.model_list?.forEach {
 
-                                            val modelEntity = ModelEntity()
-                                            AppDatabase.getDBInstance()?.modelListDao()?.insertAll(modelEntity.apply {
-                                                model_id = it.id
-                                                model_name = it.name
-                                            })
+                                                       val modelEntity = ModelEntity()
+                                                       AppDatabase.getDBInstance()?.modelListDao()?.insertAll(modelEntity.apply {
+                                                           model_id = it.id
+                                                           model_name = it.name
+                                                       })
 
-                                        }*/
+                                                   }*/
 
                                         uiThread {
                                             progress_wheel.stopSpinning()
@@ -2278,7 +2277,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 type_id = it.id
                                                 type_name = it.type
                                                 image = it.image
-                                                IsForOrganization= it.IsForOrganization
+                                                IsForOrganization = it.IsForOrganization
                                                 IsForOwn = it.IsForOwn
                                             })
                                         }
@@ -2937,10 +2936,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 },3000)*/
             }
 
-        }, arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO))
+        }, arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO))
     }
 
-    fun fileManagePermii(){
+    fun fileManagePermii() {
         /*try {
             val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
             intent.addCategory("android.intent.category.DEFAULT")
@@ -2953,12 +2952,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }*/
 
 
-     /*   val intent = Intent()
-        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-        val uri = Uri.fromParts("package", this.packageName, null)
-        intent.data = uri
-        //startActivity(intent)
-        startActivityForResult(intent,777)*/
+        /*   val intent = Intent()
+           intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+           val uri = Uri.fromParts("package", this.packageName, null)
+           intent.data = uri
+           //startActivity(intent)
+           startActivityForResult(intent,777)*/
     }
 
     private fun getLastLocation() {
@@ -3121,7 +3120,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun initView() {
         val login_TV = findViewById<TextView>(R.id.login_TV)
-        login_TV.isEnabled=true
+        login_TV.isEnabled = true
         username_EDT = findViewById(R.id.username_EDT)
         password_EDT = findViewById(R.id.password_EDT)
         forgotPassword = findViewById(R.id.forgot_password_TV)
@@ -3145,10 +3144,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         tvappCustomAnydeskInfo.isSelected = false
 
         var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
-        if(launchIntent!=null){
-            activity_login_tvappCustomAnydesk.text=resources.getString(R.string.label_open_anydesk)
-        }else{
-            activity_login_tvappCustomAnydesk.text=resources.getString(R.string.label_install_anydesk)
+        if (launchIntent != null) {
+            activity_login_tvappCustomAnydesk.text = resources.getString(R.string.label_open_anydesk)
+        } else {
+            activity_login_tvappCustomAnydesk.text = resources.getString(R.string.label_install_anydesk)
         }
 
 
@@ -3177,89 +3176,34 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         when (p0!!.id) {
             R.id.login_TV -> {
 
-                  val stat = StatFs(Environment.getExternalStorageDirectory().path)
-                val bytesAvailable: Long
-                bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    stat.blockSizeLong * stat.availableBlocksLong
-                } else {
-                    stat.blockSize.toLong() * stat.availableBlocks.toLong()
-                }
-                val megAvailable = bytesAvailable / (1024 * 1024)
-                println("storage "+megAvailable.toString());
-                XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+                var andrV = Build.VERSION.SDK_INT.toInt()
 
-
-                if(megAvailable<5000){
-                    val simpleDialog = Dialog(this)
-                    simpleDialog.setCancelable(false)
-                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    simpleDialog.setContentView(R.layout.dialog_message)
-                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                    if(Pref.user_name!=null){
-                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                    }else{
-                        dialog_yes_no_headerTV.text = "Hi User"+"!"
-                    }
-                    //dialogHeader.text = "You have only "+megAvailable.toString()+ " MB available to store data. It is not sufficient\n" +
-                            //"to proceed. Please clear memory and Retry Login again. Thanks."
-
-                    dialogHeader.text = "Please note that memory available is less than 5 GB. App may not function properly. Please make available memory greater than 5 GB."
-
-                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                    dialogYes.setOnClickListener({ view ->
-                        simpleDialog.cancel()
-                        login_TV.isEnabled = false
-                        println("xyzy - login called" + AppUtils.getCurrentDateTime());
-                        if (TextUtils.isEmpty(username_EDT.text.toString().trim())){
-                            showSnackMessage(getString(R.string.error_enter_username))
-                            login_TV.isEnabled = true
-                        }
-                        else if (TextUtils.isEmpty(password_EDT.text.toString().trim())){
-                            showSnackMessage(getString(R.string.error_enter_pwd))
-                            login_TV.isEnabled = true
-                        }
-                        else {
-                            AppUtils.hideSoftKeyboard(this)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (Settings.canDrawOverlays(this)) {
-                                    initiateLogin()
-                                } else {
-                                    //Permission is not available. Display error text.
-                                    getOverlayPermission()
-                                }
-                            } else {
-                                initiateLogin()
-                            }
-
-
-                        }
-                    })
-                    simpleDialog.show()
-                }else {
-                    login_TV.isEnabled = false
-                    println("xyzy - login called" + AppUtils.getCurrentDateTime());
-                    //Crashlytics.getInstance().crash()
-                    if (TextUtils.isEmpty(username_EDT.text.toString().trim())) {
-                        showSnackMessage(getString(R.string.error_enter_username))
-                        login_TV.isEnabled = true
-                    } else if (TextUtils.isEmpty(password_EDT.text.toString().trim())) {
-                        showSnackMessage(getString(R.string.error_enter_pwd))
-                        login_TV.isEnabled = true
+                if (andrV < 26) {
+                    val simpleDialogV = Dialog(this)
+                    simpleDialogV.setCancelable(false)
+                    simpleDialogV.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialogV.setContentView(R.layout.dialog_message)
+                    val dialogHeaderV = simpleDialogV.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTVV = simpleDialogV.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    if (Pref.user_name != null) {
+                        dialog_yes_no_headerTVV.text = "Hi " + Pref.user_name!! + "!"
                     } else {
-                        AppUtils.hideSoftKeyboard(this)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (Settings.canDrawOverlays(this)) {
-                                initiateLogin()
-                            } else {
-                                //Permission is not available. Display error text.
-                                getOverlayPermission()
-                            }
-                        } else {
-                            initiateLogin()
-                        }
+                        dialog_yes_no_headerTVV.text = "Hi User" + "!"
                     }
+                    dialogHeaderV.text = "Android Version is below 8.\n" +
+                            "Functionality may not be working properly."
+
+                    val dialogYesV = simpleDialogV.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYesV.setOnClickListener({ view ->
+                        simpleDialogV.cancel()
+                        loginProcessFun()
+                    })
+                    simpleDialogV.show()
+                } else {
+                    loginProcessFun()
                 }
+
+
 //                login_TV.isEnabled = false
 //                println("xyzy - login called" + AppUtils.getCurrentDateTime());
 //                //Crashlytics.getInstance().crash()
@@ -3312,19 +3256,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 activity_login_llList.visibility = View.GONE
             }
 
-            R.id.activity_login_tvappCustomAnydesk->{
+            R.id.activity_login_tvappCustomAnydesk -> {
                 var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
-                if(launchIntent!=null){
+                if (launchIntent != null) {
                     startActivity(launchIntent)
                     activity_login_llList.visibility = View.GONE
-                }else{
+                } else {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid"))
                     startActivity(intent)
                     activity_login_llList.visibility = View.GONE
                 }
             }
 
-            R.id.activity_login_tvappCustomAnydeskInfo->{
+            R.id.activity_login_tvappCustomAnydeskInfo -> {
                 if (!activity_login_tvappCustomAnydeskInfo.isSelected) {
                     activity_login_tvappCustomAnydeskInfo.isSelected = true
                     activity_login_llList.visibility = View.VISIBLE
@@ -3349,12 +3293,106 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }
     }
 
-    private fun fileManagePermi(){
-       /* val intent = Intent()
-        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-        val uri = Uri.fromParts("package", this.packageName, null)
-        intent.data = uri
-        startActivity(intent)*/
+    private fun loginProcessFun() {
+
+        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+        val totalSt = StatFs(Environment.getExternalStorageDirectory().path)
+        val bytesAvailable: Long
+        bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            stat.blockSizeLong * stat.availableBlocksLong
+        } else {
+            stat.blockSize.toLong() * stat.availableBlocks.toLong()
+        }
+        val bytesTotal: Long
+        bytesTotal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            totalSt.blockCountLong * totalSt.blockSizeLong
+        } else {
+            totalSt.blockCountLong.toLong() * totalSt.blockSizeLong.toLong()
+        }
+        val megAvailable = bytesAvailable / (1024 * 1024)
+        val megTotal = bytesTotal / (1024 * 1024)
+        println("phone_storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime());
+        XLog.d("phone storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime())
+
+        if (megAvailable < 1024) {
+            val simpleDialog = Dialog(this)
+            simpleDialog.setCancelable(true)
+            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            simpleDialog.setContentView(R.layout.dialog_message)
+            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+            if (Pref.user_name != null) {
+                dialog_yes_no_headerTV.text = "Hi " + Pref.user_name!! + "!"
+            } else {
+                dialog_yes_no_headerTV.text = "Hi User" + "!"
+            }
+            //dialogHeader.text = "You have only "+megAvailable.toString()+ " MB available to store data. It is not sufficient\n" +
+            //"to proceed. Please clear memory and Retry Login again. Thanks."
+
+            //dialogHeader.text = "Please note that memory available is less than 5 GB. App may not function properly. Please make available memory greater than 5 GB."
+            dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+
+            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            dialogYes.setOnClickListener({ view ->
+                simpleDialog.cancel()
+                login_TV.isEnabled = false
+                println("xyzy - login called" + AppUtils.getCurrentDateTime());
+                if (TextUtils.isEmpty(username_EDT.text.toString().trim())) {
+                    showSnackMessage(getString(R.string.error_enter_username))
+                    login_TV.isEnabled = true
+                } else if (TextUtils.isEmpty(password_EDT.text.toString().trim())) {
+                    showSnackMessage(getString(R.string.error_enter_pwd))
+                    login_TV.isEnabled = true
+                } else {
+                    AppUtils.hideSoftKeyboard(this)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (Settings.canDrawOverlays(this)) {
+                            initiateLogin()
+                        } else {
+                            //Permission is not available. Display error text.
+                            getOverlayPermission()
+                        }
+                    } else {
+                        initiateLogin()
+                    }
+
+
+                }
+            })
+            simpleDialog.show()
+        }
+        else {
+            login_TV.isEnabled = false
+            println("xyzy - login called" + AppUtils.getCurrentDateTime());
+            //Crashlytics.getInstance().crash()
+            if (TextUtils.isEmpty(username_EDT.text.toString().trim())) {
+                showSnackMessage(getString(R.string.error_enter_username))
+                login_TV.isEnabled = true
+            } else if (TextUtils.isEmpty(password_EDT.text.toString().trim())) {
+                showSnackMessage(getString(R.string.error_enter_pwd))
+                login_TV.isEnabled = true
+            } else {
+                AppUtils.hideSoftKeyboard(this)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (Settings.canDrawOverlays(this)) {
+                        initiateLogin()
+                    } else {
+                        //Permission is not available. Display error text.
+                        getOverlayPermission()
+                    }
+                } else {
+                    initiateLogin()
+                }
+            }
+        }
+    }
+
+    private fun fileManagePermi() {
+        /* val intent = Intent()
+         intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+         val uri = Uri.fromParts("package", this.packageName, null)
+         intent.data = uri
+         startActivity(intent)*/
 
     }
 
@@ -3388,12 +3426,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-
-
-
-
     private fun initiateLogin() {
-        println("xyz - initiateLogin started"+AppUtils.getCurrentDateTime());
+        println("xyz - initiateLogin started" + AppUtils.getCurrentDateTime());
         val list = AppDatabase.getDBInstance()?.addShopEntryDao()?.all
 
         if (Pref.isClearData) {
@@ -3410,7 +3444,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             if (isApiInitiated)
                 return
             //prapareLogin(this)
-            println("xyz - initiateLogin end"+AppUtils.getCurrentDateTime());
+            println("xyz - initiateLogin end" + AppUtils.getCurrentDateTime());
             callNewSettingsApi()
         } else {
             //showSnackMessage(getString(R.string.no_internet))
@@ -3420,7 +3454,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun callNewSettingsApi() {
-        println("xyz - callNewSettingsApi started"+AppUtils.getCurrentDateTime());
+        println("xyz - callNewSettingsApi started" + AppUtils.getCurrentDateTime());
         val repository = LoginRepositoryProvider.provideLoginRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -3533,7 +3567,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     fun prapareLogin(context: Context) {
-        println("xyz - callNewSettingsApi end"+AppUtils.getCurrentDateTime());
+        println("xyz - callNewSettingsApi end" + AppUtils.getCurrentDateTime());
         if (!AppUtils.isLocationEnabled(this)) {
             showSnackMessage(getString(R.string.alert_nolocation))
             return
@@ -3542,14 +3576,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         XLog.d("LoginLocationRequest : " + "\n, IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
 //        progress_wheel.spin()
         if (Pref.latitude != null && Pref.latitude!!.trim() != "") {
-            println("xyz - callApi started"+AppUtils.getCurrentDateTime());
+            println("xyz - callApi started" + AppUtils.getCurrentDateTime());
             callApi(username_EDT.text.toString().trim(), password_EDT.text.toString())
         } else {
             val gpsTracker = GPSTracker(this)
             if (gpsTracker.isGPSTrackingEnabled) {
                 Pref.latitude = gpsTracker.getLatitude().toString()
                 Pref.longitude = gpsTracker.getLongitude().toString()
-                println("xyz - callApi started"+AppUtils.getCurrentDateTime());
+                println("xyz - callApi started" + AppUtils.getCurrentDateTime());
                 callApi(username_EDT.text.toString().trim(), password_EDT.text.toString().trim())
             }
 //            SingleShotLocationProvider.requestSingleUpdate(context,
@@ -3658,7 +3692,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                             if (mLocation.contains("http"))
                                 mLocation = "Unknown"
-                            println("xyz - callNewSettingsApi end"+AppUtils.getCurrentDateTime());
+                            println("xyz - callNewSettingsApi end" + AppUtils.getCurrentDateTime());
                             doLogin(username, password, mLocation)
                         }
                     })
@@ -3667,7 +3701,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
     private fun doLogin(username: String, password: String, location: String) {
-        println("xyz - doLogin started"+AppUtils.getCurrentDateTime());
+        println("xyz - doLogin started" + AppUtils.getCurrentDateTime());
 
         XLog.d("LoginApiRequest : " + "\n, IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this) +
                 ", username : " + username + ", password : " + password + ", lat : " + Pref.latitude + ", long : " + Pref.longitude + ", location : " + location +
@@ -3690,21 +3724,21 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     Pref.isAddAttendence = false
                                 }*/
 
-                                    /*Face Url get or not*/
+                                /*Face Url get or not*/
                                 checkPhotoRegPermission(loginResponse)
 
-                            /*    if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
-                                    doAfterLoginFunctionality(loginResponse)
-                                }
-                                else {
-                                    doAsync {
-                                        AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.userAttendanceDataDao().delete()
-                                        AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.stateDao().deleteAll()
-                                        AppDatabase.getDBInstance()!!.cityDao().deleteAll()
-                                        *//*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
+                                /*    if (Pref.temp_user_id == loginResponse.user_details!!.user_id) {
+                                        doAfterLoginFunctionality(loginResponse)
+                                    }
+                                    else {
+                                        doAsync {
+                                            AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
+                                            AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
+                                            AppDatabase.getDBInstance()!!.userAttendanceDataDao().delete()
+                                            AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
+                                            AppDatabase.getDBInstance()!!.stateDao().deleteAll()
+                                            AppDatabase.getDBInstance()!!.cityDao().deleteAll()
+                                            *//*AppDatabase.getDBInstance()!!.marketingDetailDao().deleteAll()
                                         AppDatabase.getDBInstance()!!.marketingDetailImageDao().deleteAll()
                                         AppDatabase.getDBInstance()!!.marketingCategoryMasterDao().deleteAll()*//*
                                         AppDatabase.getDBInstance()!!.ppListDao().delete()
@@ -3809,9 +3843,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-     fun doAfterLoginFunctionality(loginResponse: LoginResponse) {
-        println("xyz - doLogin end"+AppUtils.getCurrentDateTime());
-        println("xyz - doAfterLoginFunctionality started"+AppUtils.getCurrentDateTime());
+    fun doAfterLoginFunctionality(loginResponse: LoginResponse) {
+        println("xyz - doLogin end" + AppUtils.getCurrentDateTime());
+        println("xyz - doAfterLoginFunctionality started" + AppUtils.getCurrentDateTime());
         // setEveningAlarm(this, 15, 9)
 
         Pref.user_id = loginResponse.user_details!!.user_id
@@ -3870,14 +3904,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         if (!TextUtils.isEmpty(loginResponse.user_details?.isOnLeave))
             Pref.isOnLeave = loginResponse.user_details?.isOnLeave!!
 
-        if(TextUtils.isEmpty(loginResponse.user_details?.isOnLeave)){
-            Pref.IsLeavePressed=false
-        } else if(loginResponse.user_details?.isOnLeave.equals("true")){
-            Pref.IsLeavePressed=true
-        }else if(loginResponse.user_details?.isOnLeave.equals("false")){
-            Pref.IsLeavePressed=false
+        if (TextUtils.isEmpty(loginResponse.user_details?.isOnLeave)) {
+            Pref.IsLeavePressed = false
+        } else if (loginResponse.user_details?.isOnLeave.equals("true")) {
+            Pref.IsLeavePressed = true
+        } else if (loginResponse.user_details?.isOnLeave.equals("false")) {
+            Pref.IsLeavePressed = false
         }
-        Log.e("leave", Pref.IsLeavePressed.toString() )
+        Log.e("leave", Pref.IsLeavePressed.toString())
 
 
 
@@ -3940,71 +3974,69 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         // updated on 17/08/2021
         //getListFromDatabase()
-        println("xyz - doAfterLoginFunctionality end"+AppUtils.getCurrentDateTime());
-        println("xyz - isStartOrEndDay started"+AppUtils.getCurrentDateTime());
+        println("xyz - doAfterLoginFunctionality end" + AppUtils.getCurrentDateTime());
+        println("xyz - isStartOrEndDay started" + AppUtils.getCurrentDateTime());
         isStartOrEndDay()
     }
 
 
-
-    fun isStartOrEndDay(){
-        try{
-            Pref.DayStartMarked=false
-            Pref.DayEndMarked=false
-            Pref.DayStartShopType=""
-            Pref.DayStartShopID=""
+    fun isStartOrEndDay() {
+        try {
+            Pref.DayStartMarked = false
+            Pref.DayEndMarked = false
+            Pref.DayStartShopType = ""
+            Pref.DayStartShopID = ""
             //Pref.IsDDvistedOnceByDay=false
             val repository = DayStartEndRepoProvider.dayStartRepositiry()
             BaseActivity.compositeDisposable.add(
-                repository.dayStartEndStatus(AppUtils.getCurrentDateyymmdd())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({ result ->
-                            XLog.d("Login DayStart : RESPONSE " + result.status)
-                            val response = result as StatusDayStartEnd
-                            if (response.status == NetworkConstant.SUCCESS) {
+                    repository.dayStartEndStatus(AppUtils.getCurrentDateyymmdd())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                XLog.d("Login DayStart : RESPONSE " + result.status)
+                                val response = result as StatusDayStartEnd
+                                if (response.status == NetworkConstant.SUCCESS) {
 
-                                doAsync {
-                                    Pref.DayStartMarked=response.DayStartMarked!!
-                                    Pref.DayEndMarked=response.DayEndMarked!!
-                                    Pref.DayStartShopType=response.day_start_shop_type!!
-                                    Pref.DayStartShopID=response.day_start_shop_id!!
-                                    Pref.IsDDvistedOnceByDay=response.IsDDvistedOnceByDay!!
+                                    doAsync {
+                                        Pref.DayStartMarked = response.DayStartMarked!!
+                                        Pref.DayEndMarked = response.DayEndMarked!!
+                                        Pref.DayStartShopType = response.day_start_shop_type!!
+                                        Pref.DayStartShopID = response.day_start_shop_id!!
+                                        Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
 
-                                    uiThread {
-                                        if(Pref.DayEndMarked){
-                                            //showSnackMessage(resources.getString(R.string.alert_imei_unavailable))
-                                            Pref.user_id=""
-                                            showSnackMessage("You already marked Day End. You will be able to login tomorrow! Thanks.")
-                                            login_TV.isEnabled=true
-                                        }else{
-                                            getListFromDatabase()
+                                        uiThread {
+                                            if (Pref.DayEndMarked) {
+                                                //showSnackMessage(resources.getString(R.string.alert_imei_unavailable))
+                                                Pref.user_id = ""
+                                                showSnackMessage("You already marked Day End. You will be able to login tomorrow! Thanks.")
+                                                login_TV.isEnabled = true
+                                            } else {
+                                                getListFromDatabase()
+                                            }
                                         }
                                     }
-                                }
 
-                            }else{
-                                Pref.IsDDvistedOnceByDay=false
+                                } else {
+                                    Pref.IsDDvistedOnceByDay = false
+                                    getListFromDatabase()
+                                }
+                            }, { error ->
+                                if (error == null) {
+                                    XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                                } else {
+                                    XLog.d("Login DayStart : ERROR " + error.localizedMessage)
+                                    error.printStackTrace()
+                                }
+                                Pref.IsDDvistedOnceByDay = false
                                 getListFromDatabase()
-                            }
-                        }, { error ->
-                            if (error == null) {
-                                XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API")
-                            } else {
-                                XLog.d("Login DayStart : ERROR " + error.localizedMessage)
-                                error.printStackTrace()
-                            }
-                            Pref.IsDDvistedOnceByDay=false
-                            getListFromDatabase()
-                        })
-        )
-        }catch (ex:java.lang.Exception){
+                            })
+            )
+        } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
             getListFromDatabase()
         }
 
     }
-
 
 
     private fun setProfileDetailInPref(user_details: UserDetail) {
@@ -4025,8 +4057,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getListFromDatabase() {
-        println("xyz - isStartOrEndDay end"+AppUtils.getCurrentDateTime());
-        println("xyz - getListFromDatabase started"+AppUtils.getCurrentDateTime());
+        println("xyz - isStartOrEndDay end" + AppUtils.getCurrentDateTime());
+        println("xyz - getListFromDatabase started" + AppUtils.getCurrentDateTime());
         list = AppDatabase.getDBInstance()!!.addShopEntryDao().uniqueShoplist
         if (list.isEmpty())
             callShopListApi()
@@ -4040,7 +4072,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun callShopListApi() {
-        println("xyz - getListFromDatabase end"+AppUtils.getCurrentDateTime());
+        println("xyz - getListFromDatabase end" + AppUtils.getCurrentDateTime());
         val repository = ShopListRepositoryProvider.provideShopListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -4107,8 +4139,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-    private fun getProductList( date: String?) {
-        println("xyzzz - getProductList started"+AppUtils.getCurrentDateTime());
+    private fun getProductList(date: String?) {
+        println("xyzzz - getProductList started" + AppUtils.getCurrentDateTime());
         val repository = ProductListRepoProvider.productListProvider()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -4123,21 +4155,21 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 var list = response.product_list
 
 
-    /*                            var ppL: ArrayList<ProductListEntity>? = ArrayList()
-                                var ppObj:ProductListEntity = ProductListEntity()
-                                ppObj.id=35354
-                                ppObj.brand_id="1"
-                                ppObj.category_id="2"
-                                ppObj.watt_id= "11"
-                                ppObj.brand="Meca"
-                                ppObj.product_name="GLOCILIN CLAV 625"
-                                ppObj.category="DRUGS"
-                                ppObj.watt="N.A"
+                                /*                            var ppL: ArrayList<ProductListEntity>? = ArrayList()
+                                                            var ppObj:ProductListEntity = ProductListEntity()
+                                                            ppObj.id=35354
+                                                            ppObj.brand_id="1"
+                                                            ppObj.category_id="2"
+                                                            ppObj.watt_id= "11"
+                                                            ppObj.brand="Meca"
+                                                            ppObj.product_name="GLOCILIN CLAV 625"
+                                                            ppObj.category="DRUGS"
+                                                            ppObj.watt="N.A"
 
-                                ppL!!.add(ppObj)
+                                                            ppL!!.add(ppObj)
 
-                                response.product_list?.add(ppObj)
-                                list=response.product_list*/
+                                                            response.product_list?.add(ppObj)
+                                                            list=response.product_list*/
 
                                 if (list != null && list.isNotEmpty()) {
 
@@ -4148,11 +4180,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
                                         //var listConv : List<ProductListEntity> = list!! as List<ProductListEntity>
-                                        println("xyzzz - getProductList db_______started"+AppUtils.getCurrentDateTime());
+                                        println("xyzzz - getProductList db_______started" + AppUtils.getCurrentDateTime());
 
                                         AppDatabase.getDBInstance()?.productListDao()?.insertAll(list!!)
 
-                                        println("xyzzz - getProductList db_______end"+AppUtils.getCurrentDateTime());
+                                        println("xyzzz - getProductList db_______end" + AppUtils.getCurrentDateTime());
 
                                         //AppDatabase.getDBInstance()?.productListDao()?.updateData(listConv!!)
 
@@ -4206,7 +4238,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getOrderList() {
-        println("xyz - getOrderList started"+AppUtils.getCurrentDateTime());
+        println("xyz - getOrderList started" + AppUtils.getCurrentDateTime());
         val repository = NewOrderListRepoProvider.provideOrderListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -4316,7 +4348,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun checkToCallSelectedRouteListApi() {
-        println("xyz - getOrderList ended"+AppUtils.getCurrentDateTime());
+        println("xyz - getOrderList ended" + AppUtils.getCurrentDateTime());
         val list = AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.getAll()
         if (list != null && list.isNotEmpty()) {
             //gotoHomeActivity()
@@ -4333,7 +4365,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
     private fun checkToCallCollectionApi() {
-        println("xyz - getSelectedRouteList ended"+AppUtils.getCurrentDateTime());
+        println("xyz - getSelectedRouteList ended" + AppUtils.getCurrentDateTime());
         val list = AppDatabase.getDBInstance()!!.collectionDetailsDao().getAll()
         if (list != null && list.isNotEmpty()) {
             callUserConfigApi()
@@ -4372,28 +4404,28 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     //private fun saveToDatabase(collection_details_list: ArrayList<CollectionListDataModel>) {
     private fun saveToDatabase(collection_details_list: ArrayList<CollectionDetailsEntity>) {
         doAsync {
-            println("xyz - saveToDatabase started"+AppUtils.getCurrentDateTime());
+            println("xyz - saveToDatabase started" + AppUtils.getCurrentDateTime());
             //for (i in collection_details_list.indices) {
-                //val collectionList = CollectionDetailsEntity()
-                //collectionList.date = AppUtils.convertDateTimeToCommonFormat(collection_details_list[i].collection_date!!) //  /*AppUtils.convertToCommonFormat(collection_details_list[i].collection_date!!)*/
-                //collectionList.shop_id = collection_details_list[i].shop_id      //
-                //collectionList.isUploaded = true
-                //collectionList.collection_id = collection_details_list[i].collection_id
-                //collectionList.collection = collection_details_list[i].collection    //
-                //collectionList.only_time = AppUtils.convertDateTimeToTime(collection_details_list[i].collection_date!!)  //
-                //collectionList.payment_id = collection_details_list[i].payment_id //
-                //collectionList.instrument_no = collection_details_list[i].instrument_no//
-                //collectionList.feedback = collection_details_list[i].remarks//
-                //collectionList.bank = collection_details_list[i].bank//
-                //collectionList.file_path = collection_details_list[i].doc//
-                //collectionList.bill_id = collection_details_list[i].bill_id//
-                //collectionList.order_id = collection_details_list[i].order_id//
-                //collectionList.patient_no = collection_details_list[i].patient_no//
-                //collectionList.patient_name = collection_details_list[i].patient_name//
-                //collectionList.patient_address = collection_details_list[i].patient_address//
+            //val collectionList = CollectionDetailsEntity()
+            //collectionList.date = AppUtils.convertDateTimeToCommonFormat(collection_details_list[i].collection_date!!) //  /*AppUtils.convertToCommonFormat(collection_details_list[i].collection_date!!)*/
+            //collectionList.shop_id = collection_details_list[i].shop_id      //
+            //collectionList.isUploaded = true
+            //collectionList.collection_id = collection_details_list[i].collection_id
+            //collectionList.collection = collection_details_list[i].collection    //
+            //collectionList.only_time = AppUtils.convertDateTimeToTime(collection_details_list[i].collection_date!!)  //
+            //collectionList.payment_id = collection_details_list[i].payment_id //
+            //collectionList.instrument_no = collection_details_list[i].instrument_no//
+            //collectionList.feedback = collection_details_list[i].remarks//
+            //collectionList.bank = collection_details_list[i].bank//
+            //collectionList.file_path = collection_details_list[i].doc//
+            //collectionList.bill_id = collection_details_list[i].bill_id//
+            //collectionList.order_id = collection_details_list[i].order_id//
+            //collectionList.patient_no = collection_details_list[i].patient_no//
+            //collectionList.patient_name = collection_details_list[i].patient_name//
+            //collectionList.patient_address = collection_details_list[i].patient_address//
 
 
-                //AppDatabase.getDBInstance()!!.collectionDetailsDao().insert(collectionList)
+            //AppDatabase.getDBInstance()!!.collectionDetailsDao().insert(collectionList)
             //}
 
 
@@ -4403,14 +4435,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
             uiThread {
                 progress_wheel.stopSpinning()
-                println("xyz - saveToDatabase ended"+AppUtils.getCurrentDateTime());
+                println("xyz - saveToDatabase ended" + AppUtils.getCurrentDateTime());
                 callUserConfigApi()
             }
         }
     }
 
     private fun callUserConfigApi() {
-        println("xyz - callUserConfigApi started"+AppUtils.getCurrentDateTime());
+        println("xyz - callUserConfigApi started" + AppUtils.getCurrentDateTime());
         val repository = UserConfigRepoProvider.provideUserConfigRepository()
         //progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -4767,9 +4799,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.isShopImageMandatory = response.getconfigure!![i].Value == "1"
                                                 }
                                             } else if (response.getconfigure!![i].Key.equals("isLogShareinLogin", ignoreCase = true)) {
-                                                if(response.getconfigure!![i].Value == "1"){
+                                                if (response.getconfigure!![i].Value == "1") {
                                                     AppUtils.saveSharedPreferenceslogShareinLogin(this, true)
-                                                }else{
+                                                } else {
                                                     AppUtils.saveSharedPreferenceslogShareinLogin(this, false)
                                                 }
 
@@ -4789,7 +4821,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 }
                                             } else if (response.getconfigure!![i].Key.equals("IsCurrentStockEnable", ignoreCase = true)) {
                                                 Pref.isCurrentStockEnable = response.getconfigure!![i].Value == "1"
-                                                
+
                                                 if (Pref.isCurrentStockEnable) {
                                                     AppUtils.saveSharedPreferencesCurrentStock(this, true)
                                                 } else {
@@ -4821,16 +4853,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 }
                                             }
                                             //else if(response.getconfigure!![i].Key.equals("IsFaceDetectionOn", ignoreCase = true)){
-                                            else if(response.getconfigure!![i].Key.equals("ShowFaceRegInMenu", ignoreCase = true)){
+                                            else if (response.getconfigure!![i].Key.equals("ShowFaceRegInMenu", ignoreCase = true)) {
                                                 Pref.IsFaceDetectionOn = response.getconfigure!![i].Value == "1"
-                                                 if (Pref.IsFaceDetectionOn) {
+                                                if (Pref.IsFaceDetectionOn) {
                                                     AppUtils.saveSharedPreferencesIsFaceDetectionOn(this, true)
                                                 } else {
                                                     AppUtils.saveSharedPreferencesIsFaceDetectionOn(this, false)
                                                 }
-                                            }else if(response.getconfigure!![i].Key.equals("IsFaceDetection", ignoreCase = true)){
+                                            } else if (response.getconfigure!![i].Key.equals("IsFaceDetection", ignoreCase = true)) {
                                                 Pref.IsFaceDetection = response.getconfigure!![i].Value == "1"
-                                                 if (Pref.IsFaceDetection) {
+                                                if (Pref.IsFaceDetection) {
                                                     AppUtils.saveSharedPreferencesIsFaceDetection(this, true)
                                                 } else {
                                                     AppUtils.saveSharedPreferencesIsFaceDetection(this, false)
@@ -4842,7 +4874,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 } else {
                                                     AppUtils.saveSharedPreferencesIsFaceDetectionWithCaptcha(this, false)
                                                 }
-                                            }else if (response.getconfigure!![i].Key.equals("IsScreenRecorderEnable", ignoreCase = true)) {
+                                            } else if (response.getconfigure!![i].Key.equals("IsScreenRecorderEnable", ignoreCase = true)) {
                                                 Pref.IsScreenRecorderEnable = response.getconfigure!![i].Value == "1"
                                                 if (Pref.IsScreenRecorderEnable) {
                                                     AppUtils.saveSharedPreferencesIsScreenRecorderEnable(this, true)
@@ -4853,91 +4885,90 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             //else if (response.getconfigure?.get(i)?.Key.equals("IsFromPortal", ignoreCase = true)) {
                                             else if (response.getconfigure?.get(i)?.Key.equals("IsDocRepoFromPortal", ignoreCase = true)) {
                                                 Pref.IsFromPortal = response.getconfigure!![i].Value == "1"
-                                             if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsFromPortal = response.getconfigure?.get(i)?.Value == "1"
-                                               }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsDocRepShareDownloadAllowed", ignoreCase = true)) {
+                                                }
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsDocRepShareDownloadAllowed", ignoreCase = true)) {
                                                 Pref.IsDocRepShareDownloadAllowed = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsDocRepShareDownloadAllowed = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuAddAttendance", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuAddAttendance", ignoreCase = true)) {
                                                 Pref.IsShowMenuAddAttendance = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuAddAttendance = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuAttendance", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuAttendance", ignoreCase = true)) {
                                                 Pref.IsShowMenuAttendance = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuAttendance = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuMIS Report", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuMIS Report", ignoreCase = true)) {
                                                 Pref.IsShowMenuMIS_Report = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuMIS_Report = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuAnyDesk", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuAnyDesk", ignoreCase = true)) {
                                                 Pref.IsShowMenuAnyDesk = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuAnyDesk = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuPermission Info", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuPermission Info", ignoreCase = true)) {
                                                 Pref.IsShowMenuPermission_Info = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuPermission_Info = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuScan QR Code", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuScan QR Code", ignoreCase = true)) {
                                                 Pref.IsShowMenuScan_QR_Code = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuScan_QR_Code = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuChat", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuChat", ignoreCase = true)) {
                                                 Pref.IsShowMenuChat = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuChat = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuWeather Details", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuWeather Details", ignoreCase = true)) {
                                                 Pref.IsShowMenuWeather_Details = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuWeather_Details = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuHome Location", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuHome Location", ignoreCase = true)) {
                                                 Pref.IsShowMenuHome_Location = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuHome_Location = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuShare Location", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuShare Location", ignoreCase = true)) {
                                                 Pref.IsShowMenuShare_Location = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuShare_Location = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuMap View", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuMap View", ignoreCase = true)) {
                                                 Pref.IsShowMenuMap_View = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuMap_View = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuReimbursement", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuReimbursement", ignoreCase = true)) {
                                                 Pref.IsShowMenuReimbursement = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuReimbursement = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuOutstanding Details PP/DD", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuOutstanding Details PP/DD", ignoreCase = true)) {
                                                 Pref.IsShowMenuOutstanding_Details_PP_DD = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuOutstanding_Details_PP_DD = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuStock Details - PP/DD", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuStock Details - PP/DD", ignoreCase = true)) {
                                                 Pref.IsShowMenuStock_Details_PP_DD = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuStock_Details_PP_DD = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsLeaveGPSTrack", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsLeaveGPSTrack", ignoreCase = true)) {
                                                 Pref.IsLeaveGPSTrack = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsLeaveGPSTrack = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowActivitiesInTeam", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowActivitiesInTeam", ignoreCase = true)) {
                                                 Pref.IsShowActivitiesInTeam = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowActivitiesInTeam = response.getconfigure?.get(i)?.Value == "1"
@@ -4950,57 +4981,49 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.IsShowPartyOnAppDashboard = response.getconfigure?.get(i)?.Value == "1"
                                                 }
 
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowAttendanceOnAppDashboard", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowAttendanceOnAppDashboard", ignoreCase = true)) {
                                                 Pref.IsShowAttendanceOnAppDashboard = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowAttendanceOnAppDashboard = response.getconfigure?.get(i)?.Value == "1"
                                                 }
 
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowTotalVisitsOnAppDashboard", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowTotalVisitsOnAppDashboard", ignoreCase = true)) {
                                                 Pref.IsShowTotalVisitsOnAppDashboard = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowTotalVisitsOnAppDashboard = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowVisitDurationOnAppDashboard", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowVisitDurationOnAppDashboard", ignoreCase = true)) {
                                                 Pref.IsShowVisitDurationOnAppDashboard = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowVisitDurationOnAppDashboard = response.getconfigure?.get(i)?.Value == "1"
                                                 }
 
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowDayStart", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowDayStart", ignoreCase = true)) {
                                                 Pref.IsShowDayStart = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowDayStart = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                                 //Pref.IsShowDayStart = true
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsshowDayStartSelfie", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsshowDayStartSelfie", ignoreCase = true)) {
                                                 Pref.IsshowDayStartSelfie = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsshowDayStartSelfie = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                                 //Pref.IsshowDayStartSelfie = true
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowDayEnd", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowDayEnd", ignoreCase = true)) {
                                                 Pref.IsShowDayEnd = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowDayEnd = response.getconfigure?.get(i)?.Value == "1"
                                                 }
 
                                                 //Pref.IsShowDayEnd = true
-                                            }
-                                           else if (response.getconfigure?.get(i)?.Key.equals("IsshowDayEndSelfie", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsshowDayEndSelfie", ignoreCase = true)) {
                                                 Pref.IsshowDayEndSelfie = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsshowDayEndSelfie = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                                 //Pref.IsshowDayEndSelfie = true
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowLeaveInAttendance", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowLeaveInAttendance", ignoreCase = true)) {
                                                 Pref.IsShowLeaveInAttendance = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowLeaveInAttendance = response.getconfigure?.get(i)?.Value == "1"
@@ -5012,20 +5035,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMarkDistVisitOnDshbrd = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsPhotoDeleteShow", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsPhotoDeleteShow", ignoreCase = true)) {
                                                 Pref.IsPhotoDeleteShow = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsPhotoDeleteShow = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("GPSAlert", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("GPSAlert", ignoreCase = true)) {
                                                 Pref.GPSAlert = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.GPSAlert = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("GPSAlertwithSound", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("GPSAlertwithSound", ignoreCase = true)) {
                                                 Pref.GPSAlertwithSound = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.GPSAlertwithSound = response.getconfigure?.get(i)?.Value == "1"
@@ -5045,53 +5065,45 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.FaceDetectionAccuracyUpper = response.getconfigure?.get(i)?.Value!!
                                                 }
-                                                CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyLower")) {
+                                                CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("FaceDetectionAccuracyLower")) {
                                                 Pref.FaceDetectionAccuracyLower = response.getconfigure!![i].Value!!
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.FaceDetectionAccuracyLower = response.getconfigure?.get(i)?.Value!!
                                                 }
-                                                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
-                                            }
-
-                                            else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy")) {
-                                                try{
-                                                    Pref.DistributorGPSAccuracy =  response.getconfigure!![i].Value!!
+                                                CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("DistributorGPSAccuracy")) {
+                                                try {
+                                                    Pref.DistributorGPSAccuracy = response.getconfigure!![i].Value!!
                                                     if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                         Pref.DistributorGPSAccuracy = response.getconfigure?.get(i)?.Value!!
                                                     }
-                                                    if(Pref.DistributorGPSAccuracy.length==0 || Pref.DistributorGPSAccuracy.equals("")){
-                                                        Pref.DistributorGPSAccuracy="500"
+                                                    if (Pref.DistributorGPSAccuracy.length == 0 || Pref.DistributorGPSAccuracy.equals("")) {
+                                                        Pref.DistributorGPSAccuracy = "500"
                                                     }
                                                     XLog.d("LoginActivity DistributorGPSAccuracy (try): " + Pref.DistributorGPSAccuracy)
-                                                }catch (e: Exception) {
+                                                } catch (e: Exception) {
                                                     e.printStackTrace()
-                                                    Pref.DistributorGPSAccuracy="500"
+                                                    Pref.DistributorGPSAccuracy = "500"
                                                     XLog.d("LoginActivity DistributorGPSAccuracy (catch): " + Pref.DistributorGPSAccuracy)
                                                 }
 
-                                            }
-
-                                            else if (response.getconfigure?.get(i)?.Key.equals("BatterySetting", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("BatterySetting", ignoreCase = true)) {
                                                 Pref.BatterySetting = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.BatterySetting = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("PowerSaverSetting", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("PowerSaverSetting", ignoreCase = true)) {
                                                 Pref.PowerSaverSetting = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.PowerSaverSetting = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("Show_App_Logout_Notification", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("Show_App_Logout_Notification", ignoreCase = true)) {
                                                 Pref.Show_App_Logout_Notification = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.Show_App_Logout_Notification = response.getconfigure?.get(i)?.Value == "1"
                                                 }
-                                            }
-                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowTypeInRegistration", ignoreCase = true)) {
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("IsShowTypeInRegistration", ignoreCase = true)) {
                                                 Pref.IsShowTypeInRegistration = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowTypeInRegistration = response.getconfigure?.get(i)?.Value == "1"
@@ -5121,7 +5133,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 }
                             }
                             Log.e("Login", "willLeaveApprovalEnable================> " + Pref.willLeaveApprovalEnable)
-                            println("xyz - callUserConfigApi ended"+AppUtils.getCurrentDateTime());
+                            println("xyz - callUserConfigApi ended" + AppUtils.getCurrentDateTime());
                             progress_wheel.stopSpinning()
                             getConfigFetchApi()
                             //gotoHomeActivity()
@@ -5137,7 +5149,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
     private fun getSelectedRouteList() {
-        println("xyz - getSelectedRouteList started"+AppUtils.getCurrentDateTime());
+        println("xyz - getSelectedRouteList started" + AppUtils.getCurrentDateTime());
         val repository = GetRouteListRepoProvider.routeListRepoProvider()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -5633,7 +5645,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-
     private fun gotoHomeActivity() {
         login_TV.isEnabled = true
         progress_wheel.stopSpinning()
@@ -5647,8 +5658,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-     fun getCurrentStockApi() {
-         progress_wheel.spin()
+    fun getCurrentStockApi() {
+        progress_wheel.spin()
         var shopAll = AppDatabase.getDBInstance()!!.shopCurrentStockEntryDao().getShopStockAll()
         if (shopAll != null && shopAll?.isNotEmpty()) {
             progress_wheel.stopSpinning()
@@ -5699,7 +5710,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             progress_wheel.stopSpinning()
                                             getCompStockApi()
                                         }
-                                    }else{
+                                    } else {
                                         progress_wheel.stopSpinning()
                                         getCompStockApi()
                                     }
@@ -5722,8 +5733,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }
     }
 
-     fun getCompStockApi() {
-         progress_wheel.spin()
+    fun getCompStockApi() {
+        progress_wheel.spin()
         var comListAll = AppDatabase.getDBInstance()!!.competetorStockEntryDao().getCompetetorStockAll()
         if (comListAll != null && comListAll?.isNotEmpty()) {
             progress_wheel.stopSpinning()
@@ -5779,7 +5790,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             progress_wheel.stopSpinning()
                                             getShopTypeStockVisibility()
                                         }
-                                    }else{
+                                    } else {
                                         progress_wheel.stopSpinning()
                                         getShopTypeStockVisibility()
                                     }
@@ -5803,9 +5814,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-
-    fun getShopTypeStockVisibility(){
-        try{
+    fun getShopTypeStockVisibility() {
+        try {
             AppDatabase.getDBInstance()?.shopTypeStockViewStatusDao()?.deleteAll()
             val repository = ShopListRepositoryProvider.provideShopListRepository()
             progress_wheel.spin()
@@ -5856,7 +5866,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             })
             )
 
-        }catch (ex:java.lang.Exception){
+        } catch (ex: java.lang.Exception) {
             ex.printStackTrace()
             //gotoHomeActivity()
             getProspectApi()
@@ -5957,8 +5967,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        println("login "+resultCode.toString());
-        if(requestCode ==777){
+        println("login " + resultCode.toString());
+        if (requestCode == 777) {
             println("login 777");
             if (!Settings.canDrawOverlays(this@LoginActivity)) {
                 getOverlayPermission()
@@ -6012,8 +6022,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 val file = File(resultUri.path!!)
 
                 uploadSelfie(file)
-            }
-            else if(requestCode ==777){
+            } else if (requestCode == 777) {
                 println("login 777");
                 if (!Settings.canDrawOverlays(this@LoginActivity)) {
                     getOverlayPermission()
@@ -6127,7 +6136,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-
     fun getShopDummyImageFile(): File {
         var bm: Bitmap? = null
         if (bm == null) {
@@ -6155,7 +6163,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
 
-    private fun checkPhotoRegPermission(loginResponse: LoginResponse){
+    private fun checkPhotoRegPermission(loginResponse: LoginResponse) {
         val repository = UserConfigRepoProvider.provideUserConfigRepository()
         //progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -6168,7 +6176,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 try {
                                     if (response.getconfigure != null && response.getconfigure!!.size > 0) {
                                         for (i in response.getconfigure!!.indices) {
-                                            if(response.getconfigure!![i].Key.equals("ShowFaceRegInMenu", ignoreCase = true)){
+                                            if (response.getconfigure!![i].Key.equals("ShowFaceRegInMenu", ignoreCase = true)) {
                                                 Pref.IsFaceDetectionOn = response.getconfigure!![i].Value == "1"
                                                 if (Pref.IsFaceDetectionOn) {
                                                     proceedLoginProcess(loginResponse)
@@ -6184,9 +6192,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     e.printStackTrace()
                                     proceedLoginProcess(loginResponse)
                                 }
-                            }else{
+                            } else {
                                 Log.e("Login", "willLeaveApprovalEnable================> " + Pref.willLeaveApprovalEnable)
-                                println("xyz - callUserConfigApi ended"+AppUtils.getCurrentDateTime());
+                                println("xyz - callUserConfigApi ended" + AppUtils.getCurrentDateTime());
                                 progress_wheel.stopSpinning()
                                 proceedLoginProcess(loginResponse)
                                 //gotoHomeActivity()
@@ -6200,43 +6208,41 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         )
     }
 
-    fun getPicUrl(loginResponse: LoginResponse){
+    fun getPicUrl(loginResponse: LoginResponse) {
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
-                repository.getUserFacePicUrlApi(loginResponse.user_details!!.user_id!!,loginResponse.session_token!!)
+                repository.getUserFacePicUrlApi(loginResponse.user_details!!.user_id!!, loginResponse.session_token!!)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as UserFacePicUrlResponse
 //                            response.status = "200"
-                            if(response.status== NetworkConstant.SUCCESS){
+                            if (response.status == NetworkConstant.SUCCESS) {
 
-                                XLog.d(" LoginActivity : FaceRegistration/FaceMatch" +response.status.toString() +", : "  + ", Success: ")
+                                XLog.d(" LoginActivity : FaceRegistration/FaceMatch" + response.status.toString() + ", : " + ", Success: ")
                                 proceedLoginProcess(loginResponse)
-                            }
-                            else{
+                            } else {
                                 BaseActivity.isApiInitiated = false
                                 showSnackMessage(getString(R.string.face_not_msg))
                                 progress_wheel.stopSpinning()
-                                XLog.d("LoginActivity : FaceRegistration/FaceMatch : " + response.status.toString() +", : "  + ", Failed: ")
+                                XLog.d("LoginActivity : FaceRegistration/FaceMatch : " + response.status.toString() + ", : " + ", Failed: ")
                                 login_TV.isEnabled = true
                             }
-                        },{
-            error ->
-            if (error != null) {
-                progress_wheel.stopSpinning()
-                XLog.d("AddAttendanceFragment : FaceRegistration/FaceMatch : " + " : "  + ", ERROR: " + error.localizedMessage)
-                login_TV.isEnabled = true
-            }
-            BaseActivity.isApiInitiated = false
-        }))
+                        }, { error ->
+                            if (error != null) {
+                                progress_wheel.stopSpinning()
+                                XLog.d("AddAttendanceFragment : FaceRegistration/FaceMatch : " + " : " + ", ERROR: " + error.localizedMessage)
+                                login_TV.isEnabled = true
+                            }
+                            BaseActivity.isApiInitiated = false
+                        }))
     }
-    fun proceedLoginProcess(loginResponse: LoginResponse){
-        try{
-            if (Pref.temp_user_id!! == loginResponse.user_details!!.user_id!! && Pref.temp_user_id!=null ) {
+
+    fun proceedLoginProcess(loginResponse: LoginResponse) {
+        try {
+            if (Pref.temp_user_id!! == loginResponse.user_details!!.user_id!! && Pref.temp_user_id != null) {
                 doAfterLoginFunctionality(loginResponse)
-            }
-            else {
+            } else {
                 doAsync {
                     AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
                     AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()
@@ -6321,7 +6327,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     }
                 }
             }
-        }catch (ex:Exception){
+        } catch (ex: Exception) {
             doAsync {
                 AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
                 AppDatabase.getDBInstance()!!.userLocationDataDao().deleteAll()

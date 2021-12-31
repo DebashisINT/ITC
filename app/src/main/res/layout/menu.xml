@@ -227,6 +227,20 @@
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
+                    android:id="@+id/my_details_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_15sdp"
+                    android:drawableStart="@drawable/ic_list_of_party"
+                    android:paddingBottom="@dimen/_7sdp"
+                    android:paddingLeft="@dimen/_17sdp"
+                    android:paddingRight="@dimen/_17sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:text="My Details"
+                    android:textColor="@color/lightest_gray"
+                    android:textSize="@dimen/_12sdp" />
+
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/add_attendence_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -999,6 +1013,7 @@
                     android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />
+
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/logout_TV"

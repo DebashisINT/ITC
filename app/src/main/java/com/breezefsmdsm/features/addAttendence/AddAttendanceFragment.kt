@@ -11,6 +11,7 @@ import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.*
+import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextUtils
@@ -85,6 +86,7 @@ import com.google.mlkit.vision.face.FaceDetectorOptions
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.File
@@ -1391,15 +1393,83 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             R.id.tv_attendance_submit -> {
                 //getLocforStart()
 
-                AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
-                workTypeId="9"
-                if(Pref.IsShowDayStart){
-                    getLocforStart()
-                }
-                else{
-                    visibilityCheck()
+                var andrV = Build.VERSION.SDK_INT.toInt()
+                if (andrV < 26) {
+                    val simpleDialogV = Dialog(mContext)
+                    simpleDialogV.setCancelable(false)
+                    simpleDialogV.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialogV.setContentView(R.layout.dialog_message)
+                    val dialogHeaderV = simpleDialogV.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTVV = simpleDialogV.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    if (Pref.user_name != null) {
+                        dialog_yes_no_headerTVV.text = "Hi " + Pref.user_name!! + "!"
+                    } else {
+                        dialog_yes_no_headerTVV.text = "Hi User" + "!"
+                    }
+                    dialogHeaderV.text = "Android Version is below 8.\n" +
+                            "Functionality may not be working properly."
+
+                    val dialogYesV = simpleDialogV.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYesV.setOnClickListener({ view ->
+                        simpleDialogV.cancel()
+                        addAttendanceProcess()
+                    })
+                    simpleDialogV.show()
+                } else {
+                    addAttendanceProcess()
                 }
 
+
+                /*val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                val bytesAvailable: Long
+                bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    stat.blockSizeLong * stat.availableBlocksLong
+                } else {
+                    stat.blockSize.toLong() * stat.availableBlocks.toLong()
+                }
+                val megAvailable = bytesAvailable / (1024 * 1024)
+                println("storage "+megAvailable.toString());
+                XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+
+                if(megAvailable<1024){
+                    val simpleDialog = Dialog(mContext)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    if(Pref.user_name!=null){
+                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                    }else{
+                        dialog_yes_no_headerTV.text = "Hi User"+"!"
+                    }
+
+                    dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+                        AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
+                        workTypeId="9"
+                        if(Pref.IsShowDayStart){
+                            getLocforStart()
+                        }
+                        else{
+                            visibilityCheck()
+                        }
+                    })
+                    simpleDialog.show()
+                }
+                else{
+                    AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
+                    workTypeId="9"
+                    if(Pref.IsShowDayStart){
+                        getLocforStart()
+                    }
+                    else{
+                        visibilityCheck()
+                    }
+                }*/
 
 
           /*      if(AppUtils.getSharedPreferencesIsFaceDetection(mContext) ||true){
@@ -1411,8 +1481,6 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
 //                startActivity(Intent(mContext,FaceStartActivity::class.java))
                 //startActivity(Intent(mContext,DetectorActivity::class.java))
-
-
 
             }
 
@@ -1544,6 +1612,67 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
             }
         }
+    }
+
+    private fun addAttendanceProcess(){
+
+            val stat = StatFs(Environment.getExternalStorageDirectory().path)
+            val bytesAvailable: Long
+            bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                stat.blockSizeLong * stat.availableBlocksLong
+            } else {
+                stat.blockSize.toLong() * stat.availableBlocks.toLong()
+            }
+            val megAvailable = bytesAvailable / (1024 * 1024)
+            println("storage "+megAvailable.toString());
+            XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+
+
+
+
+            if(megAvailable<1024){
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_message)
+                val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                if(Pref.user_name!=null){
+                    dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                }else{
+                    dialog_yes_no_headerTV.text = "Hi User"+"!"
+                }
+                //dialogHeader.text = "You have only "+megAvailable.toString()+ " MB available to store data. It is not sufficient\n" +
+                //"to proceed. Please clear memory and Retry Login again. Thanks."
+
+                //dialogHeader.text = "Please note that memory available is less than 5 GB. App may not function properly. Please make available memory greater than 5 GB."
+                dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+
+                val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                dialogYes.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                    AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
+                    workTypeId="9"
+                    if(Pref.IsShowDayStart){
+                        getLocforStart()
+                    }
+                    else{
+                        visibilityCheck()
+                    }
+                })
+                simpleDialog.show()
+            }
+            else{
+                AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
+                workTypeId="9"
+                if(Pref.IsShowDayStart){
+                    getLocforStart()
+                }
+                else{
+                    visibilityCheck()
+                }
+            }
+
     }
 
 

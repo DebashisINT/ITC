@@ -558,37 +558,473 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         start_shop = view.findViewById(R.id.start_shop)
         enddate_TV = view.findViewById(R.id.enddate_TV)
         start_TV.setOnClickListener({ view ->
-            CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
-        //////
-            val stat = StatFs(Environment.getExternalStorageDirectory().path)
-            val bytesAvailable: Long
-            bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                stat.blockSizeLong * stat.availableBlocksLong
-            } else {
-                stat.blockSize.toLong() * stat.availableBlocks.toLong()
-            }
-            val megAvailable = bytesAvailable / (1024 * 1024)
-            println("storage "+megAvailable.toString());
-            XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
 
-            if(megAvailable<5000){
-                val simpleDialog = Dialog(mContext)
-                simpleDialog.setCancelable(false)
-                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                simpleDialog.setContentView(R.layout.dialog_message)
-                val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                if(Pref.user_name!=null){
-                    dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                }else{
-                    dialog_yes_no_headerTV.text = "Hi User"+"!"
+            var andrV = Build.VERSION.SDK_INT.toInt()
+            if (andrV < 26) {
+                val simpleDialogV = Dialog(mContext)
+                simpleDialogV.setCancelable(false)
+                simpleDialogV.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogV.setContentView(R.layout.dialog_message)
+                val dialogHeaderV = simpleDialogV.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTVV = simpleDialogV.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                if (Pref.user_name != null) {
+                    dialog_yes_no_headerTVV.text = "Hi " + Pref.user_name!! + "!"
+                } else {
+                    dialog_yes_no_headerTVV.text = "Hi User" + "!"
                 }
-                dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                dialogHeaderV.text = "Android Version is below 8.\n" +
+                        "Functionality may not be working properly."
 
-                val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                dialogYes.setOnClickListener({ view ->
-                    simpleDialog.cancel()
+                val dialogYesV = simpleDialogV.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                dialogYesV.setOnClickListener({ view ->
+                    simpleDialogV.cancel()
+                    CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                    val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                    val bytesAvailable: Long
+                    bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        stat.blockSizeLong * stat.availableBlocksLong
+                    } else {
+                        stat.blockSize.toLong() * stat.availableBlocks.toLong()
+                    }
+                    val megAvailable = bytesAvailable / (1024 * 1024)
+                    println("storage "+megAvailable.toString());
+                    XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+                    if(megAvailable<1024){
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        if(Pref.user_name!=null){
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                        }else{
+                            dialog_yes_no_headerTV.text = "Hi User"+"!"
+                        }
+                        //dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                        dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
 
+                            if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                                if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                    CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                        override fun onOkClick() {
+
+                                            startTvClick()
+
+                                        }
+                                        override fun onYesClick() {
+
+                                        }
+                                        override fun onNoClick() {
+                                        }
+                                    }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                                }else{
+                                    startTvClick()
+                                }
+                            }
+                            else {
+                                startTvClick()
+                                /* start_TV.setOnClickListener({ view ->
+                                //faceDetectorSetUp()
+                                if (!AppUtils.isOnline(mContext)) {
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+
+                                }else if(isStartCall==false && Pref.DayStartMarked == false && Pref.isAddAttendence){
+
+                                    val simpleDialog = Dialog(mContext)
+                                    simpleDialog.setCancelable(false)
+                                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                    simpleDialog.setContentView(R.layout.dialog_yes_no)
+                                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                                    //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                                    dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                    dialogHeader.text = "Are you sure ?"
+                                    val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                                    val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                                    dialogYes.setOnClickListener({ view ->
+                                        simpleDialog.cancel()
+                                        //if(Pref.IsshowDayStartSelfie){
+                                        //isCameraDayStart=true
+                                        //initPermissionCheck()
+                                        //}else{
+                                        progress_wheel.spin()
+                                        isCalledFromStart=true
+                                        getPicUrl()
+                                        //}
+                                    })
+                                    dialogNo.setOnClickListener({ view ->
+                                        simpleDialog.cancel()
+                                    })
+                                    simpleDialog.show()
+                                }
+                                else{
+                                    println("reg_face - start_tv"+AppUtils.getCurrentDateTime());
+                                    if (!AppUtils.isOnline(mContext)) {
+                                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                                    }
+                                    else {
+                                        if (!Pref.isAddAttendence) {
+                                            // 27-08-21 For ITC
+                                            val simpleDialog = Dialog(mContext)
+                                            simpleDialog.setCancelable(false)
+                                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                            simpleDialog.setContentView(R.layout.dialog_message)
+                                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                            //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                            dialogHeader.text = "Please mark your attendance."
+                                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                            dialogYes.setOnClickListener({ view ->
+                                                simpleDialog.cancel()
+                                            })
+                                            simpleDialog.show()
+                    //                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
+                                        } else {
+                                            if (!Pref.DayStartMarked) {
+
+                                                getLocforStart()
+
+                                                *//*val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_yes_no)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Are you sure ?"
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                            val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                                getLocforStart()
+                            })
+                            dialogNo.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()*//*
+
+                        } else {
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                            dialogHeader.text = "Your Day started already."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                        (mContext as DashboardActivity).showSnackMessage("Day started already")
+                        }
+                    }
+                }
+            }
+        })
+*/
+                            }
+
+                        })
+                        simpleDialog.show()
+                    }
+                    else{
+                        if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                            if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                    override fun onOkClick() {
+
+                                        startTvClick()
+
+                                    }
+                                    override fun onYesClick() {
+
+                                    }
+                                    override fun onNoClick() {
+                                    }
+                                }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                            }else{
+                                startTvClick()
+                            }
+                        }
+                        else {
+                            startTvClick()
+                            /* start_TV.setOnClickListener({ view ->
+                            //faceDetectorSetUp()
+                            if (!AppUtils.isOnline(mContext)) {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+
+                            }else if(isStartCall==false && Pref.DayStartMarked == false && Pref.isAddAttendence){
+
+                                val simpleDialog = Dialog(mContext)
+                                simpleDialog.setCancelable(false)
+                                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                simpleDialog.setContentView(R.layout.dialog_yes_no)
+                                val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                                //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                dialogHeader.text = "Are you sure ?"
+                                val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                                val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                                dialogYes.setOnClickListener({ view ->
+                                    simpleDialog.cancel()
+                                    //if(Pref.IsshowDayStartSelfie){
+                                    //isCameraDayStart=true
+                                    //initPermissionCheck()
+                                    //}else{
+                                    progress_wheel.spin()
+                                    isCalledFromStart=true
+                                    getPicUrl()
+                                    //}
+                                })
+                                dialogNo.setOnClickListener({ view ->
+                                    simpleDialog.cancel()
+                                })
+                                simpleDialog.show()
+                            }
+                            else{
+                                println("reg_face - start_tv"+AppUtils.getCurrentDateTime());
+                                if (!AppUtils.isOnline(mContext)) {
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                                }
+                                else {
+                                    if (!Pref.isAddAttendence) {
+                                        // 27-08-21 For ITC
+                                        val simpleDialog = Dialog(mContext)
+                                        simpleDialog.setCancelable(false)
+                                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                        simpleDialog.setContentView(R.layout.dialog_message)
+                                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                        //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                        dialogHeader.text = "Please mark your attendance."
+                                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                        dialogYes.setOnClickListener({ view ->
+                                            simpleDialog.cancel()
+                                        })
+                                        simpleDialog.show()
+                //                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
+                                    } else {
+                                        if (!Pref.DayStartMarked) {
+
+                                            getLocforStart()
+
+                                            *//*val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_yes_no)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Are you sure ?"
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                            val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                                getLocforStart()
+                            })
+                            dialogNo.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()*//*
+
+                        } else {
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                            dialogHeader.text = "Your Day started already."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                        (mContext as DashboardActivity).showSnackMessage("Day started already")
+                        }
+                    }
+                }
+            }
+        })
+*/
+                        }
+                    }
+                })
+                simpleDialogV.show()
+            } else {
+                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                val bytesAvailable: Long
+                bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    stat.blockSizeLong * stat.availableBlocksLong
+                } else {
+                    stat.blockSize.toLong() * stat.availableBlocks.toLong()
+                }
+                val megAvailable = bytesAvailable / (1024 * 1024)
+                println("storage "+megAvailable.toString());
+                XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+                if(megAvailable<1024){
+                    val simpleDialog = Dialog(mContext)
+                    simpleDialog.setCancelable(false)
+                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialog.setContentView(R.layout.dialog_message)
+                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    if(Pref.user_name!=null){
+                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                    }else{
+                        dialog_yes_no_headerTV.text = "Hi User"+"!"
+                    }
+                    //dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                    dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYes.setOnClickListener({ view ->
+                        simpleDialog.cancel()
+
+                        if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                            if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                    override fun onOkClick() {
+
+                                        startTvClick()
+
+                                    }
+                                    override fun onYesClick() {
+
+                                    }
+                                    override fun onNoClick() {
+                                    }
+                                }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                            }else{
+                                startTvClick()
+                            }
+                        }
+                        else {
+                            startTvClick()
+                            /* start_TV.setOnClickListener({ view ->
+                            //faceDetectorSetUp()
+                            if (!AppUtils.isOnline(mContext)) {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+
+                            }else if(isStartCall==false && Pref.DayStartMarked == false && Pref.isAddAttendence){
+
+                                val simpleDialog = Dialog(mContext)
+                                simpleDialog.setCancelable(false)
+                                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                simpleDialog.setContentView(R.layout.dialog_yes_no)
+                                val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                                //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                dialogHeader.text = "Are you sure ?"
+                                val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                                val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                                dialogYes.setOnClickListener({ view ->
+                                    simpleDialog.cancel()
+                                    //if(Pref.IsshowDayStartSelfie){
+                                    //isCameraDayStart=true
+                                    //initPermissionCheck()
+                                    //}else{
+                                    progress_wheel.spin()
+                                    isCalledFromStart=true
+                                    getPicUrl()
+                                    //}
+                                })
+                                dialogNo.setOnClickListener({ view ->
+                                    simpleDialog.cancel()
+                                })
+                                simpleDialog.show()
+                            }
+                            else{
+                                println("reg_face - start_tv"+AppUtils.getCurrentDateTime());
+                                if (!AppUtils.isOnline(mContext)) {
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                                }
+                                else {
+                                    if (!Pref.isAddAttendence) {
+                                        // 27-08-21 For ITC
+                                        val simpleDialog = Dialog(mContext)
+                                        simpleDialog.setCancelable(false)
+                                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                        simpleDialog.setContentView(R.layout.dialog_message)
+                                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                        //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                        dialogHeader.text = "Please mark your attendance."
+                                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                        dialogYes.setOnClickListener({ view ->
+                                            simpleDialog.cancel()
+                                        })
+                                        simpleDialog.show()
+                //                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
+                                    } else {
+                                        if (!Pref.DayStartMarked) {
+
+                                            getLocforStart()
+
+                                            *//*val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_yes_no)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Are you sure ?"
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                            val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                                getLocforStart()
+                            })
+                            dialogNo.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()*//*
+
+                        } else {
+                            // 27-08-21 For ITC
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                            dialogHeader.text = "Your Day started already."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+//                        (mContext as DashboardActivity).showSnackMessage("Day started already")
+                        }
+                    }
+                }
+            }
+        })
+*/
+                        }
+
+                    })
+                    simpleDialog.show()
+                }
+                else{
                     if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
                         if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
                             CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
@@ -714,172 +1150,170 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         })
 */
                     }
-
-                })
-                simpleDialog.show()
-            }else{
-                if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
-                    if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
-                        CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
-                            override fun onOkClick() {
-
-                                startTvClick()
-
-                            }
-                            override fun onYesClick() {
-
-                            }
-                            override fun onNoClick() {
-                            }
-                        }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
-                    }else{
-                        startTvClick()
-                    }
                 }
-                else {
-                    startTvClick()
-                    /* start_TV.setOnClickListener({ view ->
-                    //faceDetectorSetUp()
-                    if (!AppUtils.isOnline(mContext)) {
-                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            }
 
-                    }else if(isStartCall==false && Pref.DayStartMarked == false && Pref.isAddAttendence){
+        })
 
-                        val simpleDialog = Dialog(mContext)
-                        simpleDialog.setCancelable(false)
-                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        simpleDialog.setContentView(R.layout.dialog_yes_no)
-                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
-                        //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
-                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                        dialogHeader.text = "Are you sure ?"
-                        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
-                        val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
-                        dialogYes.setOnClickListener({ view ->
-                            simpleDialog.cancel()
-                            //if(Pref.IsshowDayStartSelfie){
-                            //isCameraDayStart=true
-                            //initPermissionCheck()
-                            //}else{
-                            progress_wheel.spin()
-                            isCalledFromStart=true
-                            getPicUrl()
-                            //}
-                        })
-                        dialogNo.setOnClickListener({ view ->
-                            simpleDialog.cancel()
-                        })
-                        simpleDialog.show()
+            end_TV.setOnClickListener({ view ->
+
+                var andrV = Build.VERSION.SDK_INT.toInt()
+                if (andrV < 26) {
+                    val simpleDialogV = Dialog(mContext)
+                    simpleDialogV.setCancelable(false)
+                    simpleDialogV.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialogV.setContentView(R.layout.dialog_message)
+                    val dialogHeaderV = simpleDialogV.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTVV = simpleDialogV.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    if (Pref.user_name != null) {
+                        dialog_yes_no_headerTVV.text = "Hi " + Pref.user_name!! + "!"
+                    } else {
+                        dialog_yes_no_headerTVV.text = "Hi User" + "!"
                     }
-                    else{
-                        println("reg_face - start_tv"+AppUtils.getCurrentDateTime());
-                        if (!AppUtils.isOnline(mContext)) {
-                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-                        }
-                        else {
-                            if (!Pref.isAddAttendence) {
-                                // 27-08-21 For ITC
-                                val simpleDialog = Dialog(mContext)
-                                simpleDialog.setCancelable(false)
-                                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                                simpleDialog.setContentView(R.layout.dialog_message)
-                                val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                                val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                                //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
-                                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                                dialogHeader.text = "Please mark your attendance."
-                                val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                                dialogYes.setOnClickListener({ view ->
-                                    simpleDialog.cancel()
-                                })
-                                simpleDialog.show()
-        //                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
-                            } else {
-                                if (!Pref.DayStartMarked) {
+                    dialogHeaderV.text = "Android Version is below 8.\n" +
+                            "Functionality may not be working properly."
 
-                                    getLocforStart()
-
-                                    *//*val simpleDialog = Dialog(mContext)
-                            simpleDialog.setCancelable(false)
-                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                            simpleDialog.setContentView(R.layout.dialog_yes_no)
-                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
-                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                            dialogHeader.text = "Are you sure ?"
-                            val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
-                            val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
-                            dialogYes.setOnClickListener({ view ->
-                                simpleDialog.cancel()
-                                getLocforStart()
-                            })
-                            dialogNo.setOnClickListener({ view ->
-                                simpleDialog.cancel()
-                            })
-                            simpleDialog.show()*//*
-
+                    val dialogYesV = simpleDialogV.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYesV.setOnClickListener({ view ->
+                        simpleDialogV.cancel()
+                        CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                        val bytesAvailable: Long
+                        bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            stat.blockSizeLong * stat.availableBlocksLong
                         } else {
-                            // 27-08-21 For ITC
+                            stat.blockSize.toLong() * stat.availableBlocks.toLong()
+                        }
+                        val megAvailable = bytesAvailable / (1024 * 1024)
+                        println("storage "+megAvailable.toString());
+                        XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+                        if(megAvailable<1024){
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
                             simpleDialog.setContentView(R.layout.dialog_message)
                             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
                             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                            //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
-                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                            dialogHeader.text = "Your Day started already."
+                            if(Pref.user_name!=null){
+                                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                            }else{
+                                dialog_yes_no_headerTV.text = "Hi User"+"!"
+                            }
+                            //dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                            dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+
                             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                             dialogYes.setOnClickListener({ view ->
                                 simpleDialog.cancel()
+
+                                if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                                    if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                        CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                            override fun onOkClick() {
+
+                                                endTvClick()
+
+                                            }
+                                            override fun onYesClick() {
+
+                                            }
+                                            override fun onNoClick() {
+                                            }
+                                        }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                                    }else{
+                                        endTvClick()
+                                    }
+                                }
+                                else{
+                                    endTvClick()
+                                }
+
                             })
                             simpleDialog.show()
-//                        (mContext as DashboardActivity).showSnackMessage("Day started already")
                         }
-                    }
-                }
-            }
-        })
-*/
-                }
-            }
+                        else{
+                            if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                                if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                    CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                        override fun onOkClick() {
 
+                                            endTvClick()
 
-        })
+                                        }
+                                        override fun onYesClick() {
 
-            end_TV.setOnClickListener({ view ->
-                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
-                //////
-                val stat = StatFs(Environment.getExternalStorageDirectory().path)
-                val bytesAvailable: Long
-                bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    stat.blockSizeLong * stat.availableBlocksLong
+                                        }
+                                        override fun onNoClick() {
+                                        }
+                                    }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                                }else{
+                                    endTvClick()
+                                }
+                            }
+                            else{
+                                endTvClick()
+                            }
+                        }
+
+                    })
+                    simpleDialogV.show()
                 } else {
-                    stat.blockSize.toLong() * stat.availableBlocks.toLong()
-                }
-                val megAvailable = bytesAvailable / (1024 * 1024)
-                println("storage "+megAvailable.toString());
-                XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
-
-                if(megAvailable<5000){
-                    val simpleDialog = Dialog(mContext)
-                    simpleDialog.setCancelable(false)
-                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    simpleDialog.setContentView(R.layout.dialog_message)
-                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                    if(Pref.user_name!=null){
-                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                    }else{
-                        dialog_yes_no_headerTV.text = "Hi User"+"!"
+                    CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                    val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                    val bytesAvailable: Long
+                    bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        stat.blockSizeLong * stat.availableBlocksLong
+                    } else {
+                        stat.blockSize.toLong() * stat.availableBlocks.toLong()
                     }
-                    dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                    val megAvailable = bytesAvailable / (1024 * 1024)
+                    println("storage "+megAvailable.toString());
+                    XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+                    if(megAvailable<1024){
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        if(Pref.user_name!=null){
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                        }else{
+                            dialog_yes_no_headerTV.text = "Hi User"+"!"
+                        }
+                        //dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                        dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
 
-                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                    dialogYes.setOnClickListener({ view ->
-                        simpleDialog.cancel()
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
 
+                            if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                                if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                    CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                        override fun onOkClick() {
+
+                                            endTvClick()
+
+                                        }
+                                        override fun onYesClick() {
+
+                                        }
+                                        override fun onNoClick() {
+                                        }
+                                    }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                                }else{
+                                    endTvClick()
+                                }
+                            }
+                            else{
+                                endTvClick()
+                            }
+
+                        })
+                        simpleDialog.show()
+                    }
+                    else{
                         if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
                             if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
                                 CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
@@ -901,67 +1335,169 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         else{
                             endTvClick()
                         }
-
-                    })
-                    simpleDialog.show()
-                }else{
-                    if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
-                        if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
-                            CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
-                                override fun onOkClick() {
-
-                                    endTvClick()
-
-                                }
-                                override fun onYesClick() {
-
-                                }
-                                override fun onNoClick() {
-                                }
-                            }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
-                        }else{
-                            endTvClick()
-                        }
                     }
-                    else{
-                        endTvClick()
-                    }
+
                 }
+
+
+
+
 
             })
 
             DDVisit_TV.setOnClickListener({ view ->
-                CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
 
-                val stat = StatFs(Environment.getExternalStorageDirectory().path)
-                val bytesAvailable: Long
-                bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    stat.blockSizeLong * stat.availableBlocksLong
-                } else {
-                    stat.blockSize.toLong() * stat.availableBlocks.toLong()
-                }
-                val megAvailable = bytesAvailable / (1024 * 1024)
-                println("storage "+megAvailable.toString());
-                XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
-
-                if(megAvailable<5000){
-                    val simpleDialog = Dialog(mContext)
-                    simpleDialog.setCancelable(false)
-                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                    simpleDialog.setContentView(R.layout.dialog_message)
-                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-                    if(Pref.user_name!=null){
-                        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                    }else{
-                        dialog_yes_no_headerTV.text = "Hi User"+"!"
+                var andrV = Build.VERSION.SDK_INT.toInt()
+                if (andrV < 26) {
+                    val simpleDialogV = Dialog(mContext)
+                    simpleDialogV.setCancelable(false)
+                    simpleDialogV.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialogV.setContentView(R.layout.dialog_message)
+                    val dialogHeaderV = simpleDialogV.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                    val dialog_yes_no_headerTVV = simpleDialogV.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                    if (Pref.user_name != null) {
+                        dialog_yes_no_headerTVV.text = "Hi " + Pref.user_name!! + "!"
+                    } else {
+                        dialog_yes_no_headerTVV.text = "Hi User" + "!"
                     }
-                    dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                    dialogHeaderV.text = "Android Version is below 8.\n" +
+                            "Functionality may not be working properly."
 
-                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                    dialogYes.setOnClickListener({ view ->
-                        simpleDialog.cancel()
+                    val dialogYesV = simpleDialogV.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                    dialogYesV.setOnClickListener({ view ->
+                        simpleDialogV.cancel()
+                        CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
 
+                        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                        val bytesAvailable: Long
+                        bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            stat.blockSizeLong * stat.availableBlocksLong
+                        } else {
+                            stat.blockSize.toLong() * stat.availableBlocks.toLong()
+                        }
+                        val megAvailable = bytesAvailable / (1024 * 1024)
+                        println("storage "+megAvailable.toString());
+                        XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+
+                        if(megAvailable<1024){
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            if(Pref.user_name!=null){
+                                dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                            }else{
+                                dialog_yes_no_headerTV.text = "Hi User"+"!"
+                            }
+                            //dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                            dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+
+                                if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                                    if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                        CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                            override fun onOkClick() {
+                                                pointTvClick()
+                                            }
+                                            override fun onYesClick() {
+
+                                            }
+                                            override fun onNoClick() {
+                                            }
+                                        }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                                    }else{
+                                        pointTvClick()
+                                    }
+                                }else{
+                                    pointTvClick()
+                                }
+
+                            })
+                            simpleDialog.show()
+                        }
+                        else{
+                            if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                                if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                    CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                        override fun onOkClick() {
+                                            pointTvClick()
+                                        }
+                                        override fun onYesClick() {
+
+                                        }
+                                        override fun onNoClick() {
+                                        }
+                                    }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                                }else{
+                                    pointTvClick()
+                                }
+                            }else{
+                                pointTvClick()
+                            }
+                        }
+                    })
+                    simpleDialogV.show()
+                } else {
+                    CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+
+                    val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                    val bytesAvailable: Long
+                    bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        stat.blockSizeLong * stat.availableBlocksLong
+                    } else {
+                        stat.blockSize.toLong() * stat.availableBlocks.toLong()
+                    }
+                    val megAvailable = bytesAvailable / (1024 * 1024)
+                    println("storage "+megAvailable.toString());
+                    XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+
+                    if(megAvailable<1024){
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        if(Pref.user_name!=null){
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                        }else{
+                            dialog_yes_no_headerTV.text = "Hi User"+"!"
+                        }
+                        //dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+                        dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
+
+                        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+
+                            if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
+                                if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
+                                    CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
+                                        override fun onOkClick() {
+                                            pointTvClick()
+                                        }
+                                        override fun onYesClick() {
+
+                                        }
+                                        override fun onNoClick() {
+                                        }
+                                    }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
+                                }else{
+                                    pointTvClick()
+                                }
+                            }else{
+                                pointTvClick()
+                            }
+
+                        })
+                        simpleDialog.show()
+                    }
+                    else{
                         if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
                             if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
                                 CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
@@ -980,31 +1516,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }else{
                             pointTvClick()
                         }
-
-                    })
-                    simpleDialog.show()
-                }else{
-                    if(Pref.BatterySettingGlobal && Pref.BatterySetting ){
-                        if(AppUtils.getBatteryPercentage(mContext).toInt()<=15){
-                            CustomDialog.getInstance(AppUtils.hiFirstNameText(),getString(R.string.battery_setting_message),"OK","", "0",object : OnDialogCustomClickListener {
-                                override fun onOkClick() {
-                                    pointTvClick()
-                                }
-                                override fun onYesClick() {
-
-                                }
-                                override fun onNoClick() {
-                                }
-                            }).show((mContext as DashboardActivity).supportFragmentManager, "CustomDialog")
-                        }else{
-                            pointTvClick()
-                        }
-                    }else{
-                        pointTvClick()
                     }
                 }
-
-
 
 
 

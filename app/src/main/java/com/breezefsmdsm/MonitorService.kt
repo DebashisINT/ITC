@@ -81,7 +81,16 @@ class MonitorService:Service() {
                     if(Pref.GPSAlertGlobal){
                         if(Pref.GPSAlert){
                             SendBrod.sendBrod(this)
-                        }}
+                        }else{
+                            if(!Pref.isLocFuzedBroadPlaying){
+                                SendBrod.stopBrod(this)
+                            }
+                        }
+                    }else{
+                        if(!Pref.isLocFuzedBroadPlaying){
+                            SendBrod.stopBrod(this)
+                        }
+                    }
 
                 }, 500)
 

@@ -33,5 +33,5 @@ enum class FragType {
     CompetetorStockFragment,AddCompetetorStockFragment,ViewComStockProductDetails,
 
     ProtoRegistrationFragment,RegisTerFaceFragment,DocumentRepoFeatureNewFragment,FromOrganizationFragment,OwnfilesFragment,
-    PhotoAttendanceFragment,TeamAttendanceFragment,PhotoRegAadhaarFragment
+    PhotoAttendanceFragment,TeamAttendanceFragment,PhotoRegAadhaarFragment,MyDetailsFrag
 }

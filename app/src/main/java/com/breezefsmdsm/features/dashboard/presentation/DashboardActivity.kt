@@ -19,7 +19,6 @@ import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.net.*
 import android.os.*
-import android.os.Environment.getExternalStoragePublicDirectory
 import android.provider.MediaStore
 import android.provider.Settings
 import android.speech.tts.TextToSpeech
@@ -42,8 +41,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
@@ -210,6 +207,8 @@ import com.breezefsmdsm.mappackage.MapActivity
 import com.breezefsmdsm.mappackage.MapActivityWithoutPath
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.elvishew.xlog.XLog
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
@@ -222,7 +221,7 @@ import com.themechangeapp.pickimage.PermissionHelper
 import com.themechangeapp.pickimage.PermissionHelper.Companion.REQUEST_CODE_DOCUMENT
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_dashboard_new.*
+import kotlinx.android.synthetic.main.activity_splash.*
 import kotlinx.android.synthetic.main.menu.*
 import net.alexandroid.gps.GpsStatusDetector
 import org.jetbrains.anko.doAsync
@@ -230,6 +229,7 @@ import org.jetbrains.anko.uiThread
 import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.system.exitProcess
 
 /*
  * Created by rp : 26-10-2017:17:59
@@ -288,6 +288,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         var ttt = AppUtils.getCurrentDateForCons()
         println("curr_time "+AppUtils.getCurrentDateTime()+"   user_id "+Pref.user_id)
         println("load frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
+        var andrV = Build.VERSION.SDK_INT.toInt()
+        println("andrV "+andrV.toString()+ " Time :" + AppUtils.getCurrentDateTime());
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
@@ -357,6 +359,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private lateinit var progress_wheel: com.pnikosis.materialishprogress.ProgressWheel
     private lateinit var version_name_TV: AppCustomTextView
     private lateinit var add_attendence_tv: AppCustomTextView
+    private lateinit var my_details_tv: AppCustomTextView
     private lateinit var profilePicture: de.hdodenhof.circleimageview.CircleImageView
     private lateinit var iv_filter_icon: ImageView
     private lateinit var rl_confirm_btn: RelativeLayout
@@ -1552,6 +1555,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         settingsTV = findViewById(R.id.settings_TV)
         myAllowRequest = findViewById(R.id.my_allowence_request_TV)
         add_attendence_tv = findViewById(R.id.add_attendence_tv)
+        my_details_tv = findViewById(R.id.my_details_tv)
         tv_performance = findViewById(R.id.tv_performance)
         iv_delete_icon = findViewById(R.id.iv_delete_icon)
         rl_cart = findViewById(R.id.rl_cart)
@@ -1722,6 +1726,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         maps_TV.setOnClickListener(this)
         iv_sync_icon.setOnClickListener(this)
         add_attendence_tv.setOnClickListener(this)
+        my_details_tv.setOnClickListener(this)
         ta_tv.setOnClickListener(this)
         view_pp_dd_tv.setOnClickListener(this)
         tv_performance.setOnClickListener(this)
@@ -2435,6 +2440,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 //loadFragment(FragType.AddAttendanceFragment, false, "")
             }
 
+            R.id.my_details_tv->{
+                loadFragment(FragType.MyDetailsFrag, false, "")
+            }
+
             R.id.tv_performance -> {
                 loadFragment(FragType.PerformanceFragment, true, "")
             }
@@ -3064,6 +3073,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                   }*/
             }
 
+
             R.id.micro_learning_TV -> {
                 loadFragment(FragType.MicroLearningListFragment, false, "")
             }
@@ -3433,6 +3443,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     setTopBarVisibility(TopBarConfig.ATTENDENCEBACKLIST)
                 } else
                     setTopBarVisibility(TopBarConfig.ATTENDENCELIST)
+            }
+            FragType.MyDetailsFrag -> {
+
+                if (enableFragGeneration) {
+                    mFragment = MyDetailsFrag()
+                }
+                setTopBarTitle("My Details")
+                setTopBarVisibility(TopBarConfig.BACK)
             }
 
             FragType.ViewAllOrderListFragment -> {

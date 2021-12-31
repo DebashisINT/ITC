@@ -126,7 +126,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         println("storage "+megAvailable.toString());
         XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
 
-        if(megAvailable<5000){
+        if(megAvailable<1000){
             val simpleDialog = Dialog(this)
             simpleDialog.setCancelable(false)
             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -139,7 +139,8 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
                 dialog_yes_no_headerTV.text = "Hi User"+"!"
             }
             //dialogHeader.text = "Please note that memory available is less than 5 GB. App may not function properly. Please make available memory greater than 5 GB."
-            dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+            //dialogHeader.text = "Please make sure that you have Min: 1GB. Upto 5GB(Best performance) memory available to get best login experience."
+            dialogHeader.text = "Please note that memory available is less than 1 GB. App may not function properly. Please make available memory greater than 2 GB for better performance."
 
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
