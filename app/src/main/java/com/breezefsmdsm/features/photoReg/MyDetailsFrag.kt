@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +23,9 @@ import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
+import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.UserFacePicUrlResponse
+import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
@@ -40,8 +44,15 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
 
     private lateinit var mContext: Context
     private lateinit var ivPic: ImageView
+    private lateinit var ivDoc: ImageView
     private lateinit var ivShare: ImageView
+    private lateinit var ivDocShare: ImageView
     private lateinit var picUrl: String
+    private lateinit var docUrl: String
+
+    var userList: ArrayList<UserListResponseModel> = ArrayList()
+
+    private lateinit var progress_wheel: com.pnikosis.materialishprogress.ProgressWheel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,6 +64,7 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.frag_my_details, container, false)
         initView(view)
+
         if (AppUtils.isOnline(mContext))
             getPicUrl()
         else
@@ -61,17 +73,23 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
     }
 
     private fun initView(view: View) {
-        ivPic = view.findViewById(R.id.iv_frag_my_detailsPic)
-        ivShare = view.findViewById(R.id.iv_frag_my_detailsshare)
+        ivPic = view.findViewById(R.id.iv_frag_my_details_face_pic)
+        ivShare = view.findViewById(R.id.iv_frag_my_details_face_pic_share)
+        ivDoc = view.findViewById(R.id.iv_frag_my_details_doc_pic)
+        ivDocShare = view.findViewById(R.id.iv_frag_my_details_doc_pic_share)
         ivShare.setOnClickListener(this)
+        ivDocShare.setOnClickListener(this)
 
+        progress_wheel = view.findViewById(R.id.progress_wheel)
     }
 
     fun getPicUrl(){
+        progress_wheel.spin()
         BaseActivity.isApiInitiated=false
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
                 repository.getUserFacePicUrlApi(Pref.user_id!!, Pref.session_token!!)
+                //repository.getUserFacePicUrlApi("50560", Pref.session_token!!)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
@@ -91,17 +109,61 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
                                         .resize(500, 500)
                                         .into(ivPic)
 
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    progress_wheel.stopSpinning()
+                                }, 3000)
+
+
                             }else{
                                 BaseActivity.isApiInitiated = false
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_reg_face))
                                 XLog.d("MyDetailsFrag : FaceGet : " + response.status.toString() +", : "  + ", Failed: ")
+                                progress_wheel.stopSpinning()
                             }
                         },{
                             error ->
                             if (error != null) {
                                 XLog.d("MyDetailsFrag : FaceGet : " + " : "  + ", ERROR: " + error.localizedMessage)
                             }
+                            progress_wheel.stopSpinning()
                             BaseActivity.isApiInitiated = false
+                        })
+        )
+    }
+
+    fun getRegDoc(){
+        userList.clear()
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.getUserListApi(Pref.user_id!!, Pref.session_token!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as GetUserListResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                if (response.user_list!!.size > 0 && response.user_list!! != null) {
+
+                                    doAsync {
+                                        userList = response.user_list!!
+
+                                        uiThread {
+
+                                        }
+                                    }
+
+                                } else {
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                                }
+//
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+//                            (mContext as DashboardActivity).showSnackMessage("ERROR")
                         })
         )
     }
@@ -109,9 +171,12 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v!!.id) {
-            R.id.iv_frag_my_detailsshare -> {
+            R.id.iv_frag_my_details_face_pic_share -> {
                 var fileName = File(picUrl).name
                 downloadFile(picUrl,fileName)
+
+            }
+            R.id.iv_frag_my_details_doc_pic_share->{
 
             }
         }
