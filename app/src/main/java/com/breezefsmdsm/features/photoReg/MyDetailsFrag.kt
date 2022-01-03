@@ -10,15 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.content.FileProvider
-import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.R
-import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.NewFileUtils
 import com.breezefsmdsm.app.Pref
-import com.breezefsmdsm.app.domain.DocumentListEntity
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.FTStorageUtils
 import com.breezefsmdsm.base.presentation.BaseActivity
@@ -26,9 +22,6 @@ import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.UserFacePicUrlResponse
-import com.breezefsmdsm.widgets.AppCustomTextView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
@@ -39,7 +32,6 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.inflate_new_chat_user_item.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.File
@@ -152,10 +144,8 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
         val fileUrl = Uri.parse(File(attachment).path)
 
         val file = File(fileUrl.path)
-        if (!file.exists()) {
-            return
-        }
-        val uri = Uri.fromFile(file)
+        //val uri = Uri.fromFile(file)
+        val uri:Uri= FileProvider.getUriForFile(mContext, context!!.applicationContext.packageName.toString() + ".provider", file)
         intent.putExtra(Intent.EXTRA_STREAM, uri)
         intent.type = mimeType
         startActivity(Intent.createChooser(intent, "Share Image via..."))
@@ -174,7 +164,7 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
 
 
 
-            PRDownloader.download(downloadUrl, Environment.getExternalStorageDirectory().toString() + File.separator, fileName)
+            PRDownloader.download(downloadUrl, Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator, fileName)
                     .build()
                     .setOnProgressListener {
                         Log.e("Document List", "Attachment Download Progress======> $it")
@@ -186,9 +176,9 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
 
                                 uiThread {
 //                                    progress_wheel.stopSpinning()
-                                    val file = File(FTStorageUtils.getFolderPath(mContext) + "/" + fileName)
+                                    var filePath=Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath + File.separator+ fileName
                                     (mContext as DashboardActivity).showSnackMessage("File Downloaded")
-                                    shareDoc(FTStorageUtils.getFolderPath(mContext) + "/" + fileName)
+                                    shareDoc(filePath )
 
                                 }
                             }
