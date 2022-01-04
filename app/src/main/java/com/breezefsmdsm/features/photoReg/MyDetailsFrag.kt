@@ -69,12 +69,16 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
         if (AppUtils.isOnline(mContext))
             getPicUrl()
             //getRegDoc()
-        else
+        else{
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            progress_wheel.stopSpinning()
+        }
         return view
     }
 
     private fun initView(view: View) {
+        picUrl=""
+        docUrl=""
         ivPic = view.findViewById(R.id.iv_frag_my_details_face_pic)
         ivShare = view.findViewById(R.id.iv_frag_my_details_face_pic_share)
         ivDoc = view.findViewById(R.id.iv_frag_my_details_doc_pic)
@@ -192,13 +196,20 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.iv_frag_my_details_face_pic_share -> {
-                var fileName = File(picUrl).name
-                downloadFile(picUrl,fileName)
-
+                if(picUrl.equals("")){
+                    (mContext as DashboardActivity).showSnackMessage("No URL found")
+                }else{
+                    var fileName = File(picUrl).name
+                    downloadFile(picUrl,fileName)
+                }
             }
             R.id.iv_frag_my_details_doc_pic_share->{
+                if(docUrl.equals("")){
+                    (mContext as DashboardActivity).showSnackMessage("No URL found")
+                }else{
                 var fileName = File(docUrl).name
                 downloadFile(docUrl,fileName)
+                }
             }
         }
     }
