@@ -28,4 +28,5 @@ interface BatteryNetStatusDao {
 
     @Query("DELETE FROM " + AppConstant.BATTERY_NET_TABLE)
     fun delete()
+
 }

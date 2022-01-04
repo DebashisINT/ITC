@@ -19,6 +19,7 @@ import com.breezefsmdsm.app.NewFileUtils
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.FTStorageUtils
+import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
@@ -67,6 +68,7 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
 
         if (AppUtils.isOnline(mContext))
             getPicUrl()
+            //getRegDoc()
         else
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
         return view
@@ -111,7 +113,8 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
 
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     progress_wheel.stopSpinning()
-                                }, 3000)
+                                    getRegDoc()
+                                }, 2000)
 
 
                             }else{
@@ -132,33 +135,50 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
     }
 
     fun getRegDoc(){
-        userList.clear()
-        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         progress_wheel.spin()
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
                 repository.getUserListApi(Pref.user_id!!, Pref.session_token!!)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
-                            progress_wheel.stopSpinning()
                             var response = result as GetUserListResponse
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.user_list!!.size > 0 && response.user_list!! != null) {
-
-                                    doAsync {
                                         userList = response.user_list!!
+                                        for(i in 0..userList.size-1){
+                                            if(userList.get(i).user_id.toString().equals(Pref.user_id)){
+                                                if(userList.get(i).aadhar_image_link!!.contains("CommonFolder")){
+                                                    docUrl = userList.get(i).aadhar_image_link!!
 
-                                        uiThread {
+                                                    val picasso = Picasso.Builder(mContext)
+                                                            .memoryCache(Cache.NONE)
+                                                            .indicatorsEnabled(false)
+                                                            .loggingEnabled(true)
+                                                            .build()
 
+                                                    picasso.load(Uri.parse(docUrl))
+                                                            .centerCrop()
+                                                            .memoryPolicy(MemoryPolicy.NO_CACHE)
+                                                            .networkPolicy(NetworkPolicy.NO_CACHE)
+                                                            .resize(500, 500)
+                                                            .into(ivDoc)
+
+                                                    Handler(Looper.getMainLooper()).postDelayed({
+                                                        progress_wheel.stopSpinning()
+                                                    }, 1000)
+
+                                                }
+                                            }
                                         }
-                                    }
 
                                 } else {
-                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                                    progress_wheel.stopSpinning()
+                                    (mContext as DashboardActivity).showSnackMessage("Document Not Found")
                                 }
-//
                             } else {
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
+                                progress_wheel.stopSpinning()
+                                (mContext as DashboardActivity).showSnackMessage("Document Not Found")
                             }
                         }, { error ->
                             progress_wheel.stopSpinning()
@@ -177,7 +197,8 @@ class MyDetailsFrag : BaseFragment(), View.OnClickListener {
 
             }
             R.id.iv_frag_my_details_doc_pic_share->{
-
+                var fileName = File(docUrl).name
+                downloadFile(docUrl,fileName)
             }
         }
     }

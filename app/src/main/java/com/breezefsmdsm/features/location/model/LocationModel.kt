@@ -17,7 +17,9 @@ data class AppInfoDataModel(var id: String = "",
                             var network_type: String = "",
                             var mobile_network_type: String = "",
                             var device_model: String = "",
-                            var android_version: String = ""): Serializable
+                            var android_version: String = "",
+                            var Available_Storage: String = "",
+                            var Total_Storage:String = ""): Serializable
 
 data class AppInfoResponseModel(var app_info_list: ArrayList<AppInfoDataModel>?= null): BaseResponse(), Serializable
 

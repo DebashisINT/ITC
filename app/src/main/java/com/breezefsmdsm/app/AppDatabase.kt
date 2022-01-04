@@ -186,9 +186,9 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE prospect_list_master (id INTEGER NOT NULL PRIMARY KEY , pros_id  TEXT , pros_name TEXT ) ")
+                database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Available_Storage TEXT")
+                database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Total_Storage TEXT")
             }
         }
-//}
-
     }
 }

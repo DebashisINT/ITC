@@ -1159,6 +1159,26 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         XLog.d("device model==========> " + AppUtils.getDeviceName())
         XLog.d("android version==========> " + Build.VERSION.SDK_INT)
 
+
+        val stat = StatFs(Environment.getExternalStorageDirectory().path)
+        val totalSt = StatFs(Environment.getExternalStorageDirectory().path)
+        val bytesAvailable: Long
+        bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            stat.blockSizeLong * stat.availableBlocksLong
+        } else {
+            stat.blockSize.toLong() * stat.availableBlocks.toLong()
+        }
+        val bytesTotal: Long
+        bytesTotal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            totalSt.blockCountLong * totalSt.blockSizeLong
+        } else {
+            totalSt.blockCountLong.toLong() * totalSt.blockSizeLong.toLong()
+        }
+        val megAvailable = bytesAvailable / (1024 * 1024)
+        val megTotal = bytesTotal / (1024 * 1024)
+        println("phone_storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime());
+
+
         val batNetEntity = BatteryNetStatusEntity()
         AppDatabase.getDBInstance()?.batteryNetDao()?.insert(batNetEntity.apply {
             AppUtils.changeLanguage(this@LocationFuzedService,"en")
@@ -1172,6 +1192,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             mob_net_type = AppUtils.mobNetType(this@LocationFuzedService)
             device_model = AppUtils.getDeviceName()
             android_version = Build.VERSION.SDK_INT.toString()
+            Available_Storage= megAvailable.toString()+"mb"
+            Total_Storage=megTotal.toString()+"mb"
             isUploaded = false
         })
     }
@@ -1179,7 +1201,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun syncBatteryNetData() {
 
-        if (!shouldBatNetSyncDuration()) {
+       if (!shouldBatNetSyncDuration()) {
             XLog.e("===============Should not sync Battery Internet status data(Location Fuzed Service)==============")
             return
         }
@@ -1190,6 +1212,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         }
 
         val unSyncData = AppDatabase.getDBInstance()?.batteryNetDao()?.getDataSyncStateWise(false)
+
 
         if (unSyncData == null || unSyncData.isEmpty())
             return
@@ -1202,8 +1225,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         val appInfoList = ArrayList<AppInfoDataModel>()
 
         unSyncData.forEach {
-            appInfoList.add(AppInfoDataModel(it.bat_net_id!!, it.date_time!!, it.bat_status!!, it.bat_level!!, it.net_type!!,
-                    it.mob_net_type!!, it.device_model!!, it.android_version!!))
+            appInfoList.add(AppInfoDataModel(it.bat_net_id!!, it.date_time!!, it.bat_status!!, it.bat_level!!, it.net_type!!, it.mob_net_type!!,
+                    it.device_model!!, it.android_version!!,it.Available_Storage!!,it.Total_Storage!!))
         }
 
         val appInfoInput = AppInfoInputModel(Pref.session_token!!, Pref.user_id!!, appInfoList)
@@ -2450,7 +2473,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 }
 
 
-            } else {
+            }
+            else {
                 //if (intervalInSec > 30) {
 
                     val list = AppDatabase.getDBInstance()!!.userLocationDataDao().all

@@ -9,10 +9,20 @@
     android:focusable="true"
     android:clickable="true">
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        wheel:switchMinWidth="@dimen/_35sdp"
+        wheel:switchPadding="@dimen/_3sdp"
+        android:thumb="@drawable/login_rem_thumb_selector"
+        wheel:track="@drawable/login_rem_track_selector"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/_5sdp">
+        android:padding="@dimen/_5sdp"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:textSize="@dimen/_12sdp"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:text="Registered Face Pic"
                 android:gravity="center|start"/>
 
@@ -54,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:textSize="@dimen/_12sdp"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:text="Registered Document Pic"
                 android:gravity="center|start"
                 android:layout_marginTop="@dimen/_10sdp"/>
@@ -68,7 +78,7 @@
 
                 <ImageView
                     android:id="@+id/iv_frag_my_details_doc_pic"
-                    android:layout_width="@dimen/_150sdp"
+                    android:layout_width="@dimen/_200sdp"
                     android:layout_height="@dimen/_150sdp"
                     android:scaleType="fitXY" />
 

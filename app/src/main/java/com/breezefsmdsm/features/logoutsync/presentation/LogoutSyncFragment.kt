@@ -6178,7 +6178,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         unSyncData.forEach {
             appInfoList.add(AppInfoDataModel(it.bat_net_id!!, it.date_time!!, it.bat_status!!, it.bat_level!!, it.net_type!!,
-                    it.mob_net_type!!, it.device_model!!, it.android_version!!))
+                    it.mob_net_type!!, it.device_model!!, it.android_version!!,it.Available_Storage!!,it.Total_Storage!!))
         }
 
         val appInfoInput = AppInfoInputModel(Pref.session_token!!, Pref.user_id!!, appInfoList)
