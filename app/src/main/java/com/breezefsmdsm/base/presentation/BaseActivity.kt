@@ -594,7 +594,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("DashboardFragment DayEnd : RESPONSE " + result.status)
+                                XLog.d("BaseActivity DayEnd : RESPONSE " + result.status)
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
@@ -602,10 +602,10 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                             }, { error ->
                                 if (error == null) {
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                                    XLog.d("DashboardFragment DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                                    XLog.d("BaseActivity DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
                                 } else {
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                                    XLog.d("DashboardFragment DayEnd : ERROR " + error.localizedMessage)
+                                    XLog.d("BaseActivity DayEnd : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                             })

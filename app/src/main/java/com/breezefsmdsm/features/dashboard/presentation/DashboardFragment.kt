@@ -5595,7 +5595,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("DashboardFragment DayStart : RESPONSE " + result.status)
+                                XLog.d("DashboardFragment DayStart : RESPONSE " + result.status + " "+AppUtils.getCurrentDateTime() )
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     //(mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
@@ -5887,7 +5887,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io())
                                     .subscribe({ result ->
-                                        XLog.d("DashboardFragment DayEnd : RESPONSE " + result.status)
+                                        XLog.d("DashboardFragment DayEnd : RESPONSE " + result.status + " "+AppUtils.getCurrentDateTime() )
                                         val response = result as BaseResponse
                                         if (response.status == NetworkConstant.SUCCESS) {
                                             //(mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")

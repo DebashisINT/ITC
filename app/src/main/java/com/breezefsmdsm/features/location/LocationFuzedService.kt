@@ -587,7 +587,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             }
         }
 
-
+        XLog.d("LocationFuzedService : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
 
 
         /*try {
