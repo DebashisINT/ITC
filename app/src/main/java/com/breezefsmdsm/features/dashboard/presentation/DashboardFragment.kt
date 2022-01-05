@@ -5589,13 +5589,22 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 dayst.remarks = ""
             }
 
+            var addr=""
+            try{
+                addr=LocationWizard.getAdressFromLatlng(mContext, loc.latitude, loc.longitude)
+            }catch (ex:Exception){
+                addr=""
+            }
+
+
             val repository = DayStartEndRepoProvider.dayStartRepositiry()
             BaseActivity.compositeDisposable.add(
                     repository.dayStart(dayst)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("DashboardFragment DayStart : RESPONSE " + result.status + " "+AppUtils.getCurrentDateTime() )
+                                XLog.d("DayStart (DashboardFrag): DayStarted Success status " + result.status + " lat "+
+                                        loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     //(mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
@@ -5604,9 +5613,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 }
                             }, { error ->
                                 if (error == null) {
-                                    XLog.d("DashboardFragment DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                                    XLog.d("DayStart (DashboardFrag) : ERROR " + "UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                                 } else {
-                                    XLog.d("DashboardFragment DayStart : ERROR " + error.localizedMessage)
+                                    XLog.d("DayStart (DashboardFrag) : ERROR " + error.localizedMessage+" "+AppUtils.getCurrentDateTime())
                                     error.printStackTrace()
                                 }
                                 progress_wheel.stopSpinning()
@@ -5881,13 +5890,23 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         dayst.sale_Value = saleValue
                         dayst.remarks = ""
                     }
+
+                    var addr=""
+                    try{
+                        addr=LocationWizard.getAdressFromLatlng(mContext, loc.latitude, loc.longitude)
+                    }catch (ex:Exception){
+                        addr=""
+                    }
+
+
                     val repository = DayStartEndRepoProvider.dayStartRepositiry()
                     BaseActivity.compositeDisposable.add(
                             repository.dayStart(dayst)
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io())
                                     .subscribe({ result ->
-                                        XLog.d("DashboardFragment DayEnd : RESPONSE " + result.status + " "+AppUtils.getCurrentDateTime() )
+                                        XLog.d("DayEnd (DashboardFrag): DayEnded Success status " + result.status + " lat "+
+                                                loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
                                         val response = result as BaseResponse
                                         if (response.status == NetworkConstant.SUCCESS) {
                                             //(mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
@@ -5896,9 +5915,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         }
                                     }, { error ->
                                         if (error == null) {
-                                            XLog.d("DashboardFragment DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                                            XLog.d("DayEnd (DashboardFrag) : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
                                         } else {
-                                            XLog.d("DashboardFragment DayEnd : ERROR " + error.localizedMessage)
+                                            XLog.d("DayEnd (DashboardFrag) : ERROR " + error.localizedMessage+" "+AppUtils.getCurrentDateTime())
                                             error.printStackTrace()
                                         }
                                         progress_wheel.stopSpinning()
@@ -6359,6 +6378,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
             //dialogHeader.text = "Distributor Visited..."
             dialogHeader.text = "Thanks! Point visited Successfully."
+            var addr=""
+            try{
+                addr=LocationWizard.getAdressFromLatlng(mContext,finalNearByDD.dd_latitude!!.toDouble(), finalNearByDD.dd_longitude!!.toDouble())
+            }catch (ex:Exception){
+                addr=""
+            }
+            XLog.d("PointVisit (DashboardFrag): PointVisit Success " + " lat "+
+                    finalNearByDD.dd_latitude.toString()+ " long "+ finalNearByDD.dd_longitude+" addr "+addr+" "+AppUtils.getCurrentDateTime())
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
