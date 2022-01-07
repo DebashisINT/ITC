@@ -129,7 +129,7 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 }
 
                 if(!mList?.get(adapterPosition)?.type_name.equals(""))
-                    photo_reg_user_type_name_tv.text= "Employee Type : "+ mList?.get(adapterPosition)?.type_name!!
+                    photo_reg_user_type_name_tv.text= "Sales Rep Type : "+ mList?.get(adapterPosition)?.type_name!!
 
                 if(!mList?.get(adapterPosition)?.aadhar_image_link!!.contains("CommonFolder") && mList?.get(adapterPosition)?.isFaceRegistered!!){
                     photo_reg_user_old_reg_tv.visibility=View.VISIBLE
