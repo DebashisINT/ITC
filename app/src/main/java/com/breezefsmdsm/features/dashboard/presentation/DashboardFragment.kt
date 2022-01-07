@@ -4142,6 +4142,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 }
                                             }
 
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuShops", ignoreCase = true)) {
+                                                Pref.IsShowMenuShops = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowMenuShops = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
 
 
                                         }

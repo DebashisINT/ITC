@@ -214,7 +214,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
             (mContext as DashboardActivity).startActivityForResult(intent, PermissionHelper.REQUEST_CODE_CAMERA)*/
 
 //            Pref.FaceRegistrationOpenFrontCamera = true
-//            Pref.FaceRegistrationFrontCamera = false
+//            Pref.FaceRegistrationFrontCamera = true
             if(Pref.FaceRegistrationOpenFrontCamera && Pref.FaceRegistrationFrontCamera){
                 (mContext as DashboardActivity).captureFrontImage()
             }

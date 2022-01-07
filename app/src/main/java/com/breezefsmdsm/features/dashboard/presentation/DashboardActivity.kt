@@ -1551,7 +1551,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         profile_name_TV.text = Pref.user_name
         addOrderTV = findViewById(R.id.add_order_TV)
         orderHistoryTV = findViewById(R.id.order_history_TV)
-        addTravelAllowenceTV = findViewById(R.id.add_travel_allowence_TV)
+        addTravelAllowenceTV = findViewById(R.id.add_travel_allowence_TV)//Customer's tag
         settingsTV = findViewById(R.id.settings_TV)
         myAllowRequest = findViewById(R.id.my_allowence_request_TV)
         add_attendence_tv = findViewById(R.id.add_attendence_tv)
@@ -1692,7 +1692,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         iv_scan = findViewById(R.id.iv_scan)
         iv_view_text = findViewById(R.id.iv_view_text)
         scan_TV = findViewById(R.id.scan_TV)
-        nearby_user_TV = findViewById(R.id.nearby_user_TV)
+        nearby_user_TV = findViewById(R.id.nearby_user_TV) // Nearby Team Members
         fl_net_status = findViewById(R.id.fl_net_status)
         home_loc_TV = findViewById(R.id.home_loc_TV)
         device_info_TV = findViewById(R.id.device_info_TV)
@@ -1980,7 +1980,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 nearbyShops.visibility = View.GONE
 
             if (Pref.IsShowDayStart) {
-                addTravelAllowenceTV.visibility = View.GONE
+                addTravelAllowenceTV.visibility = View.GONE // Customer menu Hide
             } else {
                 addTravelAllowenceTV.visibility = View.VISIBLE
             }
@@ -2094,10 +2094,21 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         else
             micro_learning_TV.visibility = View.GONE
 
-        if (Pref.isShowNearbyCustomer)
+        if (Pref.isShowNearbyCustomer) {
             nearby_user_TV.visibility = View.VISIBLE
-        else
+            nearby_shop_TV.visibility = View.VISIBLE
+        }
+        else {
             nearby_user_TV.visibility = View.GONE
+            nearby_shop_TV.visibility = View.GONE
+        }
+
+        if (Pref.IsShowMenuShops) {
+            addTravelAllowenceTV.visibility = View.VISIBLE //customer menu hide
+        }
+        else {
+            addTravelAllowenceTV.visibility = View.GONE
+        }
 
         var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
         if (launchIntent != null) {

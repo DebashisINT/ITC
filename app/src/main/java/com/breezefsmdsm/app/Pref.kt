@@ -334,6 +334,8 @@ object Pref : PreferenceHolder() {
     var FaceRegistrationOpenFrontCamera: Boolean by bindToPreferenceField(false, "FaceRegistrationOpenFrontCamera")
     var FaceRegistrationFrontCamera: Boolean by bindToPreferenceField(false, "FaceRegistrationFrontCamera")
 
+    var IsShowMenuShops: Boolean by bindToPreferenceField(false, "IsShowMenuShops")
+
 
 
 }
