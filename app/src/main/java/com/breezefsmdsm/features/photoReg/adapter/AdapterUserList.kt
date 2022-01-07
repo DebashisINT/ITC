@@ -59,7 +59,7 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
             itemView.apply {
                 photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name
                 photo_reg_user_ph_tv.text = " "+mList?.get(adapterPosition)?.user_login_id
-                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
+//                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
 //                photo_reg_dd_name_tv.text="Distributor Surise Manali Himachal Limited "
                 click_for_photo_reg_tv.setOnClickListener{listner?.getUserInfoOnLick(mList?.get(adapterPosition)!!)}
                 click_for_update_type_tv.setOnClickListener{listner?.updateTypeOnClick(mList?.get(adapterPosition)!!)}

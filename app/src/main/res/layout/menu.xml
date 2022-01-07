@@ -192,7 +192,7 @@
                     android:paddingLeft="@dimen/_17sdp"
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
-                    android:text="Team Attendance"
+                    android:text="Visit"
                     android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp"
                     android:visibility="visible" />

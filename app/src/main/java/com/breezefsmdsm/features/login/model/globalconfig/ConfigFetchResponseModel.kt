@@ -67,6 +67,8 @@ class ConfigFetchResponseModel : BaseResponse() {
     var PowerSaverSetting: Boolean? = null
     var Show_App_Logout_Notification: Boolean? = null
 
+    var FaceRegistrationOpenFrontCamera: Boolean? = null
+
 
 
 }

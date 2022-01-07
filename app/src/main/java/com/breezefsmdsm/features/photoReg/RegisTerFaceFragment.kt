@@ -213,7 +213,16 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, (mContext as DashboardActivity).getPhotoFileUri(System.currentTimeMillis().toString() + ".png"))
             (mContext as DashboardActivity).startActivityForResult(intent, PermissionHelper.REQUEST_CODE_CAMERA)*/
 
-            (mContext as DashboardActivity).captureImage()
+//            Pref.FaceRegistrationOpenFrontCamera = true
+//            Pref.FaceRegistrationFrontCamera = false
+            if(Pref.FaceRegistrationOpenFrontCamera && Pref.FaceRegistrationFrontCamera){
+                (mContext as DashboardActivity).captureFrontImage()
+            }
+            else{
+                (mContext as DashboardActivity).captureImage()
+            }
+
+//            (mContext as DashboardActivity).captureImage()
         }
     }
 

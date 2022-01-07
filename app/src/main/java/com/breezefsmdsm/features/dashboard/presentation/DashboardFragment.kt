@@ -4135,6 +4135,15 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 }
                                             }
 
+                                            else if (response.getconfigure?.get(i)?.Key.equals("FaceRegistrationFrontCamera", ignoreCase = true)) {
+                                                Pref.FaceRegistrationFrontCamera = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.FaceRegistrationFrontCamera = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+
+
                                         }
                                     }
                                 } catch (e: Exception) {
@@ -4319,6 +4328,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                                 if (configResponse.Show_App_Logout_Notification != null)
                                     Pref.Show_App_Logout_Notification_Global = configResponse.Show_App_Logout_Notification!!
+
+                                if (configResponse.FaceRegistrationOpenFrontCamera != null)
+                                    Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationOpenFrontCamera!!
 
 
                             }
