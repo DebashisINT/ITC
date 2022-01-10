@@ -4073,6 +4073,10 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         if (addShopData.type == "1") {
             amount = ""
             assignedToShopId = ""
+            val assignDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
+            val assignPPList = AppDatabase.getDBInstance()?.ppListDao()?.getAll()
+            assignedToPPId = assignPPList?.get(0)?.pp_id!!
+            assignedToDDId = assignDDList?.get(0)?.dd_id!!
             if (TextUtils.isEmpty(assignedToPPId)) {
                 (mContext as DashboardActivity).showSnackMessage("Please select assigned to " + Pref.ppText)
                 BaseActivity.isApiInitiated = false
