@@ -59,14 +59,14 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
         fun bindItems(){
             itemView.apply {
                 photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name
-                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
+//                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
 
-                if(mList?.get(adapterPosition)?.RegisteredAadhaarNo!=null && mList?.get(adapterPosition)?.RegisteredAadhaarNo!!.isNotEmpty()){
+             /*   if(mList?.get(adapterPosition)?.RegisteredAadhaarNo!=null && mList?.get(adapterPosition)?.RegisteredAadhaarNo!!.isNotEmpty()){
                     photo_reg_user_adhaar_tv.text = "Aadhaar No : "+mList?.get(adapterPosition)?.RegisteredAadhaarNo
                 }
                else{
                     photo_reg_user_adhaar_tv.text = "Aadhaar not Registered."
-                }
+                }*/
 
 
                 if(mList?.get(adapterPosition)!!.isFaceRegistered!!){
