@@ -402,6 +402,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.Show_App_Logout_Notification != null)
                                     Pref.Show_App_Logout_Notification_Global = configResponse.Show_App_Logout_Notification!!
 
+                                if (configResponse.FaceRegistrationOpenFrontCamera != null)
+                                    Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationOpenFrontCamera!!
+
 
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
@@ -5109,7 +5112,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.IsShowTypeInRegistration = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("FaceRegistrationFrontCamera", ignoreCase = true)) {
+                                                Pref.FaceRegistrationFrontCamera = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.FaceRegistrationFrontCamera = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowMenuShops", ignoreCase = true)) {
+                                                Pref.IsShowMenuShops = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowMenuShops = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {
                                                 if (!TextUtilsDash.isEmpty(response.getconfigure?.get(i)?.Value)) {

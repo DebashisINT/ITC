@@ -331,6 +331,11 @@ object Pref : PreferenceHolder() {
     var PowerSaverSetting: Boolean by bindToPreferenceField(false, "PowerSaverSetting")
     var IsShowTypeInRegistration: Boolean by bindToPreferenceField(false, "IsShowTypeInRegistration")
 
+    var FaceRegistrationOpenFrontCamera: Boolean by bindToPreferenceField(false, "FaceRegistrationOpenFrontCamera")
+    var FaceRegistrationFrontCamera: Boolean by bindToPreferenceField(false, "FaceRegistrationFrontCamera")
+
+    var IsShowMenuShops: Boolean by bindToPreferenceField(false, "IsShowMenuShops")
+
 
 
 }

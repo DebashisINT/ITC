@@ -59,7 +59,7 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
             itemView.apply {
                 photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name
                 photo_reg_user_ph_tv.text = " "+mList?.get(adapterPosition)?.user_login_id
-                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
+//                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
 //                photo_reg_dd_name_tv.text="Distributor Surise Manali Himachal Limited "
                 click_for_photo_reg_tv.setOnClickListener{listner?.getUserInfoOnLick(mList?.get(adapterPosition)!!)}
                 click_for_update_type_tv.setOnClickListener{listner?.updateTypeOnClick(mList?.get(adapterPosition)!!)}
@@ -129,7 +129,7 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 }
 
                 if(!mList?.get(adapterPosition)?.type_name.equals(""))
-                    photo_reg_user_type_name_tv.text= "Employee Type : "+ mList?.get(adapterPosition)?.type_name!!
+                    photo_reg_user_type_name_tv.text= "Sales Rep Type : "+ mList?.get(adapterPosition)?.type_name!!
 
                 if(!mList?.get(adapterPosition)?.aadhar_image_link!!.contains("CommonFolder") && mList?.get(adapterPosition)?.isFaceRegistered!!){
                     photo_reg_user_old_reg_tv.visibility=View.VISIBLE

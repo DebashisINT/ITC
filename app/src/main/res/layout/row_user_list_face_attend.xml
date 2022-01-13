@@ -112,7 +112,7 @@
                 android:layout_weight="1"
                 android:gravity="start|center"
                 android:paddingStart="@dimen/_10sdp"
-                android:text="Click for Attendance"
+                android:text="Click for Visit"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_11sdp" />
 
@@ -130,7 +130,7 @@
                 android:layout_weight="1"
                 android:gravity="end|center"
                 android:paddingEnd="@dimen/_10sdp"
-                android:text="View Attendance"
+                android:text="View Visit"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_11sdp" />
 

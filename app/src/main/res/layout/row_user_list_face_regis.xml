@@ -55,7 +55,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_weight="1"
-                android:text="Employee Type : "
+                android:text="Sales Rep Type : "
                 android:gravity="center|start"
                 android:textColor="@color/login_txt_color"
                 android:textSize="@dimen/_10sdp" />
@@ -85,6 +85,7 @@
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginLeft="@dimen/_11sdp"
                 android:layout_weight="1"
+                android:visibility="gone"
                 android:gravity="center|start"
                 android:textColor="@color/login_txt_color"
                 android:textSize="@dimen/_10sdp" />
@@ -248,6 +249,7 @@
             android:layout_marginBottom="@dimen/_5sdp"
             android:orientation="horizontal">
 
+<!--            android:text="Update Employee Type"-->
             <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/click_for_update_type_tv"
                 android:layout_width="0dp"
@@ -256,7 +258,7 @@
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:paddingStart="@dimen/_10sdp"
-                android:text="Update Employee Type"
+                android:text="Update Sales Rep Type"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_10sdp" />
 
