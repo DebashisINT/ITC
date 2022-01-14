@@ -2217,6 +2217,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             view_pp_dd_tv.visibility = View.GONE
         }
 
+        if (Pref.IsShowMyDetails && Pref.IsShowMyDetailsGlobal)
+            my_details_tv.visibility = View.VISIBLE
+        else
+            my_details_tv.visibility = View.GONE
+
 
         //val frag: DashboardFragment? = supportFragmentManager.findFragmentByTag("DashboardFragment") as DashboardFragment?
 

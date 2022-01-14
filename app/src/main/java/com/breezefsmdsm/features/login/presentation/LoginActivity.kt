@@ -35,6 +35,7 @@ import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.AlarmReceiver.Companion.setAlarm
 import com.breezefsmdsm.app.domain.*
+import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.*
 import com.breezefsmdsm.app.utils.AppUtils.Companion.getCurrentTimeInMintes
 import com.breezefsmdsm.base.BaseResponse
@@ -98,6 +99,7 @@ import com.breezefsmdsm.features.newcollection.model.PaymentModeResponseModel
 import com.breezefsmdsm.features.newcollection.newcollectionlistapi.NewCollectionListRepoProvider
 import com.breezefsmdsm.features.orderList.api.neworderlistapi.NewOrderListRepoProvider
 import com.breezefsmdsm.features.orderList.model.NewOrderListResponseModel
+import com.breezefsmdsm.features.photoReg.RegisTerFaceFragment
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.UserFacePicUrlResponse
 import com.breezefsmdsm.features.quotation.api.QuotationRepoProvider
@@ -404,6 +406,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                 if (configResponse.FaceRegistrationOpenFrontCamera != null)
                                     Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationOpenFrontCamera!!
+
+                                if (configResponse.IsShowMyDetails != null)
+                                    Pref.IsShowMyDetailsGlobal = configResponse.IsShowMyDetails!!
 
 
                                 /*if (configResponse.willShowUpdateDayPlan != null)
@@ -3338,6 +3343,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
                 simpleDialog.cancel()
+
                 login_TV.isEnabled = false
                 println("xyzy - login called" + AppUtils.getCurrentDateTime());
                 if (TextUtils.isEmpty(username_EDT.text.toString().trim())) {
@@ -3501,7 +3507,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                             } else {
                                 progress_wheel.stopSpinning()
-                                showSnackMessage(newSettings.message!!)
+                                openDialogPopup(newSettings.message!!)
+//                                showSnackMessage(newSettings.message!!)
                                 login_TV.isEnabled = true
                             }
                             isApiInitiated = false
@@ -3826,10 +3833,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 progress_wheel.stopSpinning()
                                 login_TV.isEnabled = true
                                 //showSnackMessage(loginResponse.message!!)
-                                Toaster.msgLong(this, loginResponse.message!!)
+                                openDialogPopup(loginResponse.message!!)
+//                                Toaster.msgLong(this, loginResponse.message!!)
                             } else {
                                 progress_wheel.stopSpinning()
-                                showSnackMessage(loginResponse.message!!)
+                                openDialogPopup(loginResponse.message!!)
+//                                showSnackMessage(loginResponse.message!!)
                                 login_TV.isEnabled = true
                             }
                             isApiInitiated = false
@@ -4011,7 +4020,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             if (Pref.DayEndMarked) {
                                                 //showSnackMessage(resources.getString(R.string.alert_imei_unavailable))
                                                 Pref.user_id = ""
-                                                showSnackMessage("You already marked Day End. You will be able to login tomorrow! Thanks.")
+                                                openDialogPopup("You already marked Day End. You will be able to login tomorrow! Thanks.")
+//                                                showSnackMessage("You already marked Day End. You will be able to login tomorrow! Thanks.")
                                                 login_TV.isEnabled = true
                                             } else {
                                                 getListFromDatabase()
@@ -5123,6 +5133,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 Pref.IsShowMenuShops = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMenuShops = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowMyDetails", ignoreCase = true)) {
+                                                Pref.IsShowMyDetails = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowMyDetails = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
 
@@ -6428,5 +6445,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             }
         }
         XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
+    }
+
+    fun openDialogPopup(text:String){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_ok)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_yes_header_TV) as AppCustomTextView
+        dialogHeader.text = text
+        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+        })
+        simpleDialog.show()
     }
 }
