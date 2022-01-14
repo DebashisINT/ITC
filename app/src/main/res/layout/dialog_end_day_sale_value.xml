@@ -88,7 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Submit"
+                android:text="Confirm &amp; Logout"
                 android:textSize="@dimen/_13sdp"
                 android:gravity="center"
                 android:layout_gravity="center"

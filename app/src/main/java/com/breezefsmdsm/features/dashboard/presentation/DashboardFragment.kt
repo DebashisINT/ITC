@@ -6020,6 +6020,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     initPermissionCheck()
                                                 } else {
                                                     // 27-08-21 For ITC
+                                                    (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                                                     val simpleDialog = Dialog(mContext)
                                                     simpleDialog.setCancelable(false)
                                                     simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -6032,12 +6033,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                                                     dialogYes.setOnClickListener({ view ->
                                                         simpleDialog.cancel()
-                                                        (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                                        //(mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                                                         /*Handler(Looper.getMainLooper()).postDelayed({
                                                             (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                                                         }, 2000)*/
                                                     })
-                                                    simpleDialog.show()
+                                                    //simpleDialog.show()
 //                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                                     voiceAttendanceMsg(AppUtils.hiFirstNameText() +" day ended successfully.")
                                                   /*  Handler(Looper.getMainLooper()).postDelayed({
