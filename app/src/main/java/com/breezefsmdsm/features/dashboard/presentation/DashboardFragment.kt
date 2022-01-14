@@ -6032,9 +6032,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                                                     dialogYes.setOnClickListener({ view ->
                                                         simpleDialog.cancel()
-                                                        Handler(Looper.getMainLooper()).postDelayed({
+                                                        (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                                        /*Handler(Looper.getMainLooper()).postDelayed({
                                                             (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
-                                                        }, 2000)
+                                                        }, 2000)*/
                                                     })
                                                     simpleDialog.show()
 //                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
