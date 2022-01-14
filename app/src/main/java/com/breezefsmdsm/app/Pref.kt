@@ -336,6 +336,9 @@ object Pref : PreferenceHolder() {
 
     var IsShowMenuShops: Boolean by bindToPreferenceField(false, "IsShowMenuShops")
 
+    var IsShowMyDetailsGlobal: Boolean by bindToPreferenceField(false, "IsShowMyDetailsGlobal")
+    var IsShowMyDetails: Boolean by bindToPreferenceField(false, "IsShowMyDetails")
+
 
 
 }

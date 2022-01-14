@@ -69,6 +69,8 @@ class ConfigFetchResponseModel : BaseResponse() {
 
     var FaceRegistrationOpenFrontCamera: Boolean? = null
 
+    var IsShowMyDetails:Boolean? = null
+
 
 
 }

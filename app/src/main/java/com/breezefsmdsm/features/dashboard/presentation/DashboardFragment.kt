@@ -4149,6 +4149,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 }
                                             }
 
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowMyDetails", ignoreCase = true)) {
+                                                Pref.IsShowMyDetails = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowMyDetails = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
 
 
                                         }
@@ -4338,6 +4345,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                                 if (configResponse.FaceRegistrationOpenFrontCamera != null)
                                     Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationOpenFrontCamera!!
+
+                                if (configResponse.IsShowMyDetails != null)
+                                    Pref.IsShowMyDetailsGlobal = configResponse.IsShowMyDetails!!
 
 
                             }
