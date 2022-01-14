@@ -2131,7 +2131,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         }
         /*29-10-2021 Team Attendance*/
         //if (Pref.willLeaveApprovalEnable) {
-        if (Pref.IsTeamAttendance) {
+        if (Pref.IsTeamAttendance) { // now renamed as Visit
             photo_team_attendance.visibility = View.VISIBLE
 
         } else {
