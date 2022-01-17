@@ -517,7 +517,8 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                         itemView.add_quot_ll.visibility = View.GONE
                         itemView.order_view.visibility = View.GONE
                     }
-                } else {
+                }
+                else {
                     itemView.add_quot_ll.visibility = View.GONE
                     itemView.order_view.visibility = View.GONE
                     itemView.tv_funnel_stage_header.visibility = View.GONE
@@ -712,7 +713,10 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 itemView.update_bank_details_TV.visibility = View.GONE
 
 
-
+                itemView.ll_activity.visibility = View.GONE
+                itemView.activity_view.visibility = View.GONE
+                itemView.ll_stock.visibility = View.GONE
+                itemView.stock_view.visibility = View.GONE
 
             } catch (e: Exception) {
                 e.printStackTrace()
