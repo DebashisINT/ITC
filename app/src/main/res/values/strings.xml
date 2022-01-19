@@ -36,7 +36,7 @@
     <string name="aadhaar_registration" translatable="false">Aadhaar Registration</string>
     <string name="voter_registration" translatable="false">Voter Registration</string>
     <string name="pan_registration" translatable="false">Pan Registration</string>
-    <string name="team_attendance" translatable="false">Team Attendance</string>
+    <string name="team_attendance" translatable="false">Visit</string>
     <string name="team_attendance1" translatable="false">Visit</string>
     <string name="photo_attd" translatable="false">Photo Attendance</string>
     <string name="view_order" translatable="false">View Order</string>

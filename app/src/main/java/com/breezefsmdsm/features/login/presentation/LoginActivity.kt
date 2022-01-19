@@ -6255,7 +6255,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 proceedLoginProcess(loginResponse)
                             } else {
                                 BaseActivity.isApiInitiated = false
-                                showSnackMessage(getString(R.string.face_not_msg))
+                                //showSnackMessage(getString(R.string.face_not_msg))
+                                openDialogPopup(getString(R.string.face_not_msg))
                                 progress_wheel.stopSpinning()
                                 XLog.d("LoginActivity : FaceRegistration/FaceMatch : " + response.status.toString() + ", : " + ", Failed: ")
                                 login_TV.isEnabled = true
