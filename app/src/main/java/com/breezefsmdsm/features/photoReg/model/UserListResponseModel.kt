@@ -19,5 +19,6 @@ class UserListResponseModel {
     var type_id: Int? = 0
     var type_name: String? = ""
     var Registered_with: String? = ""
+    var emp_phone_no: String? = ""
 }
 

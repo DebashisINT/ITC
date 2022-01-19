@@ -59,6 +59,19 @@ interface GetUserListPhotoRegApi {
     @POST("AadharImageDetectionInfo/UserAadharInfoSave")
     fun submitAadhaarDetailsNewSingle(@Body aadhaarSubmitData: AadhaarSubmitDataNew): Observable<BaseResponse>
 
+    @FormUrlEncoded
+    @POST("PhoneNo/InsertPhoneNo")
+    fun addEmpPhoneApi(@Field("user_id") user_id: String,@Field("session_token") session_token: String,@Field("user_contactid") user_contactid: String,
+            @Field("phone_no") phone_no: String):
+            Observable<BaseResponse>
+
+    @FormUrlEncoded
+    @POST("PhoneNo/UpdatePhoneNo")
+    fun updateEmpPhoneApi(@Field("user_id") user_id: String,@Field("session_token") session_token: String,@Field("user_contactid") user_contactid: String,
+                       @Field("old_phone_no") old_phone_no: String,@Field("new_phone_no") new_phone_no: String):
+            Observable<BaseResponse>
+
+
     companion object Factory {
         fun create(): GetUserListPhotoRegApi {
             val retrofit = Retrofit.Builder()

@@ -31,6 +31,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -479,6 +480,82 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                     updateUserType(typeId,usrId)
                             }
                         }).show((mContext as DashboardActivity).supportFragmentManager, "")
+            }
+
+            override fun updateContactOnClick(obj: UserListResponseModel) {
+                val simpleDialogg = Dialog(mContext)
+                simpleDialogg.setCancelable(true)
+                simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogg.setContentView(R.layout.dialog_update_contact_photo_reg)
+
+                val heading = simpleDialogg.findViewById(R.id.tv_dialog_upsate_ph_name) as TextView
+                val cancel = simpleDialogg.findViewById(R.id.cancel_TV) as AppCustomTextView
+                val update = simpleDialogg.findViewById(R.id.ok_TV) as AppCustomTextView
+                val et_phone = simpleDialogg.findViewById(R.id.et_dialog_upsate_ph_no) as EditText
+
+                if(obj.emp_phone_no!!.length>0){
+                    heading.text=obj!!.user_name+"   (  "+obj.emp_phone_no+"   )"
+                }
+                else{
+                    heading.text=obj!!.user_name
+                }
+
+                cancel.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                })
+                update.setOnClickListener({ view ->
+
+                    var cont=et_phone.text.toString()
+                    if(cont.length==10){
+                        simpleDialogg.dismiss()
+                        updateEmpPhone(obj.emp_phone_no!!,cont,obj.user_id.toString(),obj.user_contactid!!)
+                    }else{
+                        et_phone.setError("Enter valid Phone No.")
+                        et_phone.requestFocus()
+                    }
+
+                })
+
+                simpleDialogg.show()
+            }
+
+            override fun addContactOnClick(obj: UserListResponseModel) {
+                val simpleDialogg = Dialog(mContext)
+                simpleDialogg.setCancelable(true)
+                simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogg.setContentView(R.layout.dialog_update_contact_photo_reg)
+
+                val heading = simpleDialogg.findViewById(R.id.tv_dialog_upsate_ph_name) as TextView
+                val cancel = simpleDialogg.findViewById(R.id.cancel_TV) as AppCustomTextView
+                val update = simpleDialogg.findViewById(R.id.ok_TV) as AppCustomTextView
+                val et_phone = simpleDialogg.findViewById(R.id.et_dialog_upsate_ph_no) as EditText
+
+                if(obj.emp_phone_no!!.length>0){
+                    heading.text=obj!!.user_name+"   (  "+obj.emp_phone_no+"   )"
+                }
+                else{
+                    heading.text=obj!!.user_name
+                }
+
+                update.text="Add Phone"
+
+                cancel.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                })
+                update.setOnClickListener({ view ->
+
+                    var cont=et_phone.text.toString()
+                    if(cont.length==10){
+                        simpleDialogg.dismiss()
+                        addEmpPhone(cont,obj.user_id!!.toString(),obj!!.user_contactid!!)
+                    }else{
+                        et_phone.setError("Enter valid Phone No.")
+                        et_phone.requestFocus()
+                    }
+
+                })
+
+                simpleDialogg.show()
             }
         }, {
             it
@@ -1304,6 +1381,54 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                             if (response.status == NetworkConstant.SUCCESS) {
                                 (mContext as DashboardActivity).showSnackMessage("Type updation successful.")
                                 voiceAttendanceMsg("Type updation successful.")
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        })
+        )
+    }
+
+    private fun addEmpPhone(phone:String,usrID:String,usrContID:String){
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.addEmpPhone(usrID!!, Pref.session_token!!,usrContID!!,phone)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as BaseResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                (mContext as DashboardActivity).showSnackMessage("Phone added successful.")
+                                voiceAttendanceMsg("Phone added successful.")
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        })
+        )
+    }
+
+    private fun updateEmpPhone(oldPhone:String,newPhone:String,usrID:String,usrContID:String){
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.updateEmpPhone(usrID!!, Pref.session_token!!,usrContID!!,oldPhone!!,newPhone!!)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as BaseResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                (mContext as DashboardActivity).showSnackMessage("Phone updation successful.")
+                                voiceAttendanceMsg("Phone updation successful.")
                             } else {
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             }

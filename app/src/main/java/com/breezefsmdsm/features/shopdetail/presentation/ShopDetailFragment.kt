@@ -4586,6 +4586,11 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun checkValidation() {
+        // hardcode for ITC
+        val assignDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
+        assigned_to_dd_TV.setText(assignDDList?.get(0)?.dd_name!!)
+        assignedToDDId=assignDDList?.get(0)?.dd_id!!
+
         val list = AppDatabase.getDBInstance()!!.addShopEntryDao().getDuplicateShopData(shopContactNumber.text.toString().trim())
         if (TextUtils.isEmpty(shopName.text.toString().trim()))
             (mContext as DashboardActivity).showSnackMessage("Please enter " + Pref.shopText + " name")

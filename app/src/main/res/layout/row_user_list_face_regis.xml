@@ -143,11 +143,22 @@
                 android:drawableStart="@drawable/ic_registered_shop_call_select"
                 android:gravity="center|start"
                 android:textColor="@color/login_txt_color"
-                android:textSize="@dimen/_11sdp" />
+                android:textSize="@dimen/_11sdp"
+                android:visibility="gone"/>
+
+            <com.breezefsmdsm.widgets.AppCustomTextView
+                android:id="@+id/photo_reg_user_ph_update_tv"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:text="Update Contact No"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/_10sdp" />
 
             <ImageView
                 android:id="@+id/iv_aadhaar_ion"
-                android:layout_width="@dimen/_45sdp"
+                android:layout_width="@dimen/_35sdp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/_4sdp"

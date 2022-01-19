@@ -1157,6 +1157,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
             end_TV.setOnClickListener({ view ->
 
+
                 var andrV = Build.VERSION.SDK_INT.toInt()
                 if (andrV < 26) {
                     val simpleDialogV = Dialog(mContext)
