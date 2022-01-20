@@ -393,19 +393,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.GPSAlert != null)
                                     Pref.GPSAlertGlobal = configResponse.GPSAlert!!
 
-
                                 if (configResponse.BatterySetting != null)
                                     Pref.BatterySettingGlobal = configResponse.BatterySetting!!
 
                                 if (configResponse.PowerSaverSetting != null)
                                     Pref.PowerSaverSettingGlobal = configResponse.PowerSaverSetting!!
 
-
                                 if (configResponse.Show_App_Logout_Notification != null)
                                     Pref.Show_App_Logout_Notification_Global = configResponse.Show_App_Logout_Notification!!
 
-                                if (configResponse.FaceRegistrationOpenFrontCamera != null)
-                                    Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationOpenFrontCamera!!
+                                if (configResponse.FaceRegistrationFrontCamera != null)
+                                    Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationFrontCamera!!
 
                                 if (configResponse.IsShowMyDetails != null)
                                     Pref.IsShowMyDetailsGlobal = configResponse.IsShowMyDetails!!

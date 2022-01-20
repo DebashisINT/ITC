@@ -4344,8 +4344,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 if (configResponse.Show_App_Logout_Notification != null)
                                     Pref.Show_App_Logout_Notification_Global = configResponse.Show_App_Logout_Notification!!
 
-                                if (configResponse.FaceRegistrationOpenFrontCamera != null)
-                                    Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationOpenFrontCamera!!
+                                if (configResponse.FaceRegistrationFrontCamera != null)
+                                    Pref.FaceRegistrationOpenFrontCamera = configResponse.FaceRegistrationFrontCamera!!
 
                                 if (configResponse.IsShowMyDetails != null)
                                     Pref.IsShowMyDetailsGlobal = configResponse.IsShowMyDetails!!
