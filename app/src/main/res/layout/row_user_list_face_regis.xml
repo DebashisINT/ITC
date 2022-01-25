@@ -80,6 +80,17 @@
             android:layout_height="@dimen/_30sdp">
 
             <com.breezefsmdsm.widgets.AppCustomTextView
+                android:id="@+id/photo_reg_user_ph_tv"
+                android:layout_width="200dp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginLeft="@dimen/_11sdp"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:drawableStart="@drawable/ic_registered_shop_call_select"
+                android:textColor="@color/login_txt_color"
+                android:textSize="@dimen/_10sdp" />
+
+            <com.breezefsmdsm.widgets.AppCustomTextView
                 android:id="@+id/photo_reg_dd_name_tv"
                 android:layout_width="200dp"
                 android:layout_height="@dimen/_30sdp"
@@ -136,7 +147,7 @@
             android:layout_marginLeft="@dimen/_10sdp">
 
             <com.breezefsmdsm.widgets.AppCustomTextView
-                android:id="@+id/photo_reg_user_ph_tv"
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -287,6 +298,8 @@
 
 
         </LinearLayout>
+
+
 
     </LinearLayout>
 

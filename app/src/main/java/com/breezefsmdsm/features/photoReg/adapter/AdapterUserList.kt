@@ -58,14 +58,13 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
         fun bindItems(){
             itemView.apply {
                 photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name + "   (  "+ mList?.get(adapterPosition)?.user_login_id+"  )"
-                photo_reg_user_ph_tv.text = " "+mList?.get(adapterPosition)?.user_login_id
+                photo_reg_user_ph_tv.text = " "+mList?.get(adapterPosition)?.emp_phone_no
 //                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
 //                photo_reg_dd_name_tv.text="Distributor Surise Manali Himachal Limited "
                 click_for_photo_reg_tv.setOnClickListener{listner?.getUserInfoOnLick(mList?.get(adapterPosition)!!)}
                 click_for_update_type_tv.setOnClickListener{listner?.updateTypeOnClick(mList?.get(adapterPosition)!!)}
-                sync_whatsapp_iv.setOnClickListener{listner?.getWhatsappOnLick(mList?.get(adapterPosition)?.user_login_id.toString())}
-                photo_reg_user_ph_tv.setOnClickListener{listner?.getPhoneOnLick(mList?.get(adapterPosition)?.user_login_id.toString())}
-                photo_reg_user_name_tv.setOnClickListener{listner?.getPhoneOnLick(mList?.get(adapterPosition)?.user_login_id.toString())}
+                sync_whatsapp_iv.setOnClickListener{listner?.getWhatsappOnLick(mList?.get(adapterPosition)?.emp_phone_no.toString())}
+                photo_reg_user_ph_tv.setOnClickListener{listner?.getPhoneOnLick(mList?.get(adapterPosition)?.emp_phone_no.toString())}
                 //sync_delete_iv.setOnClickListener{listner?.deletePicOnLick(mList?.get(adapterPosition)!!)}
                 sync_delete_iv_red.setOnClickListener{listner?.deletePicOnLick(mList?.get(adapterPosition)!!)}
 
@@ -83,7 +82,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
 
                 }
 
-                iv_aadhaar_ion.setOnClickListener{listner?.getAadhaarOnLick(mList?.get(adapterPosition)!!)}
+                //iv_aadhaar_ion.setOnClickListener{listner?.getAadhaarOnLick(mList?.get(adapterPosition)!!)}
+
                 //if(mList?.get(adapterPosition)?.IsAadhaarRegistered!!){
                 if(mList?.get(adapterPosition)?.aadhar_image_link!!.contains("CommonFolder")){
                     iv_aadhaar_ion.setImageResource(R.drawable.ic_aadhaar_icon_done)

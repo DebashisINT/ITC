@@ -50,12 +50,15 @@ import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
 import com.breezefsmdsm.features.attendance.model.AttendanceRequest
 import com.breezefsmdsm.features.attendance.model.AttendanceResponse
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
+import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
+import com.breezefsmdsm.features.dashboard.presentation.model.DaystartDayendRequest
 import com.breezefsmdsm.features.geofence.GeofenceService
 import com.breezefsmdsm.features.location.LocationFuzedService
 import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
 import com.breezefsmdsm.features.login.UserLoginDataEntity
 import com.breezefsmdsm.features.login.presentation.LoginActivity
+import com.breezefsmdsm.features.logout.presentation.api.LogoutRepositoryProvider
 import com.breezefsmdsm.features.photoReg.adapter.*
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
@@ -927,7 +930,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 if(Pref.user_id!!.equals(addAttendenceModel.user_id)){
                                     Pref.isAddAttendence=true
                                 }
-                                showAttendSuccessMsg()
+                                //showAttendSuccessMsg()
+                                getLocforStart(obj_temp!!.user_id.toString())
                             }
                             else {
                                 BaseActivity.isApiInitiated = false
@@ -953,7 +957,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
         dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()!!+"!"
-        dialogHeader.text = "Attendance successfully marked for "+obj_temp.user_name+".Thanks ."
+        dialogHeader.text = "Attendance successfully marked for "+obj_temp.user_name+". Thanks."
         voiceAttendanceMsg("Attendance successfully marked for "+obj_temp.user_name)
         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
@@ -969,6 +973,258 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             if (speechStatus == TextToSpeech.ERROR)
                 Log.e("Add Day Start", "TTS error in converting Text to Speech!");
         }
+    }
+
+    fun getLocforStart(usrID:String) {
+        if (AppUtils.isOnline(mContext)) {
+            if (AppUtils.mLocation != null) {
+                if (AppUtils.mLocation!!.accuracy <= Pref.gpsAccuracy.toInt()) {
+                    if (AppUtils.mLocation!!.accuracy <= Pref.shopLocAccuracy.toFloat()) {
+                        startDay(AppUtils.mLocation!!,usrID)
+                    } else {
+                        //getDDList(AppUtils.mLocation!!)
+                        singleLocation(usrID)
+                    }
+                } else {
+                    XLog.d("=====Inaccurate current location (Local Shop List)=====")
+                    singleLocation(usrID)
+                }
+            } else {
+                XLog.d("=====null location (Local Shop List)======")
+                singleLocation(usrID)
+            }
+        } else
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+
+    }
+
+    private fun singleLocation(usrID:String) {
+        progress_wheel.spin()
+        isGetLocation = -1
+        SingleShotLocationProvider.requestSingleUpdate(mContext,
+                object : SingleShotLocationProvider.LocationCallback {
+                    override fun onStatusChanged(status: String) {
+                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onProviderEnabled(status: String) {
+                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onProviderDisabled(status: String) {
+                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
+
+                    override fun onNewLocationAvailable(location: Location) {
+                        if (isGetLocation == -1) {
+                            isGetLocation = 0
+                            if (location.accuracy > Pref.gpsAccuracy.toInt()) {
+                                (mContext as DashboardActivity).showSnackMessage("Unable to fetch accurate GPS data. Please try again.")
+                                progress_wheel.stopSpinning()
+                            } else
+                                startDay(location,usrID)
+                        }
+                    }
+                })
+        val t = Timer()
+        t.schedule(object : TimerTask() {
+            override fun run() {
+                try {
+                    if (isGetLocation == -1) {
+                        isGetLocation = 1
+                        progress_wheel.stopSpinning()
+                        (mContext as DashboardActivity).showSnackMessage("GPS data to show nearby party is inaccurate. Please stop " +
+                                "internet, stop GPS/Location service, and then restart internet and GPS services to get nearby party list.")
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }, 15000)
+    }
+
+    fun startDay(loc: Location,usrID:String) {
+        progress_wheel.spin()
+        try {
+            var dayst: DaystartDayendRequest = DaystartDayendRequest()
+            dayst.user_id = usrID
+            dayst.session_token = Pref.session_token
+            dayst.date = AppUtils.getCurrentDateTime()
+            dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
+            dayst.latitude = loc.latitude.toString()
+            dayst.longitude = loc.longitude.toString()
+            dayst.IsDDvistedOnceByDay = "0"
+            dayst.visit_distributor_date_time = ""
+            dayst.visit_distributor_id = ""
+            dayst.visit_distributor_name = ""
+
+            dayst.shop_type = ""
+            dayst.shop_id = ""
+            dayst.isStart = "1"
+            dayst.isEnd = "0"
+            dayst.sale_Value = "0.0"
+            dayst.remarks = ""
+
+            var addr=""
+            try{
+                addr=LocationWizard.getAdressFromLatlng(mContext, loc.latitude, loc.longitude)
+            }catch (ex:Exception){
+                addr=""
+            }
+
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                    repository.dayStart(dayst)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                XLog.d("DayStart (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
+                                        loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
+                                progress_wheel.stopSpinning()
+                                val response = result as BaseResponse
+                                if (response.status == NetworkConstant.SUCCESS) {
+                                    endDay(loc,usrID)
+                                }
+                            }, { error ->
+                                if (error == null) {
+                                    XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+                                } else {
+                                    XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
+                                    error.printStackTrace()
+                                }
+                                progress_wheel.stopSpinning()
+                            })
+            )
+
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            progress_wheel.stopSpinning()
+        }
+
+    }
+
+    fun endDay(loc: Location,usrID:String) {
+        progress_wheel.spin()
+        try {
+            var dayst: DaystartDayendRequest = DaystartDayendRequest()
+            dayst.user_id = usrID
+            dayst.session_token = Pref.session_token
+            dayst.date = AppUtils.getCurrentDateTime()
+            dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
+            dayst.latitude = loc.latitude.toString()
+            dayst.longitude = loc.longitude.toString()
+            dayst.IsDDvistedOnceByDay = "0"
+            dayst.visit_distributor_date_time = ""
+            dayst.visit_distributor_id = ""
+            dayst.visit_distributor_name = ""
+
+            dayst.shop_type = ""
+            dayst.shop_id = ""
+            dayst.isStart = "0"
+            dayst.isEnd = "1"
+            dayst.sale_Value = "0.0"
+            dayst.remarks = ""
+
+            var addr=""
+            try{
+                addr=LocationWizard.getAdressFromLatlng(mContext, loc.latitude, loc.longitude)
+            }catch (ex:Exception){
+                addr=""
+            }
+
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                    repository.dayStart(dayst)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                XLog.d("DayEnd (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
+                                        loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
+                                progress_wheel.stopSpinning()
+                                val response = result as BaseResponse
+                                if (response.status == NetworkConstant.SUCCESS) {
+                                    calllogoutApi(loc,usrID)
+                                }
+                            }, { error ->
+                                if (error == null) {
+                                    XLog.d("DayEnd (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+                                } else {
+                                    XLog.d("DayEnd (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
+                                    error.printStackTrace()
+                                }
+                                progress_wheel.stopSpinning()
+                            })
+            )
+
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            progress_wheel.stopSpinning()
+        }
+
+    }
+
+    private fun calllogoutApi(loc: Location,usrID:String) {
+
+
+
+        var distance = 0.0
+        var location = ""
+
+        if (loc.latitude.toString() != "0.0" && loc.longitude.toString() != "0.0") {
+            location = LocationWizard.getAdressFromLatlng(mContext, loc.latitude.toDouble(), loc.longitude.toDouble())
+
+            if (location.contains("http"))
+                location = "Unknown"
+        }
+
+        val repository = LogoutRepositoryProvider.provideLogoutRepository()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.logout(usrID, Pref.session_token!!, loc.latitude.toString(), loc.longitude.toString(), AppUtils.getCurrentDateTime(), distance.toString(),
+                        "0", location)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            val logoutResponse = result as BaseResponse
+                            XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + logoutResponse.message)
+                            if (logoutResponse.status == NetworkConstant.SUCCESS) {
+                                (mContext as DashboardActivity).isChangedPassword = false
+                                Pref.tempDistance = "0.0"
+                                BaseActivity.isApiInitiated = false
+                                showAttendSuccessMsg()
+
+                            } else if (logoutResponse.status == NetworkConstant.SESSION_MISMATCH) {
+                                //clearData()
+                                (mContext as DashboardActivity).isChangedPassword = false
+                                /*startActivity(Intent(mContext, LoginActivity::class.java))
+                                (mContext as DashboardActivity).overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                                (mContext as DashboardActivity).finishAffinity()*/
+                            } else {
+                                progress_wheel.stopSpinning()
+                                (mContext as DashboardActivity).showSnackMessage("Failed to logout")
+
+                                if ((mContext as DashboardActivity).isChangedPassword) {
+                                    (mContext as DashboardActivity).isChangedPassword = false
+                                    (mContext as DashboardActivity).onBackPressed()
+                                }
+                            }
+                            BaseActivity.isApiInitiated = false
+
+
+                        }, { error ->
+                            BaseActivity.isApiInitiated = false
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + error.localizedMessage)
+                            (mContext as DashboardActivity).showSnackMessage(error.localizedMessage)
+
+                            if ((mContext as DashboardActivity).isChangedPassword) {
+                                (mContext as DashboardActivity).isChangedPassword = false
+                                (mContext as DashboardActivity).onBackPressed()
+                            }
+                        })
+        )
     }
 
 

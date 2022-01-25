@@ -68,11 +68,10 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
 
         val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopId)
         val contactNumber = shop?.ownerContactNumber
-        val remoteView = RemoteViews(mContext.packageName,
-                R.layout.customnotificationsmall)
+        val remoteView = RemoteViews(mContext.packageName, R.layout.customnotificationsmall)
 
-        val remoteViewsLarge = RemoteViews(mContext.packageName,
-                R.layout.customnotification)
+        val remoteViewsLarge = RemoteViews(mContext.packageName, R.layout.customnotification)
+
         val yesIntent = Intent(mContext, ActionReceiver::class.java)
         yesIntent.action = "actionYes"
         yesIntent.putExtra("action", "actionYes")

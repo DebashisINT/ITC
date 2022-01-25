@@ -6051,7 +6051,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     })
                                                     //simpleDialog.show()
 //                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
-                                                    voiceAttendanceMsg(AppUtils.hiFirstNameText() +" day ended successfully.")
+
+                                                    //voiceAttendanceMsg(AppUtils.hiFirstNameText() +" day ended successfully.")
+
                                                   /*  Handler(Looper.getMainLooper()).postDelayed({
                                                         (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                                                     }, 2000)*/

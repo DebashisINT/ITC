@@ -287,7 +287,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         var ttt = AppUtils.getCurrentDateForCons()
         println("curr_time "+AppUtils.getCurrentDateTime()+"   user_id "+Pref.user_id)
-        println("load frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
+        println("load_frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
         var andrV = Build.VERSION.SDK_INT.toInt()
         println("andrV "+andrV.toString()+ " Time :" + AppUtils.getCurrentDateTime());
         if (addToStack) {

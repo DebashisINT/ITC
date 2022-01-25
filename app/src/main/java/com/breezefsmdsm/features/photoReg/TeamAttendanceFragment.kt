@@ -3,6 +3,7 @@ package com.breezefsmdsm.features.photoReg
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.text.TextUtils
@@ -20,9 +21,12 @@ import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.app.domain.AddShopDBModelEntity
+import com.breezefsmdsm.app.domain.AssignToDDEntity
 import com.breezefsmdsm.app.domain.ShopActivityEntity
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.FTStorageUtils
+import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.TA.ViewAllTAListFragment
@@ -31,10 +35,14 @@ import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
 import com.breezefsmdsm.features.attendance.model.AttendanceRequest
 import com.breezefsmdsm.features.attendance.model.AttendanceResponse
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
+import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
+import com.breezefsmdsm.features.dashboard.presentation.model.DaystartDayendRequest
+import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.login.UserLoginDataEntity
 import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.elvishew.xlog.XLog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
@@ -100,17 +108,17 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
             attendanceReq.end_date = ""
             callAttendanceListApi(attendanceReq)
         } else {
-            /*if (!AppUtils.isOnline(mContext))
-                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))*/
+            if (!AppUtils.isOnline(mContext))
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
 
-            val list = AppDatabase.getDBInstance()!!.userAttendanceDataDao().getAllSortedList() as ArrayList<UserLoginDataEntity>
+          /*  val list = AppDatabase.getDBInstance()!!.userAttendanceDataDao().getAllSortedList() as ArrayList<UserLoginDataEntity>
 
             if (list != null && list.size > 0)
                 initAdapter(list)
             else {
                 noDataText.visibility = View.VISIBLE
                 recyclerView!!.visibility = View.GONE
-            }
+            }*/
         }
 
 //        userLoginDataEntityArr = AppDatabase.getDBInstance()!!.userAttendanceDataDao().all as ArrayList<UserLoginDataEntity>
@@ -341,7 +349,7 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
     private fun initView(view: View) {
         progress_wheel = view.findViewById(R.id.progress_wheel)
         tv_frag_attend_team_name = view.findViewById(R.id.tv_frag_attend_team_name)
-        tv_frag_attend_team_name.text= "Attendance Report for : "+team_user_name
+        tv_frag_attend_team_name.text= "Visit Report for : "+team_user_name
         progress_wheel.stopSpinning()
         radioButtonDateRangePicker = view.findViewById(R.id.attendance_header_radio_button_date_range_picker)
         radioButtonDateRangePicker!!.setOnClickListener(this)
@@ -401,7 +409,7 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
             (mContext as DashboardActivity).showSnackMessage("Your end date is before start date.")
             return
         }
-        val date = "Attendance: From " + day + AppUtils.getDayNumberSuffix(day.toInt()) + FTStorageUtils.formatMonth((++monthOfYear).toString() + "") + " " + year + " To " + dayEnd + AppUtils.getDayNumberSuffix(dayEnd.toInt()) + FTStorageUtils.formatMonth((++monthOfYearEnd).toString() + "") + " " + yearEnd
+        val date = "Visit: From " + day + AppUtils.getDayNumberSuffix(day.toInt()) + FTStorageUtils.formatMonth((++monthOfYear).toString() + "") + " " + year + " To " + dayEnd + AppUtils.getDayNumberSuffix(dayEnd.toInt()) + FTStorageUtils.formatMonth((++monthOfYearEnd).toString() + "") + " " + yearEnd
         dateRangeTv!!.visibility = View.VISIBLE
         dateRangeTv!!.text = date
         isDateRangeSelected = true
@@ -499,6 +507,6 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
         }
 
         return sortedlist
-
     }
+
 }

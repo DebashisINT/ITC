@@ -88,7 +88,7 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
                 click_for_photo_attd.setOnClickListener{listner?.getUserInfoOnLick(mList?.get(adapterPosition)!!)}
                 click_for_photo_attd_report.setOnClickListener{listner?.getUserInfoAttendReportOnLick(mList?.get(adapterPosition)!!)}
 
-
+                photo_reg_sales_reg_tv.text="Sales Rep Type : "+mList?.get(adapterPosition)?.type_name
 
             }
         }

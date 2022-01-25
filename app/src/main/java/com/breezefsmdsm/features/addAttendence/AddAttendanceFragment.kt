@@ -1337,7 +1337,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
             val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
             dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-            dialogHeader.text="Attendance is not possible. Distributor/Nearest Shop address is not updated in this app. Talk to your head."
+            dialogHeader.text="Attendance is not possible. Distributor address is not updated in this app. Talk to your head."
 
             val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
             dialogYes.setOnClickListener({ view ->
