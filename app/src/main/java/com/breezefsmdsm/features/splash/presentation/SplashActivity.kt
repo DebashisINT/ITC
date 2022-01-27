@@ -71,7 +71,8 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        //setContentView(R.layout.activity_splash)
+        setContentView(R.layout.activity_splash_new)
 //        Handler().postDelayed({ goToNextScreen() }, 2000)
 
         //Code by wasim

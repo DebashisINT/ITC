@@ -127,7 +127,7 @@ import com.theartofdev.edmodo.cropper.CropImage
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.*
@@ -192,11 +192,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private lateinit var tvappCustomAnydesk: AppCustomTextView
     private lateinit var tvappCustomSharelog: AppCustomTextView
 
+    private lateinit var icon_internet:ImageView
+
     private lateinit var mContext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_login_new)
         mContext = this@LoginActivity
         println("xyz - login oncreate started" + AppUtils.getCurrentDateTime());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -3125,7 +3127,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun initView() {
-        val login_TV = findViewById<TextView>(R.id.login_TV)
+        val login_TV = findViewById<ImageView>(R.id.login_TV)
         login_TV.isEnabled = true
         username_EDT = findViewById(R.id.username_EDT)
         password_EDT = findViewById(R.id.password_EDT)
@@ -3138,11 +3140,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         iv_shopImage = findViewById(R.id.iv_shopImage)
         tv_internet_info = findViewById(R.id.tv_internet_info)
         cb_remember_me = findViewById(R.id.cb_remember_me)
+        icon_internet = findViewById(R.id.icon_internet)
         tvappCustomAnydeskInfo = findViewById(R.id.activity_login_tvappCustomAnydeskInfo)
-        tvappCustomAnydesk = findViewById(R.id.activity_login_tvappCustomAnydesk)
-        tvappCustomSharelog = findViewById(R.id.activity_login_tvappCustomLogs)
-        tvappCustomAnydesk.setOnClickListener(this)
-        tvappCustomSharelog.setOnClickListener(this)
+        //tvappCustomAnydesk = findViewById(R.id.activity_login_tvappCustomAnydesk)
+        //tvappCustomSharelog = findViewById(R.id.activity_login_tvappCustomLogs)
+        //tvappCustomAnydesk.setOnClickListener(this)
+        //tvappCustomSharelog.setOnClickListener(this)
         tvappCustomAnydeskInfo.setOnClickListener(this)
         cb_remember_me.isChecked = Pref.isRememberMe
 
@@ -3151,9 +3154,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
         if (launchIntent != null) {
-            activity_login_tvappCustomAnydesk.text = resources.getString(R.string.label_open_anydesk)
+            //activity_login_tvappCustomAnydesk.text = resources.getString(R.string.label_open_anydesk)
         } else {
-            activity_login_tvappCustomAnydesk.text = resources.getString(R.string.label_install_anydesk)
+            //activity_login_tvappCustomAnydesk.text = resources.getString(R.string.label_install_anydesk)
         }
 
 
@@ -3248,8 +3251,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
             }
 
-            R.id.activity_login_tvappCustomLogs -> {
-                /*if(Build.VERSION.SDK_INT>=30){
+/*            R.id.activity_login_tvappCustomLogs -> {
+                *//*if(Build.VERSION.SDK_INT>=30){
                     if (!Environment.isExternalStorageManager()){
                         fileManagePermi()
                     }else{
@@ -3257,12 +3260,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     }
                 }else{
                     openShareIntents()
-                }*/
+                }*//*
                 openShareIntents()
                 activity_login_llList.visibility = View.GONE
-            }
+            }*/
 
-            R.id.activity_login_tvappCustomAnydesk -> {
+       /*     R.id.activity_login_tvappCustomAnydesk -> {
                 var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
                 if (launchIntent != null) {
                     startActivity(launchIntent)
@@ -3272,16 +3275,49 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     startActivity(intent)
                     activity_login_llList.visibility = View.GONE
                 }
-            }
+            }*/
 
             R.id.activity_login_tvappCustomAnydeskInfo -> {
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(true)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_settings)
+                val tvappCustomAnydesk = simpleDialog.findViewById(R.id.activity_login_tvappCustomAnydesk) as AppCustomTextView
+                val tvappCustomSharelog = simpleDialog.findViewById(R.id.activity_login_tvappCustomLogs) as AppCustomTextView
+
+                tvappCustomAnydesk.setOnClickListener {
+                    var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
+                    if (launchIntent != null) {
+                        startActivity(launchIntent)
+                    } else {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.anydesk.anydeskandroid"))
+                        startActivity(intent)
+                    }
+                    simpleDialog.dismiss()
+                }
+                tvappCustomSharelog.setOnClickListener {
+                    openShareIntents()
+                    simpleDialog.dismiss()
+
+                }
+                var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
+                if (launchIntent != null) {
+                    tvappCustomAnydesk.text = resources.getString(R.string.label_open_anydesk)
+                } else {
+                    tvappCustomAnydesk.text = resources.getString(R.string.label_install_anydesk)
+                }
+
                 if (!activity_login_tvappCustomAnydeskInfo.isSelected) {
                     activity_login_tvappCustomAnydeskInfo.isSelected = true
-                    activity_login_llList.visibility = View.VISIBLE
+//                    activity_login_llList.visibility = View.VISIBLE
                 } else {
                     activity_login_tvappCustomAnydeskInfo.isSelected = false
-                    activity_login_llList.visibility = View.GONE
+//                    activity_login_llList.visibility = View.INVISIBLE
                 }
+
+                simpleDialog.show()
+
+
             }
 
             R.id.share_log_login_TV -> {
@@ -3446,17 +3482,26 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         /***********API CALL************/
         if (AppUtils.isOnline(this)) {
-            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_green))
-            tv_internet_info.text = getString(R.string.login_net_connected)
+            //tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_green))
+            tv_internet_info.setTextColor(resources.getColor(R.color.color_custom_green))
+            tv_internet_info.text = getString(R.string.login_net_connected1)
+            icon_internet.setImageDrawable(mContext.getDrawable(R.drawable.ic_internet_new))
+//            tv_internet_info.slideDown()
+
             if (isApiInitiated)
                 return
             //prapareLogin(this)
             println("xyz - initiateLogin end" + AppUtils.getCurrentDateTime());
-            callNewSettingsApi()
-        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                callNewSettingsApi()
+            }, 400)
+        }else {
             //showSnackMessage(getString(R.string.no_internet))
-            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_red))
-            tv_internet_info.text = getString(R.string.login_net_disconnected)
+//            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_red))
+            tv_internet_info.setTextColor(resources.getColor(R.color.color_custom_red_1))
+            tv_internet_info.text = getString(R.string.login_net_disconnected1)
+            icon_internet.setImageDrawable(mContext.getDrawable(R.drawable.ic_wifi_connection_offline_new))
+            login_TV.isEnabled = true
         }
     }
 
@@ -6066,13 +6111,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         if (!AppUtils.isOnline(this)) {
             //showSnackMessage(getString(R.string.no_internet))
-            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_red))
-            tv_internet_info.text = getString(R.string.login_net_disconnected)
+//            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_red))
+            tv_internet_info.setTextColor(resources.getColor(R.color.color_custom_red_1))
+            tv_internet_info.text = getString(R.string.login_net_disconnected1)
+            icon_internet.setImageDrawable(mContext.getDrawable(R.drawable.ic_wifi_connection_offline_new))
             return
         }
 
-        tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_green))
-        tv_internet_info.text = getString(R.string.login_net_connected)
+//        tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_green))
+        tv_internet_info.setTextColor(resources.getColor(R.color.color_custom_white_1))
+        tv_internet_info.text = getString(R.string.login_net_connected1)
+        icon_internet.setImageDrawable(mContext.getDrawable(R.drawable.ic_internet_new))
+//        tv_internet_info.slideDown()
 
         val repository = LoginRepositoryProvider.provideLoginImgRepository()
         progress_wheel.spin()

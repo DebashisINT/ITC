@@ -13,10 +13,7 @@ import android.os.*
 import android.speech.tts.TextToSpeech
 import android.text.TextUtils
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
@@ -182,6 +179,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         Handler(Looper.getMainLooper()).postDelayed({
             callUSerListApi()
         }, 1000)
+
+        enableScreen()
     }
 
     override fun onClick(v: View?) {
@@ -829,6 +828,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     }
 
     private fun prepareAddAttendanceInputParams() {
+        disableScreen()
         progress_wheel.stopSpinning()
 
         try {
@@ -908,6 +908,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             doAttendance()
 
         } catch (e: Exception) {
+            enableScreen()
             e.printStackTrace()
         }
     }
@@ -925,6 +926,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             val response = result as BaseResponse
                             XLog.d("AddAttendance Response Code========> " + response.status)
                             XLog.d("AddAttendance Response Msg=========> " + response.message)
+                            enableScreen()
                             if (response.status == NetworkConstant.SUCCESS) {
                                 BaseActivity.isApiInitiated = false
                                 if(Pref.user_id!!.equals(addAttendenceModel.user_id)){
@@ -942,6 +944,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             XLog.d("AddAttendance team Response Msg=========> " + error.message)
+                            enableScreen()
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
@@ -1004,15 +1007,15 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         SingleShotLocationProvider.requestSingleUpdate(mContext,
                 object : SingleShotLocationProvider.LocationCallback {
                     override fun onStatusChanged(status: String) {
-                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                       
                     }
 
                     override fun onProviderEnabled(status: String) {
-                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                     override fun onProviderDisabled(status: String) {
-                        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
                     }
 
                     override fun onNewLocationAvailable(location: Location) {
@@ -1044,6 +1047,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     }
 
     fun startDay(loc: Location,usrID:String) {
+        disableScreen()
         progress_wheel.spin()
         try {
             var dayst: DaystartDayendRequest = DaystartDayendRequest()
@@ -1081,11 +1085,13 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 XLog.d("DayStart (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
                                         loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
                                 progress_wheel.stopSpinning()
+                                enableScreen()
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     endDay(loc,usrID)
                                 }
                             }, { error ->
+                                enableScreen()
                                 if (error == null) {
                                     XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                                 } else {
@@ -1097,6 +1103,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             )
 
         } catch (ex: Exception) {
+            enableScreen()
             ex.printStackTrace()
             progress_wheel.stopSpinning()
         }
@@ -1104,6 +1111,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     }
 
     fun endDay(loc: Location,usrID:String) {
+        disableScreen()
         progress_wheel.spin()
         try {
             var dayst: DaystartDayendRequest = DaystartDayendRequest()
@@ -1141,11 +1149,13 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 XLog.d("DayEnd (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
                                         loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
                                 progress_wheel.stopSpinning()
+                                enableScreen()
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     calllogoutApi(loc,usrID)
                                 }
                             }, { error ->
+                                enableScreen()
                                 if (error == null) {
                                     XLog.d("DayEnd (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                                 } else {
@@ -1157,6 +1167,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             )
 
         } catch (ex: Exception) {
+            enableScreen()
             ex.printStackTrace()
             progress_wheel.stopSpinning()
         }
@@ -1166,7 +1177,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     private fun calllogoutApi(loc: Location,usrID:String) {
 
 
-
+        disableScreen()
         var distance = 0.0
         var location = ""
 
@@ -1188,6 +1199,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             val logoutResponse = result as BaseResponse
                             XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + logoutResponse.message)
+                            enableScreen()
                             if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                 (mContext as DashboardActivity).isChangedPassword = false
                                 Pref.tempDistance = "0.0"
@@ -1211,8 +1223,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             }
                             BaseActivity.isApiInitiated = false
 
-
                         }, { error ->
+                            enableScreen()
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
@@ -1227,5 +1239,13 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         )
     }
 
+    private fun disableScreen(){
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private fun enableScreen(){
+        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 
 }

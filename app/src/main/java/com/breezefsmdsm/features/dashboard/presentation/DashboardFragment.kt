@@ -175,7 +175,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var tv_no_data_available: AppCustomTextView
     private lateinit var tv_pick_date_range: AppCustomTextView
     private lateinit var progress_wheel_attendance: ProgressWheel
-    private lateinit var shop_tome_order_tab_LL: LinearLayout
+    //private lateinit var shop_tome_order_tab_LL: LinearLayout
+    private lateinit var shop_tome_order_tab_LL: HorizontalScrollView
 
     lateinit var cancel_timer: TextView
     lateinit var pause_record: TextView
@@ -198,8 +199,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var DDVisitdate_TV: AppCustomTextView
 
 
-    private lateinit var StartRL: RelativeLayout
-    private lateinit var endRL: RelativeLayout
+    //private lateinit var StartRL: RelativeLayout
+    //private lateinit var endRL: RelativeLayout
+
+    private lateinit var StartRL: FrameLayout
+    private lateinit var endRL: FrameLayout
 
 
     private lateinit var start_shop: AppCustomTextView
@@ -208,6 +212,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private var isStartCall:Boolean=false
     private var isCalledFromStart:Boolean=false
     private var isEndCall:Boolean=false
+
+    /*horizontal scroll 01-10-2021*/
+    private lateinit var ll_dash_total_visit_newD  : LinearLayout
+    private lateinit var ll_dash_visit_duration_newD   : LinearLayout
+    private lateinit var ll_dash_total_order_newD   : LinearLayout
+
+
+    private lateinit var ll_dash_day_start_newD   : LinearLayout
+    private lateinit var ll_dash_point_visit_newD   : LinearLayout
+    private lateinit var ll_dash_day_end_newD   : LinearLayout
+    private lateinit var ll_dash_visit_attendance_newD   : LinearLayout
 
 
     private val customProgressDialog: CustomProgressDialog by lazy {
@@ -508,9 +523,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         avgShop = view.findViewById(R.id.n_shops_TV)
         avgOrder = view.findViewById(R.id.n_order_TV)
         avgOrder.text = getString(R.string.rupee_symbol) + "0.00"
-        shops_RL = view.findViewById(R.id.shops_RL)
-        time_RL = view.findViewById(R.id.time_RL)
-        price_RL = view.findViewById(R.id.price_RL)
+        //shops_RL = view.findViewById(R.id.shops_RL)
+        //time_RL = view.findViewById(R.id.time_RL)
+        //price_RL = view.findViewById(R.id.price_RL)
         best_performing_shop_TV = view.findViewById(R.id.best_performing_shop_TV)
         no_shop_tv = view.findViewById(R.id.no_shop_tv)
         progress_wheel = view.findViewById(R.id.progress_wheel)
@@ -538,7 +553,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
         shop_tome_order_tab_LL = view.findViewById(R.id.shop_tome_order_tab_LL)
 
-
         n_shops_TV = view.findViewById(R.id.n_shops_TV)
         no_of_shop_TV = view.findViewById(R.id.no_of_shop_TV)
 
@@ -557,6 +571,18 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
         start_shop = view.findViewById(R.id.start_shop)
         enddate_TV = view.findViewById(R.id.enddate_TV)
+
+        /*horizontal scroll 01-10-2021*/
+        ll_dash_total_visit_newD   = view.findViewById(R.id.ll_dash_total_visit_newD)
+        ll_dash_visit_duration_newD    = view.findViewById(R.id.ll_dash_visit_duration_newD)
+        ll_dash_total_order_newD    = view.findViewById(R.id.ll_dash_total_order_newD)
+        ll_dash_day_start_newD    = view.findViewById(R.id.ll_dash_day_start_newD)
+        ll_dash_point_visit_newD    = view.findViewById(R.id.ll_dash_point_visit_newD)
+        ll_dash_day_end_newD    = view.findViewById(R.id.ll_dash_day_end_newD)
+        ll_dash_visit_attendance_newD    = view.findViewById(R.id.ll_dash_visit_attendance_newD)
+
+        ll_dash_visit_attendance_newD.setOnClickListener(this)
+
         start_TV.setOnClickListener({ view ->
 
             var andrV = Build.VERSION.SDK_INT.toInt()
@@ -1733,9 +1759,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         shop_ll.setOnClickListener(this)
         attandance_ll.setOnClickListener(this)
         order_ll.setOnClickListener(this)
-        shops_RL.setOnClickListener(this)
-        time_RL.setOnClickListener(this)
-        price_RL.setOnClickListener(this)
+        //shops_RL.setOnClickListener(this)
+        //time_RL.setOnClickListener(this)
+        //price_RL.setOnClickListener(this)
+        ll_dash_total_order_newD.setOnClickListener(this)
+
         tv_view_all.setOnClickListener(this)
         tv_pick_date_range.setOnClickListener(this)
         n_shops_TV.setOnClickListener(this)
@@ -1823,7 +1851,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 if (Pref.isOrderReplacedWithTeam) {
                     tv_order.text = getString(R.string.team_details)
                     iv_order_icon.setImageResource(R.drawable.ic_team_icon)
-                    price_RL.visibility = View.GONE
+                    //price_RL.visibility = View.GONE
+                    ll_dash_total_order_newD.visibility = View.GONE
                 } else {
                     tv_order.text = getString(R.string.orders)
                     iv_order_icon.setImageResource(R.drawable.ic_dashboard_order_icon)
@@ -1831,13 +1860,15 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     if (Pref.isOrderShow) {
                         order_ll.visibility = View.VISIBLE
                         //price_RL.visibility = View.VISIBLE
-                        avgOrder.visibility = View.VISIBLE
-                        no_of_order_TV.visibility = View.VISIBLE
+                        //avgOrder.visibility = View.VISIBLE
+                        //no_of_order_TV.visibility = View.VISIBLE
+                        ll_dash_total_order_newD.visibility = View.VISIBLE
                     } else {
                         order_ll.visibility = View.GONE
                         //price_RL.visibility = View.GONE
-                        avgOrder.visibility = View.GONE
-                        no_of_order_TV.visibility = View.GONE
+                        //avgOrder.visibility = View.GONE
+                        //no_of_order_TV.visibility = View.GONE
+                        ll_dash_total_order_newD.visibility = View.GONE
                     }
                 }
             }
@@ -1872,48 +1903,63 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
         if (Pref.IsShowTotalVisitsOnAppDashboard) {
 //            shops_RL.visibility = View.VISIBLE
-            n_shops_TV.visibility = View.VISIBLE
-            no_of_shop_TV.visibility = View.VISIBLE
+            //n_shops_TV.visibility = View.VISIBLE
+            //no_of_shop_TV.visibility = View.VISIBLE
+            ll_dash_total_visit_newD.visibility = View.VISIBLE
         } else {
 //            shops_RL.visibility = View.GONE
-            n_shops_TV.visibility = View.GONE
-            no_of_shop_TV.visibility = View.GONE
+            //n_shops_TV.visibility = View.GONE
+            //no_of_shop_TV.visibility = View.GONE
+            ll_dash_total_visit_newD.visibility = View.GONE
+        }
+        if(Pref.IsShowMenuPermission_Info){
+            ll_dash_visit_attendance_newD.visibility=View.VISIBLE
+        }else{
+            ll_dash_visit_attendance_newD.visibility=View.GONE
         }
 
         if (Pref.IsShowVisitDurationOnAppDashboard) {
 //            time_RL.visibility = View.VISIBLE
-            n_time_TV.visibility = View.VISIBLE
-            no_of_time_TV.visibility = View.VISIBLE
+            //n_time_TV.visibility = View.VISIBLE
+            //no_of_time_TV.visibility = View.VISIBLE
+            ll_dash_visit_duration_newD.visibility =  View.VISIBLE
         } else {
 //            time_RL.visibility = View.GONE
-            n_time_TV.visibility = View.GONE
-            no_of_time_TV.visibility = View.GONE
+            //n_time_TV.visibility = View.GONE
+            //no_of_time_TV.visibility = View.GONE
+            ll_dash_visit_duration_newD.visibility =  View.GONE
         }
 
         //Pref.IsDMS = true
         //19-08-21
         if (Pref.IsShowMarkDistVisitOnDshbrd) {
-            DDVisit_TV.visibility = View.VISIBLE
-            DDVisitdate_TV.visibility = View.VISIBLE
+            //DDVisit_TV.visibility = View.VISIBLE
+            //DDVisitdate_TV.visibility = View.VISIBLE
+            ll_dash_point_visit_newD.visibility = View.VISIBLE
         } else {
-            DDVisit_TV.visibility = View.GONE
-            DDVisitdate_TV.visibility = View.GONE
+            //DDVisit_TV.visibility = View.GONE
+            //DDVisitdate_TV.visibility = View.GONE
+            ll_dash_point_visit_newD.visibility = View.GONE
         }
 
         if (Pref.IsShowDayStart) {
-            StartRL.visibility = View.VISIBLE
-            start_shop.visibility = View.VISIBLE
+            //StartRL.visibility = View.VISIBLE
+            //start_shop.visibility = View.VISIBLE
+            ll_dash_day_start_newD.visibility = View.VISIBLE
         } else {
-            StartRL.visibility = View.GONE
-            start_shop.visibility = View.GONE
+            //StartRL.visibility = View.GONE
+            //start_shop.visibility = View.GONE
+            ll_dash_day_start_newD.visibility = View.GONE
 
         }
         if (Pref.IsShowDayEnd) {
-            endRL.visibility = View.VISIBLE
-            enddate_TV.visibility = View.VISIBLE
+            //endRL.visibility = View.VISIBLE
+            //enddate_TV.visibility = View.VISIBLE
+            ll_dash_day_end_newD.visibility = View.VISIBLE
         } else {
-            endRL.visibility = View.GONE
-            enddate_TV.visibility = View.GONE
+            //endRL.visibility = View.GONE
+            //enddate_TV.visibility = View.GONE
+            ll_dash_day_end_newD.visibility = View.GONE
         }
 
 
@@ -2318,7 +2364,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 (mContext as DashboardActivity).loadFragment(FragType.AvgTimespentShopListFragment, true, "")
             }
 
-            R.id.price_RL -> {
+            //R.id.price_RL -> {
+                R.id.ll_dash_total_order_newD -> {
                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.functionality_disabled))
 
                 if(Pref.IsShowDayEnd){
@@ -2345,6 +2392,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
             R.id.fab_bot -> {
                 (mContext as DashboardActivity).showLanguageAlert(false)
+            }
+            R.id.ll_dash_visit_attendance_newD->{
+                if (AppUtils.isOnline(mContext)) {
+                    (mContext as DashboardActivity).loadFragment(FragType.PhotoAttendanceFragment, false, "")
+                } else {
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                }
             }
         }
     }
@@ -5163,7 +5217,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 if (Pref.isOrderReplacedWithTeam) {
                     tv_order.text = getString(R.string.team_details)
                     iv_order_icon.setImageResource(R.drawable.ic_team_icon)
-                    price_RL.visibility = View.GONE
+                    //price_RL.visibility = View.GONE
+                    ll_dash_total_order_newD.visibility = View.GONE
                 } else {
                     tv_order.text = getString(R.string.orders)
                     iv_order_icon.setImageResource(R.drawable.ic_dashboard_order_icon)
@@ -5171,13 +5226,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     if (Pref.isOrderShow) {
                         order_ll.visibility = View.VISIBLE
                         //price_RL.visibility = View.VISIBLE
-                        avgOrder.visibility = View.VISIBLE
-                        no_of_order_TV.visibility = View.VISIBLE
+                        //avgOrder.visibility = View.VISIBLE
+                        //no_of_order_TV.visibility = View.VISIBLE
+
+                        ll_dash_total_order_newD.visibility = View.VISIBLE
                     } else {
                         order_ll.visibility = View.GONE
                         //price_RL.visibility = View.GONE
-                        avgOrder.visibility = View.GONE
-                        no_of_order_TV.visibility = View.GONE
+                        //avgOrder.visibility = View.GONE
+                        //no_of_order_TV.visibility = View.GONE
+
+                        ll_dash_total_order_newD.visibility = View.GONE
                     }
                 }
             }
@@ -5194,47 +5253,65 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             history_ll.visibility = View.GONE
 
         if (Pref.IsShowMarkDistVisitOnDshbrd) {
-            DDVisit_TV.visibility = View.VISIBLE
-            DDVisitdate_TV.visibility = View.VISIBLE
+            //DDVisit_TV.visibility = View.VISIBLE
+            //DDVisitdate_TV.visibility = View.VISIBLE
+            ll_dash_point_visit_newD.visibility = View.VISIBLE
         } else {
-            DDVisit_TV.visibility = View.GONE
-            DDVisitdate_TV.visibility = View.GONE
+            //DDVisit_TV.visibility = View.GONE
+            //DDVisitdate_TV.visibility = View.GONE
+            ll_dash_point_visit_newD.visibility = View.GONE
         }
 
         if (Pref.IsShowDayStart) {
-            StartRL.visibility = View.VISIBLE
-            start_shop.visibility = View.VISIBLE
+            //StartRL.visibility = View.VISIBLE
+            //start_shop.visibility = View.VISIBLE
+
+            ll_dash_day_start_newD.visibility = View.VISIBLE
         } else {
-            StartRL.visibility = View.GONE
-            start_shop.visibility = View.GONE
+            //StartRL.visibility = View.GONE
+            //start_shop.visibility = View.GONE
+
+            ll_dash_day_start_newD.visibility = View.GONE
 
         }
         if (Pref.IsShowDayEnd) {
-            endRL.visibility = View.VISIBLE
-            enddate_TV.visibility = View.VISIBLE
+            //endRL.visibility = View.VISIBLE
+            //enddate_TV.visibility = View.VISIBLE
+            ll_dash_day_end_newD.visibility = View.VISIBLE
         } else {
-            endRL.visibility = View.GONE
-            enddate_TV.visibility = View.GONE
+            //endRL.visibility = View.GONE
+            //enddate_TV.visibility = View.GONE
+            ll_dash_day_end_newD.visibility = View.GONE
         }
 
         if (Pref.IsShowTotalVisitsOnAppDashboard) {
 //            shops_RL.visibility = View.VISIBLE
-            n_shops_TV.visibility = View.VISIBLE
-            no_of_shop_TV.visibility = View.VISIBLE
+            //n_shops_TV.visibility = View.VISIBLE
+            //no_of_shop_TV.visibility = View.VISIBLE
+            ll_dash_total_visit_newD.visibility = View.VISIBLE
         } else {
 //            shops_RL.visibility = View.GONE
-            n_shops_TV.visibility = View.GONE
-            no_of_shop_TV.visibility = View.GONE
+            //n_shops_TV.visibility = View.GONE
+            //no_of_shop_TV.visibility = View.GONE
+            ll_dash_total_visit_newD.visibility = View.GONE
         }
+        if(Pref.IsShowMenuPermission_Info){
+            ll_dash_visit_attendance_newD.visibility=View.VISIBLE
+        }else{
+            ll_dash_visit_attendance_newD.visibility=View.GONE
+        }
+
 
         if (Pref.IsShowVisitDurationOnAppDashboard) {
 //            time_RL.visibility = View.VISIBLE
-            n_time_TV.visibility = View.VISIBLE
-            no_of_time_TV.visibility = View.VISIBLE
+            //n_time_TV.visibility = View.VISIBLE
+            //no_of_time_TV.visibility = View.VISIBLE
+            ll_dash_visit_duration_newD.visibility =  View.VISIBLE
         } else {
 //            time_RL.visibility = View.GONE
-            n_time_TV.visibility = View.GONE
-            no_of_time_TV.visibility = View.GONE
+            //n_time_TV.visibility = View.GONE
+            //no_of_time_TV.visibility = View.GONE
+            ll_dash_visit_duration_newD.visibility =  View.GONE
         }
 
         if (Pref.IsShowPartyOnAppDashboard)

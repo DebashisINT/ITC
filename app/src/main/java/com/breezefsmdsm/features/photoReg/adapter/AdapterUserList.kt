@@ -164,6 +164,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                     sync_image_view.setColorFilter(ContextCompat.getColor(getContext(), R.color.black_50))
                 }
 
+                iv_aadhaar_ion.visibility=View.GONE
+
             }
         }
     }

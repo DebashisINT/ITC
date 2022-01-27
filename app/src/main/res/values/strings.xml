@@ -1514,4 +1514,9 @@
                                             5. Take Closure Look photo of PAN Card\n
                                             6. Please only Capture PAN image and dont try with any other image. It will block your registration.</string>
 
+    <string name="name_filed_managenent_system" translatable="false">FIELD SALES MANAGEMENT</string>
+    <string name="username_new" translatable="false">Username</string>
+    <string name="login_net_disconnected1" translatable="false">Please switch on the internet.</string>
+    <string name="login_net_connected1" translatable="false">You can login now.</string>
+
 </resources>

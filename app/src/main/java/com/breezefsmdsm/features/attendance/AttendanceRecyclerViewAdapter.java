@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.breezefsmdsm.R;
 import com.breezefsmdsm.app.Pref;
 import com.breezefsmdsm.app.utils.AppUtils;
 import com.breezefsmdsm.features.login.UserLoginDataEntity;
+import com.breezefsmdsm.widgets.AppCustomTextView;
 
 import java.util.ArrayList;
 
@@ -128,7 +130,8 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
 //                attendanceFragmentViewHolder.login.setText(formattedLoginTime);
 //            }else
 //                attendanceFragmentViewHolder.login.setText(AppDatabase.Companion.getDBInstance().userAttendanceDataDao().getLoginTime(Pref.INSTANCE.getUser_id()));
-        } else {
+        }
+        else {
             attendanceFragmentViewHolder.logout.setVisibility(View.VISIBLE);
             attendanceFragmentViewHolder.duration.setVisibility(View.VISIBLE);
             /*attendanceFragmentViewHolder.logout.setText(mUserLoginDataEntityArray.get(position).getLogouttime());
@@ -190,6 +193,9 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
                 attendanceFragmentViewHolder.duration.setText("On Leave");
             }
         }
+
+        attendanceFragmentViewHolder.rl_logout.setVisibility(View.GONE);
+        attendanceFragmentViewHolder.tv_duration.setVisibility(View.GONE);
     }
 
 
@@ -203,6 +209,8 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
     class AttendanceFragmentViewHolder extends RecyclerView.ViewHolder {
         TextView date, login, logout, duration;
         LinearLayout rcv_item_bg;
+        RelativeLayout rl_logout;
+        AppCustomTextView tv_duration;
 
         public AttendanceFragmentViewHolder(View itemView) {
             super(itemView);
@@ -212,7 +220,8 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
             duration = itemView.findViewById(R.id.tv_duration);
             rcv_item_bg = itemView.findViewById(R.id.rcv_item_bg);
 
-
+           rl_logout = itemView.findViewById(R.id.rl_arrend_rcv_logout);
+            tv_duration = itemView.findViewById(R.id.tv_duration);
         }
     }
 

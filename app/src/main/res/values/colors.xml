@@ -107,4 +107,7 @@
     <color name="color_silver_dark">#D6D6D6</color>
     <color name="color_custom_red">#f8424e</color>
     <color name="color_custom_green">#57a518</color>
+    <color name="color_custom_red_1">#82F8424E</color>
+    <color name="card_custom_back1">#d8d8d8</color>
+    <color name="color_custom_white_1">#084e8b</color>
 </resources>

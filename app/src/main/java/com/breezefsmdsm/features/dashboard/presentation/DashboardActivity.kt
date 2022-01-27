@@ -2167,7 +2167,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             anydesk_info_TV.visibility = View.GONE
         }
         if (Pref.IsShowMenuPermission_Info) {
-            permission_info_TV.visibility = View.VISIBLE
+            permission_info_TV.visibility = View.GONE
         } else {
             permission_info_TV.visibility = View.GONE
         }
