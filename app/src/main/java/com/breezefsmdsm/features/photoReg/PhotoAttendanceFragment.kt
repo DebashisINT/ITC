@@ -54,7 +54,6 @@ import com.breezefsmdsm.features.location.LocationFuzedService
 import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
 import com.breezefsmdsm.features.login.UserLoginDataEntity
-import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.logout.presentation.api.LogoutRepositoryProvider
 import com.breezefsmdsm.features.photoReg.adapter.*
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
@@ -457,6 +456,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         if (isGetLocation == -1) {
                             isGetLocation = 0
                             if (location.accuracy > Pref.gpsAccuracy.toInt()) {
+                                XLog.d("PhotoAttendanceFragment : loc.accuracy : "+location.accuracy.toString()+
+                                        " Pref.gpsAccuracy : "+Pref.gpsAccuracy.toInt().toString())
                                 (mContext as DashboardActivity).showSnackMessage("Unable to fetch accurate GPS data. Please try again.")
                                 progress_wheel.stopSpinning()
                             } else
@@ -1022,6 +1023,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         if (isGetLocation == -1) {
                             isGetLocation = 0
                             if (location.accuracy > Pref.gpsAccuracy.toInt()) {
+                                XLog.d("PhotoAttendanceFragment : loc.accuracy : "+location.accuracy.toString()+
+                                        " Pref.gpsAccuracy : "+Pref.gpsAccuracy.toInt().toString())
                                 (mContext as DashboardActivity).showSnackMessage("Unable to fetch accurate GPS data. Please try again.")
                                 progress_wheel.stopSpinning()
                             } else

@@ -221,7 +221,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         initView()
 
         if (AppUtils.getSharedPreferenceslogShareinLogin(this)) {
-            share_log_login_TV.visibility = View.VISIBLE
+            share_log_login_TV.visibility = View.GONE
         } else {
             share_log_login_TV.visibility = View.GONE
         }
