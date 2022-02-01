@@ -9,6 +9,7 @@ import com.breezefsmdsm.app.FileUtils
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.addshop.model.AddShopRequestCompetetorImg
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
+import com.breezefsmdsm.features.login.model.userconfig.UserConfigResponseModel
 import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
 import com.breezefsmdsm.features.photoReg.model.*
 import com.breezefsmdsm.features.stockAddCurrentStock.api.ShopAddStockApi
@@ -32,6 +33,10 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
 
     fun deleteUserPicApi(user_id: String, session_token: String): Observable<DeleteUserPicResponse> {
         return apiService.deleteUserPicApi(user_id,session_token)
+    }
+
+    fun getUserManualPhotoStatus(user_id: String, session_token: String): Observable<UserConfigResponseModel> {
+        return apiService.getUserManualPhotoStatusAPI(user_id,session_token)
     }
 
     fun getUserFacePicUrlApi(user_id: String, session_token: String): Observable<UserFacePicUrlResponse> {

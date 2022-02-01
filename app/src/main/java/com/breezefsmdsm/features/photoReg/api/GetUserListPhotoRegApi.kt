@@ -4,6 +4,7 @@ import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.addshop.api.AddShopApi
 import com.breezefsmdsm.features.location.model.AppInfoResponseModel
+import com.breezefsmdsm.features.login.model.userconfig.UserConfigResponseModel
 import com.breezefsmdsm.features.photoReg.model.*
 import com.breezefsmdsm.features.stockAddCurrentStock.api.ShopAddStockApi
 import com.breezefsmdsm.features.stockAddCurrentStock.model.CurrentStockGetData
@@ -43,6 +44,11 @@ interface GetUserListPhotoRegApi {
     @POST("FaceImageDetection/FaceImgDelete")
     fun deleteUserPicApi(@Field("user_id") user_id: String,@Field("session_token") session_token: String):
             Observable<DeleteUserPicResponse>
+
+    @FormUrlEncoded
+    @POST("Configuration/Userwise")
+    fun getUserManualPhotoStatusAPI(@Field("user_id") user_id: String,@Field("session_token") session_token: String):
+            Observable<UserConfigResponseModel>
 
 
     @Multipart

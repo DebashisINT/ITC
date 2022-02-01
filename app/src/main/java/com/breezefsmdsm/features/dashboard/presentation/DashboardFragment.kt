@@ -1952,6 +1952,16 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             ll_dash_day_start_newD.visibility = View.GONE
 
         }
+        if(Pref.IsAttendVisitShowInDashboardGlobal){
+            if(Pref.IsAttendVisitShowInDashboard){
+                ll_dash_visit_attendance_newD.visibility=View.VISIBLE
+            }else{
+                ll_dash_visit_attendance_newD.visibility=View.GONE
+            }
+        }else{
+            ll_dash_visit_attendance_newD.visibility=View.GONE
+        }
+
         if (Pref.IsShowDayEnd) {
             //endRL.visibility = View.VISIBLE
             //enddate_TV.visibility = View.VISIBLE
@@ -4210,8 +4220,18 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                     Pref.IsShowMyDetails = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
-
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsAttendVisitShowInDashboard", ignoreCase = true)) {
+                                                Pref.IsAttendVisitShowInDashboard = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsAttendVisitShowInDashboard = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowManualPhotoRegnInApp", ignoreCase = true)) {
+                                                Pref.IsShowManualPhotoRegnInApp = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowManualPhotoRegnInApp = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
                                         }
                                     }
@@ -4404,6 +4424,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 if (configResponse.IsShowMyDetails != null)
                                     Pref.IsShowMyDetailsGlobal = configResponse.IsShowMyDetails!!
 
+                                if (configResponse.IsAttendVisitShowInDashboard != null)
+                                    Pref.IsAttendVisitShowInDashboardGlobal = configResponse.IsAttendVisitShowInDashboard!!
+
+                                if (configResponse.IsShowInPortalManualPhotoRegn != null)
+                                    Pref.IsShowInPortalManualPhotoRegn = configResponse.IsShowInPortalManualPhotoRegn!!
 
                             }
                             BaseActivity.isApiInitiated = false
@@ -5295,8 +5320,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             //no_of_shop_TV.visibility = View.GONE
             ll_dash_total_visit_newD.visibility = View.GONE
         }
-        if(Pref.IsShowMenuPermission_Info){
-            ll_dash_visit_attendance_newD.visibility=View.VISIBLE
+
+        if(Pref.IsAttendVisitShowInDashboardGlobal){
+            if(Pref.IsAttendVisitShowInDashboard){
+                ll_dash_visit_attendance_newD.visibility=View.VISIBLE
+            }else{
+                ll_dash_visit_attendance_newD.visibility=View.GONE
+            }
         }else{
             ll_dash_visit_attendance_newD.visibility=View.GONE
         }

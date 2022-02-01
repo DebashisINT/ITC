@@ -20,5 +20,6 @@ class UserListResponseModel {
     var type_name: String? = ""
     var Registered_with: String? = ""
     var emp_phone_no: String? = ""
+    var IsShowManualPhotoRegnInApp: Boolean? = false
 }
 

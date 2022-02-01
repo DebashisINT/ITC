@@ -339,6 +339,11 @@ object Pref : PreferenceHolder() {
     var IsShowMyDetailsGlobal: Boolean by bindToPreferenceField(false, "IsShowMyDetailsGlobal")
     var IsShowMyDetails: Boolean by bindToPreferenceField(false, "IsShowMyDetails")
 
+    var IsAttendVisitShowInDashboardGlobal: Boolean by bindToPreferenceField(false, "IsAttendVisitShowInDashboardGlobal")
+    var IsAttendVisitShowInDashboard: Boolean by bindToPreferenceField(false, "IsAttendVisitShowInDashboard")
+    var IsShowInPortalManualPhotoRegn: Boolean by bindToPreferenceField(false, "IsShowInPortalManualPhotoRegn")
+    var IsShowManualPhotoRegnInApp: Boolean by bindToPreferenceField(false, "IsShowManualPhotoRegnInApp")
+
 
 
 }

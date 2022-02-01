@@ -147,7 +147,6 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
 
                         long loginTime = AppUtils.Companion.convertTimeWithMeredianToLong(mUserLoginDataEntityArray.get(position).getLogintime());
                         long approvedLoginTime = 0L;
-
                         if (!TextUtils.isEmpty(Pref.INSTANCE.getApprovedInTime()))
                             approvedLoginTime = AppUtils.Companion.convertTimeWithMeredianToLong(Pref.INSTANCE.getApprovedInTime());
                         else {

@@ -72,6 +72,9 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
     private lateinit var progress_wheel: ProgressWheel
     private lateinit var ll_phone : LinearLayout
 
+    private lateinit var tv_register : TextView
+    private lateinit var ll_docRoot : LinearLayout
+
     private lateinit var shopLargeImg:ImageView
     private lateinit var photoRegCameraIcon:ImageView
 
@@ -102,6 +105,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         var user_name: String? = null
         var user_login_id: String? = null
         var user_contactid: String? = null
+        var isOnlyFacePic: Boolean? = false
         var valueData:UserListResponseModel = UserListResponseModel()
         fun getInstance(objects: Any): RegisTerFaceFragment {
             val regisTerFaceFragment = RegisTerFaceFragment()
@@ -113,6 +117,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                 user_name=obj!!.user_name
                 user_login_id=obj!!.user_login_id
                 user_contactid=obj!!.user_contactid
+                isOnlyFacePic=obj!!.IsShowManualPhotoRegnInApp
             }
             return regisTerFaceFragment
         }
@@ -138,12 +143,16 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         registerTV_pan = view.findViewById(R.id.btn_frag_reg_face_register_pan)
         photoRegCameraIcon = view.findViewById(R.id.iv_frag_photo_reg_face_camera_icon)
 
+        tv_register = view.findViewById(R.id.tv_frag_register_face_register)
+        ll_docRoot = view.findViewById(R.id.ll_frag_register_face_doc_root)
+
         progress_wheel = view.findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
         registerTV.setOnClickListener(this)
         registerTV_voter.setOnClickListener(this)
         registerTV_pan.setOnClickListener(this)
         photoRegCameraIcon.setOnClickListener(this)
+        tv_register.setOnClickListener(this)
 
         nameTV.text = user_name!!
         phoneTV.text = user_login_id!!
@@ -152,6 +161,14 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
         ll_phone = view.findViewById(R.id.ll_regis_face_phone);
         ll_phone.setOnClickListener(this)
+
+        if(Pref.IsShowInPortalManualPhotoRegn){
+            //if(Pref.IsShowManualPhotoRegnInApp){
+            if(isOnlyFacePic!!){
+                tv_register.text="Register"
+                ll_docRoot.visibility=View.GONE
+            }}
+
 
         faceDetectorSetUp()
         faceDetectorSetUpRandom()
@@ -280,13 +297,16 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                                     progress_wheel.stopSpinning()
                                     //(mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment, false, "")
                                     CustomStatic.FacePicRegUrl=response.face_image_link
+
                                     //afterFaceRegistered()
-                                    if(CustomStatic.IsAadhaarForPhotoReg)
+                                    afterFaceRegisteredOne()
+
+                           /*         if(CustomStatic.IsAadhaarForPhotoReg)
                                         showAadhaarIns(valueData,getString(R.string.aadhaar_reg_guide_header),getString(R.string.aadhaar_reg_guide_body))
                                     else if(CustomStatic.IsVoterForPhotoReg)
                                         showAadhaarIns(valueData,getString(R.string.voter_reg_guide_header),getString(R.string.voter_reg_guide_body))
                                     else if(CustomStatic.IsPanForPhotoReg)
-                                        showAadhaarIns(valueData,getString(R.string.pan_reg_guide_header),getString(R.string.pan_reg_guide_body))
+                                        showAadhaarIns(valueData,getString(R.string.pan_reg_guide_header),getString(R.string.pan_reg_guide_body))*/
 
                                     //(mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
                                 }, 500)
@@ -365,7 +385,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         simpleDialog.setContentView(R.layout.dialog_ok_cancel_new)
         val dialogHeader = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-        dialogHeader.text = "Face Registered successfully. Proceed Next for Aadhaar verification."
+        dialogHeader.text = "Face Registered successfully."
         val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
         val dialogNo = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
@@ -374,6 +394,23 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         })
         dialogNo.setOnClickListener({ view ->
             simpleDialog.cancel()
+        })
+        simpleDialog.show()
+    }
+
+    private fun afterFaceRegisteredOne(){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_message)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+        dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+        dialogHeader.text = "Face Registered successfully."
+        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+            (mContext as DashboardActivity).loadFragment(FragType.ProtoRegistrationFragment,false,valueData)
         })
         simpleDialog.show()
     }
@@ -406,6 +443,14 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
                 R.id.iv_frag_photo_reg_face_camera_icon->{
                     launchCamera()
                 }
+                R.id.tv_frag_register_face_register->{
+                    if(Pref.IsShowInPortalManualPhotoRegn){
+                        //if(Pref.IsShowManualPhotoRegnInApp){
+                        if(isOnlyFacePic!!){
+                            registerClick()
+                        }}
+
+                }
 
 
             }
@@ -421,29 +466,44 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
         if(imagePath.length>0 && imagePath!="") {
             //registerFaceApi()
-            registerFaceApiNewFlow()
-            val simpleDialogg = Dialog(mContext)
-            simpleDialogg.setCancelable(false)
-            simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            simpleDialogg.setContentView(R.layout.dialog_yes_no)
-            val dialogHeader = simpleDialogg.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
-            dialogHeader.text="Do you want to Register ?"
-            val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
-            val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
 
-            dialogYes.setOnClickListener( { view ->
-                simpleDialogg.cancel()
-                if (AppUtils.isOnline(mContext)){
-                    registerFaceApi()
+            //registerFaceApiNewFlow()
+
+            if(Pref.IsShowInPortalManualPhotoRegn){
+                //if(Pref.IsShowManualPhotoRegnInApp){
+                if(isOnlyFacePic!!){
+                    tv_register.text="Register"
+                    ll_docRoot.visibility=View.GONE
+                    val simpleDialogg = Dialog(mContext)
+                    simpleDialogg.setCancelable(false)
+                    simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                    simpleDialogg.setContentView(R.layout.dialog_yes_no)
+                    val dialogHeader = simpleDialogg.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                    dialogHeader.text="Do you want to Register ?"
+                    val dialogYes = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                    val dialogNo = simpleDialogg.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+
+                    dialogYes.setOnClickListener( { view ->
+                        simpleDialogg.cancel()
+                        if (AppUtils.isOnline(mContext)){
+                            registerFaceApi()
+                        }else{
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                        }
+
+                    })
+                    dialogNo.setOnClickListener( { view ->
+                        simpleDialogg.cancel()
+                    })
+                    simpleDialogg.show()
                 }else{
-                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                    registerFaceApiNewFlow()
                 }
+            }
+            else{
+                registerFaceApiNewFlow()
+            }
 
-            })
-            dialogNo.setOnClickListener( { view ->
-                simpleDialogg.cancel()
-            })
-            //simpleDialogg.show()
         }
 
         // registerFaceApi()

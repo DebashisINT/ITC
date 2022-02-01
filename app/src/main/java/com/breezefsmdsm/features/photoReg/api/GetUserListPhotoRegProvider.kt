@@ -9,6 +9,7 @@ object GetUserListPhotoRegProvider {
         return GetUserListPhotoRegRepository(GetUserListPhotoRegApi.create())
     }
 
+
     fun providePhotoReg(): GetUserListPhotoRegRepository {
         return GetUserListPhotoRegRepository(GetUserListPhotoRegApi.createFacePic())
     }

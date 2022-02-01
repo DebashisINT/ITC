@@ -34,6 +34,8 @@ import com.breezefsmdsm.features.attendance.AttendanceRecyclerViewAdapter
 import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
 import com.breezefsmdsm.features.attendance.model.AttendanceRequest
 import com.breezefsmdsm.features.attendance.model.AttendanceResponse
+import com.breezefsmdsm.features.attendance.model.DayStartEndListResponse
+import com.breezefsmdsm.features.attendance.model.DayStartEndResponseData
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.model.DaystartDayendRequest
@@ -106,7 +108,8 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
             attendanceReq.session_token = Pref.session_token
             attendanceReq.start_date = ""
             attendanceReq.end_date = ""
-            callAttendanceListApi(attendanceReq)
+            //callAttendanceListApi(attendanceReq)
+            getDaystartDayendList(attendanceReq)
         } else {
             if (!AppUtils.isOnline(mContext))
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
@@ -386,7 +389,15 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
 //                if (adapter != null)
 //                    adapter!!.notifyAdapter(userLoginDataEntityArr)
 //                var count=AppDatabase.getDBInstance()!!.userAttendanceDataDao().deleteAll(AppUtils.getCurrentDateChanged())
-                getAttendanceList()
+
+                val attendanceReq = AttendanceRequest()
+                attendanceReq.user_id = user_uid// Pref.user_id
+                attendanceReq.session_token = Pref.session_token
+                attendanceReq.start_date = ""
+                attendanceReq.end_date = ""
+                getDaystartDayendList(attendanceReq)
+
+                //getAttendanceList()
                 dateRangeTv!!.visibility = View.GONE
 
             }
@@ -419,7 +430,8 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
             attendanceReq.session_token = Pref.session_token
             attendanceReq.start_date = AppUtils.changeLocalDateFormatToAtt(fronString)
             attendanceReq.end_date = AppUtils.changeLocalDateFormatToAtt(endString)
-            callAttendanceListApi(attendanceReq)
+            //callAttendanceListApi(attendanceReq)
+            getDaystartDayendList(attendanceReq)
         } else {
 //            var count=AppDatabase.getDBInstance()!!.userAttendanceDataDao().deleteAll(AppUtils.getCurrentDateChanged())
 //            initAdapter(AppDatabase.getDBInstance()!!.userAttendanceDataDao().all as ArrayList<UserLoginDataEntity>)
@@ -477,16 +489,24 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
 //                var count=AppDatabase.getDBInstance()!!.userAttendanceDataDao().deleteAll(AppUtils.getCurrentDateChanged())
                 //getAttendanceList()
 
-                val list = AppDatabase.getDBInstance()!!.userAttendanceDataDao().getAllSortedList() as ArrayList<UserLoginDataEntity>
+                val attendanceReq = AttendanceRequest()
+                attendanceReq.user_id = user_uid// Pref.user_id
+                attendanceReq.session_token = Pref.session_token
+                attendanceReq.start_date = ""
+                attendanceReq.end_date = ""
+                getDaystartDayendList(attendanceReq)
 
+                //getAttendanceList()
+                dateRangeTv!!.visibility = View.GONE
+
+   /*             val list = AppDatabase.getDBInstance()!!.userAttendanceDataDao().getAllSortedList() as ArrayList<UserLoginDataEntity>
                 if (list != null && list.size > 0)
                     initAdapter(list)
                 else {
                     noDataText.visibility = View.VISIBLE
                     recyclerView!!.visibility = View.GONE
                 }
-
-                dateRangeTv!!.visibility = View.GONE
+                dateRangeTv!!.visibility = View.GONE*/
 
             } else
                 isChkChanged = false
@@ -508,5 +528,57 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
 
         return sortedlist
     }
+
+    private fun getDaystartDayendList(attendanceReq: AttendanceRequest){
+        val repository = AttendanceRepositoryProvider.provideAttendanceRepository()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.getDayStartEndList(attendanceReq)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            val obj = result as DayStartEndListResponse
+                            if (obj.status == NetworkConstant.SUCCESS) {
+                                if(obj.day_start_end_list!!.size>0){
+                                    recyclerView!!.visibility = View.VISIBLE
+                                    prepareDaystartAdapter(obj)
+                                }else{
+                                    (mContext as DashboardActivity).showSnackMessage("No data found.")
+                                }
+                            }else if(obj.status ==NetworkConstant.NO_DATA){
+                                (mContext as DashboardActivity).showSnackMessage("No data found.")
+                                noDataText.visibility = View.VISIBLE
+                                recyclerView!!.visibility = View.GONE
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        })
+        )
+    }
+
+    private fun prepareDaystartAdapter(obj : DayStartEndListResponse){
+        try {
+            var  adapterObj: ArrayList<UserLoginDataEntity> = ArrayList()
+            if(obj.day_start_end_list!!.size>0){
+                for(i in 0..obj.day_start_end_list!!.size-1){
+                    var daystart_time=AppUtils.convertTime(FTStorageUtils.getStringToDate(obj.day_start_end_list!![i].dayStart_date_time!!))
+                    var daystart_date=AppUtils.changeAttendanceDateFormat(obj.day_start_end_list!![i].dayStart_date_time!!)
+
+                    var obj:UserLoginDataEntity=UserLoginDataEntity()
+                    obj.logindate=daystart_date
+                    obj.logintime=daystart_time
+                    obj.Isonleave="false"
+                    adapterObj.add(obj)
+                }
+                initAdapter(adapterObj as ArrayList<UserLoginDataEntity>)
+            }
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+    }
+
 
 }

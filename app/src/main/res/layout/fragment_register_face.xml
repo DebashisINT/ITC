@@ -104,7 +104,9 @@
 
 
             <TextView
+                android:id="@+id/tv_frag_register_face_register"
                 android:layout_width="wrap_content"
+                android:minWidth="@dimen/_130sdp"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:background="@drawable/curve_border_bg_blue"
@@ -119,6 +121,7 @@
                 android:layout_gravity="center"/>
 
             <LinearLayout
+                android:id="@+id/ll_frag_register_face_doc_root"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"
                 android:orientation="horizontal"

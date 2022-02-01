@@ -70,6 +70,8 @@ class ConfigFetchResponseModel : BaseResponse() {
     var FaceRegistrationFrontCamera: Boolean? = null
 
     var IsShowMyDetails:Boolean? = null
+    var IsAttendVisitShowInDashboard:Boolean? = null
+    var IsShowInPortalManualPhotoRegn:Boolean? = null
 
 
 

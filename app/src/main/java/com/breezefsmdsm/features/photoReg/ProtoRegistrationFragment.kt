@@ -53,6 +53,7 @@ import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
+import com.breezefsmdsm.features.login.model.userconfig.UserConfigResponseModel
 import com.breezefsmdsm.features.myjobs.model.WIPImageSubmit
 import com.breezefsmdsm.features.photoReg.adapter.AdapterUserList
 import com.breezefsmdsm.features.photoReg.adapter.PhotoRegUserListner

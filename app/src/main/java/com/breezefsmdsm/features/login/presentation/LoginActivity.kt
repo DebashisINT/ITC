@@ -410,6 +410,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.IsShowMyDetails != null)
                                     Pref.IsShowMyDetailsGlobal = configResponse.IsShowMyDetails!!
 
+                                if (configResponse.IsAttendVisitShowInDashboard != null)
+                                    Pref.IsAttendVisitShowInDashboardGlobal = configResponse.IsAttendVisitShowInDashboard!!
+
+                                if (configResponse.IsShowInPortalManualPhotoRegn != null)
+                                    Pref.IsShowInPortalManualPhotoRegn = configResponse.IsShowInPortalManualPhotoRegn!!
 
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
@@ -5183,6 +5188,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 Pref.IsShowMyDetails = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowMyDetails = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsAttendVisitShowInDashboard", ignoreCase = true)) {
+                                                Pref.IsAttendVisitShowInDashboard = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsAttendVisitShowInDashboard = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowManualPhotoRegnInApp", ignoreCase = true)) {
+                                                Pref.IsShowManualPhotoRegnInApp = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowManualPhotoRegnInApp = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
 
