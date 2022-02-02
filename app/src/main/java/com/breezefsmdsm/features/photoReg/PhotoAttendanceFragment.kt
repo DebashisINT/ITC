@@ -531,7 +531,11 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         //finalNearByDD=newDDList[5]
 
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
-            GetImageFromUrl().execute(obj_temp.face_image_link)
+            if(obj_temp.IsTeamAttenWithoutPhoto!!){
+                prepareAddAttendanceInputParams()
+            }else{
+                GetImageFromUrl().execute(obj_temp.face_image_link)
+            }
             //prepareAddAttendanceInputParams()
         }  else {
             progress_wheel.stopSpinning()

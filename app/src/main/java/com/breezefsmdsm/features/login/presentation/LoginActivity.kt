@@ -3555,6 +3555,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                             } else {
                                 progress_wheel.stopSpinning()
+                                println("xyz - callNewSettingsApi " + newSettings.message!!);
                                 openDialogPopup(newSettings.message!!)
 //                                showSnackMessage(newSettings.message!!)
                                 login_TV.isEnabled = true
@@ -3775,6 +3776,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribe({ result ->
 
                             val loginResponse = result as LoginResponse
+                            println("xyz - doLogin status " + loginResponse.status);
                             XLog.d("LoginApiResponse : " + "\n" + "Status====> " + loginResponse.status + ", Message===> " + loginResponse.message)
                             if (loginResponse.status == NetworkConstant.SUCCESS) {
 
@@ -3877,14 +3879,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                 XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
 */
-                            } else if (loginResponse.status == "220") {
+                            }
+                            else if (loginResponse.status == "220") {
                                 progress_wheel.stopSpinning()
                                 login_TV.isEnabled = true
                                 //showSnackMessage(loginResponse.message!!)
+                                println("xyz - doLogin 220 " + loginResponse.message!!);
                                 openDialogPopup(loginResponse.message!!)
 //                                Toaster.msgLong(this, loginResponse.message!!)
                             } else {
                                 progress_wheel.stopSpinning()
+                                println("xyz - doLogin status: " + loginResponse.status +" msg: "+loginResponse.message!!);
                                 openDialogPopup(loginResponse.message!!)
 //                                showSnackMessage(loginResponse.message!!)
                                 login_TV.isEnabled = true

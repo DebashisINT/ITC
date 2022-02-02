@@ -1912,8 +1912,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             //no_of_shop_TV.visibility = View.GONE
             ll_dash_total_visit_newD.visibility = View.GONE
         }
-        if(Pref.IsShowMenuPermission_Info){
-            ll_dash_visit_attendance_newD.visibility=View.VISIBLE
+        if(Pref.IsAttendVisitShowInDashboardGlobal){
+            if(Pref.IsAttendVisitShowInDashboard){
+                ll_dash_visit_attendance_newD.visibility=View.VISIBLE
+            }else{
+                ll_dash_visit_attendance_newD.visibility=View.GONE
+            }
         }else{
             ll_dash_visit_attendance_newD.visibility=View.GONE
         }
