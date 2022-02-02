@@ -329,7 +329,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 obj_temp=obj
                 if(AppUtils.isOnline(mContext)){
                     if(Pref.isAddAttendence || true){
-                        if(obj_temp.isFaceRegistered!!){
+                        if(obj_temp.isFaceRegistered!! || obj_temp.IsTeamAttenWithoutPhoto!!){
                             if(AppUtils.isOnline(mContext)){
                                 progress_wheel.spin()
                                 checkCurrentDayAttdUserWise()
