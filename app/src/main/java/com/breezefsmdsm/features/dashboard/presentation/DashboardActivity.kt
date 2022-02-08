@@ -6035,6 +6035,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 }, 500)
             }
         } else if (getFragment() != null && getFragment() is DashboardFragment) {
+            if(Pref.IsDayEndBackPressedRestrict){
+                return
+            }
             if (backpressed + 2000 > System.currentTimeMillis()) {
                 finish()
                 super.onBackPressed()

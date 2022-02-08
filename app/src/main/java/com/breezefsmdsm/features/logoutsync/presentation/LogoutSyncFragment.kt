@@ -237,7 +237,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Pref.IsDayEndBackPressedRestrict=false
         try {
             val list = AppDatabase.getDBInstance()!!.addMeetingDao().durationAvailable(false)
             if (list != null) {

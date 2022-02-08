@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.dashboard.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -15,10 +16,7 @@ import android.speech.tts.TextToSpeech
 import android.text.InputFilter
 import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -104,6 +102,7 @@ import com.breezefsmdsm.faceRec.DetectorActivity
 import com.breezefsmdsm.faceRec.FaceStartActivity
 import com.breezefsmdsm.faceRec.tflite.SimilarityClassifier
 import com.breezefsmdsm.faceRec.tflite.TFLiteObjectDetectionAPIModel
+import com.breezefsmdsm.features.logoutsync.presentation.LogoutSyncFragment
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.UserFacePicUrlResponse
 import com.breezefsmdsm.features.splash.presentation.LocationPermissionDialog
@@ -492,6 +491,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         mContext = context
     }
 
+    @SuppressLint("RestrictedApi")
     private fun initView(view: View?) {
 
         cancel_timer = view!!.findViewById(R.id.cancel_timer)
@@ -2527,6 +2527,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
 
+    @SuppressLint("WrongConstant")
     private fun initAdapter() {
         mRouteActivityDashboardAdapter = RouteActivityDashboardAdapter(this.context!!, AppDatabase.getDBInstance()!!.userLocationDataDao().all)
         layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
@@ -2543,6 +2544,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         mRouteActivityDashboardAdapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("WrongConstant")
     public fun initBottomAdapter() {
 
         /*val performList = ArrayList<AddShopDBModelEntity>()
@@ -5185,6 +5187,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         )
     }
 
+    @SuppressLint("RestrictedApi")
     private fun changeUI() {
         tv_shop.text = Pref.shopText + "(s)"
 
@@ -5737,7 +5740,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 addr=""
             }
 
-
+            progress_wheel.spin()
             val repository = DayStartEndRepoProvider.dayStartRepositiry()
             BaseActivity.compositeDisposable.add(
                     repository.dayStart(dayst)
@@ -5997,6 +6000,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
             if (saleValue.length > 0) {
                 try {
+                    progress_wheel.spin()
+
                     var dayst: DaystartDayendRequest = DaystartDayendRequest()
                     dayst.user_id = Pref.user_id
                     dayst.session_token = Pref.session_token
@@ -6049,6 +6054,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         XLog.d("DayEnd (DashboardFrag): DayEnded Success status " + result.status + " lat "+
                                                 loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
                                         val response = result as BaseResponse
+                                        progress_wheel.stopSpinning()
                                         if (response.status == NetworkConstant.SUCCESS) {
                                             //(mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
                                             //voiceAttendanceMsg("Hi, your day end marked successfully.")
@@ -6082,6 +6088,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun isStartOrEndDay(isDayEnd: Boolean) {
         try {
+            progress_wheel.spin()
+            //disable screen
+            requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            if(isDayEnd){
+                Pref.IsDayEndBackPressedRestrict=true
+            }
+
             Pref.DayStartMarked = false
             Pref.DayEndMarked = false
             Pref.DayStartShopType = ""
@@ -6104,13 +6118,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         if(Pref.IsDDvistedOnceByDay !=true){
                                             Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
                                         }
-
-
                                         uiThread {
                                             progress_wheel.stopSpinning()
-
                                             //Pref.IsshowDayStartSelfie=true
                                             //Pref.IsshowDayEndSelfie=true
+
+                                            //enable screen
+                                            requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                             if (isDayEnd == false) {
                                                 if (Pref.IsshowDayStartSelfie) {
@@ -6143,23 +6157,23 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 } else {
                                                     // 27-08-21 For ITC
                                                     (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
-                                                    val simpleDialog = Dialog(mContext)
-                                                    simpleDialog.setCancelable(false)
-                                                    simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                                                    simpleDialog.setContentView(R.layout.dialog_message)
-                                                    val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-                                                    val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                                   /// val simpleDialog = Dialog(mContext)
+                                                   /// simpleDialog.setCancelable(false)
+                                                   /// simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                                   /// simpleDialog.setContentView(R.layout.dialog_message)
+                                                   /// val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                                    ///val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                                                     //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
-                                                    dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
-                                                    dialogHeader.text = "Thanks,  day ended Successfully."
-                                                    val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-                                                    dialogYes.setOnClickListener({ view ->
-                                                        simpleDialog.cancel()
+                                                    ///dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                                                    ///dialogHeader.text = "Thanks,  day ended Successfully."
+                                                    ///val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                                                    ///dialogYes.setOnClickListener({ view ->
+                                                        ///simpleDialog.cancel()
                                                         //(mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                                                         /*Handler(Looper.getMainLooper()).postDelayed({
                                                             (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                                                         }, 2000)*/
-                                                    })
+                                                    ///})
                                                     //simpleDialog.show()
 //                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
 
@@ -6177,6 +6191,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     progress_wheel.stopSpinning()
                                     //getListFromDatabase()
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                    //enable screen
+                                    requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 }
                             }, { error ->
                                 if (error == null) {
@@ -6185,6 +6201,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     XLog.d("DashboardFragment isStartOrEndDay : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
+                                //enable screen
+                                requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                                 progress_wheel.stopSpinning()
                                 //getListFromDatabase()
                             })
@@ -6193,6 +6211,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             ex.printStackTrace()
             //getListFromDatabase()
             progress_wheel.stopSpinning()
+            //enable screen
+            requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
 
     }
@@ -7086,6 +7106,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                     dialogYes.setOnClickListener({ view ->
                         simpleDialog.cancel()
+                        (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+
                     })
                     simpleDialog.show()
 //                    (mContext as DashboardActivity).showSnackMessage("Day already ended")

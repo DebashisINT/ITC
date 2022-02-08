@@ -201,6 +201,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         setContentView(R.layout.activity_login_new)
         mContext = this@LoginActivity
         println("xyz - login oncreate started" + AppUtils.getCurrentDateTime());
+        Pref.IsDayEndBackPressedRestrict=false
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             initPermissionCheck()
         else
@@ -5209,6 +5210,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.IsShowManualPhotoRegnInApp = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsIMEICheck", ignoreCase = true)) {
+                                                Pref.IsIMEICheck = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsIMEICheck = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {
                                                 if (!TextUtilsDash.isEmpty(response.getconfigure?.get(i)?.Value)) {
@@ -5989,28 +5996,61 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             doAsync {
                                                 AppDatabase.getDBInstance()?.prosDao()?.insertAll(response.Prospect_list!!)
                                                 uiThread {
-                                                    gotoHomeActivity()
+                                                    deleteImei()
                                                 }
                                             }
                                         } else {
                                             progress_wheel.stopSpinning()
                                         }
                                     } else {
-                                        gotoHomeActivity()
+                                        deleteImei()
                                     }
 
+                                }, { error ->
+                                    progress_wheel.stopSpinning()
+                                    deleteImei()
+                                })
+                )
+            } else {
+                deleteImei()
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            deleteImei()
+
+        }
+
+    }
+
+    private fun deleteImei(){
+        if(Pref.IsIMEICheck){
+            XLog.d("deleteImei IsIMEICheck : " + Pref.IsIMEICheck.toString() + "Time : " + AppUtils.getCurrentDateTime())
+            gotoHomeActivity()
+        }else{
+                   try {
+                val repository = ShopListRepositoryProvider.provideShopListRepository()
+                BaseActivity.compositeDisposable.add(
+                        repository.deleteImei()
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ result ->
+                                    val response = result as BaseResponse
+                                    XLog.d("deleteImei " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                    if (response.status == NetworkConstant.SUCCESS) {
+                                        gotoHomeActivity()
+                                    } else {
+                                        gotoHomeActivity()
+                                    }
                                 }, { error ->
                                     progress_wheel.stopSpinning()
                                     gotoHomeActivity()
                                 })
                 )
-            } else {
-                gotoHomeActivity()
-            }
         } catch (ex: Exception) {
             ex.printStackTrace()
             gotoHomeActivity()
 
+        }
         }
 
     }

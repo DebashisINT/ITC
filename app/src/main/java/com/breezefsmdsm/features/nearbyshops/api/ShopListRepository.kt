@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.nearbyshops.api
 
 import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.login.model.productlistmodel.ModelListResponse
 import com.breezefsmdsm.features.nearbyshops.model.*
 import io.reactivex.Observable
@@ -47,6 +48,10 @@ class ShopListRepository(val apiService: ShopListApi) {
 
     fun getProsList(): Observable<ProsListResponseModel> {
         return apiService.getProsList(Pref.session_token!!, Pref.user_id!!)
+    }
+
+    fun deleteImei(): Observable<BaseResponse> {
+        return apiService.deleteImeiAPI(Pref.session_token!!, Pref.user_id!!)
     }
 
     fun getFunnelStageList(): Observable<FunnelStageListResponseModel> {

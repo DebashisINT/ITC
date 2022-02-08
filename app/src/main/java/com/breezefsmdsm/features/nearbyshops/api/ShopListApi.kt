@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.nearbyshops.api
 
 import com.breezefsmdsm.app.NetworkConstant
+import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.login.model.productlistmodel.ModelListResponse
 import com.breezefsmdsm.features.nearbyshops.model.*
 import io.reactivex.Observable
@@ -54,6 +55,10 @@ interface ShopListApi {
     @FormUrlEncoded
     @POST("RubyFoodLead/ProspectList")
     fun getProsList(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<ProsListResponseModel>
+
+    @FormUrlEncoded
+    @POST("EmployeeSync/UserIMEIClear")
+    fun deleteImeiAPI(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<BaseResponse>
 
     @FormUrlEncoded
     @POST("Shoplist/AllShopTypeWithSettings")
