@@ -454,14 +454,16 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                                 //(mContext as DashboardActivity).showSnackMessage("Registration Success.")
                             } else {
                                 //(mContext as DashboardActivity).showSnackMessage("Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks.")
-                                deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                                //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                                deletePicApi(user_id!!,"ID already registered with same name & DOB. Please use unique ID card for this registration. Thanks.")
                             }
 
                         }, { error ->
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData error: "+error.message)
-                            deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                            //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                            deletePicApi(user_id!!,"ID already registered with same name & DOB. Please use unique ID card for this registration. Thanks .")
                         })
         )
     }
