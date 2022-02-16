@@ -78,6 +78,10 @@ interface GetUserListPhotoRegApi {
             Observable<BaseResponse>
 
 
+    @POST("UpdateUserInformations/UpdateUserName")
+    fun updateUserNameApi(@Body obj: UpdateUserNameModel):
+            Observable<UpdateUserNameResponse>
+
     companion object Factory {
         fun create(): GetUserListPhotoRegApi {
             val retrofit = Retrofit.Builder()

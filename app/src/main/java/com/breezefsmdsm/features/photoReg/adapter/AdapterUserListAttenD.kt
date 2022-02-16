@@ -71,6 +71,7 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
 
                 if(mList?.get(adapterPosition)!!.isFaceRegistered!!){
                     tv_row_user_list_face_attend_face_not.visibility=View.GONE
+                    iv_row_face_attd_face.visibility=View.VISIBLE
                     var picasso = Picasso.Builder(mContext)
                             .memoryCache(Cache.NONE)
                             .indicatorsEnabled(true)
@@ -83,6 +84,7 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
                             .into(iv_row_face_attd_face)
                 }else{
                     tv_row_user_list_face_attend_face_not.visibility=View.VISIBLE
+                    iv_row_face_attd_face.visibility=View.GONE
                 }
 
                 click_for_photo_attd.setOnClickListener{listner?.getUserInfoOnLick(mList?.get(adapterPosition)!!)}

@@ -65,6 +65,10 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
         return apiService.submitAadhaarDetailsNewSingle(aadhaarSubmitData)
     }
 
+    fun updateUserName(obj:UpdateUserNameModel): Observable<UpdateUserNameResponse> {
+        return apiService.updateUserNameApi(obj)
+    }
+
     fun addUserFaceRegImg(obj: UserPhotoRegModel, user_image: String?, context: Context,user_contactid:String?): Observable<FaceRegResponse> {
         var profile_img_data: MultipartBody.Part? = null
         if (!TextUtils.isEmpty(user_image)){

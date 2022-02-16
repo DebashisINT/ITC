@@ -41,7 +41,9 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.CustomStatic
+import com.breezefsmdsm.MonitorService
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.NewFileUtils.browseDocuments
@@ -205,6 +207,7 @@ import com.breezefsmdsm.features.viewPPDDStock.ViewStockFragment
 import com.breezefsmdsm.features.weather.presentation.WeatherFragment
 import com.breezefsmdsm.mappackage.MapActivity
 import com.breezefsmdsm.mappackage.MapActivityWithoutPath
+import com.breezefsmdsm.mappackage.SendBrod
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.bumptech.glide.Glide
@@ -285,11 +288,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         })
 
-        var ttt = AppUtils.getCurrentDateForCons()
+
         println("curr_time "+AppUtils.getCurrentDateTime()+"   user_id "+Pref.user_id)
         println("load_frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
         var andrV = Build.VERSION.SDK_INT.toInt()
         println("andrV "+andrV.toString()+ " Time :" + AppUtils.getCurrentDateTime());
+
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
@@ -818,8 +822,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     fun checkToShowHomeLocationAlert() {
         if (!Pref.isHomeLocAvailable) {
             showHomeLocationAlert()
-        } else
-            checkToShowAddAttendanceAlert()
+        } else {
+            //Toaster.msgShort(this,"checkToShowAddAttendanceAlert")
+            if(Pref.MarkAttendNotification)
+             checkToShowAddAttendanceAlert()
+        }
     }
 
     private fun showHomeLocationAlert() {

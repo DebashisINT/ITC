@@ -197,6 +197,13 @@ class MonitorService:Service() {
         return super.stopService(name)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        stopForeground(true)
+        stopSelf()
+        timer!!.cancel()
+    }
+
     @SuppressLint("NewApi")
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)

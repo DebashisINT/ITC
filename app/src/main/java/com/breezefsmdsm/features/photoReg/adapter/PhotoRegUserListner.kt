@@ -12,4 +12,5 @@ interface PhotoRegUserListner {
     fun updateTypeOnClick(obj: UserListResponseModel)
     fun updateContactOnClick(obj: UserListResponseModel)
     fun addContactOnClick(obj: UserListResponseModel)
+    fun updateUserNameOnClick(obj: UserListResponseModel)
 }
