@@ -4247,6 +4247,16 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.MarkAttendNotification = response.getconfigure?.get(i)?.Value == "1"
                                                 }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsAllowClickForPhotoRegister", ignoreCase = true)) {
+                                                Pref.IsAllowClickForPhotoRegister = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsAllowClickForPhotoRegister = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsAllowClickForVisit", ignoreCase = true)) {
+                                                Pref.IsAllowClickForVisit = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsAllowClickForVisit = response.getconfigure?.get(i)?.Value == "1"
+                                                }
                                             }
 
                                         }

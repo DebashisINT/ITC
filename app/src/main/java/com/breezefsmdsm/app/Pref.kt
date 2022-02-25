@@ -350,6 +350,9 @@ object Pref : PreferenceHolder() {
     var UpdateUserName: Boolean by bindToPreferenceField(false, "UpdateUserName")
     var MarkAttendNotification: Boolean by bindToPreferenceField(false, "MarkAttendNotification")
 
+    var IsAllowClickForPhotoRegister: Boolean by bindToPreferenceField(false, "IsAllowClickForPhotoRegister")
+    var IsAllowClickForVisit: Boolean by bindToPreferenceField(false, "IsAllowClickForVisit")
+
 
 
 }

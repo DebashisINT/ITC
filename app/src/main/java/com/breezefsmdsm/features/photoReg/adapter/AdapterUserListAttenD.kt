@@ -10,6 +10,7 @@ import android.widget.Filterable
 import androidx.appcompat.view.menu.ListMenuItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
+import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.squareup.picasso.Cache
 import com.squareup.picasso.MemoryPolicy
@@ -91,6 +92,16 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
                 click_for_photo_attd_report.setOnClickListener{listner?.getUserInfoAttendReportOnLick(mList?.get(adapterPosition)!!)}
 
                 photo_reg_sales_reg_tv.text="Sales Rep Type : "+mList?.get(adapterPosition)?.type_name
+
+                if(Pref.IsAllowClickForVisit){
+                    if(mList?.get(adapterPosition)!!.IsAllowClickForVisitForSpecificUser!!){
+                        click_for_photo_attd.visibility=View.VISIBLE
+                    }else{
+                        click_for_photo_attd.visibility=View.GONE
+                    }
+                }else{
+                    click_for_photo_attd.visibility=View.GONE
+                }
 
             }
         }
