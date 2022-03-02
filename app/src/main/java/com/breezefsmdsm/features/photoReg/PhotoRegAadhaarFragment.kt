@@ -308,7 +308,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         progress_wheel.stopSpinning()
                         XLog.d("face-doc-Compare : idfy response : isMatch "+isMatch.toString() + " matchScore : "+matchScore.toString() )
                         if(isMatch){
-                            if(matchScore>60.00){
+                            if(matchScore>55.00){
                                 extractAadhaarDtls(CustomStatic.AadhaarPicRegUrl)
                             }else{
                                 (mContext as DashboardActivity).showSnackMessage("Face Not Match")
@@ -344,7 +344,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
             }
         }
         jsonObjectRequest.setRetryPolicy(DefaultRetryPolicy(
-                120000,
+                12000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
         MySingleton.getInstance(mContext.applicationContext)!!.addToRequestQueue(jsonObjectRequest)
@@ -380,8 +380,13 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                             jObj=response!!.getJSONObject("result")
                             var tt=jObj.getJSONObject("extraction_output")
                             var dob_aadhaar=tt.getString("date_of_birth")
+                            var year_dob_aadhaar=tt.getString("year_of_birth")
                             var name_aadhaar=tt.getString("name_on_card")
                             var aadhaar_no_aadhaar=tt.getString("id_number")
+                            if(tt.getString("date_of_birth").equals("null")){
+                                dob_aadhaar=year_dob_aadhaar+"-02-28"
+                            }
+
                             XLog.d("PhotoRegAadhaarFragment : idfy response : user_id:"+ user_id+" name:"+name_aadhaar+" aarhaarDOB:"+dob_aadhaar+" aadhaar_no:"+aadhaar_no_aadhaar)
                             submitCheckAadhaarData(name_aadhaar,dob_aadhaar,aadhaar_no_aadhaar)
                         }
@@ -410,7 +415,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                 }
             }
             jsonObjectRequest.setRetryPolicy(DefaultRetryPolicy(
-                    120000,
+                    12000,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
             MySingleton.getInstance(mContext.applicationContext)!!.addToRequestQueue(jsonObjectRequest)
@@ -440,32 +445,43 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
         else if(CustomStatic.IsPanForPhotoReg)
             aadhaarSubmitData.REG_DOC_TYP="PAN"
 
-        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
-        BaseActivity.compositeDisposable.add(
-                repository.sendUserAadhaarInfoNewApi(aadhaarSubmitData)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({ result ->
-                            val response = result as BaseResponse
-                            progress_wheel.stopSpinning()
-                            XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData response: "+response.status)
-                            if (response.status == NetworkConstant.SUCCESS) {
-                                dialogSuccess()
-                                //(mContext as DashboardActivity).showSnackMessage("Registration Success.")
-                            } else {
-                                //(mContext as DashboardActivity).showSnackMessage("Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks.")
-                                //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
-                                deletePicApi(user_id!!,"ID already registered with same name & DOB. Please use unique ID card for this registration. Thanks.")
-                            }
 
-                        }, { error ->
-                            error.printStackTrace()
-                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData error: "+error.message)
-                            //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
-                            deletePicApi(user_id!!,"ID already registered with same name & DOB. Please use unique ID card for this registration. Thanks .")
-                        })
-        )
+
+
+        try{
+            val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+            BaseActivity.compositeDisposable.add(
+                    repository.sendUserAadhaarInfoNewApi(aadhaarSubmitData)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                val response = result as BaseResponse
+                                progress_wheel.stopSpinning()
+                                XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData response: "+response.status)
+                                if (response.status == NetworkConstant.SUCCESS) {
+                                    dialogSuccess()
+                                    //(mContext as DashboardActivity).showSnackMessage("Registration Success.")
+                                } else {
+                                    //(mContext as DashboardActivity).showSnackMessage("Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks.")
+                                    //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                                    deletePicApi(user_id!!,"ID already registered with same name & DOB. Please use unique ID card for this registration. Thanks.")
+                                }
+
+                            }, { error ->
+                                error.printStackTrace()
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData error: "+error.message)
+                                //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                                deletePicApi(user_id!!,"Something went wrong. Please try again later.")
+                            })
+            )
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            XLog.d("submitCheckAadhaarData ex : erro : "+ex.message)
+            deletePicApi(user_id!!,"Something went wrong. Please try again later.")
+        }
+
+
     }
 
     fun deletePicApi(usr_id: String,msg:String) {
@@ -605,7 +621,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
 
             uploadAadhaarPic()
 
-            val simpleDialogg = Dialog(mContext)
+            /*val simpleDialogg = Dialog(mContext)
             simpleDialogg.setCancelable(false)
             simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             simpleDialogg.setContentView(R.layout.dialog_yes_no)
@@ -628,7 +644,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
             dialogNo.setOnClickListener( { view ->
                 simpleDialogg.cancel()
             })
-            //simpleDialogg.show()
+            simpleDialogg.show()*/
         }
     }
 

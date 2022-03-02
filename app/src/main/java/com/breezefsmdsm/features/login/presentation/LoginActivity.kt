@@ -30,7 +30,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.FileProvider
+import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.CustomStatic
+import com.breezefsmdsm.MonitorService
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.AlarmReceiver.Companion.setAlarm
@@ -119,6 +121,7 @@ import com.breezefsmdsm.features.timesheet.model.TimeSheetDropDownResponseModel
 import com.breezefsmdsm.features.viewPPDDStock.api.stocklist.StockListRepoProvider
 import com.breezefsmdsm.features.viewPPDDStock.model.stocklist.StockListDataModel
 import com.breezefsmdsm.features.viewPPDDStock.model.stocklist.StockListResponseModel
+import com.breezefsmdsm.mappackage.SendBrod
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
@@ -232,6 +235,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         /*Handler().postDelayed(Runnable {
             getConfigFetchApi()
         },100)*/
+
+/*        var intent = Intent(mContext, MonitorService::class.java)
+        intent.action = CustomConstants.STOP_MONITOR_SERVICE
+        this.stopService(intent)
+        SendBrod.stopBrod(this)*/
     }
 
     override fun onStart() {
@@ -3630,6 +3638,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         println("xyz - callNewSettingsApi end" + AppUtils.getCurrentDateTime());
         if (!AppUtils.isLocationEnabled(this)) {
             showSnackMessage(getString(R.string.alert_nolocation))
+            login_TV.isEnabled = true
             return
         }
         isApiInitiated = true
@@ -3942,6 +3951,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         Pref.termsConditionsText = ""
         Pref.approvedInTime = AppUtils.convertTime(FTStorageUtils.getStringTimeToDate(loginResponse.user_details!!.user_login_time))
         Pref.approvedOutTime = AppUtils.convertTime(FTStorageUtils.getStringTimeToDate(loginResponse.user_details!!.user_logout_time))
+        //Pref.approvedOutTime="17:25:59"
         //Pref.approvedOutTime = "09:00 PM"
 
         /*if (!TextUtils.isEmpty(loginResponse.user_details?.attendance_text))
@@ -5214,6 +5224,26 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 Pref.IsIMEICheck = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsIMEICheck = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("UpdateUserName", ignoreCase = true)) {
+                                                Pref.UpdateUserName = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.UpdateUserName = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("MarkAttendNotification", ignoreCase = true)) {
+                                                Pref.MarkAttendNotification = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.MarkAttendNotification = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsAllowClickForPhotoRegister", ignoreCase = true)) {
+                                                Pref.IsAllowClickForPhotoRegister = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsAllowClickForPhotoRegister = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsAllowClickForVisit", ignoreCase = true)) {
+                                                Pref.IsAllowClickForVisit = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsAllowClickForVisit = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
 

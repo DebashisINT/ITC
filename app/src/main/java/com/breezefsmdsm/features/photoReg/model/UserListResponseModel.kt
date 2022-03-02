@@ -22,5 +22,6 @@ class UserListResponseModel {
     var emp_phone_no: String? = ""
     var IsShowManualPhotoRegnInApp: Boolean? = false
     var IsTeamAttenWithoutPhoto: Boolean? = false
+    var IsAllowClickForVisitForSpecificUser: Boolean? = false
 }
 

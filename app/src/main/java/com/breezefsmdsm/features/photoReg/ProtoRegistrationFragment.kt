@@ -558,12 +558,96 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
                 simpleDialogg.show()
             }
+
+            override fun updateUserNameOnClick(obj: UserListResponseModel) {
+                updateUserName(obj)
+            }
         }, {
             it
         })
 
         mRv_userList.adapter = adapter
     }
+
+    private fun updateUserName(obj: UserListResponseModel){
+        val simpleDialogg = Dialog(mContext)
+        simpleDialogg.setCancelable(true)
+        simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialogg.setContentView(R.layout.dialog_update_user_name_photo_reg)
+
+        val heading = simpleDialogg.findViewById(R.id.tv_dialog_update_usr_name_header) as TextView
+        val cancel = simpleDialogg.findViewById(R.id.cancel_TV) as AppCustomTextView
+        val update = simpleDialogg.findViewById(R.id.ok_TV) as AppCustomTextView
+
+        val et_first_name = simpleDialogg.findViewById(R.id.et_dialog_update_usr_name_first) as EditText
+        val et_middle_name = simpleDialogg.findViewById(R.id.et_dialog_update_usr_name_middle) as EditText
+        val et_last_name = simpleDialogg.findViewById(R.id.et_dialog_update_usr_name_last) as EditText
+
+
+        heading.text="Update Name of : "+obj!!.user_name
+
+        cancel.setOnClickListener({ view ->
+            simpleDialogg.dismiss()
+        })
+        update.setOnClickListener({ view ->
+
+            var cont=et_first_name.text.toString()
+            if(cont.length>0){
+                simpleDialogg.dismiss()
+                updateUserNameApi(obj,
+                        et_first_name.text.toString()+" "+et_middle_name.text.toString()+" "+et_last_name.text.toString(),
+                        et_first_name.text.toString(),et_middle_name.text.toString(),et_last_name.text.toString())
+            }else{
+                et_first_name.setError("Enter First Name")
+                et_first_name.requestFocus()
+            }
+
+        })
+
+        simpleDialogg.show()
+    }
+
+
+    private fun updateUserNameApi(obj: UserListResponseModel,name:String,firstName:String,middleName:String,lastName:String){
+        try{
+            progress_wheel.spin()
+
+            var userModel=UpdateUserNameModel()
+            userModel.name_updation_user_id=obj.user_id.toString()
+            userModel.updated_name=name
+            userModel.updated_first_name=firstName
+            userModel.updated_middle_name=middleName
+            userModel.updated_last_name=lastName
+            userModel.updation_date_time=AppUtils.getCurrentDateTime()
+
+            val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+            BaseActivity.compositeDisposable.add(
+                    repository.updateUserName(userModel)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                progress_wheel.stopSpinning()
+                                var response = result as UpdateUserNameResponse
+                                if (response.status == NetworkConstant.SUCCESS) {
+                                    showMessage("Name updation success for "+response.updated_name!!+".")
+                                    //callUSerListApi()
+                                } else {
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                }
+                            }, { error ->
+                                progress_wheel.stopSpinning()
+                                error.printStackTrace()
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            })
+            )
+        }catch (ex:Exception){
+            progress_wheel.stopSpinning()
+            ex.printStackTrace()
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+        }
+
+    }
+
 
     private fun showFaceIns(obj: UserListResponseModel){
         val simpleDialog = Dialog(mContext)
@@ -1441,5 +1525,23 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         )
     }
 
+
+    private fun showMessage(msg:String){
+        val simpleDialogAdhhar = Dialog(mContext)
+        simpleDialogAdhhar.setCancelable(false)
+        simpleDialogAdhhar.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialogAdhhar.setContentView(R.layout.dialog_message)
+        val dialogHeader = simpleDialogAdhhar.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+        val dialogBody = simpleDialogAdhhar.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        dialogHeader.text = "Hi! "+Pref.user_name
+        dialogBody.text = msg
+        val tv_message_ok = simpleDialogAdhhar.findViewById(R.id.tv_message_ok) as AppCustomTextView
+
+        tv_message_ok.setOnClickListener({ view ->
+            simpleDialogAdhhar.cancel()
+            callUSerListApi()
+        })
+        simpleDialogAdhhar.show()
+    }
 
 }

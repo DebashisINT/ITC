@@ -10,6 +10,7 @@ import android.widget.Filterable
 import androidx.appcompat.view.menu.ListMenuItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
+import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.squareup.picasso.Cache
 import com.squareup.picasso.MemoryPolicy
@@ -71,6 +72,7 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
 
                 if(mList?.get(adapterPosition)!!.isFaceRegistered!!){
                     tv_row_user_list_face_attend_face_not.visibility=View.GONE
+                    iv_row_face_attd_face.visibility=View.VISIBLE
                     var picasso = Picasso.Builder(mContext)
                             .memoryCache(Cache.NONE)
                             .indicatorsEnabled(true)
@@ -83,12 +85,23 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
                             .into(iv_row_face_attd_face)
                 }else{
                     tv_row_user_list_face_attend_face_not.visibility=View.VISIBLE
+                    iv_row_face_attd_face.visibility=View.GONE
                 }
 
                 click_for_photo_attd.setOnClickListener{listner?.getUserInfoOnLick(mList?.get(adapterPosition)!!)}
                 click_for_photo_attd_report.setOnClickListener{listner?.getUserInfoAttendReportOnLick(mList?.get(adapterPosition)!!)}
 
                 photo_reg_sales_reg_tv.text="Sales Rep Type : "+mList?.get(adapterPosition)?.type_name
+
+                if(Pref.IsAllowClickForVisit){
+                    if(mList?.get(adapterPosition)!!.IsAllowClickForVisitForSpecificUser!!){
+                        click_for_photo_attd.visibility=View.VISIBLE
+                    }else{
+                        click_for_photo_attd.visibility=View.GONE
+                    }
+                }else{
+                    click_for_photo_attd.visibility=View.GONE
+                }
 
             }
         }

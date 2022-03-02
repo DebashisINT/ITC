@@ -347,6 +347,11 @@ object Pref : PreferenceHolder() {
 
     var IsDayEndBackPressedRestrict: Boolean by bindToPreferenceField(false, "IsDayEndBackPressedRestrict")
     var IsIMEICheck: Boolean by bindToPreferenceField(false, "IsIMEICheck")
+    var UpdateUserName: Boolean by bindToPreferenceField(false, "UpdateUserName")
+    var MarkAttendNotification: Boolean by bindToPreferenceField(false, "MarkAttendNotification")
+
+    var IsAllowClickForPhotoRegister: Boolean by bindToPreferenceField(false, "IsAllowClickForPhotoRegister")
+    var IsAllowClickForVisit: Boolean by bindToPreferenceField(false, "IsAllowClickForVisit")
 
 
 

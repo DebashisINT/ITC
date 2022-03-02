@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.photoReg.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,13 @@ import com.breezefsmdsm.features.nearbyshops.model.NewOrderModel
 import com.breezefsmdsm.features.nearbyshops.presentation.NearByShopsListAdapter
 import com.breezefsmdsm.features.nearbyshops.presentation.NearByShopsListClickListener
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
+import com.squareup.picasso.Cache
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.row_user_list_face_attend.view.*
 import kotlinx.android.synthetic.main.row_user_list_face_regis.view.*
+import kotlinx.android.synthetic.main.row_user_list_face_regis.view.photo_reg_user_name_tv
 
 class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserListResponseModel>,val listner:PhotoRegUserListner,private val getSize: (Int) -> Unit):
         RecyclerView.Adapter<AdapterUserList.MyViewHolder>(), Filterable {
@@ -67,6 +74,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 photo_reg_user_ph_tv.setOnClickListener{listner?.getPhoneOnLick(mList?.get(adapterPosition)?.emp_phone_no.toString())}
                 //sync_delete_iv.setOnClickListener{listner?.deletePicOnLick(mList?.get(adapterPosition)!!)}
                 sync_delete_iv_red.setOnClickListener{listner?.deletePicOnLick(mList?.get(adapterPosition)!!)}
+
+                photo_reg_user_ph_update_name.setOnClickListener{listner?.updateUserNameOnClick(mList?.get(adapterPosition)!!)}
 
                 if(mList?.get(adapterPosition)?.emp_phone_no!!.length>0){
                     photo_reg_user_ph_update_tv.text="Update Contact No"
@@ -163,6 +172,19 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 }else{
                     sync_image_view.setColorFilter(ContextCompat.getColor(getContext(), R.color.black_50))
                 }
+
+                if(Pref.UpdateUserName){
+                    photo_reg_user_ph_update_name.visibility=View.VISIBLE
+                }else{
+                    photo_reg_user_ph_update_name.visibility=View.GONE
+                }
+
+                if(Pref.IsAllowClickForPhotoRegister){
+                    click_for_photo_reg_tv.visibility=View.VISIBLE
+                }else{
+                    click_for_photo_reg_tv.visibility=View.GONE
+                }
+
 
                 iv_aadhaar_ion.visibility=View.GONE
 
