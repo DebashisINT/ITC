@@ -28,12 +28,13 @@
 
 
             <com.breezefsmdsm.widgets.AppCustomTextView
-                android:id="@+id/version_name_TV"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_alignParentRight="true"
                 android:layout_margin="@dimen/_5sdp"
+                android:gravity="bottom"
                 android:text="@string/version_name"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="gone" />
 
@@ -390,6 +391,19 @@
         </RelativeLayout>
 
     </ScrollView>
+
+    <com.breezefsmdsm.widgets.AppCustomTextView
+        android:id="@+id/version_name_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/_5sdp"
+        android:gravity="bottom"
+        android:text="@string/version_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10sdp"
+        android:visibility="visible" />
 
     <com.pnikosis.materialishprogress.ProgressWheel
         android:id="@+id/progress_wheel"

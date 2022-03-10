@@ -78,6 +78,18 @@ interface GetUserListPhotoRegApi {
             Observable<BaseResponse>
 
 
+    @FormUrlEncoded
+    @POST("UpdateUserInformations/UpdateUserOtherID")
+    fun updateOtherIDApi(@Field("update_other_id_user_contactid") update_other_id_user_contactid: String,
+                         @Field("other_id") other_id: String): Observable<BaseResponse>
+
+
+    @FormUrlEncoded
+    @POST("UpdateUserInformations/UpdateUserLoginID")
+    fun updateUserLoginIDApi(@Field("update_login_id_of_user_id") update_login_id_of_user_id: String,
+                         @Field("user_login_id_new") user_login_id_new: String): Observable<BaseResponse>
+
+
     @POST("UpdateUserInformations/UpdateUserName")
     fun updateUserNameApi(@Body obj: UpdateUserNameModel):
             Observable<UpdateUserNameResponse>

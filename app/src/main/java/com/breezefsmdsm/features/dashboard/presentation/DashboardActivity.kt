@@ -2151,8 +2151,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         } else {
             screen_record_info_TV.visibility = View.GONE
         }
-
-
+        
         if (Pref.IsShowMenuAddAttendance) {
             add_attendence_tv.visibility = View.VISIBLE
         } else {

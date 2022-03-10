@@ -25,6 +25,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.provider.MediaStore
 import android.speech.tts.TextToSpeech
 import android.text.Editable
+import android.text.InputType
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
@@ -316,6 +317,27 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         //Toast.makeText(mContext,userList.size.toString(),Toast.LENGTH_SHORT).show()
         //tv_cust_no_frag_reg.text = "Total customer(s) : " + userList!!.size
 
+        //filter userList for duplicate value
+        var userList_temp:ArrayList<UserListResponseModel> = ArrayList()
+
+        for(i in 0..userList.size-1){
+            if(userList_temp.size==0){
+                userList_temp.add(userList.get(i))
+            }
+            var isDuplicate = false
+            for(j in 0..userList_temp.size-1){
+                if(userList.get(i).user_id == userList_temp.get(j).user_id){
+                    isDuplicate=true
+                    break
+                }
+            }
+            if(!isDuplicate){
+                userList_temp.add(userList.get(i))
+            }
+        }
+        userList.clear()
+        userList=userList_temp
+
         adapter = AdapterUserList(mContext, userList!!, object : PhotoRegUserListner {
 
             override fun getUserInfoOnLick(obj: UserListResponseModel) {
@@ -561,6 +583,64 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
             override fun updateUserNameOnClick(obj: UserListResponseModel) {
                 updateUserName(obj)
+            }
+
+            override fun updateOtherIDOnClick(obj: UserListResponseModel) {
+                val simpleDialogg = Dialog(mContext)
+                simpleDialogg.setCancelable(true)
+                simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogg.setContentView(R.layout.dialog_update_contact_photo_reg)
+
+                val heading = simpleDialogg.findViewById(R.id.tv_dialog_upsate_ph_name) as TextView
+                val cancel = simpleDialogg.findViewById(R.id.cancel_TV) as AppCustomTextView
+                val update = simpleDialogg.findViewById(R.id.ok_TV) as AppCustomTextView
+                val et_phone = simpleDialogg.findViewById(R.id.et_dialog_upsate_ph_no) as EditText
+
+                heading.text=obj!!.user_name
+                et_phone.setHint("Enter Other ID")
+                et_phone.inputType=InputType.TYPE_CLASS_TEXT
+
+                cancel.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                })
+                update.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                    var cont=et_phone.text.toString()
+                    updateOtherID(cont,obj.user_contactid!!)
+                })
+                simpleDialogg.show()
+            }
+
+            override fun updateLoginIDOnClick(obj: UserListResponseModel) {
+                val simpleDialogg = Dialog(mContext)
+                simpleDialogg.setCancelable(true)
+                simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogg.setContentView(R.layout.dialog_update_contact_photo_reg)
+
+                val heading = simpleDialogg.findViewById(R.id.tv_dialog_upsate_ph_name) as TextView
+                val cancel = simpleDialogg.findViewById(R.id.cancel_TV) as AppCustomTextView
+                val update = simpleDialogg.findViewById(R.id.ok_TV) as AppCustomTextView
+                val et_phone = simpleDialogg.findViewById(R.id.et_dialog_upsate_ph_no) as EditText
+
+                heading.text=obj!!.user_name
+                et_phone.setHint("Enter User ID")
+                et_phone.inputType=InputType.TYPE_CLASS_TEXT
+
+                cancel.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                })
+                update.setOnClickListener({ view ->
+                    var cont=et_phone.text.toString()
+                    if(cont.length!=0){
+                        simpleDialogg.dismiss()
+                        updateUserLoginID(obj.user_id!!.toString(),cont)
+                    }else{
+                        et_phone.setError("Enter User ID")
+                        et_phone.requestFocus()
+                    }
+
+                })
+                simpleDialogg.show()
             }
         }, {
             it
@@ -1136,7 +1216,6 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         simpleDialogAdhhar.show()
     }
 
-
     private fun voiceAttendanceMsg(msg: String) {
         if (Pref.isVoiceEnabledForAttendanceSubmit) {
             val speechStatus = (mContext as DashboardActivity).textToSpeech.speak(msg, TextToSpeech.QUEUE_FLUSH, null)
@@ -1525,6 +1604,71 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
         )
     }
 
+    private fun updateOtherID(value:String,contactid:String){
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.updateOtherID(contactid,value)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as BaseResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                //(mContext as DashboardActivity).showSnackMessage("Updation successful.")
+                                //voiceAttendanceMsg("Updation successful.")
+                                showMessage("Updation successful.")
+                            } else {
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        })
+        )
+    }
+
+    private fun updateUserLoginID(updating_user_id:String,new_login_id:String){
+        val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+                repository.updateUserLoginID(updating_user_id,new_login_id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            progress_wheel.stopSpinning()
+                            var response = result as BaseResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                //(mContext as DashboardActivity).showSnackMessage("Updation successful.")
+                                //voiceAttendanceMsg("Updation successful.")
+                                showMessage("Updation successful.")
+                            } else if(response.status == NetworkConstant.NO_DATA){
+                                val simpleDialogAdhhar = Dialog(mContext)
+                                simpleDialogAdhhar.setCancelable(false)
+                                simpleDialogAdhhar.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                                simpleDialogAdhhar.setContentView(R.layout.dialog_message)
+                                val dialogHeader = simpleDialogAdhhar.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                                val dialogBody = simpleDialogAdhhar.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                                dialogHeader.text = "Hi! "+Pref.user_name
+                                dialogBody.text = "Duplicate ID"
+                                val tv_message_ok = simpleDialogAdhhar.findViewById(R.id.tv_message_ok) as AppCustomTextView
+
+                                tv_message_ok.setOnClickListener({ view ->
+                                    simpleDialogAdhhar.cancel()
+                                    callUSerListApi()
+                                })
+                                simpleDialogAdhhar.show()
+                            }else{
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        })
+        )
+    }
 
     private fun showMessage(msg:String){
         val simpleDialogAdhhar = Dialog(mContext)

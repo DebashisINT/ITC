@@ -34,7 +34,8 @@
                     android:layout_weight="1"
                     android:gravity="center|start"
                     android:textColor="@color/login_txt_color"
-                    android:textSize="@dimen/_11sdp" />
+                    android:textSize="@dimen/_11sdp"
+                    android:hint="Name"/>
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/photo_reg_user_adhaar_tv"
@@ -55,7 +56,8 @@
                     android:layout_weight="1"
                     android:gravity="center|start"
                     android:textColor="@color/login_txt_color"
-                    android:textSize="@dimen/_10sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    android:hint="Sales Rep Type : "/>
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/photo_reg_dd_name_tv"

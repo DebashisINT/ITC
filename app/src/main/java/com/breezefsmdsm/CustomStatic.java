@@ -1,7 +1,5 @@
 package com.breezefsmdsm;
 
-import com.squareup.picasso.Picasso;
-
 public class CustomStatic {
     public static Boolean IsFaceRec=false;
     public static String FaceUrl="";

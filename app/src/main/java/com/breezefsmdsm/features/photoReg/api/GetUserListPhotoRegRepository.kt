@@ -59,6 +59,13 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
         return apiService.updateEmpPhoneApi(user_id,session_token,usrContID,oldPhoneNo,newPhoneNo)
     }
 
+    fun updateOtherID(update_other_id_user_contactid: String, other_id: String): Observable<BaseResponse> {
+        return apiService.updateOtherIDApi(update_other_id_user_contactid,other_id)
+    }
+
+    fun updateUserLoginID(update_other_id_user_contactid: String, other_id: String): Observable<BaseResponse> {
+        return apiService.updateUserLoginIDApi(update_other_id_user_contactid,other_id)
+    }
 
 
     fun sendUserAadhaarInfoNewApi(aadhaarSubmitData:AadhaarSubmitDataNew): Observable<BaseResponse> {

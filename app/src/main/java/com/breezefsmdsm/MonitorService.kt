@@ -65,7 +65,7 @@ class MonitorService:Service() {
     }
 
     fun serviceStatusActionable(){
-        XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime())
+        XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
         Log.e("MonitorService_abc", "startabc" )
         monitorBroadcast=MonitorBroadcast()
 

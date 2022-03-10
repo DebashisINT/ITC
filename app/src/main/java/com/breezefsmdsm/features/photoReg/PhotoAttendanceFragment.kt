@@ -66,6 +66,8 @@ import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
@@ -76,6 +78,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_photo_registration.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
@@ -324,9 +327,36 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     }
 
     private fun setAdapter(){
+
+        //filter userList for duplicate value
+        var userList_temp:ArrayList<UserListResponseModel> = ArrayList()
+
+        for(i in 0..userList.size-1){
+            if(userList_temp.size==0){
+                userList_temp.add(userList.get(i))
+            }
+            var isDuplicate = false
+            for(j in 0..userList_temp.size-1){
+                if(userList.get(i).user_id == userList_temp.get(j).user_id){
+                    isDuplicate=true
+                    break
+                }
+            }
+            if(!isDuplicate){
+                userList_temp.add(userList.get(i))
+            }
+        }
+        userList.clear()
+        userList=userList_temp
+
         adapter=AdapterUserListAttenD(mContext,userList,object : PhotoAttendanceListner{
             override fun getUserInfoOnLick(obj: UserListResponseModel) {
                 obj_temp=obj
+                //obj_temp.IsActiveUser=false
+                if(!obj_temp.IsActiveUser!!){
+                    inactiveUserMsg("Login is inactive for ${obj_temp.user_name}. Please talk to administrator.")
+                    return
+                }
                 if(AppUtils.isOnline(mContext)){
                     if(Pref.isAddAttendence || true){
                         if(obj_temp.isFaceRegistered!! || obj_temp.IsTeamAttenWithoutPhoto!!){
@@ -359,6 +389,22 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         })
 
         rvUserDtls.adapter=adapter
+    }
+
+    private fun inactiveUserMsg(msgBody:String){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_message)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
+        dialogHeader.text = msgBody
+        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+        })
+        simpleDialog.show()
     }
 
     private fun checkCurrentDayAttdUserWise(){
@@ -758,6 +804,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         //    if (saved) {
 //      lastSaved = System.currentTimeMillis();
 //    }
+
         CustomStatic.IsCameraFacingFromTeamAttdCametaStatus=true
         CustomStatic.IsCameraFacingFromTeamAttd=true
         Log.e("xc", "startabc" )

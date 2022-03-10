@@ -1,6 +1,5 @@
 package com.breezefsmdsm.features.login.presentation
 
-
 import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
@@ -136,7 +135,6 @@ import org.jetbrains.anko.uiThread
 import java.io.*
 import java.util.*
 import kotlin.collections.ArrayList
-
 
 /**
  * Created by Pratishruti on 26-10-2017.

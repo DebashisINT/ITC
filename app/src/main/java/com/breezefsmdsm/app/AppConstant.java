@@ -110,5 +110,4 @@ public interface AppConstant {
     /*Foreground service intent*/
     int FOREGROUND_SERVICE = 911;
 
-    boolean isImageNotFound = false;
 }

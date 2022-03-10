@@ -23,5 +23,9 @@ class UserListResponseModel {
     var IsShowManualPhotoRegnInApp: Boolean? = false
     var IsTeamAttenWithoutPhoto: Boolean? = false
     var IsAllowClickForVisitForSpecificUser: Boolean? = false
+    var IsActiveUser: Boolean? = true
+    var UpdateOtherID: Boolean? = true
+    var UpdateUserID: Boolean? = true
+    var OtherID: String? = ""
 }
 

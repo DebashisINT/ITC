@@ -64,7 +64,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
     inner class MyViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
         fun bindItems(){
             itemView.apply {
-                photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name + "   (  "+ mList?.get(adapterPosition)?.user_login_id+"  )"
+                //photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name + "   (  "+ mList?.get(adapterPosition)?.user_login_id+"  )"
+                photo_reg_user_name_tv.text = mList?.get(adapterPosition)?.user_name + " ( "+ mList?.get(adapterPosition)?.OtherID+" )"
                 photo_reg_user_ph_tv.text = " "+mList?.get(adapterPosition)?.emp_phone_no
 //                photo_reg_dd_name_tv.text="Distributor : "+mList?.get(adapterPosition)?.ShowDDInFaceRegistration
 //                photo_reg_dd_name_tv.text="Distributor Surise Manali Himachal Limited "
@@ -88,7 +89,6 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                     }else{
                         listner?.addContactOnClick(mList?.get(adapterPosition)!!)
                     }
-
                 }
 
                 //iv_aadhaar_ion.setOnClickListener{listner?.getAadhaarOnLick(mList?.get(adapterPosition)!!)}
@@ -185,6 +185,18 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                     click_for_photo_reg_tv.visibility=View.GONE
                 }
 
+                if(mList?.get(adapterPosition)?.UpdateOtherID!!){
+                    photo_reg_user_other_id_update_tv.visibility=View.VISIBLE
+                }else{
+                    photo_reg_user_other_id_update_tv.visibility=View.GONE
+                }
+                if(mList?.get(adapterPosition)?.UpdateUserID!!){
+                    photo_reg_user_login_id_update_tv.visibility=View.VISIBLE
+                }else{
+                    photo_reg_user_login_id_update_tv.visibility=View.GONE
+                }
+                photo_reg_user_other_id_update_tv.setOnClickListener{listner?.updateOtherIDOnClick(mList?.get(adapterPosition)!!)}
+                photo_reg_user_login_id_update_tv.setOnClickListener{listner?.updateLoginIDOnClick(mList?.get(adapterPosition)!!)}
 
                 iv_aadhaar_ion.visibility=View.GONE
 

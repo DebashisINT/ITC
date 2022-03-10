@@ -4,12 +4,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import static com.breezefsmdsm.app.AppConstant.SHOP_TABLE;
+import com.breezefsmdsm.app.AppConstant;
 
 /**
  * Created by sayantan.sarkar on 2/11/17.
  */
-@Entity(tableName = SHOP_TABLE)
+@Entity(tableName = AppConstant.SHOP_TABLE)
 public class AddShopDBModelEntity {
 
     @PrimaryKey(autoGenerate = true)

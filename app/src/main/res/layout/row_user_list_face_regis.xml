@@ -17,7 +17,8 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp">
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/_30sdp">
 
 
         <com.breezefsmdsm.widgets.AppCustomTextView
@@ -163,6 +164,24 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
+                <com.breezefsmdsm.widgets.AppCustomTextView
+                    android:id="@+id/photo_reg_user_other_id_update_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:gravity="center|start"
+                    android:text="Update Other ID"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_10sdp" />
+
+                <com.breezefsmdsm.widgets.AppCustomTextView
+                    android:id="@+id/photo_reg_user_login_id_update_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:gravity="center|start"
+                    android:text="Update User ID"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_10sdp" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/photo_reg_user_ph_update_tv"
