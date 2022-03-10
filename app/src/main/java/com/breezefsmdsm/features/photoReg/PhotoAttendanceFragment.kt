@@ -449,8 +449,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
         dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()+"!"
         //dialogHeader.text = "Attendance of "+obj_temp!!.user_name +" submitted for today."
-        dialogHeader.text = "Attendance for "+obj_temp!!.user_name+" already marked for today."
-        voiceAttendanceMsg("Attendance for "+obj_temp!!.user_name+" already marked for today.")
+        dialogHeader.text = "Visit for "+obj_temp!!.user_name+" already marked for today."
+        voiceAttendanceMsg("Visit for "+obj_temp!!.user_name+" already marked for today.")
         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
             simpleDialog.cancel()
@@ -1012,8 +1012,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
         dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()!!+"!"
-        dialogHeader.text = "Attendance successfully marked for "+obj_temp.user_name+". Thanks."
-        voiceAttendanceMsg("Attendance successfully marked for "+obj_temp.user_name)
+        dialogHeader.text = "Visit successfully marked for "+obj_temp.user_name+". Thanks."
+        voiceAttendanceMsg("Visit successfully marked for "+obj_temp.user_name)
         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
             simpleDialog.cancel()

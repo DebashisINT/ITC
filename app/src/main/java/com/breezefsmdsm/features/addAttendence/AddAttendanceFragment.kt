@@ -2462,7 +2462,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                                         Pref.distributorName = addAttendenceModel.distributor_name
                                         Pref.marketWorked = addAttendenceModel.market_worked
 
-                                        voiceAttendanceMsg("Hi, your attendance mark successfully.")
+                                        voiceAttendanceMsg("Hi, your visit mark successfully.")
 
                                     } else {
                                         userLoginDataEntity.Isonleave = "true"
@@ -2493,7 +2493,8 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
                                 //Pref.isAddAttendence = true
                                 BaseActivity.isApiInitiated = false
-                                (mContext as DashboardActivity).showSnackMessage(response.message!!)
+                                //(mContext as DashboardActivity).showSnackMessage(response.message!!)
+                                (mContext as DashboardActivity).showSnackMessage("Hi, your visit mark successfully.")
                                 (mContext as DashboardActivity).onBackPressed()
 
 

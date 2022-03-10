@@ -57,7 +57,7 @@
     <string name="attendance" translatable="false">Attendance</string>
     <string name="view_attendance" translatable="false">View Attendance</string>
     <string name="order_list" translatable="false">Order List</string>
-    <string name="add_attendance" translatable="false">Add Attendance</string>
+    <string name="add_attendance" translatable="false">Add Visit</string>
     <string name="ta_text" translatable="false">TA</string>
     <string name="pp_dd_text" translatable="false">View PP/DD Stock</string>
     <string name="pp_dd_header_text" translatable="false">PP/DD Stock</string>
@@ -638,7 +638,7 @@
     <string name="select_brand_type" translatable="false">Search by Band</string>
     <string name="select_group_type" translatable="false">Search by Group</string>
     <string name="select_route" translatable="false">Select Route</string>
-    <string name="choose_attendance_type" translatable="false">Mark your Attendance: <!--Choose Plan Type:--> </string>
+    <string name="choose_attendance_type" translatable="false">Mark your Visit: <!--Choose Plan Type:--> </string>
     <string name="on_leave" translatable="false">On Leave</string>
     <string name="todays_plan" translatable="false">Today\'s Plan</string>
     <string name="at_work" translatable="false">At Work</string>

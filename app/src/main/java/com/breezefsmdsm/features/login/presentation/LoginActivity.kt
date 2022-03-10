@@ -4050,7 +4050,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         //getListFromDatabase()
         println("xyz - doAfterLoginFunctionality end" + AppUtils.getCurrentDateTime());
         println("xyz - isStartOrEndDay started" + AppUtils.getCurrentDateTime());
+
         isStartOrEndDay()
+
     }
 
 
