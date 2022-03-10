@@ -714,6 +714,7 @@
     <!--Add Attendance-->
     <string name="attendance_alert" translatable="false">Attendance Notification</string>
     <string name="attendance_msg_bdy" translatable="false">Select OK to mark your Attendance. Thanks.</string>
+    <string name="attendance_msg_bdy1" translatable="false">Select OK to mark your Visit. Thanks.</string>
     <string name="set_todays_target" translatable="false">Set Your Today\'s Target</string>
     <string name="target_order_value" translatable="false">Target value</string>
     <string name="target_collection_value" translatable="false">Collection value</string>
