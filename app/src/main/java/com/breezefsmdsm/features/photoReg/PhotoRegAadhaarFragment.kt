@@ -445,9 +445,6 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
         else if(CustomStatic.IsPanForPhotoReg)
             aadhaarSubmitData.REG_DOC_TYP="PAN"
 
-
-
-
         try{
             val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
             BaseActivity.compositeDisposable.add(

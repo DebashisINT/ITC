@@ -434,13 +434,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             }
                             isApiInitiated = false
                             //gotoHomeActivity()
-                            checkToCallAlarmConfigApi()
+
+                            //checkToCallAlarmConfigApi()
+                            isStartOrEndDay()
 
                         }, { error ->
                             isApiInitiated = false
                             error.printStackTrace()
                             //gotoHomeActivity()
-                            checkToCallAlarmConfigApi()
+
+                            //checkToCallAlarmConfigApi()
+                            isStartOrEndDay()
+
                             progress_wheel.stopSpinning()
                             XLog.d("ConfigFetchApiResponse ERROR: " + error.localizedMessage)
                         })
@@ -516,6 +521,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getBillListApi() {
+        if (Pref.canAddBillingFromBillingList) {
+            XLog.d("API_Optimization GET getBillListApi Login : enable " + "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+
         val repository = BillingListRepoProvider.provideBillListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -591,6 +599,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkToCallRateList()
                         })
         )
+        }
+        else{
+            XLog.d("API_Optimization GET getBillListApi Login : disable " + "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            checkToCallRateList()
+        }
     }
 
     private fun checkToCallRateList() {
@@ -664,6 +677,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getMeetingList() {
+        if (Pref.isMeetingAvailable) {
+            XLog.d("API_Optimization GET getMeetingList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         progress_wheel.spin()
         val repository = MeetingRepoProvider.meetingRepoProvider()
         BaseActivity.compositeDisposable.add(
@@ -715,6 +731,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkToCallProductRateList()
                         })
         )
+        }
+        else{
+            XLog.d("API_Optimization GET getMeetingList Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallProductRateList()
+        }
     }
 
     private fun checkToCallProductRateList() {
@@ -726,6 +747,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getProductRateListApi() {
+        if(Pref.isOrderShow){
+            XLog.d("API_Optimization getProductRateListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         val repository = ProductListRepoProvider.productListProvider()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -785,6 +809,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkToCallAreaListApi()
                         })
         )
+        }else{
+            XLog.d("API_Optimization getProductRateListApi Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallAreaListApi()
+        }
     }
 
     private fun checkToCallAreaListApi() {
@@ -896,6 +924,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getPjpListApi() {
+        if(Pref.isActivatePJPFeature){
+            XLog.d("API_Optimization GET getPjpListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         progress_wheel.spin()
         val repository = TeamRepoProvider.teamRepoProvider()
         BaseActivity.compositeDisposable.add(
@@ -950,6 +981,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkModelList()
                         })
         )
+        }else{
+            XLog.d("API_Optimization GET getPjpListApi Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkModelList()
+        }
     }
 
     private fun checkModelList() {
@@ -1584,6 +1619,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getTeamAreaListApi() {
+        if(Pref.isOfflineTeam){
+            XLog.d("API_call_optimization Login->isOfflineTeam Enable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         val repository = TeamRepoProvider.teamRepoProvider()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -1630,9 +1668,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             getTimesheetDropdownApi()
                         })
         )
+        }
+        else{
+            XLog.d("API_call_optimization Login->isOfflineTeam Disable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            getTimesheetDropdownApi()
+        }
     }
 
     private fun getTimesheetDropdownApi() {
+        if(Pref.willTimesheetShow) {
+            XLog.d("API_Optimization->  TIMESHEET Enable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
         progress_wheel.spin()
         val repository = TimeSheetRepoProvider.timeSheetRepoProvider()
         BaseActivity.compositeDisposable.add(
@@ -1702,6 +1747,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             getTimesheetConfig()
                         })
         )
+        }else{
+            XLog.d("API_Optimization-> TIMESHEET Disable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallActivityTypeApi()
+        }
     }
 
     private fun getTimesheetConfig() {
@@ -2175,6 +2224,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getStockList() {
+        if (Pref.willStockShow) {
+            XLog.d("API_Optimization GET getStockList Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+
         val repository = StockRepositoryProvider.provideStockRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -2266,6 +2318,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkToCallDocumentTypeList()
                         })
         )
+        }
+        else{
+            XLog.d("API_Optimization GET getStockList  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallDocumentTypeList()
+        }
     }
 
     private fun checkToCallDocumentTypeList() {
@@ -2277,6 +2334,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getDocumentTypeApi() {
+        if (Pref.isDocumentRepoShow) {
+            XLog.d("API_Optimization GET getDocumentListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         val repository = DocumentRepoProvider.documentRepoProvider()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -2323,6 +2383,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkToCallDocumentListApi()
                         })
         )
+        }
+        else{
+            XLog.d("API_Optimization GET getDocumentListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallPaymentApi()
+        }
     }
 
     private fun checkToCallDocumentListApi() {
@@ -2334,6 +2399,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getDocumentListApi() {
+        if (Pref.isDocumentRepoShow) {
+            XLog.d("API_Optimization GET getDocumentListApi  Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
         val repository = DocumentRepoProvider.documentRepoProvider()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -2382,6 +2449,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             XLog.d("DOCUMENT LIST ERROR=======> " + error.localizedMessage)
                         })
         )
+        }
+        else{
+            XLog.d("API_Optimization GET getDocumentListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallPaymentApi()
+        }
     }
 
     private fun checkToCallPaymentApi() {
@@ -4051,7 +4123,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         println("xyz - doAfterLoginFunctionality end" + AppUtils.getCurrentDateTime());
         println("xyz - isStartOrEndDay started" + AppUtils.getCurrentDateTime());
 
-        isStartOrEndDay()
+        callUserConfigApi()
+
+        //isStartOrEndDay()
 
     }
 
@@ -4217,6 +4291,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
     private fun getProductList(date: String?) {
+        if(Pref.isOrderShow){
+            XLog.d("API_Optimization getProductList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         println("xyzzz - getProductList started" + AppUtils.getCurrentDateTime());
         val repository = ProductListRepoProvider.productListProvider()
         progress_wheel.spin()
@@ -4303,7 +4380,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             //checkToCallSelectedRouteListApi()
                             checkToCallOrderList()
                         })
-        )
+        ) }else{
+            XLog.d("API_Optimization getProductList Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallOrderList()
+        }
     }
 
     private fun checkToCallOrderList() {
@@ -4315,6 +4395,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getOrderList() {
+        if(Pref.isOrderShow){
+            XLog.d("API_Optimization getOrderList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         println("xyz - getOrderList started" + AppUtils.getCurrentDateTime());
         val repository = NewOrderListRepoProvider.provideOrderListRepository()
         progress_wheel.spin()
@@ -4422,6 +4505,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkToCallSelectedRouteListApi()
                         })
         )
+        }else{
+            XLog.d("API_Optimization getOrderList Login : disdable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallSelectedRouteListApi()
+        }
     }
 
     private fun checkToCallSelectedRouteListApi() {
@@ -4445,12 +4532,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         println("xyz - getSelectedRouteList ended" + AppUtils.getCurrentDateTime());
         val list = AppDatabase.getDBInstance()!!.collectionDetailsDao().getAll()
         if (list != null && list.isNotEmpty()) {
-            callUserConfigApi()
+            //callUserConfigApi()
+            checkToCallAlarmConfigApi()
         } else
             callCollectionListApi()
     }
 
     private fun callCollectionListApi() {
+        if (Pref.isCollectioninMenuShow) {
+            XLog.d("API_Optimization GET callCollectionListApi Login : enable " +  "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+
         val repository = NewCollectionListRepoProvider.newCollectionListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -4462,20 +4553,27 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             if (collection.status == NetworkConstant.SUCCESS) {
                                 if (collection.collection_list == null || collection.collection_list?.size!! == 0) {
                                     progress_wheel.stopSpinning()
-                                    callUserConfigApi()
+                                    //callUserConfigApi()
+                                    checkToCallAlarmConfigApi()
                                 } else
                                     saveToDatabase(collection.collection_list!!)
 
                             } else {
                                 progress_wheel.stopSpinning()
-                                callUserConfigApi()
+                                //callUserConfigApi()
+                                checkToCallAlarmConfigApi()
                             }
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            callUserConfigApi()
+                            //callUserConfigApi()
+                            checkToCallAlarmConfigApi()
                         })
-        )
+        )  }
+        else{
+            XLog.d("API_Optimization GET callCollectionListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            checkToCallAlarmConfigApi()
+        }
     }
 
     //private fun saveToDatabase(collection_details_list: ArrayList<CollectionListDataModel>) {
@@ -4513,7 +4611,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             uiThread {
                 progress_wheel.stopSpinning()
                 println("xyz - saveToDatabase ended" + AppUtils.getCurrentDateTime());
-                callUserConfigApi()
+                //callUserConfigApi()
+                checkToCallAlarmConfigApi()
             }
         }
     }
@@ -5795,6 +5894,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
     fun getCurrentStockApi() {
+        if (Pref.isCurrentStockEnable) {
+            XLog.d("API_Optimization GET getCurrentStockApi Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
         progress_wheel.spin()
         var shopAll = AppDatabase.getDBInstance()!!.shopCurrentStockEntryDao().getShopStockAll()
         if (shopAll != null && shopAll?.isNotEmpty()) {
@@ -5867,9 +5968,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 getCompStockApi()
             }
         }
+        }
+        else{
+            XLog.d("API_Optimization GET getCurrentStockApi Login : disable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            getCompStockApi()
+        }
     }
 
     fun getCompStockApi() {
+        if (Pref.IscompetitorStockRequired) {
+            XLog.d("API_Optimization GET getCompStockApi Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+
         progress_wheel.spin()
         var comListAll = AppDatabase.getDBInstance()!!.competetorStockEntryDao().getCompetetorStockAll()
         if (comListAll != null && comListAll?.isNotEmpty()) {
@@ -5946,6 +6055,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 XLog.d("Login CompetitorStock/CompetitorStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                 getShopTypeStockVisibility()
             }
+        }
+        }
+        else{
+            XLog.d("API_Optimization GET getCompStockApi Login : disable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            getShopTypeStockVisibility()
         }
     }
 
