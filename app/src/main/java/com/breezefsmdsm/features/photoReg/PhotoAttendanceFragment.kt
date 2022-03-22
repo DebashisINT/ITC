@@ -527,6 +527,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     }
 
     private fun getNearyShopListDD(location: Location) {
+        progress_wheel.spin()
         var nearBy: Double = Pref.shopLocAccuracy.toDouble()
         var shop_id: String = ""
         var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
@@ -571,7 +572,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
 
         //finalNearByDD=newDDList[5]
-
+        progress_wheel.stopSpinning()
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
             if(obj_temp.IsTeamAttenWithoutPhoto!!){
                 prepareAddAttendanceInputParams()
@@ -662,6 +663,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 //Toast.makeText(this, "No File", Toast.LENGTH_SHORT).show()
                 return
             }
+            progress_wheel.spin()
             //ivFace.setImageBitmap(mBitmap)
             previewWidth = mBitmap.width
             previewHeight = mBitmap.height
@@ -671,6 +673,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             faceBmp = Bitmap.createBitmap(TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, Bitmap.Config.ARGB_8888)
             faceDetector?.process(image)?.addOnSuccessListener(OnSuccessListener<List<Face>> { faces ->
                 if (faces.size == 0) {
+                    progress_wheel.stopSpinning()
                     println("reg_face - add_attendance_registerFace no face detected"+AppUtils.getCurrentDateTime());
                     return@OnSuccessListener
                 }
@@ -678,6 +681,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                     object : Thread() {
                         override fun run() {
                             //action
+                            progress_wheel.stopSpinning()
                             println("reg_face - add_attendance_registerFace face detected"+AppUtils.getCurrentDateTime());
                             onFacesDetected(1, faces, true) //no need to add currtime
                         }
@@ -689,6 +693,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
+            progress_wheel.stopSpinning()
         }
     }
 
@@ -1013,7 +1018,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
             simpleDialog.cancel()
-            (mContext as DashboardActivity).loadFragment(FragType.PhotoAttendanceFragment, false, "")
+            callUSerListApi()
+            //(mContext as DashboardActivity).loadFragment(FragType.PhotoAttendanceFragment, false, "")
         })
         simpleDialog.show()
     }
