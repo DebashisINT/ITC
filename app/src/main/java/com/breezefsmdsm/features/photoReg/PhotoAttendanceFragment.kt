@@ -3,7 +3,6 @@ package com.breezefsmdsm.features.photoReg
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
@@ -20,9 +19,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.CustomStatic
-import com.breezefsmdsm.MonitorService
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
@@ -41,7 +38,6 @@ import com.breezefsmdsm.faceRec.tflite.TFLiteObjectDetectionAPIModel
 import com.breezefsmdsm.features.addAttendence.PrimaryValueAdapter
 import com.breezefsmdsm.features.addAttendence.api.addattendenceapi.AddAttendenceRepoProvider
 import com.breezefsmdsm.features.addAttendence.model.AddAttendenceInpuModel
-import com.breezefsmdsm.features.addAttendence.model.AddAttendenceInputDataModel
 import com.breezefsmdsm.features.addAttendence.model.PrimaryValueDataModel
 import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
 import com.breezefsmdsm.features.attendance.model.AttendanceRequest
@@ -49,25 +45,18 @@ import com.breezefsmdsm.features.attendance.model.AttendanceResponse
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.model.DaystartDayendRequest
-import com.breezefsmdsm.features.geofence.GeofenceService
-import com.breezefsmdsm.features.location.LocationFuzedService
 import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
-import com.breezefsmdsm.features.login.UserLoginDataEntity
 import com.breezefsmdsm.features.logout.presentation.api.LogoutRepositoryProvider
 import com.breezefsmdsm.features.photoReg.adapter.*
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.ProsCustom
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
-import com.breezefsmdsm.features.photoReg.present.UpdateDSTypeStatusDialog
-import com.breezefsmdsm.features.reimbursement.presentation.MonthListAdapter
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import com.google.android.gms.tasks.OnSuccessListener
-import com.google.gson.JsonArray
-import com.google.gson.JsonParser
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
@@ -78,12 +67,10 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_photo_registration.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
 
 class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
@@ -351,34 +338,43 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
         adapter=AdapterUserListAttenD(mContext,userList,object : PhotoAttendanceListner{
             override fun getUserInfoOnLick(obj: UserListResponseModel) {
-                obj_temp=obj
-                //obj_temp.IsActiveUser=false
-                if(!obj_temp.IsActiveUser!!){
-                    inactiveUserMsg("Login is inactive for ${obj_temp.user_name}. Please talk to administrator.")
-                    return
-                }
-                if(AppUtils.isOnline(mContext)){
-                    if(Pref.isAddAttendence || true){
-                        if(obj_temp.isFaceRegistered!! || obj_temp.IsTeamAttenWithoutPhoto!!){
-                            if(AppUtils.isOnline(mContext)){
-                                progress_wheel.spin()
-                                checkCurrentDayAttdUserWise()
-                                //prepareAddAttendanceInputParams()
-                            }else{
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-                            }
 
-                            //getLocforDD()
-                            //GetImageFromUrl().execute(obj_temp.face_image_link)
+                faceDetector=null
+                faceDetectorSetUp()
+
+                Handler(Looper.getMainLooper()).postDelayed(Runnable {
+                    CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                    CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
+                    obj_temp=obj
+                    //obj_temp.IsActiveUser=false
+                    if(!obj_temp.IsActiveUser!!){
+                        inactiveUserMsg("Login is inactive for ${obj_temp.user_name}. Please talk to administrator.")
+                    }else if(AppUtils.isOnline(mContext)){
+                        if(Pref.isAddAttendence || true){
+                            if(obj_temp.isFaceRegistered!! || obj_temp.IsTeamAttenWithoutPhoto!!){
+                                if(AppUtils.isOnline(mContext)){
+                                    progress_wheel.spin()
+                                    checkCurrentDayAttdUserWise()
+                                    //prepareAddAttendanceInputParams()
+                                }else{
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                                }
+
+                                //getLocforDD()
+                                //GetImageFromUrl().execute(obj_temp.face_image_link)
+                            }else{
+                                (mContext as DashboardActivity).showSnackMessage("Face Not Registered")
+                            }
                         }else{
-                            (mContext as DashboardActivity).showSnackMessage("Face Not Registered")
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.choose_attendance_type))
                         }
-                    }else{
-                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.choose_attendance_type))
                     }
-                }else{
-                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-                }
+                    else{
+                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                    }
+                }, 1500)
+
+
             }
 
             override fun getUserInfoAttendReportOnLick(obj: UserListResponseModel) {

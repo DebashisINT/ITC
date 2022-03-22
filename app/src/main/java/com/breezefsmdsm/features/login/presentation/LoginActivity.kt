@@ -3969,8 +3969,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 //                                Toaster.msgLong(this, loginResponse.message!!)
                             } else {
                                 progress_wheel.stopSpinning()
-                                println("xyz - doLogin status: " + loginResponse.status +" msg: "+loginResponse.message!!);
-                                openDialogPopup(loginResponse.message!!)
+
+                                if(loginResponse.message!!.contains("IMEI",ignoreCase = true))
+                                {
+                                    openDialogPopup("Current Login ID has already been used from another mobile device. You are not allowed to " +
+                                            "login from your current device due to IMEI BLOCKED! Please talk to Admin.")
+                                }else{
+                                    openDialogPopup(loginResponse.message!!)
+                                }
+
+                                //println("xyz - doLogin status: " + loginResponse.status +" msg: "+loginResponse.message!!);
+                                //openDialogPopup(loginResponse.message!!)
 //                                showSnackMessage(loginResponse.message!!)
                                 login_TV.isEnabled = true
                             }

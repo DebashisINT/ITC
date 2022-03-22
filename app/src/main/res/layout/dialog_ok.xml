@@ -49,7 +49,6 @@
                 android:text="Ok"
                 android:textSize="@dimen/_13sdp"
                 android:gravity="center"
-                android:backgroundTint="#57a518"
                 android:layout_gravity="center"
                 android:background="@drawable/selector_order_history_bg"
                 android:textColor="@drawable/selector_text_clor_blue_white"

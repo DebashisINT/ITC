@@ -308,7 +308,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         progress_wheel.stopSpinning()
                         XLog.d("face-doc-Compare : idfy response : isMatch "+isMatch.toString() + " matchScore : "+matchScore.toString() )
                         if(isMatch){
-                            if(matchScore>55.00){
+                            if(matchScore>45.00){
                                 extractAadhaarDtls(CustomStatic.AadhaarPicRegUrl)
                             }else{
                                 (mContext as DashboardActivity).showSnackMessage("Face Not Match")

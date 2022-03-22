@@ -605,6 +605,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 dialogYesV.setOnClickListener({ view ->
                     simpleDialogV.cancel()
                     CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                    CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                     val stat = StatFs(Environment.getExternalStorageDirectory().path)
                     val bytesAvailable: Long
                     bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -893,6 +894,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 simpleDialogV.show()
             } else {
                 CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                 val stat = StatFs(Environment.getExternalStorageDirectory().path)
                 val bytesAvailable: Long
                 bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -1204,6 +1206,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     dialogYesV.setOnClickListener({ view ->
                         simpleDialogV.cancel()
                         CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                        CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                         val stat = StatFs(Environment.getExternalStorageDirectory().path)
                         val bytesAvailable: Long
                         bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -1286,6 +1289,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     simpleDialogV.show()
                 } else {
                     CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
+                    CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                     val stat = StatFs(Environment.getExternalStorageDirectory().path)
                     val bytesAvailable: Long
                     bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -1394,7 +1398,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     dialogYesV.setOnClickListener({ view ->
                         simpleDialogV.cancel()
                         CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
-
+                        CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                         val stat = StatFs(Environment.getExternalStorageDirectory().path)
                         val bytesAvailable: Long
                         bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -1471,7 +1475,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     simpleDialogV.show()
                 } else {
                     CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
-
+                    CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                     val stat = StatFs(Environment.getExternalStorageDirectory().path)
                     val bytesAvailable: Long
                     bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

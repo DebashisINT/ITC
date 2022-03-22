@@ -411,7 +411,6 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
     }
 
     private fun versionChecking(response: VersionCheckingReponseModel) {
-
         try {
 
             val minVersion = Integer.parseInt(response.min_req_version?.replace(".", "").toString())
@@ -446,6 +445,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
                         override fun onOkClick() {
 
                             /*market://details?id=com.fieldtrackingsystem*/
+
 
                             if (!TextUtils.isEmpty(response.apk_url)) {
                                 val webLaunch = Intent(Intent.ACTION_VIEW, Uri.parse(response.apk_url))

@@ -163,6 +163,8 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                         photo_reg_user_old_reg_tv.visibility=View.VISIBLE
                         photo_reg_user_old_reg_tv.setTextColor(resources.getColor(R.color.color_custom_green))
                         photo_reg_user_old_reg_tv.text= "Registered with\n"+mList?.get(adapterPosition)?.Registered_with!!+"     "
+                    }else{
+                        photo_reg_user_old_reg_tv.visibility=View.GONE
                     }
 
                 }

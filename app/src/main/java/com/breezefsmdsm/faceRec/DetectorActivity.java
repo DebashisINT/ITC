@@ -647,15 +647,16 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
              lowerLi= Float.parseFloat(CustomStatic.FaceDetectionAccuracyLower);
              upperLi= Float.parseFloat(CustomStatic.FaceDetectionAccuracyUpper);
             if(lowerLi==0.00){
-               lowerLi= 0.40f;
+               lowerLi= 0.10f;
             }
             if(upperLi==0.00){
               upperLi=1.0f;
             }
           }
           catch (Exception e){
+            XLog.d("DetectorActivityyy exception : "+e.getMessage().toString());
             e.printStackTrace();
-             lowerLi= 0.40f;
+             lowerLi= 0.10f;
              upperLi=1.0f;
           }
           //println("Face_Value "+lowerLi.toString() + " : "+upperLi.toString());
