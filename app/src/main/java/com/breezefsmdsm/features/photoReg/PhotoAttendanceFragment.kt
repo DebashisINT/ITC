@@ -25,9 +25,13 @@ import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.SearchListener
-import com.breezefsmdsm.app.domain.*
+import com.breezefsmdsm.app.domain.AddShopDBModelEntity
+import com.breezefsmdsm.app.domain.AssignToDDEntity
+import com.breezefsmdsm.app.domain.ProspectEntity
 import com.breezefsmdsm.app.types.FragType
-import com.breezefsmdsm.app.utils.*
+import com.breezefsmdsm.app.utils.AppUtils
+import com.breezefsmdsm.app.utils.FTStorageUtils
+import com.breezefsmdsm.app.utils.PermissionUtils
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
@@ -48,7 +52,10 @@ import com.breezefsmdsm.features.dashboard.presentation.model.DaystartDayendRequ
 import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
 import com.breezefsmdsm.features.logout.presentation.api.LogoutRepositoryProvider
-import com.breezefsmdsm.features.photoReg.adapter.*
+import com.breezefsmdsm.features.photoReg.adapter.AdapterUserListAttenD
+import com.breezefsmdsm.features.photoReg.adapter.PhotoAttendanceListner
+import com.breezefsmdsm.features.photoReg.adapter.ProsListSelectionAdapter
+import com.breezefsmdsm.features.photoReg.adapter.ProsListSelectionListner
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.ProsCustom
@@ -64,13 +71,14 @@ import com.google.mlkit.vision.face.FaceDetector
 import com.google.mlkit.vision.face.FaceDetectorOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_photo_registration.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.IOException
 import java.io.InputStream
+import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
+
 
 class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
@@ -342,6 +350,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 faceDetector=null
                 faceDetectorSetUp()
 
+                //GetImageFromUrl().execute(obj.face_image_link!!)
+                //GetImageFromUrl().execute("http://fts.indusnettechnologies.com:7007/CommonFolder/FaceImageDetection/EMD0000447.jpg")
+                //return
+
                 Handler(Looper.getMainLooper()).postDelayed(Runnable {
                     CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
                     CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
@@ -420,7 +432,14 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             val attendanceList = result as AttendanceResponse
                             if (attendanceList.status == "205"){
                                 progress_wheel.stopSpinning()
+                                try{
+                                    CustomStatic.FaceUrl=obj_temp.face_image_link
+                                }catch (ex:Exception){
+
+                                }
                                 getLocforDD()
+
+                                //GetImageFromUrl().execute(obj_temp.face_image_link!!)
                             }else if(attendanceList.status == NetworkConstant.SUCCESS){
                                 progress_wheel.stopSpinning()
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.team_attendance_submited))
@@ -622,9 +641,25 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         override fun onPostExecute(result: Bitmap?) {
             super.onPostExecute(result)
             println("reg_face - registerFace called"+AppUtils.getCurrentDateTime());
-            registerFace(result)
+            registerFace(getResizedBitmap(result!!,240,240))
+            //registerFace(result)
         }
+    }
 
+    fun getResizedBitmap(bm: Bitmap, newHeight: Int, newWidth: Int): Bitmap? {
+        val width = bm.width
+        val height = bm.height
+        val scaleWidth = newWidth.toFloat() / width
+        val scaleHeight = newHeight.toFloat() / height
+
+        // create a matrix for the manipulation
+        val matrix = Matrix()
+
+        // resize the bit map
+        matrix.postScale(scaleWidth, scaleHeight)
+
+        // recreate the new Bitmap
+        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false)
     }
 
     fun faceDetectorSetUp(){

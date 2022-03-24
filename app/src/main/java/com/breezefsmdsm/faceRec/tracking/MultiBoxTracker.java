@@ -26,6 +26,7 @@ import android.graphics.Paint.Join;
 import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 
@@ -183,7 +184,7 @@ public class MultiBoxTracker {
           "Result! Frame: " + result.getLocation() + " mapped to screen:" + detectionScreenRect);
 
       screenRects.add(new Pair<Float, RectF>(result.getDistance(), detectionScreenRect));
-
+      Log.e("add_value",String.valueOf(result.getDistance()));
       if (detectionFrameRect.width() < MIN_SIZE || detectionFrameRect.height() < MIN_SIZE) {
         logger.w("Degenerate rectangle! " + detectionFrameRect);
         continue;

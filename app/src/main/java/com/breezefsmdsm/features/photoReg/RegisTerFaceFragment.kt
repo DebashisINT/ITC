@@ -18,7 +18,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
 import com.breezefsmdsm.CustomStatic
+import com.breezefsmdsm.MySingleton
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
@@ -54,6 +60,8 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_register_face.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -142,7 +150,6 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         registerTV_voter = view.findViewById(R.id.btn_frag_reg_face_register_voter)
         registerTV_pan = view.findViewById(R.id.btn_frag_reg_face_register_pan)
         photoRegCameraIcon = view.findViewById(R.id.iv_frag_photo_reg_face_camera_icon)
-
         tv_register = view.findViewById(R.id.tv_frag_register_face_register)
         ll_docRoot = view.findViewById(R.id.ll_frag_register_face_doc_root)
 
@@ -183,8 +190,11 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         //startActivity(Intent(mContext, CustomCameraActivity::class.java))
 
         launchCamera()
+
+
         //(mContext as DashboardActivity).loadFragment(FragType.PhotoRegAadhaarFragment,true,valueData)
     }
+
 
     fun showPictureDialog() {
         val pictureDialog = AlertDialog.Builder(mContext)

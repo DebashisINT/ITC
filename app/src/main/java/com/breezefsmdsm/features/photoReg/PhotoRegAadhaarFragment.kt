@@ -181,9 +181,6 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                     }
 
-
-
-
                     /*if(imagePath.length>0 && imagePath!="") {
                         if (AppUtils.isOnline(mContext)) {
                             tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_green))
@@ -253,6 +250,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                                     if(CustomStatic.FacePicRegUrl!="" && CustomStatic.AadhaarPicRegUrl!=""){
                                         XLog.d("PhotoRegAadhaarFragment face url: "+CustomStatic.FacePicRegUrl+" aadhaar url : "+CustomStatic.AadhaarPicRegUrl+AppUtils.getCurrentDateTime().toString())
                                         faceAadhaarCompareParam(CustomStatic.FacePicRegUrl,CustomStatic.AadhaarPicRegUrl)
+                                        //extractAadhaarDtls(CustomStatic.AadhaarPicRegUrl)
                                     }else{
                                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                                         deletePicApi(user_id!!,"Something went wrong. Please try again later")
@@ -296,8 +294,9 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
     }
 
     fun faceAadhaarCompare(notification: JSONObject) {
-        progress_wheel.spin()
-        val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest("https://eve.idfy.com/v3/tasks/sync/compare/face", notification,
+        try{
+            progress_wheel.spin()
+            val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest("https://eve.idfy.com/v3/tasks/sync/compare/face", notification,
                 object : Response.Listener<JSONObject?> {
                     override fun onResponse(response: JSONObject?) {
                         var jObj:JSONObject= JSONObject()
@@ -332,22 +331,23 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         deletePicApi(user_id!!,"Please provide valid ID card photo to register. Thanks.")
                     }
                 }) {
-            @Throws(AuthFailureError::class)
-            override fun getHeaders(): Map<String, String> {
-                val params: MutableMap<String, String> = HashMap()
-                //params["api-key"] = "dfe0a602-7e79-4a5b-af00-509fc0e8349a" //test
-                params["api-key"] = "cebc560a-855d-429e-a050-8882b9debf60"
-                params["Content-Type"] = "application/json"
-                //params["account-id"] = "aaa73f1c1bdb/fa4cf738-2dda-41db-b0e5-0b406ebe6d2f"  //test
-                params["account-id"] = "1a3ae2d3a141/68665e20-bc63-4bb8-b725-f126521f3264"
-                return params
+                @Throws(AuthFailureError::class)
+                override fun getHeaders(): Map<String, String> {
+                    val params: MutableMap<String, String> = HashMap()
+                    //params["api-key"] = "dfe0a602-7e79-4a5b-af00-509fc0e8349a" //test
+                    params["api-key"] = "cebc560a-855d-429e-a050-8882b9debf60"
+                    params["Content-Type"] = "application/json"
+                    //params["account-id"] = "aaa73f1c1bdb/fa4cf738-2dda-41db-b0e5-0b406ebe6d2f"  //test
+                    params["account-id"] = "1a3ae2d3a141/68665e20-bc63-4bb8-b725-f126521f3264"
+                    return params
+                }
             }
-        }
-        jsonObjectRequest.setRetryPolicy(DefaultRetryPolicy(
+            jsonObjectRequest.setRetryPolicy(DefaultRetryPolicy(
                 12000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-        MySingleton.getInstance(mContext.applicationContext)!!.addToRequestQueue(jsonObjectRequest)
+            MySingleton.getInstance(mContext.applicationContext)!!.addToRequestQueue(jsonObjectRequest)
+        }catch (ex:Exception){ex.printStackTrace()}
 
     }
 
@@ -376,19 +376,43 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                     object : Response.Listener<JSONObject?> {
                         override fun onResponse(response: JSONObject?) {
                             progress_wheel.stopSpinning()
+
                             var jObj:JSONObject= JSONObject()
                             jObj=response!!.getJSONObject("result")
-                            var tt=jObj.getJSONObject("extraction_output")
-                            var dob_aadhaar=tt.getString("date_of_birth")
-                            var year_dob_aadhaar=tt.getString("year_of_birth")
-                            var name_aadhaar=tt.getString("name_on_card")
-                            var aadhaar_no_aadhaar=tt.getString("id_number")
-                            if(tt.getString("date_of_birth").equals("null")){
-                                dob_aadhaar=year_dob_aadhaar+"-02-28"
+
+                                var tt=jObj.getJSONObject("extraction_output")
+                                var dob_aadhaar=tt.getString("date_of_birth")
+
+                                var year_dob_aadhaar=""
+                                if(!CustomStatic.IsPanForPhotoReg) {
+                                    year_dob_aadhaar = tt.getString("year_of_birth")
+                                }
+
+                                var name_aadhaar=tt.getString("name_on_card")
+                                var aadhaar_no_aadhaar=tt.getString("id_number")
+
+                            try{
+                                //if(tt.getString("date_of_birth").equals("null")){
+                                if(dob_aadhaar.equals("null") || tt.getString("date_of_birth").equals("null")){
+                                    if(year_dob_aadhaar.length>0){
+                                        dob_aadhaar=year_dob_aadhaar+"-02-28"
+                                    }else{
+                                        dob_aadhaar="1990-02-28"
+                                    }
+                                }
+                            }catch (ex:Exception){
+                                dob_aadhaar="1990-02-28"
+                            }
+
+                            if(name_aadhaar.equals("null")){
+                                name_aadhaar="Unknown"
                             }
 
                             XLog.d("PhotoRegAadhaarFragment : idfy response : user_id:"+ user_id+" name:"+name_aadhaar+" aarhaarDOB:"+dob_aadhaar+" aadhaar_no:"+aadhaar_no_aadhaar)
-                            submitCheckAadhaarData(name_aadhaar,dob_aadhaar,aadhaar_no_aadhaar)
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                submitCheckAadhaarData(name_aadhaar,dob_aadhaar,aadhaar_no_aadhaar)
+                            }, 1500)
+
                         }
                     },
                     object : Response.ErrorListener {
@@ -429,6 +453,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
     }
 
     private fun submitCheckAadhaarData(aadhaar_name:String,aarhaarDOB:String,aadhaar_no:String){
+
         XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData : user_id:"+ user_id+" name:"+aadhaar_name+" aarhaarDOB:"+aarhaarDOB+" aadhaar_no:"+aadhaar_no)
         progress_wheel.spin()
         var aadhaarSubmitData: AadhaarSubmitDataNew = AadhaarSubmitDataNew()
@@ -466,6 +491,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
 
                             }, { error ->
                                 error.printStackTrace()
+                                progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                                 XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData error: "+error.message)
                                 //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
@@ -474,6 +500,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
             )
         }catch (ex:Exception){
             ex.printStackTrace()
+            progress_wheel.stopSpinning()
             XLog.d("submitCheckAadhaarData ex : erro : "+ex.message)
             deletePicApi(user_id!!,"Something went wrong. Please try again later.")
         }

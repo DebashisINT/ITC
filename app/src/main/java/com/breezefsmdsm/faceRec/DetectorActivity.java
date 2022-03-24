@@ -16,6 +16,7 @@
 
 package com.breezefsmdsm.faceRec;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -150,6 +151,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
   //private HashMap<String, Classifier.Recognition> knownFaces = new HashMap<>();
 
+  @SuppressLint("RestrictedApi")
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -170,7 +172,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                     //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
                     //.setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
                     .setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
-                    .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+                    .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
                     //.setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
                     .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
                     .build();
@@ -541,8 +543,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
     for (Face face : faces) {
 
-      Float f=face.getLeftEyeOpenProbability();
-      Float ff=face.getRightEyeOpenProbability();
+      //Float f=face.getLeftEyeOpenProbability();
+      //Float ff=face.getRightEyeOpenProbability();
       //Float fff=face.getSmilingProbability();
       //List l=face.getAllLandmarks();
       //Toast.makeText(this,String.valueOf(f)+"-"+String.valueOf(ff)+"-"+String.valueOf(fff),Toast.LENGTH_SHORT).show();
@@ -571,11 +573,11 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
       //Toast.makeText(this,String.valueOf(leftEar.getPosition())+" :: "+String.valueOf(rightEar.getPosition())+" :: "+String.valueOf(ad.getPosition()),Toast.LENGTH_SHORT).show();
       //Toast.makeText(this,String.valueOf(rotx)+" :: "+String.valueOf(rotY)+" :: "+String.valueOf(rotZ),Toast.LENGTH_SHORT).show();
 
-      if(f<0.7 || ff<0.7 ){
+      /*if(f<0.7 || ff<0.7 ){
         isTrueFace=true;
       }else{
         isTrueFace=false;
-      }
+      }*/
 
       isTrueFace=true;
 
@@ -675,6 +677,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                if(isTrueFace){
                 //Toast.makeText(this,"Real Face", Toast.LENGTH_SHORT).show();
                 CustomStatic.IsFaceRec=true;
+
+
+                 XLog.d("DetectorActivity green: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("valueD",true);
