@@ -66,6 +66,12 @@ interface GetUserListPhotoRegApi {
     fun submitAadhaarDetailsNewSingle(@Body aadhaarSubmitData: AadhaarSubmitDataNew): Observable<BaseResponse>
 
     @FormUrlEncoded
+    @POST("AadharImageDetectionInfo/UserAadharInfoSave")
+    fun submitAadhaarDetailsNewSingleWithDtls(@Field("user_id") user_id: String,
+                                              @Field("name_on_aadhaar") name_on_aadhaar: String,@Field("DOB_on_aadhaar") DOB_on_aadhaar: String,
+                                              @Field("Aadhaar_number") Aadhaar_number: String,@Field("REG_DOC_TYP") REG_DOC_TYP: String): Observable<BaseResponse>
+
+    @FormUrlEncoded
     @POST("PhoneNo/InsertPhoneNo")
     fun addEmpPhoneApi(@Field("user_id") user_id: String,@Field("session_token") session_token: String,@Field("user_contactid") user_contactid: String,
             @Field("phone_no") phone_no: String):

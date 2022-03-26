@@ -111,6 +111,10 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
 
 
         launchCamera()
+
+        //CustomStatic.IsAadhaarForPhotoReg=true
+        //submitCheckAadhaarData("MD Shahadat aarhaar","1974-05-03","247141377595")
+        //submitCheckAadhaarData("MD Shahadat aarhaar","null-02-28","247141377595")
     }
 
     fun launchCamera() {
@@ -377,42 +381,45 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         override fun onResponse(response: JSONObject?) {
                             progress_wheel.stopSpinning()
 
-                            var jObj:JSONObject= JSONObject()
-                            jObj=response!!.getJSONObject("result")
-
+                            try{
+                                var jObj:JSONObject= JSONObject()
+                                jObj=response!!.getJSONObject("result")
                                 var tt=jObj.getJSONObject("extraction_output")
                                 var dob_aadhaar=tt.getString("date_of_birth")
-
                                 var year_dob_aadhaar=""
                                 if(!CustomStatic.IsPanForPhotoReg) {
                                     year_dob_aadhaar = tt.getString("year_of_birth")
                                 }
-
                                 var name_aadhaar=tt.getString("name_on_card")
                                 var aadhaar_no_aadhaar=tt.getString("id_number")
-
-                            try{
-                                //if(tt.getString("date_of_birth").equals("null")){
-                                if(dob_aadhaar.equals("null") || tt.getString("date_of_birth").equals("null")){
-                                    if(year_dob_aadhaar.length>0){
-                                        dob_aadhaar=year_dob_aadhaar+"-02-28"
-                                    }else{
-                                        dob_aadhaar="1990-02-28"
+                                try{
+                                    //if(tt.getString("date_of_birth").equals("null")){
+                                    if(dob_aadhaar.equals("null") || tt.getString("date_of_birth").equals("null")){
+                                        if(year_dob_aadhaar.length>0 && !year_dob_aadhaar.equals("null")){
+                                            dob_aadhaar=year_dob_aadhaar+"-02-28"
+                                        }else{
+                                            dob_aadhaar="1990-02-28"
+                                        }
                                     }
+                                }catch (ex:Exception){
+                                    dob_aadhaar="1990-02-28"
                                 }
+
+                                if(name_aadhaar.equals("null")){
+                                    name_aadhaar="Unknown"
+                                }
+                                if(dob_aadhaar.contains("null")){
+                                    dob_aadhaar="1990-02-28"
+                                }
+
+                                XLog.d("PhotoRegAadhaarFragment : idfy response : user_id:"+ user_id+" name:"+name_aadhaar+" aarhaarDOB:"+dob_aadhaar+" aadhaar_no:"+aadhaar_no_aadhaar)
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    submitCheckAadhaarData(name_aadhaar,dob_aadhaar,aadhaar_no_aadhaar)
+                                }, 1000)
+
                             }catch (ex:Exception){
-                                dob_aadhaar="1990-02-28"
+                                submitCheckAadhaarData("Unknown","1990-02-28","null")
                             }
-
-                            if(name_aadhaar.equals("null")){
-                                name_aadhaar="Unknown"
-                            }
-
-                            XLog.d("PhotoRegAadhaarFragment : idfy response : user_id:"+ user_id+" name:"+name_aadhaar+" aarhaarDOB:"+dob_aadhaar+" aadhaar_no:"+aadhaar_no_aadhaar)
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                submitCheckAadhaarData(name_aadhaar,dob_aadhaar,aadhaar_no_aadhaar)
-                            }, 1500)
-
                         }
                     },
                     object : Response.ErrorListener {
@@ -454,7 +461,7 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
 
     private fun submitCheckAadhaarData(aadhaar_name:String,aarhaarDOB:String,aadhaar_no:String){
 
-        XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData : user_id:"+ user_id+" name:"+aadhaar_name+" aarhaarDOB:"+aarhaarDOB+" aadhaar_no:"+aadhaar_no)
+        XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData : user_id:"+ user_id+" name:"+aadhaar_name+" aarhaarDOB:"+aarhaarDOB+" aadhaar_no:"+aadhaar_no+" DocType ${CustomStatic.IsAadhaarForPhotoReg}")
         progress_wheel.spin()
         var aadhaarSubmitData: AadhaarSubmitDataNew = AadhaarSubmitDataNew()
         aadhaarSubmitData.user_id= user_id!!
@@ -463,6 +470,8 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
         aadhaarSubmitData.DOB_on_aadhaar= aarhaarDOB!!
         aadhaarSubmitData.Aadhaar_number= aadhaar_no!!
 
+        aadhaarSubmitData.REG_DOC_TYP = "Aadhaar"
+
         if(CustomStatic.IsAadhaarForPhotoReg)
             aadhaarSubmitData.REG_DOC_TYP="Aadhaar"
         else if(CustomStatic.IsVoterForPhotoReg)
@@ -470,41 +479,50 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
         else if(CustomStatic.IsPanForPhotoReg)
             aadhaarSubmitData.REG_DOC_TYP="PAN"
 
+        var responseOuter=""
+
         try{
             val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
             BaseActivity.compositeDisposable.add(
-                    repository.sendUserAadhaarInfoNewApi(aadhaarSubmitData)
+                    //repository.sendUserAadhaarInfoNewApi(aadhaarSubmitData)
+                    repository.sendUserAadhaarInfoNewApi(aadhaarSubmitData.user_id,aadhaarSubmitData.name_on_aadhaar, aadhaarSubmitData.DOB_on_aadhaar,
+                        aadhaarSubmitData.Aadhaar_number,aadhaarSubmitData.REG_DOC_TYP)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                val response = result as BaseResponse
+
                                 progress_wheel.stopSpinning()
+
+                                val response = result as BaseResponse
+                                responseOuter=response!!.status!!
                                 XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData response: "+response.status)
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     dialogSuccess()
-                                    //(mContext as DashboardActivity).showSnackMessage("Registration Success.")
-                                } else {
-                                    //(mContext as DashboardActivity).showSnackMessage("Duplicate Aadhaar Number.Please enter Unique for Current Person.Thanks.")
-                                    //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                                }
+                                else {
                                     deletePicApi(user_id!!,"ID already registered with same name & DOB. Please use unique ID card for this registration. Thanks.")
                                 }
 
                             }, { error ->
                                 error.printStackTrace()
                                 progress_wheel.stopSpinning()
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                                XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData error: "+error.message)
-                                //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
-                                deletePicApi(user_id!!,"Something went wrong. Please try again later.")
+
+                                if(!responseOuter.equals("200")){
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                    XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData errorr : "+error.message.toString() + " "+error.localizedMessage.toString() + " "+ error.cause.toString())
+                                    //deletePicApi(user_id!!,"Duplicate ID Number. Please enter Unique ID number for current person. Thanks.")
+                                    deletePicApi(user_id!!,"Please try again. Error info (${error.message})")
+                                }
+                                XLog.d("PhotoRegAadhaarFragment : submitCheckAadhaarData errorr : "+error.message.toString() + " "+error.localizedMessage.toString() + " "+ error.cause.toString())
+
                             })
             )
         }catch (ex:Exception){
             ex.printStackTrace()
             progress_wheel.stopSpinning()
             XLog.d("submitCheckAadhaarData ex : erro : "+ex.message)
-            deletePicApi(user_id!!,"Something went wrong. Please try again later.")
+            deletePicApi(user_id!!,"Please try again. Error info (${ex.message})")
         }
-
 
     }
 

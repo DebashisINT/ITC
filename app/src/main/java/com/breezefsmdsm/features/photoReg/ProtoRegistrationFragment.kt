@@ -231,7 +231,8 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
                                 }
 //
-                            } else {
+                            }
+                            else {
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_date_found))
                             }
                         }, { error ->
@@ -240,7 +241,6 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 //                            (mContext as DashboardActivity).showSnackMessage("ERROR")
                         })
         )
-
     }
 
     private fun callAllUserAadhaarDetailsApi() {

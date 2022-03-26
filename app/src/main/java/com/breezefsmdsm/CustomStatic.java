@@ -1,5 +1,7 @@
 package com.breezefsmdsm;
 
+import com.breezefsmdsm.faceRec.tflite.SimilarityClassifier;
+
 public class CustomStatic {
     public static Boolean IsFaceRec=false;
     public static String FaceUrl="";
@@ -27,5 +29,8 @@ public class CustomStatic {
     public static Boolean IsAadhaarForPhotoReg=false;
     public static Boolean IsVoterForPhotoReg=false;
     public static Boolean IsPanForPhotoReg=false;
+
+
+    public static SimilarityClassifier.Recognition cus_recognition;
 
 }

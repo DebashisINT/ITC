@@ -351,7 +351,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 faceDetectorSetUp()
 
                 //GetImageFromUrl().execute(obj.face_image_link!!)
-                //GetImageFromUrl().execute("http://fts.indusnettechnologies.com:7007/CommonFolder/FaceImageDetection/EMD0000447.jpg")
+                //GetImageFromUrl().execute("http://fts.indusnettechnologies.com:7007/CommonFolder/FaceImageDetection/EMA0003358.jpg")
+                //GetImageFromUrl().execute("http://3.7.30.86:82/CommonFolder/FaceImageDetection/EMK0000014.jpg")
                 //return
 
                 Handler(Looper.getMainLooper()).postDelayed(Runnable {
@@ -846,8 +847,14 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         Log.e("xc", "startabc" )
         val rec = mappedRecognitions[0]
         FaceStartActivity.detector.register("", rec)
-        val intent = Intent(mContext, DetectorActivity::class.java)
-        startActivityForResult(intent, 172)
+
+        CustomStatic.cus_recognition=rec
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(mContext, DetectorActivity::class.java)
+            startActivityForResult(intent, 172)
+        }, 1000)
+
+
 //        startActivity(new Intent(this,DetectorActivity.class));
 //        finish();
 

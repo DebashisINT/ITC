@@ -184,8 +184,11 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
 
     //checkWritePermission();
-
-
+    try{
+      register(CustomStatic.cus_recognition);
+    }catch (Exception ex){
+      ex.printStackTrace();
+    }
 
   }
 
@@ -470,6 +473,13 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
   }
 
+
+  public void register(SimilarityClassifier.Recognition rec){
+    detector=FaceStartActivity.detector;
+    detector.register("", rec);
+  }
+
+
   private void updateResults(long currTimestamp, final List<SimilarityClassifier.Recognition> mappedRecognitions) {
 
     tracker.trackResults(mappedRecognitions, currTimestamp);
@@ -664,7 +674,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
           //println("Face_Value "+lowerLi.toString() + " : "+upperLi.toString());
           //Log.v("Face_Value",lowerLi.toString() + " : "+upperLi.toString());
           XLog.d("DetectorActivity lowerLi: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
-          if (conf>lowerLi && conf < 0.99f) {
+          if (conf>lowerLi && conf < 1.0f) {
           //if (conf>lowerLi && conf < upperLi) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
             confidence = conf;
@@ -679,7 +689,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                 CustomStatic.IsFaceRec=true;
 
 
-                 XLog.d("DetectorActivity green: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
+                XLog.d("DetectorActivity green: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("valueD",true);

@@ -71,6 +71,9 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
     fun sendUserAadhaarInfoNewApi(aadhaarSubmitData:AadhaarSubmitDataNew): Observable<BaseResponse> {
         return apiService.submitAadhaarDetailsNewSingle(aadhaarSubmitData)
     }
+    fun sendUserAadhaarInfoNewApi(user_id:String ,name_on_aadhaar:String,DOB_on_aadhaar:String,Aadhaar_number:String,REG_DOC_TYP:String): Observable<BaseResponse> {
+        return apiService.submitAadhaarDetailsNewSingleWithDtls(user_id,name_on_aadhaar,DOB_on_aadhaar,Aadhaar_number,REG_DOC_TYP)
+    }
 
     fun updateUserName(obj:UpdateUserNameModel): Observable<UpdateUserNameResponse> {
         return apiService.updateUserNameApi(obj)

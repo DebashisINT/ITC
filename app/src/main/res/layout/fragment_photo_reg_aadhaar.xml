@@ -107,9 +107,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="@color/color_custom_green"
+            android:padding="@dimen/_10sdp"
             android:text="@string/login_logout_reg_msg"
-            android:textColor="@color/white"
-            android:padding="@dimen/_10sdp" />
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 
