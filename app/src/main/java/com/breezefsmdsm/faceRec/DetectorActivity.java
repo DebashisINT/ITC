@@ -555,6 +555,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
       //Float f=face.getLeftEyeOpenProbability();
       //Float ff=face.getRightEyeOpenProbability();
+
       //Float fff=face.getSmilingProbability();
       //List l=face.getAllLandmarks();
       //Toast.makeText(this,String.valueOf(f)+"-"+String.valueOf(ff)+"-"+String.valueOf(fff),Toast.LENGTH_SHORT).show();
