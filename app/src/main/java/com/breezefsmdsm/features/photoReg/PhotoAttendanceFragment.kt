@@ -848,7 +848,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val rec = mappedRecognitions[0]
         FaceStartActivity.detector.register("", rec)
 
-        CustomStatic.cus_recognition=rec
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(mContext, DetectorActivity::class.java)
             startActivityForResult(intent, 172)

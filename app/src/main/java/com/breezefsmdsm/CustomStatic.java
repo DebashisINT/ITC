@@ -31,6 +31,4 @@ public class CustomStatic {
     public static Boolean IsPanForPhotoReg=false;
 
 
-    public static SimilarityClassifier.Recognition cus_recognition;
-
 }

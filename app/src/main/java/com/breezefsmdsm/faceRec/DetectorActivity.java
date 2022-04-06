@@ -184,11 +184,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
 
     //checkWritePermission();
-    try{
-      register(CustomStatic.cus_recognition);
-    }catch (Exception ex){
-      ex.printStackTrace();
-    }
 
   }
 
@@ -471,12 +466,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     builder.setView(dialogLayout);
     builder.show();
 
-  }
-
-
-  public void register(SimilarityClassifier.Recognition rec){
-    detector=FaceStartActivity.detector;
-    detector.register("", rec);
   }
 
 
