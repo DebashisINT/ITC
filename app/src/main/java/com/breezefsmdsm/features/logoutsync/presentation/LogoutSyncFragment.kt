@@ -5414,6 +5414,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     .subscribe({ result ->
                         progress_wheel.stopSpinning()
                         var response = result as GetConcurrentUserResponse
+                        XLog.d("deleteConcurrentUserDtls : " + "response : " + response.status + "Time : " + AppUtils.getCurrentDateTime())
                         if (response.status == NetworkConstant.SUCCESS) {
 //                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                             callLogshareApi()
@@ -5425,7 +5426,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     }, { error ->
                         progress_wheel.stopSpinning()
                         error.printStackTrace()
-                        XLog.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        XLog.d("deleteConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
 //                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                         callLogshareApi()
 
@@ -5434,7 +5435,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         }catch (ex:Exception){
             progress_wheel.stopSpinning()
             ex.printStackTrace()
-            XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            XLog.d("deleteConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
 //            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             callLogshareApi()
 
@@ -5445,7 +5446,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     private fun callLogshareApi(){
         val addReqData = AddLogReqData()
         addReqData.user_id = Pref.user_id
-        val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xdemologsample/log").path);
+        val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
         val file = File(fileUrl.path)
         if (!file.exists()) {
             return
