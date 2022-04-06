@@ -52,6 +52,8 @@ import com.breezefsmdsm.features.location.api.LocationRepoProvider
 import com.breezefsmdsm.features.location.model.*
 import com.breezefsmdsm.features.location.shopRevisitStatus.ShopRevisitStatusRepositoryProvider
 import com.breezefsmdsm.features.location.shopdurationapi.ShopDurationRepositoryProvider
+import com.breezefsmdsm.features.login.api.LoginRepositoryProvider
+import com.breezefsmdsm.features.login.model.GetConcurrentUserResponse
 import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.logout.presentation.api.LogoutRepositoryProvider
 import com.breezefsmdsm.features.nearbyshops.api.updateaddress.ShopAddressUpdateRepoProvider
@@ -86,6 +88,7 @@ import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.util.*
@@ -5393,7 +5396,40 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         )
     }
     //===========================================================ADD ACTIVITY========================================================
+    private fun deleteConcurrentUserDtls(){
+        try{
+            progress_wheel.spin()
+            val repository = LoginRepositoryProvider.provideLoginRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.deleteConcurrentUserDtls(Pref.user_login_ID)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        progress_wheel.stopSpinning()
+                        var response = result as GetConcurrentUserResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                        }
+                        else {
+                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        error.printStackTrace()
+                        XLog.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
 
+                    })
+            )
+        }catch (ex:Exception){
+            progress_wheel.stopSpinning()
+            ex.printStackTrace()
+            XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+
+        }
+
+    }
 
 
     //===============================================Logout===========================================================================//
@@ -6156,7 +6192,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private fun callAppInfoApi() {
         if (!Pref.isAppInfoEnable) {
-            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            deleteConcurrentUserDtls()
             return
         }
 
@@ -6164,7 +6201,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         if (unSyncData == null || unSyncData.isEmpty()) {
             XLog.e("=======Appinfo list is empty (Logout Sync)=========")
-            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            deleteConcurrentUserDtls()
             return
         }
 
@@ -6209,13 +6247,15 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                                     uiThread {
                                         progress_wheel.stopSpinning()
-                                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                        //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                        deleteConcurrentUserDtls()
                                     }
                                 }
                             }
                             else {
                                 progress_wheel.stopSpinning()
-                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                deleteConcurrentUserDtls()
                             }
 
                         }, { error ->
@@ -6223,7 +6263,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             XLog.d("App Info : ERROR : " + error.localizedMessage)
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            deleteConcurrentUserDtls()
                         })
         )
     }

@@ -5,6 +5,7 @@ import android.net.Uri
 import com.breezefsmdsm.app.FileUtils
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.base.BaseResponse
+import com.breezefsmdsm.features.login.model.GetConcurrentUserResponse
 import com.breezefsmdsm.features.login.model.LoginImageInput
 import com.breezefsmdsm.features.login.model.LoginResponse
 import com.breezefsmdsm.features.login.model.NewSettingsResponseModel
@@ -25,6 +26,19 @@ class LoginRepository(val apiService: LoginApi) {
               device_token: String): Observable<LoginResponse> {
         return apiService.getLoginResponse(username, password, latitude, longitude, login_time, imei, version, location, device_token)
     }
+
+    fun getConcurrentUserDtls(username: String): Observable<GetConcurrentUserResponse> {
+        return apiService.getConcurrentUserDtlsApi(username)
+    }
+
+    fun insertConcurrentUserDtls(username: String,imei:String,dateTime:String): Observable<BaseResponse> {
+        return apiService.insertConcurrentUserDtlsApi(username,imei,dateTime)
+    }
+
+    fun deleteConcurrentUserDtls(username: String): Observable<BaseResponse> {
+        return apiService.deleteConcurrentUserDtlsApi(username)
+    }
+
 
     fun getMeetingList(): Observable<MeetingListResponseModel> {
         return apiService.getMeetingList(Pref.session_token!!, Pref.user_id!!)

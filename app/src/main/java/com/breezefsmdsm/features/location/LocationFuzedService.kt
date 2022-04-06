@@ -883,7 +883,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         }
 
         var distance = LocationWizard.getDistance(lastLat, lastLng, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
-        distance=0.5
+        distance=0.7
         XLog.e("====================checkAutoRevisit====================")
         if (distance * 1000 > Pref.autoRevisitDistance.toDouble()) {
             val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all

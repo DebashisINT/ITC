@@ -79,6 +79,7 @@ import com.breezefsmdsm.features.login.api.alarmconfigapi.AlarmConfigRepoProvide
 import com.breezefsmdsm.features.login.api.global_config.ConfigFetchRepoProvider
 import com.breezefsmdsm.features.login.api.productlistapi.ProductListRepoProvider
 import com.breezefsmdsm.features.login.api.user_config.UserConfigRepoProvider
+import com.breezefsmdsm.features.login.model.GetConcurrentUserResponse
 import com.breezefsmdsm.features.login.model.LoginResponse
 import com.breezefsmdsm.features.login.model.NewSettingsResponseModel
 import com.breezefsmdsm.features.login.model.UserDetail
@@ -3808,7 +3809,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             if (mLocation.contains("http"))
                 mLocation = "Unknown"
 
-            doLogin(username, password, mLocation)
+            //doLogin(username, password, mLocation)
+            getConcurrentUserDtls(username, password, mLocation)
         } else if (Pref.latitude == "0.0" && Pref.longitude == "0.0") {
             progress_wheel.spin()
             SingleShotLocationProvider.requestSingleUpdate(this,
@@ -3832,10 +3834,52 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             if (mLocation.contains("http"))
                                 mLocation = "Unknown"
                             println("xyz - callNewSettingsApi end" + AppUtils.getCurrentDateTime());
-                            doLogin(username, password, mLocation)
+                            //doLogin(username, password, mLocation)
+                            getConcurrentUserDtls(username, password, mLocation)
                         }
                     })
         }
+    }
+
+    private fun getConcurrentUserDtls(username: String, password: String, location: String){
+        try{
+            Pref.user_login_ID=username.toString()
+            progress_wheel.spin()
+            val repository = LoginRepositoryProvider.provideLoginRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.getConcurrentUserDtls(username)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        progress_wheel.stopSpinning()
+                        var response = result as GetConcurrentUserResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            if(Pref.imei == response.imei){
+                                doLogin(username, password, location)
+                            }else{
+                                login_TV.isEnabled = true
+                                openDialogPopup("You are logged In from another Device. Please Logout Out from there and then try to Login.")
+                            }
+                        }
+                        else {
+                            doLogin(username, password, location)
+                        }
+                    }, { error ->
+                        login_TV.isEnabled = true
+                        progress_wheel.stopSpinning()
+                        error.printStackTrace()
+                        XLog.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        doLogin(username, password, location)
+                    })
+            )
+        }catch (ex:Exception){
+            login_TV.isEnabled = true
+            progress_wheel.stopSpinning()
+            ex.printStackTrace()
+            XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            doLogin(username, password, location)
+        }
+
     }
 
 
@@ -3972,7 +4016,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                 if(loginResponse.message!!.contains("IMEI",ignoreCase = true))
                                 {
-                                    openDialogPopup("Current Login ID has already been used from another mobile device. You are not allowed to " +
+                                    var realName=""
+                                    try{
+                                        realName= Pref.user_name!!.replace("null","")
+                                    }catch (ex:Exception){
+                                        realName=""
+                                    }
+
+                                    openDialogPopupIMEI("Hi! $realName ($username)","Current Login ID has already been used from another mobile device. You are not allowed to " +
                                             "login from your current device due to IMEI BLOCKED! Please talk to Admin.")
                                 }else{
                                     openDialogPopup(loginResponse.message!!)
@@ -6178,7 +6229,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun deleteImei(){
         if(Pref.IsIMEICheck){
             XLog.d("deleteImei IsIMEICheck : " + Pref.IsIMEICheck.toString() + "Time : " + AppUtils.getCurrentDateTime())
-            gotoHomeActivity()
+            //gotoHomeActivity()
+            deleteConcurrentUserDtls()
         }else{
                    try {
                 val repository = ShopListRepositoryProvider.provideShopListRepository()
@@ -6190,22 +6242,89 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     val response = result as BaseResponse
                                     XLog.d("deleteImei " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                                     if (response.status == NetworkConstant.SUCCESS) {
-                                        gotoHomeActivity()
+                                        //gotoHomeActivity()
+                                        deleteConcurrentUserDtls()
                                     } else {
-                                        gotoHomeActivity()
+                                        //gotoHomeActivity()
+                                        deleteConcurrentUserDtls()
                                     }
                                 }, { error ->
                                     progress_wheel.stopSpinning()
-                                    gotoHomeActivity()
+                                    //gotoHomeActivity()
+                                    deleteConcurrentUserDtls()
                                 })
                 )
         } catch (ex: Exception) {
             ex.printStackTrace()
+            //gotoHomeActivity()
+         deleteConcurrentUserDtls()
+        }
+        }
+    }
+
+    private fun deleteConcurrentUserDtls(){
+        try{
+            progress_wheel.spin()
+            val repository = LoginRepositoryProvider.provideLoginRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.deleteConcurrentUserDtls(Pref.user_login_ID)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        progress_wheel.stopSpinning()
+                        var response = result as GetConcurrentUserResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            insertConcurrentUserDtls()
+                        }
+                        else {
+                            insertConcurrentUserDtls()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        error.printStackTrace()
+                        XLog.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        insertConcurrentUserDtls()
+
+                    })
+            )
+        }catch (ex:Exception){
+            progress_wheel.stopSpinning()
+            ex.printStackTrace()
+            XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            insertConcurrentUserDtls()
+        }
+    }
+
+    private fun insertConcurrentUserDtls(){
+        try{
+            progress_wheel.spin()
+            val repository = LoginRepositoryProvider.provideLoginRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.insertConcurrentUserDtls(Pref.user_login_ID.toString(),Pref.imei.toString(),AppUtils.getCurrentDateTime().toString())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        progress_wheel.stopSpinning()
+                        var response = result as BaseResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            gotoHomeActivity()
+                        }
+                        else {
+                            gotoHomeActivity()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        error.printStackTrace()
+                        XLog.d("insertConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        gotoHomeActivity()
+                    })
+            )
+        }catch (ex:Exception){
+            progress_wheel.stopSpinning()
+            ex.printStackTrace()
+            XLog.d("insertConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
             gotoHomeActivity()
-
         }
-        }
-
     }
 
 
@@ -6713,6 +6832,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
     }
 
+
     fun openDialogPopup(text:String){
         val simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(false)
@@ -6720,6 +6840,22 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         simpleDialog.setContentView(R.layout.dialog_ok)
         val dialogHeader = simpleDialog.findViewById(R.id.dialog_yes_header_TV) as AppCustomTextView
         dialogHeader.text = text
+        val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+        })
+        simpleDialog.show()
+    }
+
+    fun openDialogPopupIMEI(header:String,text:String){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_ok_imei)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_yes_header) as AppCustomTextView
+        val dialogBody = simpleDialog.findViewById(R.id.dialog_yes_body) as AppCustomTextView
+        dialogHeader.text = header
+        dialogBody.text = text
         val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
             simpleDialog.cancel()

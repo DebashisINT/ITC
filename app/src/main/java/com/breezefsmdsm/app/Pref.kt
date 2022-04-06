@@ -353,6 +353,6 @@ object Pref : PreferenceHolder() {
     var IsAllowClickForPhotoRegister: Boolean by bindToPreferenceField(false, "IsAllowClickForPhotoRegister")
     var IsAllowClickForVisit: Boolean by bindToPreferenceField(false, "IsAllowClickForVisit")
 
-
+    var user_login_ID: String by bindToPreferenceField("", "user_login_ID")
 
 }
