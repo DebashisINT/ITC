@@ -5480,7 +5480,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
         }
     }
-    
+
     //===============================================Logout===========================================================================//
     private fun calllogoutApi(user_id: String, session_id: String) {
         if (Pref.current_latitude == null || Pref.current_longitude == null) {
