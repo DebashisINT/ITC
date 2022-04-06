@@ -5431,7 +5431,6 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     }
 
-
     //===============================================Logout===========================================================================//
     private fun calllogoutApi(user_id: String, session_id: String) {
         if (Pref.current_latitude == null || Pref.current_longitude == null) {
