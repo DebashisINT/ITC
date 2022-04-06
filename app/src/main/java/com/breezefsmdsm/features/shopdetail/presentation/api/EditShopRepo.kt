@@ -4,8 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.text.TextUtils
 import com.breezefsmdsm.app.FileUtils
+import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.features.addshop.model.AddLogReqData
 import com.breezefsmdsm.features.addshop.model.AddShopRequestData
 import com.breezefsmdsm.features.addshop.model.AddShopResponse
+import com.breezefsmdsm.features.addshop.model.LogFileResponse
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.gson.Gson
@@ -127,5 +130,21 @@ class EditShopRepo(val apiService: EditShopApi) {
         else
             apiService.editShopWithImage(jsonInString, profile_img_data)
         // return apiService.getAddShopWithoutImage(jsonInString)
+    }
+
+    fun addLogfile(user_id: AddLogReqData, shop_image: String, context: Context): Observable<LogFileResponse> {
+        var log_attachments_new:MultipartBody.Part? = null
+        var log_attachments_file: File? = null
+        log_attachments_file = File(shop_image)
+        val profileImgBody = RequestBody.create(MediaType.parse("multipart/form-data"), log_attachments_file)
+        var jsonInString = ""
+        try {
+            jsonInString = ObjectMapper().writeValueAsString(user_id)
+            //  shopObject = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonInString)
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
+        log_attachments_new = MultipartBody.Part.createFormData("attachments", Pref.user_id, profileImgBody)
+        return  apiService.logshareFile(jsonInString, log_attachments_new)
     }
 }
