@@ -3,6 +3,7 @@ package com.breezefsmdsm.features.shopdetail.presentation.api
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.features.addshop.model.AddShopRequestData
 import com.breezefsmdsm.features.addshop.model.AddShopResponse
+import com.breezefsmdsm.features.addshop.model.LogFileResponse
 import io.reactivex.Observable
 import okhttp3.MultipartBody
 import retrofit2.Retrofit
@@ -27,6 +28,10 @@ interface EditShopApi {
     @POST("ShopRegistration/EditShop")
     fun editShopWithImage(@Query("data") addShop: String, @Part logo_img_data: MultipartBody.Part?): Observable<AddShopResponse>
 
+
+    @Multipart
+    @POST("APPLogFilesDetection/APPLogFilesSave")
+    fun logshareFile(@Query("data") userId: String, @Part attachments: MultipartBody.Part?): Observable<LogFileResponse>
     /**
      * Companion object to create the GithubApiService
      */

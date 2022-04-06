@@ -3,8 +3,10 @@ package com.breezefsmdsm.features.logoutsync.presentation
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
@@ -15,6 +17,7 @@ import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.FileProvider
 import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.MonitorService
 import com.breezefsmdsm.R
@@ -31,6 +34,7 @@ import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.activities.api.ActivityRepoProvider
 import com.breezefsmdsm.features.activities.model.*
 import com.breezefsmdsm.features.addshop.api.AddShopRepositoryProvider
+import com.breezefsmdsm.features.addshop.model.AddLogReqData
 import com.breezefsmdsm.features.addshop.model.AddShopRequestCompetetorImg
 import com.breezefsmdsm.features.addshop.model.AddShopRequestData
 import com.breezefsmdsm.features.addshop.model.AddShopResponse
@@ -91,6 +95,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -457,12 +462,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                             error.printStackTrace()
                                         }
                                         checkToCallActivity()
+
                                     })
                     )
                 //}
             }else{
                 //checkToCallAddShopApi()
                 checkToCallActivity()
+
             }
         }catch (ex:Exception){
             //checkToCallAddShopApi()
@@ -5408,16 +5415,19 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         progress_wheel.stopSpinning()
                         var response = result as GetConcurrentUserResponse
                         if (response.status == NetworkConstant.SUCCESS) {
-                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+//                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            callLogshareApi()
                         }
                         else {
-                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+//                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            callLogshareApi()
                         }
                     }, { error ->
                         progress_wheel.stopSpinning()
                         error.printStackTrace()
                         XLog.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
-                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+//                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                        callLogshareApi()
 
                     })
             )
@@ -5425,12 +5435,52 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             progress_wheel.stopSpinning()
             ex.printStackTrace()
             XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
-            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+//            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            callLogshareApi()
 
         }
-
     }
 
+    //----------------------------------share Log File----------------------------------//
+    private fun callLogshareApi(){
+        val addReqData = AddLogReqData()
+        addReqData.user_id = Pref.user_id
+        val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xdemologsample/log").path);
+        val file = File(fileUrl.path)
+        if (!file.exists()) {
+            return
+        }
+        val uri: Uri = FileProvider.getUriForFile(mContext, mContext!!.applicationContext.packageName.toString() + ".provider", file)
+        try{
+            val repository = EditShopRepoProvider.provideEditShopRepository()
+            BaseActivity.compositeDisposable.add(
+                    repository.addLogfile(addReqData,file.toString(),mContext)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({ result ->
+                                XLog.d("Logshare : RESPONSE " + result.status)
+                                if (result.status == NetworkConstant.SUCCESS){
+                                    //XLog.d("Return : RESPONSE URL " + result.file_url +  " " +Pref.user_name)
+                                }
+                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            },{error ->
+                                if (error == null) {
+                                    XLog.d("Logshare : ERROR " + "UNEXPECTED ERROR IN Log share API")
+                                } else {
+                                    XLog.d("Logshare : ERROR " + error.localizedMessage)
+                                    error.printStackTrace()
+                                }
+                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            })
+            )
+
+        }
+        catch (ex:Exception){
+            ex.printStackTrace()
+            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+        }
+    }
+    
     //===============================================Logout===========================================================================//
     private fun calllogoutApi(user_id: String, session_id: String) {
         if (Pref.current_latitude == null || Pref.current_longitude == null) {
@@ -6277,4 +6327,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         icon.animate().cancel()
         icon.clearAnimation()
     }
+
+
+
 }
