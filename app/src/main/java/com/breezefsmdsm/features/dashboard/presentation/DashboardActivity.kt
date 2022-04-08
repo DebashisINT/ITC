@@ -16,6 +16,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.location.LocationManager
 import android.net.*
 import android.os.*
@@ -225,6 +226,7 @@ import com.themechangeapp.pickimage.PermissionHelper.Companion.REQUEST_CODE_DOCU
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_splash.*
+import kotlinx.android.synthetic.main.fragment_dashboard_new.*
 import kotlinx.android.synthetic.main.menu.*
 import net.alexandroid.gps.GpsStatusDetector
 import org.jetbrains.anko.doAsync
@@ -422,6 +424,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     private lateinit var photo_registration: AppCustomTextView
     private lateinit var photo_team_attendance: AppCustomTextView
+    private lateinit var tb_auto_revisit_menu: AppCustomTextView
 
     private lateinit var alarmCofifDataModel: AlarmConfigDataModel
     private lateinit var quo_TV: AppCustomTextView
@@ -560,6 +563,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     private var feedBackDialogCompetetorImg = false
     lateinit var drawerLL: LinearLayout
+    private var lastLat = 0.0
+    private var lastLng = 0.0
+    private var prevRevisitTimeStamp = 0L
+    private var shop_id = ""
 
 
     @SuppressLint("NewApi")
@@ -1711,6 +1718,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         photo_registration = findViewById(R.id.photo_registration)
         photo_team_attendance = findViewById(R.id.photo_team_attendance)
 
+        tb_auto_revisit_menu =  findViewById(R.id.tb_auto_revisit_menu)
+        tb_auto_revisit_menu.setOnClickListener(this)
+
         home_RL.setOnClickListener(this)
         add_shop_RL.setOnClickListener(this)
         nearby_shops_RL.setOnClickListener(this)
@@ -2145,6 +2155,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             photo_team_attendance.visibility = View.GONE
         }
 
+        if (Pref.ShowAutoRevisitInAppMenu) {
+            tb_auto_revisit_menu.visibility = View.VISIBLE
+
+        } else {
+            tb_auto_revisit_menu.visibility = View.GONE
+        }
+
 
         if (AppUtils.getSharedPreferencesIsScreenRecorderEnable(mContext)) {
             screen_record_info_TV.visibility = View.VISIBLE
@@ -2227,6 +2244,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             my_details_tv.visibility = View.VISIBLE
         else
             my_details_tv.visibility = View.GONE
+
+        if(Pref.ShowAutoRevisitInDashboard)
+            revisit_ll.visibility = View.VISIBLE
+        else
+            revisit_ll.visibility = View.GONE
 
 
         //val frag: DashboardFragment? = supportFragmentManager.findFragmentByTag("DashboardFragment") as DashboardFragment?
@@ -2616,6 +2638,33 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }, 500)
                 }
 
+            }
+            /*07-04-2022*/
+            R.id.tb_auto_revisit_menu -> {
+                if (!Pref.isAddAttendence) {
+                    (mContext as DashboardActivity).checkToShowAddAttendanceAlert()
+                    return
+                } else {
+                    if (Pref.IsShowDayStart) {
+                        if (!Pref.DayStartMarked) {
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                            dialogHeader.text = "Please start your day..."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+                        } else {
+                            checkAutoRevisit()
+                        }
+                    }
+                }
             }
             //19-08-21 nearBy shop visit stop untill daystart
             R.id.nearby_shop_TV -> {
@@ -10708,6 +10757,288 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             screen_record_info_TV.text = "Screen Recorder"
         }
     }
+
+        private fun checkAutoRevisit() {
+
+            if (!Pref.isAddAttendence) {
+                XLog.e("====================Attendance is not given (Location Fuzed Service)====================")
+                return
+            }
+
+
+            if (lastLat == 0.0 || lastLng == 0.0) {
+                XLog.e("====================1st time check auto revisit====================")
+                return
+            }
+
+            var distance = LocationWizard.getDistance(lastLat, lastLng, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
+            distance=0.7
+            XLog.e("====================checkAutoRevisit====================")
+            if (distance * 1000 > Pref.autoRevisitDistance.toDouble()) {
+                val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
+
+                if (allShopList != null && allShopList.size > 0) {
+                    for (i in 0 until allShopList.size) {
+                        val shopLat: Double = allShopList[i].shopLat
+                        val shopLong: Double = allShopList[i].shopLong
+
+                        if (shopLat != null && shopLong != null) {
+                            val shopLocation = Location("")
+                            shopLocation.latitude = shopLat
+                            shopLocation.longitude = shopLong
+
+                            val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, Pref.autoRevisitDistance.toInt())
+                            //val isShopNearby = true
+
+                            XLog.e("Distance 1 from shop " + allShopList[i].shopName + " location to current location============> " + AppUtils.mLocation?.distanceTo(shopLocation) + " Meter")
+
+                            val distance = LocationWizard.getDistance(shopLat, shopLong, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
+                            XLog.e("Distance 2 from shop " + allShopList[i].shopName + " location to current location============> $distance KM")
+
+                            if (isShopNearby) {
+
+                                XLog.e("================Nearby shop " + allShopList[i].shopName + "(Location Fuzed Service)===================")
+
+                                /*val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForTodayShop(allShopList[i].shop_id,
+                                        false, false, AppUtils.getCurrentDateForShopActi())*/
+
+                                val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(allShopList[i].shop_id, AppUtils.getCurrentDateForShopActi())
+
+                                if (shopActivityList == null || shopActivityList.isEmpty()) {
+                                    AppUtils.changeLanguage(mContext,"en")
+                                    val currentTimeStamp = System.currentTimeMillis()
+                                    changeLocale()
+                                    if (prevRevisitTimeStamp != 0L) {
+
+                                        if (shop_id == allShopList[i].shop_id) {
+
+                                            val interval = currentTimeStamp - prevRevisitTimeStamp
+
+                                            val intervalInMins = (interval / 1000) / 60
+                                            XLog.e("Fuzed Location: start auto revisit interval=====> $intervalInMins min(s)")
+
+                                            if (intervalInMins >= Pref.autoRevisitTime.toLong()) {
+                                                AppUtils.isAutoRevisit = true
+                                                revisitShop()
+                                                prevRevisitTimeStamp = 0L
+                                                shop_id = ""
+                                            }
+                                        } else {
+                                            prevRevisitTimeStamp = currentTimeStamp
+                                            shop_id = allShopList[i].shop_id
+                                        }
+                                    } else {
+                                        prevRevisitTimeStamp = currentTimeStamp
+                                        shop_id = allShopList[i].shop_id
+                                    }
+
+                                    break
+                                } else
+                                    XLog.e("================" + allShopList[i].shopName + " is visiting now normally (Location Fuzed Service)===================")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private fun changeLocale() {
+            val intent = Intent()
+            intent.action = "CHANGE_LOCALE_BROADCAST"
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+        }
+
+        private fun revisitShop() {
+            try {
+
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.cancel(shop_id.hashCode())
+
+                val shopActivityEntity = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(shop_id, AppUtils.getCurrentDateForShopActi())
+                val imageUpDateTime = AppUtils.getCurrentISODateTime()
+
+                val mAddShopDBModelEntity = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shop_id)
+
+                if (shopActivityEntity.isEmpty() || shopActivityEntity[0].date != AppUtils.getCurrentDateForShopActi()) {
+                    val mShopActivityEntity = ShopActivityEntity()
+                    AppUtils.changeLanguage(this,"en")
+                    mShopActivityEntity.startTimeStamp = System.currentTimeMillis().toString()
+                    changeLocale()
+                    mShopActivityEntity.isUploaded = false
+                    mShopActivityEntity.isVisited = true
+                    mShopActivityEntity.shop_name = mAddShopDBModelEntity?.shopName
+                    mShopActivityEntity.duration_spent = "00:00:00"
+                    mShopActivityEntity.date = AppUtils.getCurrentDateForShopActi()
+                    mShopActivityEntity.shop_address = mAddShopDBModelEntity?.address
+                    mShopActivityEntity.shopid = mAddShopDBModelEntity?.shop_id
+                    mShopActivityEntity.visited_date = imageUpDateTime //AppUtils.getCurrentISODateTime()
+                    mShopActivityEntity.isDurationCalculated = false
+                    if (mAddShopDBModelEntity?.totalVisitCount != null && mAddShopDBModelEntity?.totalVisitCount != "") {
+                        val visitCount = mAddShopDBModelEntity?.totalVisitCount?.toInt()!! + 1
+                        AppDatabase.getDBInstance()!!.addShopEntryDao().updateTotalCount(visitCount.toString(), shop_id)
+                        AppDatabase.getDBInstance()!!.addShopEntryDao().updateLastVisitDate(AppUtils.getCurrentDateChanged(), shop_id)
+                    }
+
+                    var distance = 0.0
+                    var address = ""
+                    XLog.e("======New Distance (At auto revisit time)=========")
+
+                    val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shop_id)
+                    address = if (!TextUtils.isEmpty(shop.actual_address))
+                        shop.actual_address
+                    else
+                        LocationWizard.getNewLocationName(this, shop.shopLat.toDouble(), shop.shopLong.toDouble())
+
+                    if (Pref.isOnLeave.equals("false", ignoreCase = true)) {
+
+                        XLog.e("=====User is at work (At auto revisit time)=======")
+
+                        val locationList = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationUpdateForADay(AppUtils.getCurrentDateForShopActi())
+
+                        //val distance = LocationWizard.getDistance(shop.shopLat, shop.shopLong, location.latitude, location.longitude)
+
+                        val userlocation = UserLocationDataEntity()
+                        userlocation.latitude = shop.shopLat.toString()
+                        userlocation.longitude = shop.shopLong.toString()
+
+                        var loc_distance = 0.0
+
+                        if (locationList != null && locationList.isNotEmpty()) {
+                            loc_distance = LocationWizard.getDistance(locationList[locationList.size - 1].latitude.toDouble(), locationList[locationList.size - 1].longitude.toDouble(),
+                                    userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
+                        }
+                        val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
+
+                        XLog.e("===Distance (At auto shop revisit time)===")
+                        XLog.e("Temp Distance====> " + Pref.tempDistance)
+                        XLog.e("Normal Distance====> $loc_distance")
+                        XLog.e("Total Distance====> $finalDistance")
+                        XLog.e("===========================================")
+
+                        userlocation.distance = finalDistance
+                        userlocation.locationName = LocationWizard.getNewLocationName(this, userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
+                        userlocation.timestamp = LocationWizard.getTimeStamp()
+                        userlocation.time = LocationWizard.getFormattedTime24Hours(true)
+                        userlocation.meridiem = LocationWizard.getMeridiem()
+                        userlocation.hour = LocationWizard.getHour()
+                        userlocation.minutes = LocationWizard.getMinute()
+                        userlocation.isUploaded = false
+                        userlocation.shops = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi()).size.toString()
+                        userlocation.updateDate = AppUtils.getCurrentDateForShopActi()
+                        userlocation.updateDateTime = AppUtils.getCurrentDateTime()
+                        userlocation.network_status = if (AppUtils.isOnline(this)) "Online" else "Offline"
+                        userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
+                        AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
+
+                        XLog.e("=====Shop auto revisit data added=======")
+
+                        Pref.totalS2SDistance = (Pref.totalS2SDistance.toDouble() + userlocation.distance.toDouble()).toString()
+
+                        distance = Pref.totalS2SDistance.toDouble()
+                        Pref.totalS2SDistance = "0.0"
+                        Pref.tempDistance = "0.0"
+                    } else {
+                        XLog.e("=====User is on leave (At auto revisit time)=======")
+                        distance = 0.0
+                    }
+
+                    XLog.e("shop to shop distance (At auto revisit time)=====> $distance")
+
+                    mShopActivityEntity.distance_travelled = distance.toString()
+                    mShopActivityEntity.in_time = AppUtils.getCurrentTimeWithMeredian()
+                    mShopActivityEntity.in_loc = address
+
+//                AppUtils.isShopVisited = true
+
+                    Pref.isShopVisited=true
+
+                    var shopAll = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
+                    mShopActivityEntity.shop_revisit_uniqKey = Pref.user_id + System.currentTimeMillis().toString()
+
+                    AppDatabase.getDBInstance()!!.shopActivityDao().insertAll(mShopActivityEntity)
+
+                    /*Terminate All other Shop Visit*/
+                    val shopList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+                    for (i in 0 until shopList.size) {
+                        if (shopList[i].shopid != mShopActivityEntity.shopid && !shopList[i].isDurationCalculated) {
+                            AppUtils.changeLanguage(this,"en")
+                            val endTimeStamp = System.currentTimeMillis().toString()
+                            changeLocale()
+                            val duration = AppUtils.getTimeFromTimeSpan(shopList[i].startTimeStamp, endTimeStamp)
+                            val totalMinute = AppUtils.getMinuteFromTimeStamp(shopList[i].startTimeStamp, endTimeStamp)
+                            //If duration is greater than 20 hour then stop incrementing
+                            if (totalMinute.toInt() > 20 * 60) {
+                                AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                                return
+                            }
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateEndTimeOfShop(endTimeStamp, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateTotalMinuteForDayOfShop(shopList[i].shopid!!, totalMinute, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateTimeDurationForDayOfShop(shopList[i].shopid!!, duration, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateOutTime(AppUtils.getCurrentTimeWithMeredian(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateOutLocation(LocationWizard.getNewLocationName(this, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble()), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
+
+                            val netStatus = if (AppUtils.isOnline(this))
+                                "Online"
+                            else
+                                "Offline"
+
+                            val netType = if (AppUtils.getNetworkType(this).equals("wifi", ignoreCase = true))
+                                AppUtils.getNetworkType(this)
+                            else
+                                "Mobile ${AppUtils.mobNetType(this)}"
+
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
+                                    AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                        }
+                    }
+                }
+
+                AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdList(shop_id)!![0].visited = true
+
+                val performance = AppDatabase.getDBInstance()!!.performanceDao().getTodaysData(AppUtils.getCurrentDateForShopActi())
+                if (performance != null) {
+                    val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedVisitedShopForADay(AppUtils.getCurrentDateForShopActi(), true)
+                    AppDatabase.getDBInstance()!!.performanceDao().updateTotalShopVisited(list.size.toString(), AppUtils.getCurrentDateForShopActi())
+                    var totalTimeSpentForADay = 0
+                    for (i in list.indices) {
+                        totalTimeSpentForADay += list[i].totalMinute.toInt()
+                    }
+                    AppDatabase.getDBInstance()!!.performanceDao().updateTotalDuration(totalTimeSpentForADay.toString(), AppUtils.getCurrentDateForShopActi())
+                } else {
+                    val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedVisitedShopForADay(AppUtils.getCurrentDateForShopActi(), true)
+                    val performanceEntity = PerformanceEntity()
+                    performanceEntity.date = AppUtils.getCurrentDateForShopActi()
+                    performanceEntity.total_shop_visited = list.size.toString()
+                    var totalTimeSpentForADay = 0
+                    for (i in list.indices) {
+                        totalTimeSpentForADay += list[i].totalMinute.toInt()
+                    }
+                    performanceEntity.total_duration_spent = totalTimeSpentForADay.toString()
+                    AppDatabase.getDBInstance()!!.performanceDao().insert(performanceEntity)
+                }
+
+                /*val shopDetail = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(mShopId)
+                if (shopDetail.is_otp_verified.equals("false", ignoreCase = true)) {
+                    if (AppUtils.isOnline(this@DashboardActivity))
+                        showShopVerificationDialog()
+                    else
+                        loadFragment(FragType.ShopDetailFragment, true, mShopId)
+                } else
+                    loadFragment(FragType.ShopDetailFragment, true, mShopId)*/
+
+                AppUtils.isAutoRevisit = false
+
+                val intent = Intent()
+                intent.action = "AUTO_REVISIT_BROADCAST"
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
 
 
 }
