@@ -355,4 +355,9 @@ object Pref : PreferenceHolder() {
 
     var user_login_ID: String by bindToPreferenceField("", "user_login_ID")
 
+    var ShowAutoRevisitInDashboard: Boolean by bindToPreferenceField(false, "ShowAutoRevisitInDashboard")
+    var ShowAutoRevisitInAppMenu: Boolean by bindToPreferenceField(false, "ShowAutoRevisitInAppMenu")
+
+    var IsRestrictNearbyGeofence: Boolean by bindToPreferenceField(false, "IsRestrictNearbyGeofence")
+    var GeofencingRelaxationinMeter: Int by bindToPreferenceField(100, "GeofencingRelaxationinMeter")
 }

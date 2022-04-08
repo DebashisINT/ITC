@@ -1,5 +1,6 @@
 package com.breezefsmdsm.features.localshops
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.os.Bundle
@@ -51,6 +52,8 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
     private lateinit var getFloatingVal: ArrayList<String>
     private val preid: Int = 100
     private var isGetLocation = -1
+    private lateinit var geofenceTv: AppCompatTextView
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -81,6 +84,16 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
         nearByShopsList = view.findViewById(R.id.near_by_shops_RCV)
         noShopAvailable = view.findViewById(R.id.no_shop_tv)
         shop_list_parent_rl = view.findViewById(R.id.shop_list_parent_rl)
+        geofenceTv = view.findViewById(R.id.tv_geofence_relax)
+
+        if(Pref.IsRestrictNearbyGeofence){
+            //geofenceTv.visibility = View.VISIBLE
+            //geofenceTv.text ="Geofence Relaxed :  " + Pref.GeofencingRelaxationinMeter + " mtr"
+            geofenceTv.visibility = View.GONE
+        }
+        else{
+            geofenceTv.visibility = View.GONE
+        }
 
         shop_list_parent_rl.setOnClickListener { view ->
             floating_fab.close(true)
@@ -159,6 +172,7 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
     }
 
 
+    @SuppressLint("WrongConstant")
     private fun initAdapter() {
 
         if (list != null && list.size > 0) {
@@ -372,7 +386,14 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
                     XLog.d("long=====> " + location.longitude)
                     XLog.d("NEARBY_RADIUS====> $NEARBY_RADIUS")*/
 
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, NEARBY_RADIUS)
+                    var mRadious:Int = NEARBY_RADIUS
+                    if(Pref.IsRestrictNearbyGeofence){
+                        mRadious = Pref.GeofencingRelaxationinMeter
+//                        mRadious=9999000
+                    }
+
+                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, NEARBY_RADIUS)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, mRadious)
                     if (isShopNearby) {
                         XLog.d("shop_id====> " + newList[i].shop_id)
                         XLog.d("shopName====> " + newList[i].shopName)
