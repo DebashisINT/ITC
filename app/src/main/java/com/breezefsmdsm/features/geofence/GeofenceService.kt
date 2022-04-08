@@ -74,6 +74,12 @@ class GeofenceService : Service(), OnCompleteListener<Void> {
 
         XLog.e("Geofence:== new list size=====> " + newList.size)
 
+        var mRadious:Float = Pref.gpsAccuracy.toFloat()
+        if(Pref.IsRestrictNearbyGeofence){
+            mRadious = Pref.GeofencingRelaxationinMeter.toFloat()
+//            mRadious=9999000.99F
+        }
+
         for (i in 0 until newList.size) {
             mGeofenceList.add(Geofence.Builder()
                     // Set the request ID of the geofence. This is a string to identify this
@@ -87,7 +93,8 @@ class GeofenceService : Service(), OnCompleteListener<Void> {
                     .setCircularRegion(
                             newList[i].shopLat,
                             newList[i].shopLong,
-                            Pref.gpsAccuracy.toFloat()
+                            //Pref.gpsAccuracy.toFloat()
+                            mRadious
                     )
 
                     // Set the expiration duration of the geofence. This geofence gets automatically

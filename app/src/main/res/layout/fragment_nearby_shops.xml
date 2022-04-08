@@ -144,6 +144,19 @@
         android:visibility="gone"
         android:layout_below="@+id/tv_shop_count"/>
 
+    <com.breezefsmdsm.widgets.AppCustomTextView
+        android:id="@+id/tv_geofence_relax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="@dimen/_11sdp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:visibility="gone"
+        android:layout_below="@+id/tv_beat_name"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/near_by_shops_RCV"
         android:layout_width="match_parent"
