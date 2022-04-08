@@ -1,5 +1,6 @@
 package com.breezefsmdsm.features.logoutsync.presentation
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -5443,6 +5444,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     }
 
     //----------------------------------share Log File----------------------------------//
+    @SuppressLint("NewApi")
     private fun callLogshareApi(){
         val addReqData = AddLogReqData()
         addReqData.user_id = Pref.user_id

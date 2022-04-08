@@ -555,6 +555,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onLocationChanged(location: Location) {
+        try{
+            AppUtils.mLocation = location
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
 
         XLog.d("onLocationChanged : LocationFuzedService " + AppUtils.getCurrentDateTime())
 

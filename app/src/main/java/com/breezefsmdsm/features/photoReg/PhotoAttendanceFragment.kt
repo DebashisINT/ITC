@@ -349,7 +349,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
                 faceDetector=null
                 faceDetectorSetUp()
-
+                XLog.d("AdapterUserListAttenD onclick")
                 //GetImageFromUrl().execute(obj.face_image_link!!)
                 //GetImageFromUrl().execute("http://fts.indusnettechnologies.com:7007/CommonFolder/FaceImageDetection/EMA0003358.jpg")
                 //GetImageFromUrl().execute("http://3.7.30.86:82/CommonFolder/FaceImageDetection/EMK0000014.jpg")
@@ -594,6 +594,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         //finalNearByDD=newDDList[5]
         progress_wheel.stopSpinning()
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
+            XLog.d("PhotoAtend nearby found onclick")
             if(obj_temp.IsTeamAttenWithoutPhoto!!){
                 prepareAddAttendanceInputParams()
             }else{
@@ -1018,8 +1019,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
-                            XLog.d("AddAttendance Response Code========> " + response.status)
-                            XLog.d("AddAttendance Response Msg=========> " + response.message)
+                            XLog.d("VISIT AddAttendance Response Code========> " + response.status)
+                            XLog.d("VISIT AddAttendance Response Msg=========> " + response.message)
                             enableScreen()
                             if (response.status == NetworkConstant.SUCCESS) {
                                 BaseActivity.isApiInitiated = false
@@ -1034,10 +1035,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
                             }
 
-                            Log.e("add attendance team", "api work type")
+                            Log.e("VISIT add attendance team", "api work type")
 
                         }, { error ->
-                            XLog.d("AddAttendance team Response Msg=========> " + error.message)
+                            XLog.d("VISIT AddAttendance team Response Msg=========> " + error.message)
                             enableScreen()
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
