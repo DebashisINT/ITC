@@ -5405,7 +5405,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.IsAllowClickForVisit = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
                                             else if (response.getconfigure?.get(i)?.Key.equals("ShowAutoRevisitInDashboard", ignoreCase = true)) {
                                                 Pref.ShowAutoRevisitInDashboard = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
@@ -5418,8 +5417,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.ShowAutoRevisitInAppMenu = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
-
                                             else if (response.getconfigure?.get(i)?.Key.equals("GeofencingRelaxationinMeter", ignoreCase = true)) {
                                                 try{
                                                     Pref.GeofencingRelaxationinMeter = response.getconfigure!![i].Value!!.toInt()
@@ -5427,10 +5424,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                         Pref.GeofencingRelaxationinMeter = response.getconfigure!![i].Value!!.toInt()
                                                     }
                                                 }catch(ex:Exception){
-                                                    Pref.GeofencingRelaxationinMeter = 100
+                                                    Pref.GeofencingRelaxationinMeter = 250
                                                 }
                                             }
-
                                             else if (response.getconfigure?.get(i)?.Key.equals("IsRestrictNearbyGeofence", ignoreCase = true)) {
                                                 Pref.IsRestrictNearbyGeofence = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {

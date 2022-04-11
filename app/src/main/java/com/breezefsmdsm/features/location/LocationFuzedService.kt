@@ -556,7 +556,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onLocationChanged(location: Location) {
         try{
+            if(location!=null)
             AppUtils.mLocation = location
+            Pref.current_latitude = location.latitude.toString()
+            Pref.current_longitude = location.longitude.toString()
+
         }catch (ex:Exception){
             ex.printStackTrace()
         }
