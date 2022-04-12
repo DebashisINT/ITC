@@ -5634,6 +5634,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 response.getconfigure?.get(i)?.Value == "1"
                                         }
                                     }
+                                    else if (response.getconfigure?.get(i)?.Key.equals(
+                                                    "IsShowNearByTeam",
+                                                    ignoreCase = true
+                                            )
+                                    )
+                                    {
+                                        Pref.IsShowNearByTeam =
+                                                response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowNearByTeam =
+                                                    response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }
+
+
 
                                 }
                             }
