@@ -35,7 +35,7 @@ interface LoginApi {
 
     @FormUrlEncoded
     @POST("LoginConcurrentusers/DeleteConcurrentUser")
-    fun deleteConcurrentUserDtlsApi(@Field("user_id") user_id: String): Observable<BaseResponse>
+    fun deleteConcurrentUserDtlsApi(@Field("user_id") user_id: String): Observable<GetConcurrentUserResponse>
 
 
     @FormUrlEncoded
