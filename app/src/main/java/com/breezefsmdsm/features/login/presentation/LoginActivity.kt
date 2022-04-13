@@ -2023,12 +2023,48 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         )
     }
 
-    private fun checkToCallChemistVisitApi() {
+  /*  private fun checkToCallChemistVisitApi() {
         val list = AppDatabase.getDBInstance()!!.addChemistDao().getAll()
         if (list != null && list.isNotEmpty())
             checkToCallDoctorVisitApi()
         else
             getChemistVisitListApi()
+    }*/
+    private fun checkToCallChemistVisitApi() {
+        var isChemistTypeAvailable:Boolean = false
+        var isDoctorTypeAvaliable:Boolean = false
+        doAsync {
+            val list = AppDatabase.getDBInstance()!!.shopTypeDao().getAll()
+            for (i in list.indices) {
+                if(list[i].shoptype_name!!.contains("Chemist",ignoreCase = true)){
+                    isChemistTypeAvailable = true
+                    break
+                }
+                else if(list[i].shoptype_name!!.contains("Doctor",ignoreCase = true)){
+                    isDoctorTypeAvaliable = true
+                    break
+                }
+            }
+            uiThread {
+                if(isChemistTypeAvailable){
+                    val list = AppDatabase.getDBInstance()!!.addChemistDao().getAll()
+                    if (list != null && list.isNotEmpty()){
+                        if(isDoctorTypeAvaliable)
+                            checkToCallDoctorVisitApi()
+                        else
+                            checkToCallStockListApi()
+                    } else
+                        getChemistVisitListApi()
+                }
+                else if(isDoctorTypeAvaliable){
+                    checkToCallDoctorVisitApi()
+                }
+                else{
+                    checkToCallStockListApi()
+                }
+
+            }
+        }
     }
 
     private fun getChemistVisitListApi() {
