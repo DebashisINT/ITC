@@ -35,7 +35,7 @@ class LoginRepository(val apiService: LoginApi) {
         return apiService.insertConcurrentUserDtlsApi(username,imei,dateTime)
     }
 
-    fun deleteConcurrentUserDtls(username: String): Observable<BaseResponse> {
+    fun deleteConcurrentUserDtls(username: String): Observable<GetConcurrentUserResponse> {
         return apiService.deleteConcurrentUserDtlsApi(username)
     }
 

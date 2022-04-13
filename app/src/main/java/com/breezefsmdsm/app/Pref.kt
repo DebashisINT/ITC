@@ -360,4 +360,6 @@ object Pref : PreferenceHolder() {
 
     var IsRestrictNearbyGeofence: Boolean by bindToPreferenceField(false, "IsRestrictNearbyGeofence")
     var GeofencingRelaxationinMeter: Int by bindToPreferenceField(100, "GeofencingRelaxationinMeter")
+
+    var IsShowNearByTeam: Boolean by bindToPreferenceField(false, "IsShowNearByTeam")
 }

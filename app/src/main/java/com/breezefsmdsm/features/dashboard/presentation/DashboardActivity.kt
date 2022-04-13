@@ -2112,12 +2112,20 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             micro_learning_TV.visibility = View.GONE
 
         if (Pref.isShowNearbyCustomer) {
-            nearby_user_TV.visibility = View.VISIBLE
+//            nearby_user_TV.visibility = View.VISIBLE
             nearby_shop_TV.visibility = View.VISIBLE
         }
         else {
-            nearby_user_TV.visibility = View.GONE
+//            nearby_user_TV.visibility = View.GONE
             nearby_shop_TV.visibility = View.GONE
+        }
+        /*12-04-2022*/
+//        Pref.IsShowNearByTeam = true
+        if (Pref.IsShowNearByTeam) {
+            nearby_user_TV.visibility = View.VISIBLE
+        }
+        else {
+            nearby_user_TV.visibility = View.GONE
         }
 
         if (Pref.IsShowMenuShops) {

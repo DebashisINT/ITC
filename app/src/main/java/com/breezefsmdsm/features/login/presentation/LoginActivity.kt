@@ -5434,6 +5434,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 }
                                             }
 
+                                            else if (response.getconfigure!![i].Key.equals("IsShowNearByTeam", ignoreCase = true)) {
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowNearByTeam = response.getconfigure!![i].Value == "1"
+                                                }
+                                            }
+
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {
                                                 if (!TextUtilsDash.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.isFingerPrintMandatoryForAttendance = response.getconfigure?.get(i)?.Value == "1"

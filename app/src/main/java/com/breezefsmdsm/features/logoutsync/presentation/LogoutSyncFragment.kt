@@ -5451,37 +5451,41 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
         val file = File(fileUrl.path)
         if (!file.exists()) {
-            return
-        }
-        val uri: Uri = FileProvider.getUriForFile(mContext, mContext!!.applicationContext.packageName.toString() + ".provider", file)
-        try{
-            val repository = EditShopRepoProvider.provideEditShopRepository()
-            BaseActivity.compositeDisposable.add(
-                    repository.addLogfile(addReqData,file.toString(),mContext)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ result ->
-                                XLog.d("Logshare : RESPONSE " + result.status)
-                                if (result.status == NetworkConstant.SUCCESS){
-                                    //XLog.d("Return : RESPONSE URL " + result.file_url +  " " +Pref.user_name)
-                                }
-                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                            },{error ->
-                                if (error == null) {
-                                    XLog.d("Logshare : ERROR " + "UNEXPECTED ERROR IN Log share API")
-                                } else {
-                                    XLog.d("Logshare : ERROR " + error.localizedMessage)
-                                    error.printStackTrace()
-                                }
-                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                            })
-            )
-
-        }
-        catch (ex:Exception){
-            ex.printStackTrace()
+//            return
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
         }
+        else{
+            val uri: Uri = FileProvider.getUriForFile(mContext, mContext!!.applicationContext.packageName.toString() + ".provider", file)
+            try{
+                val repository = EditShopRepoProvider.provideEditShopRepository()
+                BaseActivity.compositeDisposable.add(
+                        repository.addLogfile(addReqData,file.toString(),mContext)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ result ->
+                                    XLog.d("Logshare : RESPONSE " + result.status)
+                                    if (result.status == NetworkConstant.SUCCESS){
+                                        //XLog.d("Return : RESPONSE URL " + result.file_url +  " " +Pref.user_name)
+                                    }
+                                    calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                },{error ->
+                                    if (error == null) {
+                                        XLog.d("Logshare : ERROR " + "UNEXPECTED ERROR IN Log share API")
+                                    } else {
+                                        XLog.d("Logshare : ERROR " + error.localizedMessage)
+                                        error.printStackTrace()
+                                    }
+                                    calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                                })
+                )
+
+            }
+            catch (ex:Exception){
+                ex.printStackTrace()
+                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            }
+        }
+
     }
 
     //===============================================Logout===========================================================================//
