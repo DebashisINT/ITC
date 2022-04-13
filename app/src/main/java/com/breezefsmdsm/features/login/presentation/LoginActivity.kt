@@ -3478,13 +3478,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             initiateLogin()
                         } else {
                             //Permission is not available. Display error text.
-                            getOverlayPermission()
+                            //getOverlayPermission()
+                            initiateLogin()
                         }
                     } else {
                         initiateLogin()
                     }
-
-
                 }
             })
             simpleDialog.show()
@@ -3506,7 +3505,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         initiateLogin()
                     } else {
                         //Permission is not available. Display error text.
-                        getOverlayPermission()
+                        //getOverlayPermission()
+                        initiateLogin()
                     }
                 } else {
                     initiateLogin()
@@ -3842,7 +3842,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getConcurrentUserDtls(username: String, password: String, location: String){
-        try{
+
+        doLogin(username, password, location)
+
+        /*try{
             Pref.user_login_ID=username.toString()
             progress_wheel.spin()
             val repository = LoginRepositoryProvider.provideLoginRepository()
@@ -3878,7 +3881,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             ex.printStackTrace()
             XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
             doLogin(username, password, location)
-        }
+        }*/
 
     }
 
@@ -6575,7 +6578,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun getOverlayPermission() {
         CommonDialog.getInstance(getString(R.string.overlaypermission), getString(R.string.overlay_permission_description), getString(R.string.cancel), getString(R.string.ok), false, object : CommonDialogClickListener {
             override fun onLeftClick() {
-                finish()
+                //finish()
             }
 
             override fun onRightClick(editableData: String) {
