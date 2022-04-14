@@ -3878,7 +3878,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getConcurrentUserDtls(username: String, password: String, location: String){
-
+        Pref.user_login_ID=username.toString()
         doLogin(username, password, location)
 
         /*try{
