@@ -362,4 +362,8 @@ object Pref : PreferenceHolder() {
     var GeofencingRelaxationinMeter: Int by bindToPreferenceField(100, "GeofencingRelaxationinMeter")
 
     var IsShowNearByTeam: Boolean by bindToPreferenceField(false, "IsShowNearByTeam")
+    var AllowProfileUpdate: Boolean by bindToPreferenceField(false, "AllowProfileUpdate")
+    var IsShowRevisitRemarksPopup: Boolean by bindToPreferenceField(false, "IsShowRevisitRemarksPopup")
+
+    var IsAllowShopStatusUpdate: Boolean by bindToPreferenceField(false, "IsAllowShopStatusUpdate")
 }

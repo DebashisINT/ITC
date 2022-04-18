@@ -223,7 +223,12 @@ class MyProfileFragment : BaseFragment() {
 //        profile_name_TV.isEnabled=false
 
         update_TV = view.findViewById(R.id.update_TV)
-        update_TV.visibility=View.GONE
+        if(Pref.AllowProfileUpdate){
+            update_TV.visibility=View.VISIBLE
+        }else{
+            update_TV.visibility=View.GONE
+        }
+
         update_TV.setOnClickListener(View.OnClickListener {
             validateFieldAndApiCall()
         })

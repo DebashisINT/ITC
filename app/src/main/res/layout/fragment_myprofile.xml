@@ -340,8 +340,7 @@
                 android:padding="@dimen/_8sdp"
                 android:text="@string/update"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/_13sdp"
-                android:visibility="gone" />
+                android:textSize="@dimen/_13sdp" />
 
         </LinearLayout>
 

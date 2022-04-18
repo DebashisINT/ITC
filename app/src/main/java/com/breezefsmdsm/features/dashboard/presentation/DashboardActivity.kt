@@ -4,10 +4,7 @@ package com.breezefsmdsm.features.dashboard.presentation
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.Dialog
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.*
@@ -782,6 +779,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         try {
                             fl_net_status.background = getDrawable(R.drawable.green_round)
                             netStatus = "Online"
+                            if (!isMonitorServiceRunningggg()) {
+                                XLog.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
+                                val intent = Intent(applicationContext, MonitorService::class.java)
+                                intent.action = CustomConstants.START_MONITOR_SERVICE
+                                startService(intent)
+                                //Toast.makeText(this, "Loc service started", Toast.LENGTH_SHORT).show()
+                            }
                         } catch (e: java.lang.Exception) {
                             e.printStackTrace()
                         }
@@ -797,7 +801,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                 })
             }
-        } else {
+        }
+        else {
             val builder = NetworkRequest.Builder()
             builder.addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             val networkRequest = builder.build()
@@ -808,6 +813,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             try {
                                 fl_net_status.background = getDrawable(R.drawable.green_round)
                                 netStatus = "Online"
+                                if (!isMonitorServiceRunningggg()) {
+                                    XLog.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
+                                    val intent = Intent(applicationContext, MonitorService::class.java)
+                                    intent.action = CustomConstants.START_MONITOR_SERVICE
+                                    startService(intent)
+                                    //Toast.makeText(this, "Loc service started", Toast.LENGTH_SHORT).show()
+                                }
                             } catch (e: java.lang.Exception) {
                                 e.printStackTrace()
                             }
@@ -824,6 +836,22 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         }
                     })
         }
+    }
+
+    fun isMonitorServiceRunningggg(): Boolean {
+        val activityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
+        if (activityManager != null) {
+            val servicesList = activityManager.getRunningServices(Int.MAX_VALUE)
+            for (serviceInfo in servicesList) {
+                if (MonitorService::class.java.getName() == serviceInfo.service.className) {
+                    //if (serviceInfo.foreground) {
+                    return true
+                    //}
+                }
+            }
+            return false
+        }
+        return false
     }
 
     fun checkToShowHomeLocationAlert() {
@@ -8114,7 +8142,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
     private fun revisitShop(image: String) {
-
+        progress_wheel.spin()
         var shopName = ""
         var shopLat = 0.0
         var shopLong = 0.0
@@ -8329,9 +8357,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 visit_datetime = imageUpDateTime
             })
         }
-
+        progress_wheel.stopSpinning()
         val shopDetail = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(mShopId)
-        if (shopDetail.is_otp_verified.equals("false", ignoreCase = true)) {
+        // test done ITC
+        afterShopRevisit()
+
+        /*if (shopDetail.is_otp_verified.equals("false", ignoreCase = true)) {
             if (AppUtils.isOnline(this@DashboardActivity)) {
                 if (!isOtherUsersShopRevisit) {
                     cancelNotification(mShopId)
@@ -8341,7 +8372,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             } else
                 afterShopRevisit()
         } else
-            afterShopRevisit()
+            afterShopRevisit()*/
     }
 
     private fun showRevisitReasonDialog(revisitStatus: Int, addShopDBModelEntity: AddShopDBModelEntity?, storeName: String,
@@ -8370,7 +8401,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private fun afterShopRevisit() {
         if (!isOtherUsersShopRevisit) {
             cancelNotification(mShopId)
-            loadFragment(FragType.ShopDetailFragment, true, mShopId)
+            //loadFragment(FragType.ShopDetailFragment, true, mShopId)
+            // test done ITC
+            (getFragment() as LocalShopListFragment).refreshList()
         } else
             showOrderCollectionDialog()
     }
@@ -9428,6 +9461,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         else
             "Revisit Shop"*/
 
+
         CommonDialog.getInstance(AppUtils.hiFirstNameText(), popupBody, "NO", "YES", object : CommonDialogClickListener {
             override fun onLeftClick() {
                 cancelNotification(shopId)
@@ -9486,39 +9520,46 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     private fun callFeedbackDialog(image: String) {
         revisitImage = image
+        // test done ITC
+        if(Pref.IsShowRevisitRemarksPopup){
+            feedbackDialog = AddFeedbackSingleBtnDialog.getInstance(shopName + "\n" + contactNumber, getString(R.string.confirm_revisit), mShopId, object : AddFeedbackSingleBtnDialog.OnOkClickListener {
+                override fun onOkClick(mFeedback: String, mNextVisitDate: String, filePath: String) {
+                    if (!TextUtils.isEmpty(mFeedback))
+                        feedback = mFeedback
 
-        feedbackDialog = AddFeedbackSingleBtnDialog.getInstance(shopName + "\n" + contactNumber, getString(R.string.confirm_revisit), mShopId, object : AddFeedbackSingleBtnDialog.OnOkClickListener {
-            override fun onOkClick(mFeedback: String, mNextVisitDate: String, filePath: String) {
-                if (!TextUtils.isEmpty(mFeedback))
-                    feedback = mFeedback
+                    nextVisitDate = mNextVisitDate
+                    mFilePath = filePath
 
-                nextVisitDate = mNextVisitDate
-                mFilePath = filePath
-
-                if (Pref.isFingerPrintMandatoryForVisit) {
-                    if (isFingerPrintSupported)
-                        showFingerprintPopup()
-                    else
+                    if (Pref.isFingerPrintMandatoryForVisit) {
+                        if (isFingerPrintSupported)
+                            showFingerprintPopup()
+                        else
+                            revisitShop(image)
+                    } else
                         revisitShop(image)
-                } else
-                    revisitShop(image)
-            }
+                }
 
-            override fun onCloseClick() {
-                if (Pref.isFingerPrintMandatoryForVisit) {
-                    if (isFingerPrintSupported)
-                        showFingerprintPopup()
-                    else
+                override fun onCloseClick() {
+                    if (Pref.isFingerPrintMandatoryForVisit) {
+                        if (isFingerPrintSupported)
+                            showFingerprintPopup()
+                        else
+                            revisitShop(image)
+                    } else
                         revisitShop(image)
-                } else
-                    revisitShop(image)
-            }
+                }
 
-            override fun onClickCompetitorImg() {
-                feedBackDialogCompetetorImg = true
-            }
-        })
-        feedbackDialog?.show((mContext as DashboardActivity).supportFragmentManager, "AddFeedbackSingleBtnDialog")
+                override fun onClickCompetitorImg() {
+                    feedBackDialogCompetetorImg = true
+                }
+            })
+            feedbackDialog?.show((mContext as DashboardActivity).supportFragmentManager, "AddFeedbackSingleBtnDialog")
+        }else{
+            revisitShop(image)
+        }
+
+
+
     }
 
     private var fingerprintDialog: FingerprintDialog? = null

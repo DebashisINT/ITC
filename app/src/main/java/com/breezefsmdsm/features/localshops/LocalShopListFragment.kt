@@ -167,6 +167,10 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
         fetchNearbyShops()
     }
 
+    fun refreshList(){
+        fetchNearbyShops()
+    }
+
     override fun onClick(v: View?) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

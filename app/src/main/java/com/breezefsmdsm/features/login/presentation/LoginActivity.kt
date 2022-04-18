@@ -5472,10 +5472,21 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.IsRestrictNearbyGeofence = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
-
                                             else if (response.getconfigure!![i].Key.equals("IsShowNearByTeam", ignoreCase = true)) {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowNearByTeam = response.getconfigure!![i].Value == "1"
+                                                }
+                                            }else if (response.getconfigure!![i].Key.equals("AllowProfileUpdate", ignoreCase = true)) {
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.AllowProfileUpdate = response.getconfigure!![i].Value == "1"
+                                                }
+                                            }else if (response.getconfigure!![i].Key.equals("IsShowRevisitRemarksPopup", ignoreCase = true)) {
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowRevisitRemarksPopup = response.getconfigure!![i].Value == "1"
+                                                }
+                                            }else if (response.getconfigure!![i].Key.equals("IsAllowShopStatusUpdate", ignoreCase = true)) {
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsAllowShopStatusUpdate = response.getconfigure!![i].Value == "1"
                                                 }
                                             }
 
