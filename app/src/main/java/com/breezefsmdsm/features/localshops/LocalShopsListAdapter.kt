@@ -19,6 +19,25 @@ import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.features.location.LocationWizard
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.inflate_nearby_shops.view.*
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.add_order_ll
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.add_quot_ll
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.call_ll
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.direction_ll
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.direction_view
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.last_visited_date_TV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.ll_shop_code
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.myshop_address_TV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.myshop_name_TV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.order_amt_p_TV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.order_view
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.shop_IV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.shop_image_IV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.shop_list_LL
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.total_v_TV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.total_visited_value_TV
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.tv_shop_code
+import kotlinx.android.synthetic.main.inflate_nearby_shops.view.tv_shop_contact_no
+import kotlinx.android.synthetic.main.inflate_registered_shops.view.*
 
 /**
  * Created by riddhi on 2/1/18.
@@ -52,6 +71,12 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
 
         fun bindItems(context: Context, list: List<AddShopDBModelEntity>, listener: LocalShopListClickListener) {
             //Picasso.with(context).load(list[adapterPosition].shopImageLocalPath).into(itemView.shop_image_IV)
+
+            if(list[adapterPosition].shopStatusUpdate.equals("0")){
+                itemView.shop_list_LL.visibility=View.GONE
+            }else{
+                itemView.shop_list_LL.visibility=View.VISIBLE
+            }
 
             itemView.total_v_TV.text = context.getString(R.string.total_visits)
 

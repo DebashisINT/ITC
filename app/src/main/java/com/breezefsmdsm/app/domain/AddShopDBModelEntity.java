@@ -247,6 +247,17 @@ public class AddShopDBModelEntity {
     @ColumnInfo(name = "actual_address")
     private String actual_address = null;
 
+    @ColumnInfo(name = "shopStatusUpdate")
+    private String shopStatusUpdate = "1";
+
+    public String getShopStatusUpdate() {
+        return shopStatusUpdate;
+    }
+
+    public void setShopStatusUpdate(String shopStatusUpdate) {
+        this.shopStatusUpdate = shopStatusUpdate;
+    }
+
     public String getIs_otp_verified() {
         return is_otp_verified;
     }

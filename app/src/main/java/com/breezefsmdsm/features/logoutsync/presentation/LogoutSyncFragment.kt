@@ -1488,6 +1488,11 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         }
 
 
+        if(mAddShopDBModelEntity.shopStatusUpdate.equals("0"))
+            addShopData.shopStatusUpdate = mAddShopDBModelEntity.shopStatusUpdate
+        else
+            addShopData.shopStatusUpdate = "1"
+
         //if (TextUtils.isEmpty(mAddShopDBModelEntity.shopImageLocalPath) && TextUtils.isEmpty(mAddShopDBModelEntity.doc_degree)) {
         if (true) {
             Log.v("sync_odd","shop_edit_sync_data")

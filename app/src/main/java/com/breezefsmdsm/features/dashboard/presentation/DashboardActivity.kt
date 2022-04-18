@@ -8572,6 +8572,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         addShopReqData.assigned_to_shop_id = addShopData.assigned_to_shop_id
         addShopReqData.actual_address = addShopData.actual_address
 
+        if(addShopData.shopStatusUpdate.equals("0"))
+            addShopReqData.shopStatusUpdate = addShopData.shopStatusUpdate
+        else
+            addShopReqData.shopStatusUpdate = "1"
+
         /*val addShop = AddShopRequest()
         addShop.data = addShopReqData*/
 

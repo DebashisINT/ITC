@@ -19,7 +19,8 @@
             android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:background="@drawable/shape_cursor_one"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <RelativeLayout
                 android:id="@+id/shop_detail_RL"

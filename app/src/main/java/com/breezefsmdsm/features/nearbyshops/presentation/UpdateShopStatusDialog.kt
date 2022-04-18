@@ -100,7 +100,7 @@ class UpdateShopStatusDialog: DialogFragment(), View.OnClickListener {
 
     interface OnDSButtonClickListener {
         fun onLeftClick()
-        fun onRightClick(typeId: String,typeName:String,usrId:String)
+        fun onRightClick(status:String)
     }
 
     override fun onClick(v: View?) {
@@ -121,7 +121,7 @@ class UpdateShopStatusDialog: DialogFragment(), View.OnClickListener {
                 dismiss()
             }
             R.id.ok_TV ->{
-                mListener.onRightClick(selectedTypeID,selectedTypeName,muserIdForTypeUpdate)
+                mListener.onRightClick(tv_ds_type_dropdown.text.toString())
                 dismiss()
             }
         }

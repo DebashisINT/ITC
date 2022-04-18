@@ -69,6 +69,8 @@ class AddShopRequestData {
     var agency_name: String?= null
     var lead_contact_number: String?= null
 
+    var shopStatusUpdate: String?= null
+
 
 
 }

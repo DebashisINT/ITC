@@ -67,6 +67,13 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
         fun bindItems(context: Context, list: List<AddShopDBModelEntity>, listener: NearByShopsListClickListener) {
             //Picasso.with(context).load(list[adapterPosition].shopImageLocalPath).into(itemView.shop_image_IV)
             try {
+
+                if(list[adapterPosition].shopStatusUpdate.equals("0")){
+                    itemView.shop_list_LL.visibility=View.GONE
+                }else{
+                    itemView.shop_list_LL.visibility=View.VISIBLE
+                }
+
                 if (!TextUtils.isEmpty(list[adapterPosition].shopImageLocalPath)) {
                     Picasso.get()
                             .load(list[adapterPosition].shopImageLocalPath)

@@ -191,6 +191,10 @@ public interface AddShopDao {
     @Query("update shop_detail set account_holder=:account_holder, account_no=:account_no, bank_name=:bank_name, ifsc_code=:ifsc_code, upi_id=:upi_id where shop_id=:shopId")
     long updateBankDetails(String account_holder, String account_no, String bank_name, String ifsc_code, String upi_id, String shopId);
 
+
+    @Query("update shop_detail set shopStatusUpdate=:shopStatusUpdate where shop_id=:shop_id")
+    long updateShopStatus(String shop_id, String shopStatusUpdate);
+
 //    @Query("INSERT OR REPLACE INTO SHOP_TABLE (shopId,shopName,address,pinCode,ownerName,isVisited) VALUES (:id, :title, :url, COALESCE((SELECT isSubscribed FROM articles WHERE id = :id), 0));")
 //    void insertOrUpdateShop(long id, String title, String url);
 }
