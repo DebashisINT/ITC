@@ -4137,6 +4137,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         if (!TextUtils.isEmpty(loginResponse.user_details!!.willAlarmTrigger))
             Pref.willAlarmTrigger = loginResponse.user_details!!.willAlarmTrigger?.toBoolean()!!
 
+        Pref.willAlarmTrigger=false //  hardcoded for ITC  18-04-2022
+
         if (!Pref.isAddAttendence)
             Pref.totalS2SDistance = "0.0"
 
