@@ -2343,6 +2343,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
     }
 
+    @SuppressLint("NewApi")
     private fun sendNotification(shopId: String) {
         val list = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(shopId, AppUtils.getCurrentDateForShopActi())
         var isDurationCalculated = false
