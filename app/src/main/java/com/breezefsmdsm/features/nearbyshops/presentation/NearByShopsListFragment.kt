@@ -68,6 +68,7 @@ import com.breezefsmdsm.features.nearbyshops.model.ShopData
 import com.breezefsmdsm.features.nearbyshops.model.ShopListResponse
 import com.breezefsmdsm.features.nearbyshops.model.StageListResponseModel
 import com.breezefsmdsm.features.nearbyshops.model.updateaddress.AddressUpdateRequest
+import com.breezefsmdsm.features.photoReg.present.UpdateDSTypeStatusDialog
 import com.breezefsmdsm.features.shopdetail.presentation.AddCollectionDialog
 import com.breezefsmdsm.features.shopdetail.presentation.api.EditShopRepoProvider
 import com.breezefsmdsm.features.shopdetail.presentation.api.addcollection.AddCollectionRepoProvider
@@ -1167,6 +1168,19 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
             override fun OnNearByShopsListClick(position: Int) {
                 floating_fab.close(true)
                 (mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, list[position].shop_id)
+            }
+
+            override fun onUpdateStatusClick(obj: AddShopDBModelEntity) {
+                UpdateShopStatusDialog.getInstance(obj.shopName!!, "Cancel", "Confirm", true,"",obj.user_id.toString()!!,
+                        object : UpdateShopStatusDialog.OnDSButtonClickListener {
+                            override fun onLeftClick() {
+
+                            }
+                            override fun onRightClick(typeId: String, typeName: String, usrId: String) {
+//                                if(!typeName.equals("") && typeName.length>0)
+//                                    updateUserType(typeId,usrId)
+                            }
+                        }).show((mContext as DashboardActivity).supportFragmentManager, "")
             }
 
 
