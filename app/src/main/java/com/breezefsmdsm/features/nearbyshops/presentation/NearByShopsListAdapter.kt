@@ -157,7 +157,6 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                     itemView.ll_shop_type.visibility = View.VISIBLE
                 } else
                     itemView.ll_shop_type.visibility = View.GONE*/
-                Pref.IsAllowShopStatusUpdate = true
                 if(Pref.IsAllowShopStatusUpdate) {
                     itemView.tv_update_status_inflate_registered_shops.visibility = View.VISIBLE
                 }

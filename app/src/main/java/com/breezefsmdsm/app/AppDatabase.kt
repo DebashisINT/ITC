@@ -55,7 +55,7 @@ import com.breezefsmdsm.features.stockCompetetorStock.model.CompetetorStockData
         OrderStatusRemarksModelEntity::class,CurrentStockEntryModelEntity::class,CurrentStockEntryProductModelEntity::class,
            CcompetetorStockEntryModelEntity::class,CompetetorStockEntryProductModelEntity::class,
         ShopTypeStockViewStatus::class,ProspectEntity::class ),
-        version = 2, exportSchema = false)
+        version = 3, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -168,7 +168,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // allow queries on the main thread.
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
-                        .addMigrations(MIGRATION_1_2)
+                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -188,6 +188,11 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("CREATE TABLE prospect_list_master (id INTEGER NOT NULL PRIMARY KEY , pros_id  TEXT , pros_name TEXT ) ")
                 database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Available_Storage TEXT")
                 database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Total_Storage TEXT")
+            }
+        }
+        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE shop_detail ADD COLUMN shopStatusUpdate TEXT")
             }
         }
     }
