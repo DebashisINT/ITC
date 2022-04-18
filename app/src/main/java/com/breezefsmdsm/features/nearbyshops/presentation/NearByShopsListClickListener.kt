@@ -1,5 +1,7 @@
 package com.breezefsmdsm.features.nearbyshops.presentation
 
+import com.breezefsmdsm.app.domain.AddShopDBModelEntity
+
 /**
  * Created by Pratishruti on 30-10-2017.
  */
@@ -21,4 +23,6 @@ interface NearByShopsListClickListener {
     fun onCreateQrClick(position: Int)
     fun onUpdatePartyStatusClick(position: Int)
     fun onUpdateBankDetailsClick(position: Int)
+    fun onUpdateStatusClick(obj: AddShopDBModelEntity)
+
 }
