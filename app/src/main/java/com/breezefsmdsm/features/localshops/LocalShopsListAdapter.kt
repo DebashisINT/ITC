@@ -6,6 +6,8 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.amulyakhare.textdrawable.TextDrawable
@@ -42,16 +44,25 @@ import kotlinx.android.synthetic.main.inflate_registered_shops.view.*
 /**
  * Created by riddhi on 2/1/18.
  */
-class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, val listener: LocalShopListClickListener) : RecyclerView.Adapter<LocalShopsListAdapter.MyViewHolder>() {
+class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, val listener: LocalShopListClickListener,private val getSize: (Int) -> Unit) :
+        RecyclerView.Adapter<LocalShopsListAdapter.MyViewHolder>(), Filterable {
     private val layoutInflater: LayoutInflater
     private var context: Context
-    private var mList: List<AddShopDBModelEntity>
+    private var mList: ArrayList<AddShopDBModelEntity>
 
+    private var tempList: ArrayList<AddShopDBModelEntity>? = null
+    private var filterList: ArrayList<AddShopDBModelEntity>? = null
 
     init {
         layoutInflater = LayoutInflater.from(context)
         this.context = context
-        mList = list
+//        mList = list
+        tempList = ArrayList()
+        filterList = ArrayList()
+        mList = ArrayList()
+
+        tempList?.addAll(list)
+        mList?.addAll(list as ArrayList<AddShopDBModelEntity>)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -272,8 +283,69 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
         }
     }
 
-    fun updateAdapter(mlist: List<AddShopDBModelEntity>) {
+    fun updateAdapter(mlist: ArrayList<AddShopDBModelEntity>) {
         this.mList = mlist
+        notifyDataSetChanged()
+    }
+
+    override fun getFilter(): Filter {
+        return SearchFilter()
+    }
+
+    inner class SearchFilter : Filter() {
+        override fun performFiltering(p0: CharSequence?): FilterResults {
+
+            //var land=AppDatabase.getDBInstance()!!.addShopEntryDao().getLandNumber(p0?.toString())
+
+            val results = FilterResults()
+            filterList?.clear()
+            tempList?.indices!!
+                    .filter { tempList?.get(it)?.shopName?.toLowerCase()?.contains(p0?.toString()?.toLowerCase()!!)!!
+                    }
+                    .forEach { filterList?.add(tempList?.get(it)!!) }
+
+
+            results.values = filterList
+            results.count = filterList?.size!!
+
+            return results
+        }
+
+        override fun publishResults(p0: CharSequence?, results: FilterResults?) {
+
+            try {
+                filterList = results?.values as ArrayList<AddShopDBModelEntity>?
+                mList?.clear()
+                val hashSet = HashSet<String>()
+                if (filterList != null) {
+
+                    filterList?.indices!!
+                            .filter { hashSet.add(filterList?.get(it)?.shopName!!) }
+                            .forEach { mList?.add(filterList?.get(it)!!) }
+
+                    getSize(mList?.size!!)
+
+                    notifyDataSetChanged()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+    fun refreshList(list: ArrayList<AddShopDBModelEntity>) {
+
+        mList?.clear()
+        mList?.addAll(list)
+
+        tempList?.clear()
+        tempList?.addAll(list)
+
+        if (filterList == null)
+            filterList = ArrayList()
+        filterList?.clear()
+
         notifyDataSetChanged()
     }
 
