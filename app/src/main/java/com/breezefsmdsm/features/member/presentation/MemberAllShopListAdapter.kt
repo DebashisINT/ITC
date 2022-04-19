@@ -16,13 +16,29 @@ import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.features.member.model.TeamShopListDataModel
 import kotlinx.android.synthetic.main.inflate_member_shop_list.view.*
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.last_visited_date_TV
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.ll_dd_name
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.ll_shop_code
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.ll_shop_type
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.myshop_address_TV
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.myshop_name_TV
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.shop_IV
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.total_visited_value_TV
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.tv_dd_name
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.tv_funnel_stage
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.tv_funnel_stage_header
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.tv_shop_code
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.tv_shop_contact_no
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.tv_stage
+import kotlinx.android.synthetic.main.inflate_member_shop_list.view.tv_stage_header
+import kotlinx.android.synthetic.main.inflate_registered_shops.view.*
 
 /**
  * Created by Saikat on 28-02-2020.
  */
 class MemberAllShopListAdapter(private val context: Context, private val teamShopList: ArrayList<TeamShopListDataModel>,
                                private val listener: (TeamShopListDataModel) -> Unit, private val onUpdateLocClick: (TeamShopListDataModel) -> Unit,
-                               private val getListSize: (Int) -> Unit) : RecyclerView.Adapter<MemberAllShopListAdapter.MyViewHolder>(),
+                               private val getListSize: (Int) -> Unit,private val getShopStatusDtls: (TeamShopListDataModel) -> Unit) : RecyclerView.Adapter<MemberAllShopListAdapter.MyViewHolder>(),
         Filterable {
 
     private val layoutInflater: LayoutInflater by lazy {
@@ -48,7 +64,7 @@ class MemberAllShopListAdapter(private val context: Context, private val teamSho
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bindItems(context, shopList!!, listener, onUpdateLocClick)
+        holder.bindItems(context, shopList!!, listener, onUpdateLocClick,getShopStatusDtls)
     }
 
     override fun getItemCount(): Int {
@@ -58,7 +74,7 @@ class MemberAllShopListAdapter(private val context: Context, private val teamSho
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindItems(context: Context, teamShopList: ArrayList<TeamShopListDataModel>, listener: (TeamShopListDataModel) -> Unit,
-                      onUpdateLocClick: (TeamShopListDataModel) -> Unit) {
+                      onUpdateLocClick: (TeamShopListDataModel) -> Unit,getShopStatusDtls:(TeamShopListDataModel) -> Unit) {
             itemView.apply {
                 myshop_name_TV.text = teamShopList[adapterPosition].shop_name
                 myshop_address_TV.text = teamShopList[adapterPosition].shop_address
@@ -139,7 +155,8 @@ class MemberAllShopListAdapter(private val context: Context, private val teamSho
                         tv_funnel_stage_header.visibility = View.GONE
                         tv_funnel_stage.visibility = View.GONE
                     }
-                } else {
+                }
+                else {
                     tv_funnel_stage_header.visibility = View.GONE
                     tv_funnel_stage.visibility = View.GONE
                     tv_stage_header.visibility = View.GONE
@@ -181,6 +198,16 @@ class MemberAllShopListAdapter(private val context: Context, private val teamSho
                             ll_dd_name.visibility = View.GONE
                         }
                     }
+                }
+
+                if(Pref.IsAllowShopStatusUpdate) {
+                    tv_update_status.visibility = View.VISIBLE
+                }
+                else {
+                    tv_update_status.visibility = View.GONE
+                }
+                tv_update_status.setOnClickListener {
+                    getShopStatusDtls(teamShopList[adapterPosition])
                 }
             }
         }

@@ -5,10 +5,7 @@ import android.net.Uri
 import com.breezefsmdsm.app.FileUtils
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.base.BaseResponse
-import com.breezefsmdsm.features.addAttendence.model.AddAttendenceImageInput
-import com.breezefsmdsm.features.addAttendence.model.AddAttendenceInpuModel
-import com.breezefsmdsm.features.addAttendence.model.LeaveListResponseModel
-import com.breezefsmdsm.features.addAttendence.model.SendLeaveApprovalInputParams
+import com.breezefsmdsm.features.addAttendence.model.*
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.location.LocationFuzedService
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -70,4 +67,9 @@ class AddAttendenceRepo(val apiService: AddAttendenceApi) {
     fun leaveList(fromDate: String, toDate: String): Observable<LeaveListResponseModel> {
         return apiService.leaveList(Pref.session_token!!, Pref.user_id!!, fromDate, toDate)
     }
+
+    fun getReportToFCMInfo(user_id: String, session_token: String): Observable<GetReportToFCMResponse> {
+        return apiService.getReportToFCMInfoAPI(user_id,session_token)
+    }
+
 }

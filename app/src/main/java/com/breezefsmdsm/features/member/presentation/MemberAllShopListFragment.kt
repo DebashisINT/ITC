@@ -11,6 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import com.android.volley.AuthFailureError
+import com.android.volley.Response
+import com.android.volley.VolleyError
+import com.android.volley.toolbox.JsonObjectRequest
+import com.breezefsmdsm.MySingleton
 import com.elvishew.xlog.XLog
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.breezefsmdsm.R
@@ -22,6 +27,8 @@ import com.breezefsmdsm.app.domain.MemberShopEntity
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
+import com.breezefsmdsm.features.addAttendence.api.addattendenceapi.AddAttendenceRepoProvider
+import com.breezefsmdsm.features.addAttendence.model.GetReportToFCMResponse
 import com.breezefsmdsm.features.addshop.presentation.AccuracyIssueDialog
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
@@ -30,9 +37,13 @@ import com.breezefsmdsm.features.member.model.TeamShopListDataModel
 import com.breezefsmdsm.features.member.model.TeamShopListResponseModel
 import com.breezefsmdsm.features.nearbyshops.api.updateaddress.ShopAddressUpdateRepoProvider
 import com.breezefsmdsm.features.nearbyshops.model.updateaddress.AddressUpdateRequest
+import com.breezefsmdsm.features.nearbyshops.presentation.UpdateShopStatusDialog
 import com.breezefsmdsm.widgets.AppCustomTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.json.JSONArray
+import org.json.JSONObject
+import java.util.HashMap
 
 /**
  * Created by Saikat on 28-02-2020.
@@ -259,10 +270,104 @@ class MemberAllShopListFragment : BaseFragment() {
                 tv_shop_count.text = "Total " + shopType_.shoptype_name + "(s): " + size
             } else
                 tv_shop_count.text = "Total " + Pref.shopText + "(s): " + size
+        },{ teamShop: TeamShopListDataModel ->
+
+            UpdateShopStatusDialog.getInstance(teamShop.shop_name!!, "Cancel", "Confirm", true,"","",
+                object : UpdateShopStatusDialog.OnDSButtonClickListener {
+                    override fun onLeftClick() {
+
+                    }
+                    override fun onRightClick(status: String) {
+                        if(!status.equals("")){
+                            if(status.equals("Inactive")){
+                                var selShopId = teamShop.shop_id
+                                getFCMInfo(userId,selShopId,teamShop.shop_name)
+                            }
+                            if(status.equals("Active")){
+
+                            }
+                        }
+
+                    }
+                }).show((mContext as DashboardActivity).supportFragmentManager, "")
         })
 
         rv_team_shop_list.adapter = adapter
     }
+
+    private fun getFCMInfo(usrID:String,shopID:String,shopName:String){
+        try{
+            val repository = AddAttendenceRepoProvider.addAttendenceRepo()
+            BaseActivity.compositeDisposable.add(
+                repository.getReportToFCMInfo(usrID,Pref.session_token.toString())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as GetReportToFCMResponse
+
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            sendFCMNotiForShopStatus(response.device_token!!,shopID,shopName)
+                        }
+
+                    }, { error ->
+                        XLog.d("Apply Leave Response ERROR=========> " + error.message)
+                        BaseActivity.isApiInitiated = false
+                        progress_wheel.stopSpinning()
+                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                    })
+            )
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+
+    }
+
+    private fun sendFCMNotiForShopStatus(superVisor_fcmToken:String,shopID:String,shopName:String){
+        if (superVisor_fcmToken != "") {
+            try {
+                val jsonObject = JSONObject()
+                val notificationBody = JSONObject()
+                notificationBody.put("body","Shop : $shopName inactive by ${Pref.user_name}")
+                notificationBody.put("body1",shopID)
+                //notificationBody.put("body2",shopName)
+                //notificationBody.put("body3",Pref.user_name)
+                notificationBody.put("flag", "shop_status_update")
+                notificationBody.put("applied_user_id",Pref.user_id)
+                jsonObject.put("data", notificationBody)
+                val jsonArray = JSONArray()
+                jsonArray.put(0,superVisor_fcmToken)
+                jsonObject.put("registration_ids", jsonArray)
+                sendCustomNotification(jsonObject)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun sendCustomNotification(notification: JSONObject) {
+        val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest("https://fcm.googleapis.com/fcm/send", notification,
+            object : Response.Listener<JSONObject?> {
+                override fun onResponse(response: JSONObject?) {
+                    (mContext as DashboardActivity).onBackPressed()
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(error: VolleyError?) {
+
+                }
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["Authorization"] = "key=AAAAtEsk8DQ:APA91bGPAdNEeJD4IjeKM6gIs_jgfgUT9daBGkyqEXzjozBQQrAAAhm1Wpdptj8mZp-xDy7buoz3P2ocGYkKVWL42LimbWwmqB-qz4HIwoOzzJfb7-7zY0tDYDqUe3UzXIisgkReB7cy"
+                params["Content-Type"] = "application/json"
+                return params
+            }
+        }
+
+        MySingleton.getInstance(mContext)!!.addToRequestQueue(jsonObjectRequest)
+    }
+
 
     private fun getShopLatLong(teamShop: TeamShopListDataModel) {
         if (!isAddressUpdating) {

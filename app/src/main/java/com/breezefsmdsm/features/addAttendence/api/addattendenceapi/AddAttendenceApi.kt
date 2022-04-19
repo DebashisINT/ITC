@@ -3,6 +3,7 @@ package com.breezefsmdsm.features.addAttendence.api.addattendenceapi
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.addAttendence.model.AddAttendenceInpuModel
+import com.breezefsmdsm.features.addAttendence.model.GetReportToFCMResponse
 import com.breezefsmdsm.features.addAttendence.model.LeaveListResponseModel
 import com.breezefsmdsm.features.addAttendence.model.SendLeaveApprovalInputParams
 import io.reactivex.Observable
@@ -39,6 +40,11 @@ interface AddAttendenceApi {
     @POST("Leave/GetLeaveList")
     fun leaveList(@Field("session_token") session_token: String, @Field("user_id") user_id: String, @Field("from_date") from_date: String,
                        @Field("to_date") to_date: String): Observable<LeaveListResponseModel>
+
+    @FormUrlEncoded
+    @POST("Devicetoken/UserDeviceTokenInfo")
+    fun getReportToFCMInfoAPI(@Field("user_id") user_id: String,@Field("session_token") session_token: String): Observable<GetReportToFCMResponse>
+
 
     /**
      * Companion object to create the GithubApiService

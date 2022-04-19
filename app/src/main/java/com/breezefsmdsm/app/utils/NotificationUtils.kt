@@ -999,4 +999,74 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
             notificationmanager.notify((chatUserDataModel?.id + "#" + chatListDataModel.id).hashCode(), notification)
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun sendFCMNotificaitonShopStatusUpdate(applicationContext: Context, remoteMessage: RemoteMessage?) {
+
+        val random = Random()
+        val m = random.nextInt(9999 - 1000) + 1000
+
+        val notificationmanager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val remoteView = RemoteViews(applicationContext.packageName, R.layout.customnotificationsmall)
+
+
+        remoteView.setImageViewResource(R.id.imagenotileft_small, R.drawable.ic_logo)
+        remoteView.setTextViewText(R.id.title_small, remoteMessage?.data?.get("body"))
+        remoteView.setTextViewText(R.id.text_small, "Nordusk")
+
+
+        val shopIntent = Intent(applicationContext, DashboardActivity::class.java)
+        shopIntent.putExtra("TYPE", "RECEIVER_SHOP_STATUS")
+        shopIntent.putExtra("shopID", remoteMessage?.data?.get("body1"))
+        shopIntent.action = Intent.ACTION_MAIN
+        shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 1, shopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = AppUtils.notificationChannelId
+
+            val channelName = AppUtils.notificationChannelName
+
+            XLog.e("========Notification Channel enabled (FirebaseMesagingService)=========")
+
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val notificationChannel = NotificationChannel(channelId, channelName, importance)
+            notificationChannel.enableLights(true)
+            notificationChannel.enableVibration(true)
+            notificationmanager.createNotificationChannel(notificationChannel)
+
+            val notificationBuilder = NotificationCompat.Builder(applicationContext)
+                .setSmallIcon(R.drawable.ic_notifications_icon)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true)
+                .setChannelId(channelId)
+                .setContentIntent(pendingIntent)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setGroup("FTS Group")
+                .setGroupSummary(true)
+                .setContent(remoteView)
+                .build()
+
+            notificationmanager.notify(m, notificationBuilder)
+        }
+        else {
+            val notification = NotificationCompat.Builder(
+                applicationContext)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(R.drawable.ic_notifications_icon)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setAutoCancel(true)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setGroup("FTS Group")
+                .setGroupSummary(true)
+                .setContent(remoteView)
+                .build()
+
+            notificationmanager.notify(m, notification)
+        }
+
+    }
+
 }

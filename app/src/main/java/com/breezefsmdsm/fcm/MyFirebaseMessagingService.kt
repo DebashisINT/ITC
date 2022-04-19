@@ -96,6 +96,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         //getting the title and the body
         //val title = remoteMessage?.notification?.title
         val body = remoteMessage?.data?.get("body")
+        val tag = remoteMessage?.data?.get("flag")
 
         val notification = NotificationUtils(getString(R.string.app_name), "", "", "")
 
@@ -137,6 +138,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             else if (remoteMessage?.data?.get("type") == "update_status") {
                 val intent = Intent()
                 intent.action = "FCM_STATUS_ACTION_RECEIVER"
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+            } else if(tag.equals("shop_status_update")){
+                notification.sendFCMNotificaitonShopStatusUpdate(applicationContext, remoteMessage)
+
+                val intent = Intent()
+                intent.action = "FCM_ACTION_RECEIVER_SHOP_STATUS"
                 LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
             }
             else {
