@@ -2273,12 +2273,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
             R.id.revisit_ll -> {
 
-                if (!Pref.isAddAttendence) {
+                //if (!Pref.isAddAttendence) {
+                if (!Pref.isAddAttendence){
                     (mContext as DashboardActivity).checkToShowAddAttendanceAlert()
-                    return
                 }
                 else {
-                    if (Pref.IsShowDayStart) {
+                    if (Pref.IsShowDayStart || true) {
                         if (!Pref.DayStartMarked) {
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
