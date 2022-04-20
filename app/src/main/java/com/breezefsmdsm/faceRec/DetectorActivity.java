@@ -295,8 +295,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     tracker.setFrameConfiguration(previewWidth, previewHeight, sensorOrientation);
   }
 
-
-
   @Override
   protected void processImage() {
     ++timestamp;
@@ -347,7 +345,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
 
   }
-
 
   private void registerFace(Bitmap mBitmap){
     InputImage image = InputImage.fromBitmap(mBitmap, 0);
@@ -467,7 +464,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     builder.show();
 
   }
-
 
   private void updateResults(long currTimestamp, final List<SimilarityClassifier.Recognition> mappedRecognitions) {
 

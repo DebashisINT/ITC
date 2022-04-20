@@ -55,7 +55,7 @@ class MonitorService:Service() {
 
             }
         }
-        timer!!.schedule(task, 0, 8000)
+        timer!!.schedule(task, 0, 10000)
 
         // 15 mins is 60000 * 15
 
