@@ -2272,14 +2272,43 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         when (p0!!.id) {
 
             R.id.revisit_ll -> {
-
                 //if (!Pref.isAddAttendence) {
-                if (!Pref.isAddAttendence){
+                if (!Pref.isAddAttendence && false){
                     (mContext as DashboardActivity).checkToShowAddAttendanceAlert()
                 }
                 else {
-                    if (Pref.IsShowDayStart || true) {
-                        if (!Pref.DayStartMarked) {
+                    if (Pref.IsShowDayStart && !Pref.DayStartMarked) {
+                        val simpleDialog = Dialog(mContext)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!
+                            .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader =
+                            simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV =
+                            simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialogHeader.text = "Please start your day..."
+                        val dialogYes =
+                            simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+                    }
+                    else {
+                        progress_wheel.spin()
+                        revisit_ll.isEnabled=false
+                        //checkAutoRevisit()
+
+                        var loc:Location = Location("")
+                        loc.latitude=Pref.current_latitude.toDouble()
+                        loc.longitude=Pref.current_longitude.toDouble()
+                        checkAutoRevisitManual(loc)
+
+                        Handler().postDelayed(Runnable {
+                            revisit_ll.isEnabled=true
+                            progress_wheel.stopSpinning()
                             val simpleDialog = Dialog(mContext)
                             simpleDialog.setCancelable(false)
                             simpleDialog.getWindow()!!
@@ -2290,34 +2319,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             val dialog_yes_no_headerTV =
                                 simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                             dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
-                            dialogHeader.text = "Please start your day..."
+                            dialogHeader.text = "Process has been successfully completed."
                             val dialogYes =
                                 simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                             dialogYes.setOnClickListener({ view ->
                                 simpleDialog.cancel()
                             })
                             simpleDialog.show()
-                        } else {
-                            progress_wheel.spin()
-                            revisit_ll.isEnabled=false
-                            checkAutoRevisit()
-                            Handler().postDelayed(Runnable {
-                                revisit_ll.isEnabled=true
-                                progress_wheel.stopSpinning()
-                            }, 5000)
-                        }
-                    } else {
-                        progress_wheel.spin()
-                        revisit_ll.isEnabled=false
-                        checkAutoRevisit()
-                        Handler().postDelayed(Runnable {
-                            revisit_ll.isEnabled=true
-                            progress_wheel.stopSpinning()
                         }, 5000)
                     }
                 }
-
             }
+
+
+
+
 
             R.id.fab -> {
 
@@ -4438,19 +4454,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             Pref.appInfoMins =
                                                 response.getconfigure?.get(i)?.Value!!
                                         }
-                                    } else if (response.getconfigure!![i].Key.equals(
-                                            "autoRevisitDistance",
-                                            ignoreCase = true
-                                        )
-                                    ) {
-                                        if (!TextUtils.isEmpty(response.getconfigure!![i].Value))
-                                            Pref.autoRevisitDistance =
-                                                response.getconfigure!![i].Value!!
-                                    } else if (response.getconfigure!![i].Key.equals(
-                                            "autoRevisitTime",
-                                            ignoreCase = true
-                                        )
-                                    ) {
+                                    } else if (response.getconfigure!![i].Key.equals("autoRevisitDistance", ignoreCase = true)) {
+                                        if (!TextUtils.isEmpty(response.getconfigure!![i].Value)) Pref.autoRevisitDistance = response.getconfigure!![i].Value!!
+                                    }
+                                    else if (response.getconfigure!![i].Key.equals("autoRevisitTime", ignoreCase = true)) {
                                         if (!TextUtils.isEmpty(response.getconfigure!![i].Value))
                                             Pref.autoRevisitTime =
                                                 response.getconfigure!![i].Value!!
@@ -8936,6 +8943,77 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         else {
             //progress_wheel.stopSpinning()
         }
+    }
+    fun checkAutoRevisitManual(location:Location) {
+        var nearestDist = 5000
+        var nearBy: Double = Pref.DistributorGPSAccuracy.toDouble()
+        var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
+        val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
+        val newList = java.util.ArrayList<AddShopDBModelEntity>()
+        for (i in allShopList.indices) {
+            newList.add(allShopList[i])
+        }
+
+        var visitedForToday = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi()) as List<ShopActivityEntity>
+        if(visitedForToday.size > 0 && newList.size>0){
+            for(i in 0..visitedForToday.size-1) {
+                var match = false
+                var pos = 0
+                for (j in 0..newList.size - 1) {
+                    if (newList.get(j).shop_id.equals(visitedForToday.get(i).shopid)) {
+                        match = true
+                        pos = j
+                        break
+                    }
+                }
+                if (match) {
+                    newList.removeAt(pos)
+                }
+            }
+        }
+
+
+        if (newList != null && newList.size > 0) {
+            for (i in 0 until newList.size) {
+                val shopLat: Double = newList[i].shopLat
+                val shopLong: Double = newList[i].shopLong
+                if (shopLat != null && shopLong != null) {
+                    val shopLocation = Location("")
+                    shopLocation.latitude = shopLat
+                    shopLocation.longitude = shopLong
+                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
+                        location,
+                        shopLocation,
+                        Pref.DistributorGPSAccuracy.toInt()
+                    )
+                    var dist = location.distanceTo(shopLocation).toInt()  //21-10-2021
+                    if (isShopNearby) {
+                        if ((location.distanceTo(shopLocation)) < nearBy) {
+                            nearBy = location.distanceTo(shopLocation).toDouble()
+                            finalNearByShop = newList[i]
+                        }
+                    } else {
+                        if (dist < nearestDist) {
+                            nearestDist = dist
+                        }
+                    }
+                }
+            }
+
+        } else {
+            //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
+        }
+
+       if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
+           shop_id = finalNearByShop.shop_id
+           AppUtils.isAutoRevisit = true
+           revisitShop()
+           shop_id = ""
+        }else{
+           return
+        }
+
     }
 
 

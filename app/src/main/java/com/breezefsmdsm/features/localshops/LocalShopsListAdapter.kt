@@ -1,6 +1,9 @@
 package com.breezefsmdsm.features.localshops
 
+import android.app.Dialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -19,6 +22,7 @@ import com.breezefsmdsm.app.domain.AddShopDBModelEntity
 import com.breezefsmdsm.app.domain.OrderDetailsListEntity
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.features.location.LocationWizard
+import com.breezefsmdsm.widgets.AppCustomTextView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.inflate_nearby_shops.view.*
 import kotlinx.android.synthetic.main.inflate_nearby_shops.view.add_order_ll
@@ -150,28 +154,54 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
             })
 
             itemView.visit_rl.setOnClickListener(View.OnClickListener {
-                if (Pref.isMultipleVisitEnable) {
-                    val list_ = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(list[adapterPosition].shop_id, AppUtils.getCurrentDateForShopActi())
-                    /*if (list_ == null || list_.isEmpty())
-                        listener.visitShop(list[adapterPosition])
-                    else {
-                        var isDurationCalculated = false
-                        for (i in list_.indices) {
-                            isDurationCalculated = list_[i].isDurationCalculated
-                            if (!list_[i].isDurationCalculated)
-                                break
 
-                        }
 
-                        if (isDurationCalculated)
+                    if (Pref.IsShowDayStart && !Pref.DayStartMarked) {
+                        val simpleDialog = Dialog(context)
+                        simpleDialog.setCancelable(false)
+                        simpleDialog.getWindow()!!
+                            .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        simpleDialog.setContentView(R.layout.dialog_message)
+                        val dialogHeader =
+                            simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                        val dialog_yes_no_headerTV =
+                            simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()
+                        dialogHeader.text = "Please start your day..."
+                        val dialogYes =
+                            simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                        dialogYes.setOnClickListener({ view ->
+                            simpleDialog.cancel()
+                        })
+                        simpleDialog.show()
+                    }else {
+                        if (Pref.isMultipleVisitEnable) {
+                            val list_ = AppDatabase.getDBInstance()!!.shopActivityDao()
+                                .getShopForDay(
+                                    list[adapterPosition].shop_id,
+                                    AppUtils.getCurrentDateForShopActi()
+                                )
+                            /*if (list_ == null || list_.isEmpty())
+                                listener.visitShop(list[adapterPosition])
+                            else {
+                                var isDurationCalculated = false
+                                for (i in list_.indices) {
+                                    isDurationCalculated = list_[i].isDurationCalculated
+                                    if (!list_[i].isDurationCalculated)
+                                        break
+
+                                }
+
+                                if (isDurationCalculated)
+                                    listener.visitShop(list[adapterPosition])
+                            }*/
                             listener.visitShop(list[adapterPosition])
-                    }*/
-                    listener.visitShop(list[adapterPosition])
-                }
-                else {
-                    if (!list[adapterPosition].visited)
-                        listener.visitShop(list[adapterPosition])
-                }
+                        } else {
+                            if (!list[adapterPosition].visited)
+                                listener.visitShop(list[adapterPosition])
+                        }
+                    }
+
             })
 
             itemView.tv_shop_contact_no.text = list[adapterPosition].ownerContactNumber
