@@ -192,7 +192,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
         val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE shop_detail ADD COLUMN shopStatusUpdate TEXT")
+                database.execSQL("ALTER TABLE shop_detail ADD COLUMN shopStatusUpdate TEXT DEFAULT '1' ")
             }
         }
     }

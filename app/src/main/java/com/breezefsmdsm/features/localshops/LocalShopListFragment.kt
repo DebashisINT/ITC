@@ -216,6 +216,9 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
 
             try {
 
+                //20-04-2022
+                shopCountTvShow.text = "Near By Shop Count : "+list.size
+
                 localShopsListAdapter = LocalShopsListAdapter(mContext, list, object : LocalShopListClickListener {
                     override fun onQuationClick(shop: Any) {
                         (mContext as DashboardActivity).isBack = true
@@ -261,7 +264,8 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
                 e.printStackTrace()
             }
         } else {
-
+            //20-04-2022
+            shopCountTvShow.text = "Near By Shop Count : "+list.size
             XLog.d("=====empty selected list (Local Shop List)=======")
 
             noShopAvailable.visibility = View.VISIBLE
@@ -380,9 +384,6 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
 
         list.clear()
         val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
-
-        //20-04-2022
-        shopCountTvShow.text = "Near By Shop Count : "+allShopList.size
 
         val newList = java.util.ArrayList<AddShopDBModelEntity>()
 

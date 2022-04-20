@@ -166,7 +166,8 @@
         android:text=""
         android:layout_below="@+id/tv_beat_name"
         android:textColor="@color/login_txt_color"
-        android:textSize="@dimen/_12sdp" />
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_5sdp"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -186,7 +187,8 @@
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/_13sdp"
         android:textStyle="normal"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/_10sdp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/filter_fab"

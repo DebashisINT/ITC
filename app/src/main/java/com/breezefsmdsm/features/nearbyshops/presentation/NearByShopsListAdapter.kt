@@ -68,6 +68,11 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
             //Picasso.with(context).load(list[adapterPosition].shopImageLocalPath).into(itemView.shop_image_IV)
             try {
 
+                try{
+
+                }catch (ex:Exception){
+
+                }
                 if(list[adapterPosition].shopStatusUpdate.equals("0")){
                     itemView.shop_list_LL.visibility=View.GONE
                 }else{
