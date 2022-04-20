@@ -157,11 +157,23 @@
         android:visibility="gone"
         android:layout_below="@+id/tv_beat_name"/>
 
+    <com.breezefsmdsm.widgets.AppCustomTextView
+        android:id="@+id/tv_shop_count_fragment_nearby_shop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/_5sdp"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:text=""
+        android:layout_below="@+id/tv_beat_name"
+        android:textColor="@color/login_txt_color"
+        android:textSize="@dimen/_12sdp" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/near_by_shops_RCV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_beat_name"
+        android:layout_below="@id/tv_shop_count_fragment_nearby_shop"
         android:overScrollMode="never" />
 
     <com.breezefsmdsm.widgets.AppCustomTextView

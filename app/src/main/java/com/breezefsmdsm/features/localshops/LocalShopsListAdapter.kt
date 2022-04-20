@@ -310,7 +310,10 @@ class LocalShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>, 
             }
             else
                 itemView.tv_party_value.text = ""
+
+
         }
+
     }
 
     fun updateAdapter(mlist: ArrayList<AddShopDBModelEntity>) {

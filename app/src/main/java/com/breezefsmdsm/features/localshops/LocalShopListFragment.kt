@@ -54,6 +54,7 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
     private val preid: Int = 100
     private var isGetLocation = -1
     private lateinit var geofenceTv: AppCompatTextView
+    private lateinit var shopCountTvShow:AppCompatTextView
 
 
     override fun onAttach(context: Context) {
@@ -99,6 +100,9 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
         noShopAvailable = view.findViewById(R.id.no_shop_tv)
         shop_list_parent_rl = view.findViewById(R.id.shop_list_parent_rl)
         geofenceTv = view.findViewById(R.id.tv_geofence_relax)
+        shopCountTvShow = view.findViewById(R.id.tv_shop_count_fragment_nearby_shop)
+
+
 
         if(Pref.IsRestrictNearbyGeofence){
             //geofenceTv.visibility = View.VISIBLE
@@ -376,6 +380,9 @@ class LocalShopListFragment : BaseFragment(), View.OnClickListener {
 
         list.clear()
         val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
+
+        //20-04-2022
+        shopCountTvShow.text = "Near By Shop Count : "+allShopList.size
 
         val newList = java.util.ArrayList<AddShopDBModelEntity>()
 
