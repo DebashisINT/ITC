@@ -236,7 +236,7 @@ import kotlin.system.exitProcess
 /*
  * Created by rp : 26-10-2017:17:59
  */
-class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, OnCompleteListener<Void>, GpsStatusDetector.GpsStatusDetectorCallBack {
+class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, OnCompleteListener<Void>, GpsStatusDetector.GpsStatusDetectorCallBack{
     override fun onComplete(task: Task<Void>) {
         mPendingGeofenceTask = PendingGeofenceTask.NONE;
         if (task.isSuccessful) {
@@ -837,6 +837,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         }
                     })
         }
+
     }
 
     fun isMonitorServiceRunningggg(): Boolean {
