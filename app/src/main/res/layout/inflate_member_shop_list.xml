@@ -421,6 +421,7 @@
                 android:textColor="@color/login_txt_color"
                 android:textSize="@dimen/_8sdp"  />
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

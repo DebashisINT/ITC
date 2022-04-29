@@ -366,4 +366,5 @@ object Pref : PreferenceHolder() {
     var IsShowRevisitRemarksPopup: Boolean by bindToPreferenceField(false, "IsShowRevisitRemarksPopup")
 
     var IsAllowShopStatusUpdate: Boolean by bindToPreferenceField(false, "IsAllowShopStatusUpdate")
+
 }

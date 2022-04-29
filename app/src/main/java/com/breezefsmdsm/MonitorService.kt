@@ -65,7 +65,7 @@ class MonitorService:Service() {
     }
 
     fun serviceStatusActionable(){
-        XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
+        //XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
         Log.e("MonitorService_abc", "startabc" )
         monitorBroadcast=MonitorBroadcast()
 
@@ -128,8 +128,8 @@ class MonitorService:Service() {
 
         if(shouldShopActivityUpdate()){
             if (FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, this)) {
-                XLog.d("MonitorService LocationFuzedService : " + "true" + "," + " Time :" + AppUtils.getCurrentDateTime())
-                XLog.d("MonitorService Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
+                //XLog.d("MonitorService LocationFuzedService : " + "true" + "," + " Time :" + AppUtils.getCurrentDateTime())
+                //XLog.d("MonitorService Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
                 /*if(powerSaver){
                     sendGPSOffBroadcast()
                 }else{

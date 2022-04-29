@@ -22,6 +22,7 @@ import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.EntityTypeEntity
 import com.breezefsmdsm.app.domain.PartyStatusEntity
+import com.breezefsmdsm.app.domain.ShopDeactivateEntity
 import com.breezefsmdsm.features.alarm.model.AlarmData
 import com.breezefsmdsm.features.broadcastreceiver.ActionReceiver
 import com.breezefsmdsm.features.chat.model.ChatListDataModel
@@ -1005,6 +1006,11 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
 
         val random = Random()
         val m = random.nextInt(9999 - 1000) + 1000
+
+        var objShop: ShopDeactivateEntity = ShopDeactivateEntity()
+        objShop.shop_id=remoteMessage?.data?.get("body1")!!
+        objShop.noti_id=m.toString()
+        AppDatabase.getDBInstance()?.shopDeactivateDao()?.insert(objShop)
 
         val notificationmanager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

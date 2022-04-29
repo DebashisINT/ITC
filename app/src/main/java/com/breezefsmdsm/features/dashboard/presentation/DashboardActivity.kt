@@ -11520,6 +11520,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         XLog.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
                         if (addShopResult.status == NetworkConstant.SUCCESS) {
                             AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
+                            AppDatabase.getDBInstance()?.shopDeactivateDao()!!.deleteByShopID(addShopReqData.shop_id!!)
                             progress_wheel.stopSpinning()
                         }
                         BaseActivity.isApiInitiated = false

@@ -54,8 +54,8 @@ import com.breezefsmdsm.features.stockCompetetorStock.model.CompetetorStockData
         VisitRemarksEntity::class,ShopVisitCompetetorModelEntity::class,
         OrderStatusRemarksModelEntity::class,CurrentStockEntryModelEntity::class,CurrentStockEntryProductModelEntity::class,
            CcompetetorStockEntryModelEntity::class,CompetetorStockEntryProductModelEntity::class,
-        ShopTypeStockViewStatus::class,ProspectEntity::class ),
-        version = 3, exportSchema = false)
+        ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class ),
+        version = 4, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -158,6 +158,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun visitRemarksDao(): VisitRemarksDao
 
     abstract fun prosDao(): ProspectDao
+    abstract fun shopDeactivateDao(): ShopDeactivateDao
 
     companion object {
         var INSTANCE: AppDatabase? = null
@@ -168,7 +169,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // allow queries on the main thread.
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
-                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
+                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4)
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -193,6 +194,12 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_2_3: Migration = object : Migration(2, 3) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE shop_detail ADD COLUMN shopStatusUpdate TEXT DEFAULT '1' ")
+            }
+        }
+
+        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("create TABLE shop_deactivate_record  (id INTEGER NOT NULL PRIMARY KEY , shop_id  TEXT , noti_id TEXT ) ")
             }
         }
     }

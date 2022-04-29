@@ -99,6 +99,8 @@ public interface AppConstant {
     String ASSIGNED_TO_SHOP_TABLE = "assignedto_shop";
     String VISIT_REMARKS_TABLE = "visit_remarks";
 
+    String SHOP_DEACTIVATE_RECORD = "shop_deactivate_record";
+
     /*App Intent Action*/
     String STARTFOREGROUND_ACTION = "start_foreground";
     String STOPFOREGROUND_ACTION = "stop_foreground";

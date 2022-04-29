@@ -48,9 +48,7 @@ import com.breezefsmdsm.features.SearchLocation.locationInfoModel
 import com.breezefsmdsm.features.addshop.api.assignToPPList.AssignToPPListRepoProvider
 import com.breezefsmdsm.features.addshop.api.assignedToDDList.AssignToDDListRepoProvider
 import com.breezefsmdsm.features.addshop.api.typeList.TypeListRepoProvider
-import com.breezefsmdsm.features.addshop.model.AssignedToShopListResponseModel
-import com.breezefsmdsm.features.addshop.model.EntityResponseModel
-import com.breezefsmdsm.features.addshop.model.PartyStatusResponseModel
+import com.breezefsmdsm.features.addshop.model.*
 import com.breezefsmdsm.features.addshop.model.assigntoddlist.AssignToDDListResponseModel
 import com.breezefsmdsm.features.addshop.model.assigntopplist.AssignToPPListResponseModel
 import com.breezefsmdsm.features.alarm.api.attendance_report_list_api.AttendanceReportRepoProvider
@@ -100,6 +98,7 @@ import com.breezefsmdsm.features.nearbyshops.model.*
 import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.UserFacePicUrlResponse
 import com.breezefsmdsm.features.report.presentation.ReportAdapter
+import com.breezefsmdsm.features.shopdetail.presentation.api.EditShopRepoProvider
 import com.breezefsmdsm.features.timesheet.api.TimeSheetRepoProvider
 import com.breezefsmdsm.features.timesheet.model.TimeSheetConfigResponseModel
 import com.breezefsmdsm.features.timesheet.model.TimeSheetDropDownResponseModel
@@ -3604,7 +3603,169 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     fun refresh() {
-        checkToCallAssignedDDListApi()
+        //checkToCallAssignedDDListApi()
+
+        var shopDeactiveList=AppDatabase.getDBInstance()?.shopDeactivateDao()!!.getAll()
+        if(shopDeactiveList!=null && shopDeactiveList.size>0){
+            for(i in 0..shopDeactiveList.size-1){
+                var notificationManager = (mContext as DashboardActivity).getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.cancel(shopDeactiveList.get(i).noti_id!!.toInt())
+                updateShopStatusFromNoti(shopDeactiveList.get(i).shop_id!!)
+            }
+        }else{
+            checkToCallAssignedDDListApi()
+        }
+
+    }
+
+    private fun updateShopStatusFromNoti(shopID:String){
+        AppDatabase.getDBInstance()!!.addShopEntryDao().updateShopStatus(shopID,"0")
+        AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(0,shopID)
+        if(AppUtils.isOnline(mContext))
+            convertToReqAndApiCallForShopStatus(AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopID!!))
+    }
+    private fun convertToReqAndApiCallForShopStatus(addShopData: AddShopDBModelEntity) {
+        if (Pref.user_id == null || Pref.user_id == "" || Pref.user_id == " ") {
+            (mContext as DashboardActivity).showSnackMessage("Please login again")
+            BaseActivity.isApiInitiated = false
+            return
+        }
+
+        val addShopReqData = AddShopRequestData()
+        addShopReqData.session_token = Pref.session_token
+        addShopReqData.address = addShopData.address
+        addShopReqData.actual_address = addShopData.address
+        addShopReqData.owner_contact_no = addShopData.ownerContactNumber
+        addShopReqData.owner_email = addShopData.ownerEmailId
+        addShopReqData.owner_name = addShopData.ownerName
+        addShopReqData.pin_code = addShopData.pinCode
+        addShopReqData.shop_lat = addShopData.shopLat.toString()
+        addShopReqData.shop_long = addShopData.shopLong.toString()
+        addShopReqData.shop_name = addShopData.shopName.toString()
+        addShopReqData.shop_id = addShopData.shop_id
+        addShopReqData.added_date = ""
+        addShopReqData.user_id = Pref.user_id
+        addShopReqData.type = addShopData.type
+        addShopReqData.assigned_to_pp_id = addShopData.assigned_to_pp_id
+        addShopReqData.assigned_to_dd_id = addShopData.assigned_to_dd_id
+        /*addShopReqData.dob = addShopData.dateOfBirth
+        addShopReqData.date_aniversary = addShopData.dateOfAniversary*/
+        addShopReqData.amount = addShopData.amount
+        addShopReqData.area_id = addShopData.area_id
+        /*val addShop = AddShopRequest()
+        addShop.data = addShopReqData*/
+
+        addShopReqData.model_id = addShopData.model_id
+        addShopReqData.primary_app_id = addShopData.primary_app_id
+        addShopReqData.secondary_app_id = addShopData.secondary_app_id
+        addShopReqData.lead_id = addShopData.lead_id
+        addShopReqData.stage_id = addShopData.stage_id
+        addShopReqData.funnel_stage_id = addShopData.funnel_stage_id
+        addShopReqData.booking_amount = addShopData.booking_amount
+        addShopReqData.type_id = addShopData.type_id
+
+        if (!TextUtils.isEmpty(addShopData.dateOfBirth))
+            addShopReqData.dob =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.dateOfBirth)
+
+        if (!TextUtils.isEmpty(addShopData.dateOfAniversary))
+            addShopReqData.date_aniversary =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.dateOfAniversary)
+
+        addShopReqData.director_name = addShopData.director_name
+        addShopReqData.key_person_name = addShopData.person_name
+        addShopReqData.phone_no = addShopData.person_no
+
+        if (!TextUtils.isEmpty(addShopData.family_member_dob))
+            addShopReqData.family_member_dob =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.family_member_dob)
+
+        if (!TextUtils.isEmpty(addShopData.add_dob))
+            addShopReqData.addtional_dob =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.add_dob)
+
+        if (!TextUtils.isEmpty(addShopData.add_doa))
+            addShopReqData.addtional_doa =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.add_doa)
+
+        addShopReqData.specialization = addShopData.specialization
+        addShopReqData.category = addShopData.category
+        addShopReqData.doc_address = addShopData.doc_address
+        addShopReqData.doc_pincode = addShopData.doc_pincode
+        addShopReqData.is_chamber_same_headquarter = addShopData.chamber_status.toString()
+        addShopReqData.is_chamber_same_headquarter_remarks = addShopData.remarks
+        addShopReqData.chemist_name = addShopData.chemist_name
+        addShopReqData.chemist_address = addShopData.chemist_address
+        addShopReqData.chemist_pincode = addShopData.chemist_pincode
+        addShopReqData.assistant_contact_no = addShopData.assistant_no
+        addShopReqData.average_patient_per_day = addShopData.patient_count
+        addShopReqData.assistant_name = addShopData.assistant_name
+
+        if (!TextUtils.isEmpty(addShopData.doc_family_dob))
+            addShopReqData.doc_family_member_dob =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.doc_family_dob)
+
+        if (!TextUtils.isEmpty(addShopData.assistant_dob))
+            addShopReqData.assistant_dob =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.assistant_dob)
+
+        if (!TextUtils.isEmpty(addShopData.assistant_doa))
+            addShopReqData.assistant_doa =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.assistant_doa)
+
+        if (!TextUtils.isEmpty(addShopData.assistant_family_dob))
+            addShopReqData.assistant_family_dob =
+                AppUtils.changeAttendanceDateFormatToCurrent(addShopData.assistant_family_dob)
+
+        addShopReqData.entity_id = addShopData.entity_id
+        addShopReqData.party_status_id = addShopData.party_status_id
+        addShopReqData.retailer_id = addShopData.retailer_id
+        addShopReqData.dealer_id = addShopData.dealer_id
+        addShopReqData.beat_id = addShopData.beat_id
+        addShopReqData.assigned_to_shop_id = addShopData.assigned_to_shop_id
+        //addShopReqData.actual_address = addShopData.actual_address
+
+
+        if(addShopData.shopStatusUpdate.equals("0"))
+            addShopReqData.shopStatusUpdate = addShopData.shopStatusUpdate
+        else
+            addShopReqData.shopStatusUpdate = "1"
+
+        callEditShopApiForShopStatus(addShopReqData)
+    }
+
+    private fun callEditShopApiForShopStatus(addShopReqData: AddShopRequestData) {
+        if (BaseActivity.isApiInitiated)
+            return
+
+        BaseActivity.isApiInitiated = true
+
+        progress_wheel.spin()
+
+        if (true) {
+            val repository = EditShopRepoProvider.provideEditShopWithoutImageRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.editShop(addShopReqData)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val addShopResult = result as AddShopResponse
+                        XLog.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
+                        if (addShopResult.status == NetworkConstant.SUCCESS) {
+                            AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
+                            AppDatabase.getDBInstance()?.shopDeactivateDao()!!.deleteByShopID(addShopReqData.shop_id!!)
+                            progress_wheel.stopSpinning()
+                            refresh()
+                        }
+                        BaseActivity.isApiInitiated = false
+                    }, { error ->
+                        error.printStackTrace()
+                        BaseActivity.isApiInitiated = false
+                        progress_wheel.stopSpinning()
+                        checkToCallAssignedDDListApi()
+                    })
+            )
+        }
     }
 
     private fun checkToCallAssignedDDListApi() {
