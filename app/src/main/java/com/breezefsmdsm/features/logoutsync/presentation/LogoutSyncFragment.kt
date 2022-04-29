@@ -19,6 +19,7 @@ import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.FileProvider
+import androidx.work.WorkManager
 import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.MonitorService
 import com.breezefsmdsm.R
@@ -4741,6 +4742,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         SendBrod.stopBrod(mContext)
         XLog.d("==============checkToCallActivity (Logout Sync)====================" + "   MonitorService Stop , MonitorBrodcastStop")
+
+        try{
+            XLog.d("==Logout Sync " + "   WorkManager stop")
+            WorkManager.getInstance(mContext).cancelAllWork()
+            WorkManager.getInstance(mContext).cancelAllWorkByTag("workerTag")
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
 
         if (Pref.willActivityShow) {
             val list = AppDatabase.getDBInstance()?.activDao()?.getDataSyncWise(false)

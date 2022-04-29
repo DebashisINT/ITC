@@ -3446,7 +3446,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                             results
                     )
 
-                    if (results.getOrNull(0) ?: -1f in 0..200) {
+                    if (results.getOrNull(0) ?: -1 in 0..200) {
                         observable.onNext(it)
                     } /*else {
                         val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(it.shop_id, AppUtils.getCurrentDateForShopActi())

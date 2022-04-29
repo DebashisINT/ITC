@@ -29,6 +29,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.FileProvider
+import androidx.work.WorkInfo
+import androidx.work.WorkManager
 import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.MonitorService
@@ -126,6 +128,7 @@ import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
 import com.google.android.material.textfield.TextInputEditText
+import com.google.common.util.concurrent.ListenableFuture
 import com.theartofdev.edmodo.cropper.CropImage
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -135,6 +138,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.*
 import java.util.*
+import java.util.concurrent.ExecutionException
 import kotlin.collections.ArrayList
 
 /**
@@ -239,6 +243,30 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         intent.action = CustomConstants.STOP_MONITOR_SERVICE
         this.stopService(intent)
         SendBrod.stopBrod(this)*/
+
+        WorkManager.getInstance(this).cancelAllWork()
+        WorkManager.getInstance(this).cancelAllWorkByTag("workerTag")
+
+    }
+
+    fun isWorkerRunning(tag:String):Boolean{
+        val workInstance = WorkManager.getInstance(this)
+        val status: ListenableFuture<List<WorkInfo>> = WorkManager.getInstance(this).getWorkInfosByTag(tag)
+        try{
+            var runningStatus:Boolean = false
+            val workInfoList:List<WorkInfo> = status.get()
+            for( obj: WorkInfo in workInfoList){
+                var state : WorkInfo.State =  obj.state
+                runningStatus = state == WorkInfo.State.RUNNING || state == WorkInfo.State.ENQUEUED
+            }
+            return runningStatus
+        }
+        catch (ex: ExecutionException){
+            return false
+        }
+        catch (ex:InterruptedException){
+            return false
+        }
     }
 
     override fun onStart() {

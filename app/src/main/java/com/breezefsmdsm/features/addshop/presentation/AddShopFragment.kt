@@ -609,12 +609,14 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         randTen=Pref.user_id+AppUtils.getRandomNumber(5).toString()
         customer_name_EDT.text=randTen
         try{
-            val assigDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
-            if (assigDDList != null || assigDDList!!.size>0){
-                var dis_id=assigDDList.get(0).dd_id
-                dis_id=dis_id!!.drop(6)
-                //shop_name_EDT.setText(dis_id.toString()+"_"+randTen) //22-09-2021  comment
-                //ownerNumber.setText(randTen)  //22-09-2021  comment
+            var assigDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
+            if (assigDDList != null) {
+                if (assigDDList != null || assigDDList.size > 0){
+                    var dis_id=assigDDList!!.get(0).dd_id
+                    dis_id=dis_id!!.drop(6)
+                    //shop_name_EDT.setText(dis_id.toString()+"_"+randTen) //22-09-2021  comment
+                    //ownerNumber.setText(randTen)  //22-09-2021  comment
+                }
             }
         }catch (ex:java.lang.Exception){ex.printStackTrace()}
 
