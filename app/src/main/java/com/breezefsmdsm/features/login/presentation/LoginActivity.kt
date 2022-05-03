@@ -5518,6 +5518,23 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsAllowShopStatusUpdate = response.getconfigure!![i].Value == "1"
                                                 }
+                                            } else if (response.getconfigure!![i].Key.equals("ShowTotalVisitAppMenu", ignoreCase = true)) {
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.ShowTotalVisitAppMenu = response.getconfigure!![i].Value == "1"
+                                                }
+                                            } else if (response.getconfigure?.get(i)?.Key.equals("OfflineShopAccuracy")) {
+                                                try {
+                                                    Pref.OfflineShopAccuracy = response.getconfigure!![i].Value!!
+                                                    if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                        Pref.OfflineShopAccuracy = response.getconfigure?.get(i)?.Value!!
+                                                    }
+                                                    if (Pref.OfflineShopAccuracy.length == 0 || Pref.OfflineShopAccuracy.equals("")) {
+                                                        Pref.OfflineShopAccuracy = "700"
+                                                    }
+                                                } catch (e: Exception) {
+                                                    e.printStackTrace()
+                                                    Pref.OfflineShopAccuracy = "700"
+                                                }
                                             }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {

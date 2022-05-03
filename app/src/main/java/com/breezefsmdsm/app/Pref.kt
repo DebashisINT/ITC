@@ -367,4 +367,7 @@ object Pref : PreferenceHolder() {
 
     var IsAllowShopStatusUpdate: Boolean by bindToPreferenceField(false, "IsAllowShopStatusUpdate")
 
+    var OfflineShopAccuracy: String by bindToPreferenceField("700", "OfflineShopAccuracy")
+    var ShowTotalVisitAppMenu: Boolean by bindToPreferenceField(false, "ShowTotalVisitAppMenu")
+
 }
