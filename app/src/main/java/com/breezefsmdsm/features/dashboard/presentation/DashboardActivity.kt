@@ -424,6 +424,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private lateinit var photo_registration: AppCustomTextView
     private lateinit var photo_team_attendance: AppCustomTextView
     private lateinit var tb_auto_revisit_menu: AppCustomTextView
+    private lateinit var tb_total_visit_menu: AppCustomTextView
 
     private lateinit var alarmCofifDataModel: AlarmConfigDataModel
     private lateinit var quo_TV: AppCustomTextView
@@ -1791,7 +1792,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         photo_team_attendance = findViewById(R.id.photo_team_attendance)
 
         tb_auto_revisit_menu =  findViewById(R.id.tb_auto_revisit_menu)
+        tb_total_visit_menu =  findViewById(R.id.tb_total_visit_menu)
         tb_auto_revisit_menu.setOnClickListener(this)
+        tb_total_visit_menu.setOnClickListener(this)
 
         home_RL.setOnClickListener(this)
         add_shop_RL.setOnClickListener(this)
@@ -2240,7 +2243,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         } else {
             tb_auto_revisit_menu.visibility = View.GONE
         }
+        if (Pref.ShowTotalVisitAppMenu) {
+            tb_total_visit_menu.visibility = View.VISIBLE
 
+        } else {
+            tb_total_visit_menu.visibility = View.GONE
+        }
 
         if (AppUtils.getSharedPreferencesIsScreenRecorderEnable(mContext)) {
             screen_record_info_TV.visibility = View.VISIBLE
@@ -2329,7 +2337,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         else
             tb_auto_revisit_menu.visibility = View.GONE
 
+        if (Pref.ShowTotalVisitAppMenu) {
+            tb_total_visit_menu.visibility = View.VISIBLE
 
+        } else {
+            tb_total_visit_menu.visibility = View.GONE
+        }
         //val frag: DashboardFragment? = supportFragmentManager.findFragmentByTag("DashboardFragment") as DashboardFragment?
 
 
@@ -2782,6 +2795,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                 }
 
+            }
+
+            R.id.tb_total_visit_menu->{
+                (mContext as DashboardActivity).loadFragment(FragType.AverageShopFragment, true, "")
             }
             //19-08-21 nearBy shop visit stop untill daystart
             R.id.nearby_shop_TV -> {

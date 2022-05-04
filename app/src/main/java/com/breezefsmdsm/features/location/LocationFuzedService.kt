@@ -892,7 +892,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         }
 
         var distance = LocationWizard.getDistance(lastLat, lastLng, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
-        distance=0.7
+        distance=0.9
         XLog.e("====================checkAutoRevisit====================")
 
         var autoRevDistance : Double = 0.0
@@ -916,7 +916,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         shopLocation.latitude = shopLat
                         shopLocation.longitude = shopLong
 
-                        val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, Pref.autoRevisitDistance.toInt())
+                        //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, Pref.autoRevisitDistance.toInt())
+                        val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
                         //val isShopNearby = true
 
                         XLog.e("Distance 1 from shop " + allShopList[i].shopName + " location to current location============> " + AppUtils.mLocation?.distanceTo(shopLocation) + " Meter")
@@ -948,6 +949,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                                         if (intervalInMins >= Pref.autoRevisitTime.toLong()) {
                                             AppUtils.isAutoRevisit = true
+                                            XLog.e("Fuzed Location: auto revisit started ${AppUtils.getCurrentDateTime()}")
                                             revisitShop()
                                             prevRevisitTimeStamp = 0L
                                             shop_id = ""
@@ -1151,7 +1153,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 loadFragment(FragType.ShopDetailFragment, true, mShopId)*/
 
             AppUtils.isAutoRevisit = false
-
+            XLog.e("Fuzed Location: auto revisit endes ${AppUtils.getCurrentDateTime()}")
             val intent = Intent()
             intent.action = "AUTO_REVISIT_BROADCAST"
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)

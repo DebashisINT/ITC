@@ -214,6 +214,21 @@
                     android:visibility="visible" />
 
                 <com.breezefsmdsm.widgets.AppCustomTextView
+                    android:id="@+id/tb_total_visit_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_nearby_new"
+                    android:drawablePadding="@dimen/_15sdp"
+                    android:paddingLeft="@dimen/_17sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:paddingRight="@dimen/_17sdp"
+                    android:paddingBottom="@dimen/_7sdp"
+                    android:text="Total Visit"
+                    android:textColor="@color/lightest_gray"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="visible" />
+
+                <com.breezefsmdsm.widgets.AppCustomTextView
                     android:id="@+id/chat_bot_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
