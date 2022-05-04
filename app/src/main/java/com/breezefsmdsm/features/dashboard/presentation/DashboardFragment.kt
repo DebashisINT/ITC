@@ -5840,6 +5840,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         }
                                     }
 
+                                    else if (response.getconfigure?.get(i)?.Key.equals("autoRevisitTimeInSeconds")) {
+                                        try {
+                                            Pref.autoRevisitTimeInSeconds = response.getconfigure!![i].Value!!
+                                            if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                Pref.autoRevisitTimeInSeconds = response.getconfigure?.get(i)?.Value!!
+                                            }
+                                            if (Pref.autoRevisitTimeInSeconds.length == 0 || Pref.autoRevisitTimeInSeconds.equals("")) {
+                                                Pref.autoRevisitTimeInSeconds = "600"
+                                            }
+                                        } catch (e: Exception) {
+                                            e.printStackTrace()
+                                            Pref.autoRevisitTimeInSeconds = "600"
+                                        }
+                                    }
+
 
 
 

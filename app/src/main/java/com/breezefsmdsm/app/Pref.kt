@@ -370,4 +370,7 @@ object Pref : PreferenceHolder() {
     var OfflineShopAccuracy: String by bindToPreferenceField("700", "OfflineShopAccuracy")
     var ShowTotalVisitAppMenu: Boolean by bindToPreferenceField(false, "ShowTotalVisitAppMenu")
 
+
+    var autoRevisitTimeInSeconds: String by bindToPreferenceField("600", "autoRevisitTimeInSeconds")
+
 }
