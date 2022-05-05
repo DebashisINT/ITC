@@ -67,7 +67,7 @@
             android:id="@+id/rv_frag_photo_attend_user_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            wheel:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            wheel:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <com.pnikosis.materialishprogress.ProgressWheel
             android:id="@+id/progress_wheel_frag_photo_attend"

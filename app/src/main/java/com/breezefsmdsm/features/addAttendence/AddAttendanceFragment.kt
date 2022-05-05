@@ -1328,7 +1328,6 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
         }
 
-
         if(isDDLatLongNull){
             progress_wheel.stopSpinning()
             val simpleDialog = Dialog(mContext)

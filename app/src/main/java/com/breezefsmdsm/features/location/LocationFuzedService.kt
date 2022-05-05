@@ -946,11 +946,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                                         val intervalInMins = (interval / 1000) / 60
                                         /*4-05-2022*/
-                                        val intervalInSec = Pref.autoRevisitTimeInSeconds
+                                        val intervalInSec = (interval / 1000)
                                         XLog.e("Fuzed Location: start auto revisit interval=====> $intervalInMins min(s)")
 
                                      //   if (intervalInMins >= Pref.autoRevisitTime.toLong()) {
-                                            if (intervalInSec >= Pref.autoRevisitTime.toString()){
+                                            if (intervalInSec >= Pref.autoRevisitTimeInSeconds.toLong()){
                                             AppUtils.isAutoRevisit = true
                                             XLog.e("Fuzed Location: auto revisit started ${AppUtils.getCurrentDateTime()}")
                                             revisitShop()
