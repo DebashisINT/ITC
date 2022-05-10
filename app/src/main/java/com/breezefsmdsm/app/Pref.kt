@@ -372,5 +372,6 @@ object Pref : PreferenceHolder() {
 
 
     var autoRevisitTimeInSeconds: String by bindToPreferenceField("600", "autoRevisitTimeInSeconds")
-
+    var PartyUpdateAddrMandatory: Boolean by bindToPreferenceField(false, "PartyUpdateAddrMandatory")
+    var LogoutWithLogFile: Boolean by bindToPreferenceField(false, "LogoutWithLogFile")
 }

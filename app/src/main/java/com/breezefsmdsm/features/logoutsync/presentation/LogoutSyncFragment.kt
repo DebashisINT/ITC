@@ -5460,6 +5460,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     //----------------------------------share Log File----------------------------------//
     @SuppressLint("NewApi")
     private fun callLogshareApi(){
+        if(Pref.LogoutWithLogFile){
         val addReqData = AddLogReqData()
         addReqData.user_id = Pref.user_id
         val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
@@ -5498,6 +5499,10 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 ex.printStackTrace()
                 calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             }
+        }
+        }else{
+            XLog.d("Logshare : false ")
+            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
         }
 
     }

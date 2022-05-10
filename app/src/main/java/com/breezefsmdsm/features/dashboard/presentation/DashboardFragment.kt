@@ -2758,11 +2758,43 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             }
             R.id.ll_dash_visit_attendance_newD -> {
                 if (AppUtils.isOnline(mContext)) {
-                    (mContext as DashboardActivity).loadFragment(
-                        FragType.PhotoAttendanceFragment,
-                        false,
-                        ""
-                    )
+                    if(Pref.PartyUpdateAddrMandatory){
+                        var isDDLatLongNull=true
+                        var assignDD  = AppDatabase.getDBInstance()!!.ddListDao().getAll()
+                        try{
+                            for (i in assignDD.indices) {
+                                if(!assignDD[i].dd_latitude.toString().equals("0") && !assignDD[i].dd_longitude.toString().equals("0")){
+                                    isDDLatLongNull=false
+                                }
+                            }
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
+                        if(isDDLatLongNull && assignDD.size>0){
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(true)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message_broad)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            dialog_yes_no_headerTV.text = "Hi "+Pref.user_name!!+"!"
+                            dialogHeader.text="You must update WD Point address from Dashboard > Customer > Update Address."
+
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                Handler().postDelayed(Runnable {
+                                    (mContext as DashboardActivity).loadFragment(FragType.NearByShopsListFragment, false, "")
+                                }, 100)
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+                        }else{
+                            (mContext as DashboardActivity).loadFragment(FragType.PhotoAttendanceFragment, false, "")
+                        }
+                    }else{
+                        (mContext as DashboardActivity).loadFragment(FragType.PhotoAttendanceFragment, false, "")
+                    }
+
                 } else {
                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                 }
@@ -5852,6 +5884,15 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         } catch (e: Exception) {
                                             e.printStackTrace()
                                             Pref.autoRevisitTimeInSeconds = "600"
+                                        }
+                                    }else if (response.getconfigure!![i].Key.equals("PartyUpdateAddrMandatory", ignoreCase = true)) {
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.PartyUpdateAddrMandatory = response.getconfigure!![i].Value == "1"
+                                        }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("LogoutWithLogFile", ignoreCase = true)) {
+                                        Pref.LogoutWithLogFile = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.LogoutWithLogFile = response.getconfigure?.get(i)?.Value == "1"
                                         }
                                     }
 
