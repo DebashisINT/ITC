@@ -262,6 +262,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
     override fun loadFragment(mFragType: FragType, addToStack: Boolean, initializeObject: Any) {
+        AppUtils.contx = this
 
         drawerLayout.closeDrawers()
 
@@ -841,18 +842,20 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     })
         }
 
-        if(!isWorkerRunning("workerTag")){
-            val constraint = Constraints.Builder()
-                .setRequiresCharging(false)
-                .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
-                .setRequiresBatteryNotLow(true)
-                .build()
-            val request = PeriodicWorkRequest.Builder(WorkerService::class.java, 15, TimeUnit.MINUTES)
-                .setConstraints(constraint)
-                .addTag("workerTag")
-                .build()
-            WorkManager.getInstance(this).enqueueUniquePeriodicWork("loc_worker", ExistingPeriodicWorkPolicy.KEEP, request)
-        }
+        Handler().postDelayed(Runnable {
+            if(!isWorkerRunning("workerTag")){
+                val constraint = Constraints.Builder()
+                    .setRequiresCharging(false)
+                    .setRequiredNetworkType(NetworkType.NOT_REQUIRED)
+                    .setRequiresBatteryNotLow(true)
+                    .build()
+                val request = PeriodicWorkRequest.Builder(WorkerService::class.java, 15, TimeUnit.MINUTES)
+                    .setConstraints(constraint)
+                    .addTag("workerTag")
+                    .build()
+                WorkManager.getInstance(this).enqueueUniquePeriodicWork("loc_worker", ExistingPeriodicWorkPolicy.KEEP, request)
+            }
+        }, 1000)
 
     }
 

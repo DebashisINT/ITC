@@ -988,9 +988,9 @@ fun serviceStatusActionable() {
                 val resultCode = jobScheduler.schedule(jobInfo)
 
                 if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                    XLog.d("===============================Job scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "============================")
+                    XLog.d("=============================== BaseActivity Job scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "============================")
                 } else {
-                    XLog.d("=====================Job not scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "====================================")
+                    XLog.d("===================== BaseActivity Job not scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "====================================")
                 }
             } else {
                 startService(serviceLauncher)

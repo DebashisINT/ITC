@@ -9,6 +9,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Handler
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
@@ -25,13 +26,16 @@ class WorkerService(context: Context,workParm:WorkerParameters):Worker(context,w
 
     override fun doWork(): Result {
         println("tag_ worker ${AppUtils.contx.toString()}")
-        XLog.d("Worker doWork")
+        XLog.d("Worker doWork ${AppUtils.contx.toString()} ")
         try{
             if(AppUtils.contx!=null){
-                if (!FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, AppUtils.contx)) {
-                    XLog.d("Worker doWork LocationFuzedService called")
-                    serviceStatusActionable()
-                }
+                    if (!FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, AppUtils.contx)) {
+                        XLog.d("Worker doWork LocationFuzedService called")
+                        serviceStatusActionable()
+                    }else{
+                        XLog.d("Worker doWork LocationFuzedService running")
+                    }
+
             }
         }catch (ex:Exception){
             ex.printStackTrace()
@@ -93,6 +97,7 @@ class WorkerService(context: Context,workParm:WorkerParameters):Worker(context,w
                 XLog.d("===========Worker Service alarm is stopped (Base Activity)================")
             }
         } catch (e: Exception) {
+            XLog.d("Worker serviceStatusActionable error : ${e.message} ")
             e.printStackTrace()
         }
     }
