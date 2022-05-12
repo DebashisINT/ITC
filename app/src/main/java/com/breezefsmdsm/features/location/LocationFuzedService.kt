@@ -947,7 +947,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                         val intervalInMins = (interval / 1000) / 60
                                         /*4-05-2022*/
                                         val intervalInSec = (interval / 1000)
-                                        XLog.e("Fuzed Location: start auto revisit interval=====> $intervalInMins min(s)")
+                                        //XLog.e("Fuzed Location: start auto revisit interval min =====> $intervalInMins min(s)")
+                                        XLog.e("Fuzed Location: start auto revisit interval sec =====> $intervalInSec sec(s) autoRevTimeInSec : ${Pref.autoRevisitTimeInSeconds.toString()}")
 
                                      //   if (intervalInMins >= Pref.autoRevisitTime.toLong()) {
                                             if (intervalInSec >= Pref.autoRevisitTimeInSeconds.toLong()){
@@ -963,7 +964,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                     }
                                 } else {
                                     prevRevisitTimeStamp = currentTimeStamp
-                                    shop_id = allShopList[i].shop_id
+                                     shop_id = allShopList[i].shop_id
                                 }
 
                                 break

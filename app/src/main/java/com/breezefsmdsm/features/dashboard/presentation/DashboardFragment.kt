@@ -5872,7 +5872,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         }
                                     }
 
-                                    else if (response.getconfigure?.get(i)?.Key.equals("autoRevisitTimeInSeconds")) {
+                                    else if (response.getconfigure?.get(i)?.Key.equals("AutoRevisitTimeInSeconds")) {
                                         try {
                                             Pref.autoRevisitTimeInSeconds = response.getconfigure!![i].Value!!
                                             if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {

@@ -170,13 +170,22 @@
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 
+    <TextView
+        android:id="@+id/tv_frag_avg_shop_total_visit_count"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_30sdp"
+        android:text="Total Visit (Count) : 0 "
+        android:gravity="center|start"
+        android:textSize="@dimen/_12sdp"
+        android:paddingStart="@dimen/_10sdp"
+        android:textColor="@color/default_text_color"
+        android:layout_below="@id/date_CV"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shop_list_RCV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/date_CV"
-
+        android:layout_below="@id/tv_frag_avg_shop_total_visit_count"
         />
 
     <com.breezefsmdsm.widgets.AppCustomTextView

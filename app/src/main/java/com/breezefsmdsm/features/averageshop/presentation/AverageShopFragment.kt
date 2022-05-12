@@ -30,6 +30,7 @@ import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.*
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.AppUtils
+import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseActivity.Companion.compositeDisposable
@@ -82,6 +83,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     private lateinit var progress_wheel: ProgressWheel
     private lateinit var selectedDate: String
     private lateinit var sync_all_tv: AppCustomTextView
+    private lateinit var tv_frag_avg_shop_total_visit_count: TextView
     var i: Int = 0
     private var j: Int = 0
 
@@ -134,6 +136,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         total_shop_TV = view.findViewById(R.id.total_shop_TV)
         progress_wheel = view.findViewById(R.id.progress_wheel)
         sync_all_tv = view.findViewById(R.id.sync_all_tv);
+        tv_frag_avg_shop_total_visit_count = view.findViewById(R.id.tv_frag_avg_shop_total_visit_count);
         progress_wheel.stopSpinning()
         total_shop_TV.text = InfoWizard.getTotalShopVisitCount()
         noOfShop.text = InfoWizard.getAvergareShopVisitCount()
@@ -668,6 +671,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
             }
 
         } else {
+            tv_frag_avg_shop_total_visit_count.text="Total Visit (Count) : ${ShopActivityEntityList.size}"
             noShopAvailable.visibility = View.VISIBLE
             shopList.visibility = View.GONE
         }
@@ -1045,6 +1049,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
 
     private fun initAdapter() {
+        tv_frag_avg_shop_total_visit_count.text="Total Visit (Count) : ${ShopActivityEntityList.size}"
         averageShopListAdapter = AverageShopListAdapter(mContext, ShopActivityEntityList, object : AverageShopListClickListener {
             override fun onSyncClick(position: Int) {
 
