@@ -880,11 +880,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun checkAutoRevisit() {
 
+
         if (!Pref.isAddAttendence) {
             XLog.e("====================Attendance is not given (Location Fuzed Service)====================")
             return
         }
-
 
         if (lastLat == 0.0 || lastLng == 0.0) {
             XLog.e("====================1st time check auto revisit====================")
@@ -893,7 +893,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         var distance = LocationWizard.getDistance(lastLat, lastLng, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
         distance=0.9
-        XLog.e("====================checkAutoRevisit====================")
+        XLog.e("==checkAutoRevisit==")
 
         var autoRevDistance : Double = 0.0
         if (AppUtils.isOnline(this)) {
@@ -920,20 +920,16 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
                         //val isShopNearby = true
 
-                        XLog.e("Distance 1 from shop " + allShopList[i].shopName + " location to current location============> " + AppUtils.mLocation?.distanceTo(shopLocation) + " Meter")
+                        XLog.e("Dist 1 from shop " + allShopList[i].shopName + " loc to current loc===> " + AppUtils.mLocation?.distanceTo(shopLocation) + " Meter")
 
                         val distance = LocationWizard.getDistance(shopLat, shopLong, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
-                        XLog.e("Distance 2 from shop " + allShopList[i].shopName + " location to current location============> $distance KM")
+                        XLog.e("Dist 2 from shop " + allShopList[i].shopName + " loc to current loc===> $distance KM")
 
                         if (isShopNearby) {
-
-                            XLog.e("================Nearby shop " + allShopList[i].shopName + "(Location Fuzed Service)===================")
-
+                            XLog.e("==Nearby shop " + allShopList[i].shopName + "(Location Fuzed Service)==")
                             /*val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForTodayShop(allShopList[i].shop_id,
                                     false, false, AppUtils.getCurrentDateForShopActi())*/
-
                             val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(allShopList[i].shop_id, AppUtils.getCurrentDateForShopActi())
-
                             if (shopActivityList == null || shopActivityList.isEmpty()) {
                                 AppUtils.changeLanguage(this,"en")
                                 val currentTimeStamp = System.currentTimeMillis()
@@ -966,10 +962,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                     prevRevisitTimeStamp = currentTimeStamp
                                      shop_id = allShopList[i].shop_id
                                 }
-
                                 break
                             } else
-                                XLog.e("================" + allShopList[i].shopName + " is visiting now normally (Location Fuzed Service)===================")
+                                XLog.e("==" + allShopList[i].shopName + " is visiting now normally (Loc Fuzed Service)==")
                         }
                     }
                 }
