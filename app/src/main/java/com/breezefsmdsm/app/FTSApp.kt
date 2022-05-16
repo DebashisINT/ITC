@@ -14,6 +14,7 @@ import com.elvishew.xlog.interceptor.BlacklistTagsFilterInterceptor
 import com.elvishew.xlog.printer.AndroidPrinter
 import com.elvishew.xlog.printer.Printer
 import com.elvishew.xlog.printer.file.FilePrinter
+import com.elvishew.xlog.printer.file.backup.FileSizeBackupStrategy2
 import com.elvishew.xlog.printer.file.backup.NeverBackupStrategy
 import com.elvishew.xlog.printer.file.clean.FileLastModifiedCleanStrategy
 import com.facebook.stetho.Stetho
@@ -91,7 +92,8 @@ class FTSApp : MultiDexApplication() {
         val filePrinter = FilePrinter.Builder(File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample").path)// Printer that print the log to the file system
                 // Specify the path to save log file
 //                .fileNameGenerator(ChangelessFileNameGenerator())        // Default: ChangelessFileNameGenerator("log")
-                 .backupStrategy(NeverBackupStrategy())             // Default: FileSizeBackupStrategy(1024 * 1024)
+                 //.backupStrategy(NeverBackupStrategy())             // Default: FileSizeBackupStrategy(1024 * 1024)
+                 .backupStrategy(FileSizeBackupStrategy2(1024*1024*20,1))             // Default: FileSizeBackupStrategy(1024 * 1024)
                 //.logFlattener(ClassicFlattener())                  // Default: DefaultFlattener
                 .cleanStrategy(FileLastModifiedCleanStrategy(MAX_TIME))
                 .build()

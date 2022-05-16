@@ -144,7 +144,8 @@ class EditShopRepo(val apiService: EditShopApi) {
         } catch (e: Throwable) {
             e.printStackTrace()
         }
-        log_attachments_new = MultipartBody.Part.createFormData("attachments", Pref.user_id, profileImgBody)
+        //log_attachments_new = MultipartBody.Part.createFormData("attachments", Pref.user_id, profileImgBody)
+        log_attachments_new = MultipartBody.Part.createFormData("attachments", "${Pref.user_id}.zip", profileImgBody)
         return  apiService.logshareFile(jsonInString, log_attachments_new)
     }
 }

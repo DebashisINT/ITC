@@ -97,8 +97,10 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import java.io.File
+import java.io.*
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 import kotlin.collections.ArrayList
 
 /**
@@ -5461,9 +5463,28 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     @SuppressLint("NewApi")
     private fun callLogshareApi(){
         if(Pref.LogoutWithLogFile){
+
+            try{
+                val filesForZip: Array<String> = arrayOf(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path)
+                ZipOutputStream(BufferedOutputStream(FileOutputStream(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log.zip").path))).use { out ->
+                    for (file in filesForZip) {
+                        FileInputStream(file).use { fi ->
+                            BufferedInputStream(fi).use { origin ->
+                                val entry = ZipEntry(file.substring(file.lastIndexOf("/")))
+                                out.putNextEntry(entry)
+                                origin.copyTo(out, 1024)
+                            }
+                        }
+                    }
+                }
+            }catch (ex:Exception){
+                XLog.d("Logshare : log.zip error " + ex.message)
+                checkToCallActivity()
+            }
+
         val addReqData = AddLogReqData()
         addReqData.user_id = Pref.user_id
-        val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
+        val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log.zip").path);
         val file = File(fileUrl.path)
         if (!file.exists()) {
 //            return
