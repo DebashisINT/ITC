@@ -93,7 +93,7 @@ class FTSApp : MultiDexApplication() {
                 // Specify the path to save log file
 //                .fileNameGenerator(ChangelessFileNameGenerator())        // Default: ChangelessFileNameGenerator("log")
                  //.backupStrategy(NeverBackupStrategy())             // Default: FileSizeBackupStrategy(1024 * 1024)
-                 .backupStrategy(FileSizeBackupStrategy2(1024*1024*20,1))             // Default: FileSizeBackupStrategy(1024 * 1024)
+                 .backupStrategy(FileSizeBackupStrategy2(1024*1024*18,1))             // Default: FileSizeBackupStrategy(1024 * 1024)
                 //.logFlattener(ClassicFlattener())                  // Default: DefaultFlattener
                 .cleanStrategy(FileLastModifiedCleanStrategy(MAX_TIME))
                 .build()

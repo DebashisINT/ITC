@@ -5463,7 +5463,6 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     @SuppressLint("NewApi")
     private fun callLogshareApi(){
         if(Pref.LogoutWithLogFile){
-
             try{
                 val filesForZip: Array<String> = arrayOf(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path)
                 ZipOutputStream(BufferedOutputStream(FileOutputStream(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log.zip").path))).use { out ->
@@ -5477,25 +5476,20 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         }
                     }
                 }
-            }catch (ex:Exception){
-                XLog.d("Logshare : log.zip error " + ex.message)
-                checkToCallActivity()
-            }
 
-        val addReqData = AddLogReqData()
-        addReqData.user_id = Pref.user_id
-        val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log.zip").path);
-        val file = File(fileUrl.path)
-        if (!file.exists()) {
-//            return
-            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-        }
-        else{
-            val uri: Uri = FileProvider.getUriForFile(mContext, mContext!!.applicationContext.packageName.toString() + ".provider", file)
-            try{
-                val repository = EditShopRepoProvider.provideEditShopRepository()
-                BaseActivity.compositeDisposable.add(
-                        repository.addLogfile(addReqData,file.toString(),mContext)
+                val addReqData = AddLogReqData()
+                addReqData.user_id = Pref.user_id
+                val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log.zip").path);
+                val file = File(fileUrl.path)
+                if (!file.exists()) {
+                    calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                }
+                else{
+                    val uri: Uri = FileProvider.getUriForFile(mContext, mContext!!.applicationContext.packageName.toString() + ".provider", file)
+                    try{
+                        val repository = EditShopRepoProvider.provideEditShopRepository()
+                        BaseActivity.compositeDisposable.add(
+                            repository.addLogfile(addReqData,file.toString(),mContext)
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe({ result ->
@@ -5513,19 +5507,20 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     }
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                                 })
-                )
-
-            }
-            catch (ex:Exception){
-                ex.printStackTrace()
+                        )
+                    } catch (ex:Exception){
+                        ex.printStackTrace()
+                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                    }
+                }
+            }catch (ex:Exception){
+                XLog.d("Logshare : log.zip error " + ex.message)
                 calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             }
-        }
         }else{
             XLog.d("Logshare : false ")
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
         }
-
     }
 
     //===============================================Logout===========================================================================//
