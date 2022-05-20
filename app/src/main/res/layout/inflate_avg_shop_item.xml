@@ -538,7 +538,7 @@
                     </LinearLayout>
 
                     <View
-                        android:id="@+id/activity_view"
+                        android:id="@+id/activity_vieww"
                         android:layout_width="@dimen/_1sdp"
                         android:layout_height="@dimen/_20sdp"
                         android:layout_marginLeft="@dimen/_5sdp"

@@ -257,6 +257,9 @@ class AverageShopListAdapter(context: Context, userLocationDataEntity: List<Shop
                     (context as DashboardActivity).loadFragment(FragType.ViewAllOrderListFragment, true, shop!!)
                 }
 
+                //itemView.ll_activity.visibility=View.GONE
+                //itemView.activity_vieww.visibility=View.GONE
+
                 itemView.ll_activity.setOnClickListener {
                     when (shop?.type) {
                         "7" -> {
