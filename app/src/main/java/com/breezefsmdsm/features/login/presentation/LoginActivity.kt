@@ -5862,6 +5862,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             else
                 shopObj.assigned_to_shop_id = shop_list[i].assigned_to_shop_id
 
+            shopObj.isShopDuplicate = shop_list[i].isShopDuplicate
 
             list.add(shopObj)
             AppDatabase.getDBInstance()!!.addShopEntryDao().insert(shopObj)
