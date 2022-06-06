@@ -1,5 +1,6 @@
 package com.breezefsmdsm.features.averageshop.presentation
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -1029,6 +1030,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     }
 
     private fun initShopList() {
+
         ShopActivityEntityList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
 
         Collections.reverse(ShopActivityEntityList)
@@ -1048,6 +1050,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     }
 
 
+    @SuppressLint("WrongConstant")
     private fun initAdapter() {
         tv_frag_avg_shop_total_visit_count.text="Total Visit (Count) : ${ShopActivityEntityList.size}"
         averageShopListAdapter = AverageShopListAdapter(mContext, ShopActivityEntityList, object : AverageShopListClickListener {
