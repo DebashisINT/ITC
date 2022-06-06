@@ -236,6 +236,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.fragment_logout_sync, container, false)
         //Pref.DayEndMarked=true
+
         initView(view)
 
 

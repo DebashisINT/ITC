@@ -8948,11 +8948,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                 dialogYes.setOnClickListener({ view ->
                     simpleDialog.cancel()
-                    (mContext as DashboardActivity).loadFragment(
-                        FragType.LogoutSyncFragment,
-                        false,
-                        ""
-                    )
+                    (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
 
                 })
                 simpleDialog.show()
