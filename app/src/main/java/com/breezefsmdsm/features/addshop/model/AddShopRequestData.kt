@@ -71,6 +71,8 @@ class AddShopRequestData {
 
     var shopStatusUpdate: String?= null
 
+    var isShopDuplicate: Boolean?= null
+
 
 
 }

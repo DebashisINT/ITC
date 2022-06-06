@@ -1313,6 +1313,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         XLog.d("beat id=======> " + addShop.beat_id)
         XLog.d("assigned to shop id=======> " + addShop.assigned_to_shop_id)
         XLog.d("actual address=======> " + addShop.actual_address)
+        XLog.d("shopDuplicate=======> " + addShop.isShopDuplicate)
 
         if (shop_imgPath != null)
             XLog.d("shop image path=======> $shop_imgPath")
@@ -4605,6 +4606,25 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             return
         }
 
+        val allShopList= AppDatabase.getDBInstance()?.addShopEntryDao()?.all
+        shopDataModel.isShopDuplicate=false
+        if(allShopList != null){
+            for(i in 0..allShopList?.size-1){
+                var shopLat = allShopList.get(i).shopLat
+                var shopLon = allShopList.get(i).shopLong
+                if(shopLat == shopDataModel.shopLat && shopLon == shopDataModel.shopLong){
+                    shopDataModel.isShopDuplicate=true
+                    break
+                }else{
+                    val dist = LocationWizard.getDistance(shopLat,shopLon,shopDataModel.shopLat,shopDataModel.shopLong)
+                    if(dist<0.01) {
+                        shopDataModel.isShopDuplicate=true
+                        break
+                    }
+                }
+            }
+        }
+
         if (Pref.isFingerPrintMandatoryForVisit) {
             if ((mContext as DashboardActivity).isFingerPrintSupported) {
                 (mContext as DashboardActivity).checkForFingerPrint()
@@ -4769,6 +4789,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         }
 
         addShopData.shop_revisit_uniqKey=finalUniqKey!!
+
+        // duplicate shop api call
+        addShopData.isShopDuplicate=shopDataModel.isShopDuplicate
+
+
 
         addShopApi(addShopData, shopDataModel.shopImageLocalPath, shopDataModel.doc_degree)
     }

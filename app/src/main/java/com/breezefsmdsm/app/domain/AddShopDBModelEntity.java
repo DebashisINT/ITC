@@ -250,6 +250,17 @@ public class AddShopDBModelEntity {
     @ColumnInfo(name = "shopStatusUpdate")
     private String shopStatusUpdate = "1";
 
+    @ColumnInfo(name = "isShopDuplicate")
+    private boolean isShopDuplicate = false;
+
+    public boolean getIsShopDuplicate() {
+        return isShopDuplicate;
+    }
+    public void setIsShopDuplicate(boolean isShopDuplicate) {
+        this.isShopDuplicate = isShopDuplicate;
+    }
+
+
     public String getShopStatusUpdate() {
         return shopStatusUpdate;
     }
