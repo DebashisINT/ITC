@@ -291,6 +291,9 @@ class NewCollectionListFragment : BaseFragment(), View.OnClickListener {
         var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id!!,false)
         addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
 
+        // duplicate shop api call
+        addShopData.isShopDuplicate=mAddShopDBModelEntity.isShopDuplicate
+
         callAddShopApiForSync(addShopData, mAddShopDBModelEntity.shopImageLocalPath, list, adapterPosition, mAddShopDBModelEntity.doc_degree)
     }
 

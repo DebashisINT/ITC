@@ -1173,6 +1173,9 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
             addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
 //////////////////////
 
+            // duplicate shop api call
+            addShopData.isShopDuplicate=shop.isShopDuplicate
+
             callAddShopApi(addShopData, shop.shopImageLocalPath, shop.doc_degree, position)
             //}
         } catch (e: Exception) {

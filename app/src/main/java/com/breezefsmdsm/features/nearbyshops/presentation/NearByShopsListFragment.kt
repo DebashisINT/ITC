@@ -1025,6 +1025,9 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
                     var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id,false)
                     addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
 
+                    // duplicate shop api call
+                    addShopData.isShopDuplicate=mAddShopDBModelEntity.isShopDuplicate
+
                     callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, null, true,
                             mAddShopDBModelEntity.doc_degree)
                     //callAddShopApi(addShopData, "")
@@ -1357,6 +1360,9 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
         var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id,false)
         addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
+
+        // duplicate shop api call
+        addShopData.isShopDuplicate=mAddShopDBModelEntity.isShopDuplicate
 
         callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, shop_id, order_id, amount, collection,
                 currentDateForShopActi, desc, billId, mAddShopDBModelEntity.doc_degree, collectionDetails)
@@ -3334,6 +3340,9 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
         var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id,false)
         addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
 
+        // duplicate shop api call
+        addShopData.isShopDuplicate=mAddShopDBModelEntity.isShopDuplicate
+
         callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, shopList, true,
                 mAddShopDBModelEntity.doc_degree)
         //callAddShopApi(addShopData, "")
@@ -3469,6 +3478,9 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
             var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id,false)
             addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
+
+            // duplicate shop api call
+            addShopData.isShopDuplicate=mAddShopDBModelEntity.isShopDuplicate
 
             addShopData
         }.let {
