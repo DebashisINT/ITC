@@ -23,7 +23,7 @@ android {
     buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.breezefsmdsm"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 100
         versionName "4.0.7"

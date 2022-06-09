@@ -7704,12 +7704,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     }
 
-    fun endDay(
-        nearByShop: AddShopDBModelEntity,
-        nearByDD: AssignToDDEntity,
-        loc: Location,
-        isShop: Boolean
-    ) {
+    fun endDay(nearByShop: AddShopDBModelEntity, nearByDD: AssignToDDEntity, loc: Location, isShop: Boolean) {
         progress_wheel.stopSpinning()
         var saleValue: String = ""
         /*if (isShop) {
@@ -7881,8 +7876,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     //Pref.IsshowDayEndSelfie=true
 
                                     //enable screen
-                                    requireActivity().getWindow()
-                                        .clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                                     if (isDayEnd == false) {
                                         if (Pref.IsshowDayStartSelfie) {
@@ -7919,11 +7913,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             initPermissionCheck()
                                         } else {
                                             // 27-08-21 For ITC
-                                            (mContext as DashboardActivity).loadFragment(
-                                                FragType.LogoutSyncFragment,
-                                                false,
-                                                ""
-                                            )
+                                            (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                                             /// val simpleDialog = Dialog(mContext)
                                             /// simpleDialog.setCancelable(false)
                                             /// simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -7959,8 +7949,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             //getListFromDatabase()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             //enable screen
-                            requireActivity().getWindow()
-                                .clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         }
                     }, { error ->
                         if (error == null) {
@@ -7970,8 +7959,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             error.printStackTrace()
                         }
                         //enable screen
-                        requireActivity().getWindow()
-                            .clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong)+".")
+                        requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         progress_wheel.stopSpinning()
                         //getListFromDatabase()
                     })
@@ -7981,6 +7970,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             //getListFromDatabase()
             progress_wheel.stopSpinning()
             //enable screen
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong)+"..")
             requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         }
 

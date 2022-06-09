@@ -680,10 +680,10 @@ private fun calllogoutApi(user_id: String, session_id: String) {
         return
     }
 
-    syncShopList()
+    //syncShopList()
 
 
-    Handler().postDelayed(Runnable {
+    //Handler().postDelayed(Runnable {
 
     var intent = Intent(this, MonitorService::class.java)
     intent.action = CustomConstants.STOP_MONITOR_SERVICE
@@ -796,7 +796,7 @@ private fun calllogoutApi(user_id: String, session_id: String) {
                         performLogout()
                     })
     )
-}, 5500)
+//}, 5500)
 }
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)

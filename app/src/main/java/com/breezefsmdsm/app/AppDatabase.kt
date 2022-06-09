@@ -55,7 +55,7 @@ import com.breezefsmdsm.features.stockCompetetorStock.model.CompetetorStockData
         OrderStatusRemarksModelEntity::class,CurrentStockEntryModelEntity::class,CurrentStockEntryProductModelEntity::class,
            CcompetetorStockEntryModelEntity::class,CompetetorStockEntryProductModelEntity::class,
         ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class ),
-        version = 4, exportSchema = false)
+        version = 5, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -169,7 +169,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // allow queries on the main thread.
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
-                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4)
+                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5)
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -200,6 +200,11 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_3_4: Migration = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("create TABLE shop_deactivate_record  (id INTEGER NOT NULL PRIMARY KEY , shop_id  TEXT , noti_id TEXT ) ")
+            }
+        }
+        val MIGRATION_4_5: Migration = object : Migration(4, 5) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE shop_detail ADD COLUMN isShopDuplicate INTEGER NOT NULL DEFAULT 0 ")
             }
         }
     }

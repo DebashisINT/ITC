@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.addAttendence
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.Dialog
@@ -389,6 +390,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     private var selectedRoute = ArrayList<RouteEntity>()
     private var routeID = ""
 
+    @SuppressLint("WrongConstant")
     private fun setRouteAdapter(arrayList: ArrayList<RouteEntity>, selectionStatus: Int, route_id: String?) {
         /*val routeList = ArrayList<String>()
         for (i in 1..10) {
@@ -541,6 +543,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         }
     }
 
+    @SuppressLint("WrongConstant")
     private fun setLeaveTypeAdapter(leaveTypeList: ArrayList<LeaveTypeEntity>?) {
         rv_leave_type_list.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
         rv_leave_type_list.adapter = LeaveTypeListAdapter(mContext, leaveTypeList!!, object : LeaveTypeListAdapter.OnLeaveTypeClickListener {
@@ -912,6 +915,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
     private var position = -1
     private var workTypeList = ArrayList<WorkTypeEntity>()
+    @SuppressLint("WrongConstant")
     private fun setAdapter(list: ArrayList<WorkTypeEntity>?) {
         if (list != null) {
             rv_work_type_list.layoutManager = LinearLayoutManager(mContext, LinearLayout.VERTICAL, false)
@@ -2305,6 +2309,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
         }
     }
 
+    @SuppressLint("NewApi")
     private fun callAddAttendanceApi(addAttendenceModel: AddAttendenceInpuModel) {
         XLog.e("==========AddAttendance=============")
         XLog.d("=====AddAttendance Input Params========")
