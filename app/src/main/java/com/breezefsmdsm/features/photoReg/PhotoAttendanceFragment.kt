@@ -1202,6 +1202,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 XLog.d("PhotoAtendFrag : startDay : getCurrentDateTime() " +AppUtils.getCurrentDateTime())
                 XLog.d("PhotoAtendFrag : startDay : getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
                 XLog.d("PhotoAtendFrag : startDay : user_id ${dayst.user_id}")
+                XLog.d("PhotoAtendFrag : startDay : date ${dayst.date}")
+                XLog.d("PhotoAtendFrag : startDay : locationName ${dayst.location_name}")
+                XLog.d("PhotoAtendFrag : startDay : address $addr")
 
 
                 XLog.d("PhotoAtendFrag : startDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
@@ -1279,6 +1282,11 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             try{
                 XLog.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTime() " +AppUtils.getCurrentDateTime())
                 XLog.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
+
+                XLog.d("PhotoAtendFrag : endDay : user_id ${dayst.user_id}")
+                XLog.d("PhotoAtendFrag : endDay : date ${dayst.date}")
+                XLog.d("PhotoAtendFrag : endDay : locationName ${dayst.location_name}")
+                XLog.d("PhotoAtendFrag : endDay : address $addr")
                 XLog.d("PhotoAtendFrag : endDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
             }catch (ex:Exception){
                 ex.printStackTrace()
