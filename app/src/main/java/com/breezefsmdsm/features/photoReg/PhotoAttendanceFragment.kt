@@ -1205,8 +1205,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 XLog.d("PhotoAtendFrag : startDay : date ${dayst.date}")
                 XLog.d("PhotoAtendFrag : startDay : locationName ${dayst.location_name}")
                 XLog.d("PhotoAtendFrag : startDay : address $addr")
-
-
                 XLog.d("PhotoAtendFrag : startDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
             }catch (ex:Exception){
                 ex.printStackTrace()
