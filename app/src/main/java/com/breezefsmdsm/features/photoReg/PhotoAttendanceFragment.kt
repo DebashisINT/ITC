@@ -1201,6 +1201,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             try{
                 XLog.d("PhotoAtendFrag : startDay : getCurrentDateTime() " +AppUtils.getCurrentDateTime())
                 XLog.d("PhotoAtendFrag : startDay : getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
+                XLog.d("PhotoAtendFrag : startDay : user_id ${dayst.user_id}")
+
+
                 XLog.d("PhotoAtendFrag : startDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
             }catch (ex:Exception){
                 ex.printStackTrace()
