@@ -7181,6 +7181,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 hbRecorder!!.startScreenRecording(data, resultCode, mContext as Activity)
             }
             if (requestCode == 171) {
+                progress_wheel.stopSpinning()
                 println("reg_face - dashboard_frag face Detect Face Match" + AppUtils.getCurrentDateTime());
                 if (isCalledFromStart) {
                     isStartCall = true
@@ -7430,9 +7431,21 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             var dayst: DaystartDayendRequest = DaystartDayendRequest()
             dayst.user_id = Pref.user_id
             dayst.session_token = Pref.session_token
-            dayst.date = AppUtils.getCurrentDateTime()
-            dayst.location_name =
-                LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
+            //dayst.date = AppUtils.getCurrentDateTime()
+            dayst.date = AppUtils.getCurrentDateTimeNew()
+            try{
+                XLog.d("DashFrag : startDay :  getCurrentDateTime() " + AppUtils.getCurrentDateTime() + " getCurrentDateTimeNew() "+  AppUtils.getCurrentDateTimeNew())
+            }catch (ex:Exception){
+                ex.printStackTrace()
+                XLog.d("DashFrag : startDay :  err ${ex.message} ")
+            }
+            if(dayst.date.equals("") || dayst.date==null){
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                return
+            }
+
+
+            dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
             dayst.latitude = loc.latitude.toString()
             dayst.longitude = loc.longitude.toString()
             dayst.IsDDvistedOnceByDay = "0"
@@ -7748,9 +7761,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     var dayst: DaystartDayendRequest = DaystartDayendRequest()
                     dayst.user_id = Pref.user_id
                     dayst.session_token = Pref.session_token
-                    dayst.date = AppUtils.getCurrentDateTime()
-                    dayst.location_name =
-                        LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
+                    //dayst.date = AppUtils.getCurrentDateTime()
+                    dayst.date = AppUtils.getCurrentDateTimeNew()
+                    dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
                     dayst.latitude = loc.latitude.toString()
                     dayst.longitude = loc.longitude.toString()
                     if (Pref.IsDDvistedOnceByDay) {
@@ -8553,6 +8566,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     private fun registerFace(mBitmap: Bitmap?) {
         progress_wheel.stopSpinning()
+        progress_wheel.spin()
         //BaseActivity.isApiInitiated=false
         println("reg_face - add_attendance_registerFace" + AppUtils.getCurrentDateTime());
         try {

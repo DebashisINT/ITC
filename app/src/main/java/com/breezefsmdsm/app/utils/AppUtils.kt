@@ -51,6 +51,9 @@ import java.math.BigDecimal
 import java.sql.Timestamp
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
@@ -422,6 +425,12 @@ class AppUtils {
         fun getCurrentDateTime(): String {
             val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
             return df.format(Date()).toString()
+        }
+
+        fun getCurrentDateTimeNew(): String {
+            val df = LocalDateTime.now()
+            var formatD = df.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            return formatD.toString()
         }
 
         fun getCurrentDateTimeDDMMYY(): String {

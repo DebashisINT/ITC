@@ -556,16 +556,18 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onLocationChanged(location: Location) {
         try{
-            if(location!=null)
-            AppUtils.mLocation = location
-            Pref.current_latitude = location.latitude.toString()
-            Pref.current_longitude = location.longitude.toString()
-
+            if(location!=null){
+                AppUtils.mLocation = location
+                Pref.current_latitude = location.latitude.toString()
+                Pref.current_longitude = location.longitude.toString()
+                XLog.d("onLocationChanged : loc_update : lat - ${Pref.current_latitude.toString()} long - ${Pref.current_longitude.toString()}" + AppUtils.getCurrentDateTime())
+            }
         }catch (ex:Exception){
             ex.printStackTrace()
+            XLog.d("onLocationChanged : loc_update error" + AppUtils.getCurrentDateTime())
         }
 
-        XLog.d("onLocationChanged : LocationFuzedService " + AppUtils.getCurrentDateTime())
+        //XLog.d("onLocationChanged : LocationFuzedService " + AppUtils.getCurrentDateTime())
 
         if (Pref.login_date != AppUtils.getCurrentDateChanged()) {
             XLog.e("=======Auto logout scenario (Location Fuzed Service)==========")

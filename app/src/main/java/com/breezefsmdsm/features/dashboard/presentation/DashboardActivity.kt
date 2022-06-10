@@ -295,7 +295,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         println("load_frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
         var andrV = Build.VERSION.SDK_INT.toInt()
         println("andrV "+andrV.toString()+ " Time :" + AppUtils.getCurrentDateTime());
-
+        var tt = AppUtils.getCurrentDateTimeNew()
+        var t = AppUtils.getCurrentDateTime()
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()

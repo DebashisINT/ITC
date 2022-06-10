@@ -805,6 +805,9 @@ fun clearData() {
         val result = runLongTask()
         uiThread {
             if (result == true) {
+                Pref.DayStartMarked = false
+                Pref.DayEndMarked = false
+
                 Pref.user_id = ""
                 Pref.session_token = ""
                 Pref.login_date = ""
