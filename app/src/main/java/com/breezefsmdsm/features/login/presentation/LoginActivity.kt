@@ -4150,6 +4150,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         Pref.termsConditionsText = ""
         Pref.approvedInTime = AppUtils.convertTime(FTStorageUtils.getStringTimeToDate(loginResponse.user_details!!.user_login_time))
         Pref.approvedOutTime = AppUtils.convertTime(FTStorageUtils.getStringTimeToDate(loginResponse.user_details!!.user_logout_time))
+        Pref.approvedOutTimeServerFormat = loginResponse.user_details!!.user_logout_time.toString()
         //Pref.approvedOutTime="17:25:59"
         //Pref.approvedOutTime = "09:00 PM"
 

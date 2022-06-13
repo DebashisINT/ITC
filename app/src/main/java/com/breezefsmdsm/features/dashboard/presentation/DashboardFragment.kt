@@ -124,6 +124,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
 import java.net.URL
+import java.time.LocalTime
 import java.util.*
 
 /**
@@ -7763,6 +7764,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     dayst.session_token = Pref.session_token
                     //dayst.date = AppUtils.getCurrentDateTime()
                     dayst.date = AppUtils.getCurrentDateTimeNew()
+
+                    //new time work
+                    //Pref.approvedOutTimeServerFormat="15:21:00"
+                    var onlyTime = dayst.date!!.split(" ").get(1)
+                    var timeDayend = LocalTime.parse(onlyTime)
+                    var timeEndGlobal = LocalTime.parse(Pref.approvedOutTimeServerFormat)
+                    if(timeDayend>timeEndGlobal){
+                        dayst.date = AppUtils.getCurrentDateNew() + " " + timeEndGlobal
+                    }
+
+
                     dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
                     dayst.latitude = loc.latitude.toString()
                     dayst.longitude = loc.longitude.toString()

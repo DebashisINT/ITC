@@ -76,6 +76,7 @@ import io.reactivex.schedulers.Schedulers
 import net.alexandroid.gps.GpsStatusDetector
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.time.LocalTime
 import java.util.*
 
 
@@ -579,6 +580,14 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
             dayst.session_token = Pref.session_token
             //dayst.date = AppUtils.getCurrentDateTime()
             dayst.date = AppUtils.getCurrentDateTime12(Pref.login_date!!)
+
+            //new time work
+            //Pref.approvedOutTimeServerFormat="15:21:11"
+            var onlyTime = dayst.date!!.split(" ").get(1)
+            var onlydate = dayst.date!!.split(" ").get(0)
+            var timeEndGlobal = LocalTime.parse(Pref.approvedOutTimeServerFormat)
+            dayst.date = onlydate + " " + timeEndGlobal
+
             dayst.location_name = LocationWizard.getNewLocationName(this, location.latitude, location.longitude)
             dayst.latitude = location.latitude.toString()
             dayst.longitude = location.longitude.toString()

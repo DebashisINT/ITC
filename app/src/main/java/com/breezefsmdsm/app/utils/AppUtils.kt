@@ -433,6 +433,12 @@ class AppUtils {
             return formatD.toString()
         }
 
+        fun getCurrentDateNew(): String {
+            val df = LocalDate.now()
+            var formatD = df.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            return formatD.toString()
+        }
+
         fun getCurrentDateTimeDDMMYY(): String {
             val df = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH)
             return df.format(Date()).toString()

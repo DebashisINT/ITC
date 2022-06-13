@@ -290,13 +290,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         })
 
-
-        println("curr_time "+AppUtils.getCurrentDateTime()+"   user_id "+Pref.user_id +" "+ Pref.GeofencingRelaxationinMeter.toString())
-        println("load_frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.Show_App_Logout_Notification)
-        var andrV = Build.VERSION.SDK_INT.toInt()
-        println("andrV "+andrV.toString()+ " Time :" + AppUtils.getCurrentDateTime());
-        var tt = AppUtils.getCurrentDateTimeNew()
-        var t = AppUtils.getCurrentDateTime()
+        println("load_frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.approvedOutTimeServerFormat)
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
