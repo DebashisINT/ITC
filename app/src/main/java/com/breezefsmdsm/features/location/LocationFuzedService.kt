@@ -50,7 +50,9 @@ import com.breezefsmdsm.features.addshop.model.AddShopRequestCompetetorImg
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.dashboard.presentation.SystemEventReceiver
 import com.breezefsmdsm.features.dashboard.presentation.api.ShopVisitImageUploadRepoProvider
+import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.model.ShopVisitImageUploadInputModel
+import com.breezefsmdsm.features.dashboard.presentation.model.StatusDayStartEnd
 import com.breezefsmdsm.features.gpsstatus.GpsReceiver
 import com.breezefsmdsm.features.gpsstatus.LocationCallBack
 import com.breezefsmdsm.features.location.LocationWizard.Companion.NEARBY_RADIUS
@@ -68,6 +70,9 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login_new.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
@@ -587,296 +592,303 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             }
         }
 
-
-
-
         calculateOrderCollectionAlertTime()
-
+        XLog.d("LocationFuzedService : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" sstatus " + AppUtils.getCurrentDateTime())
         if(Pref.IsShowDayStart){
-            if(!Pref.DayStartMarked){
-                return
-            }
-        }
-
-        XLog.d("LocationFuzedService : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
+            if(Pref.DayStartMarked){
+                //XLog.d("LocationFuzedService : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
 
 
-        /*try {
-            if (Pref.current_latitude == location.latitude.toString() && Pref.current_longitude == location.longitude.toString()) {
-                if (sameLoc == 0L) {
-                    sameLoc = dateFormat.parse(AppUtils.getCurrentTime()).time
-                    Log.e(TAG, "same location-------> " + AppUtils.getTimeInHourMinuteFormat(sameLoc))
-                }
-            } else {
-                diffLoc = dateFormat.parse(AppUtils.getCurrentTime()).time
-                Log.e(TAG, "different location----------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc))
-            }
-
-            val performance = AppDatabase.getDBInstance()!!.performanceDao().getTodaysData(AppUtils.getCurrentDateForShopActi())
-            if (performance == null) {
-
-                if ((diffLoc - sameLoc) > 0 && sameLoc > 0) {
-                    val performanceEntity = PerformanceEntity()
-                    performanceEntity.date = AppUtils.getCurrentDateForShopActi()
-                    performanceEntity.ideal_duration = (diffLoc - sameLoc).toString()
-                    Log.e(TAG, "duration------------------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc - sameLoc))
-                    AppDatabase.getDBInstance()!!.performanceDao().insert(performanceEntity)
-                    diffLoc = 0
-                    sameLoc = 0
-                }
-            } else {
-                if (TextUtils.isEmpty(performance.ideal_duration)) {
-                    if ((diffLoc - sameLoc) > 0 && sameLoc > 0) {
-                        AppDatabase.getDBInstance()!!.performanceDao().updateIdealDuration((diffLoc - sameLoc).toString(), AppUtils.getCurrentDateForShopActi())
-                        Log.e(TAG, "duration------------------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc - sameLoc))
-                        diffLoc = 0
-                        sameLoc = 0
+                /*try {
+                    if (Pref.current_latitude == location.latitude.toString() && Pref.current_longitude == location.longitude.toString()) {
+                        if (sameLoc == 0L) {
+                            sameLoc = dateFormat.parse(AppUtils.getCurrentTime()).time
+                            Log.e(TAG, "same location-------> " + AppUtils.getTimeInHourMinuteFormat(sameLoc))
+                        }
+                    } else {
+                        diffLoc = dateFormat.parse(AppUtils.getCurrentTime()).time
+                        Log.e(TAG, "different location----------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc))
                     }
-                } else {
-                    if ((diffLoc - sameLoc) > 0 && sameLoc > 0) {
-                        val duration = diffLoc - sameLoc
-                        val totalDuration = performance.ideal_duration?.toLong()!! + duration
-                        AppDatabase.getDBInstance()!!.performanceDao().updateIdealDuration(totalDuration.toString(), AppUtils.getCurrentDateForShopActi())
-                        Log.e(TAG, "duration------------------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc - sameLoc))
-                        diffLoc = 0
-                        sameLoc = 0
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }*/
 
-        XLog.e(TAG, "ON LOCATION CHANGED: ")
-        //location.accuracy = 200f
-        XLog.d("onLocationChanged : " + "Location : " + location.latitude + "," + location.longitude + " Time : " + AppUtils.getCurrentDateTime() + ", Accuracy :" + location.accuracy)
+                    val performance = AppDatabase.getDBInstance()!!.performanceDao().getTodaysData(AppUtils.getCurrentDateForShopActi())
+                    if (performance == null) {
+
+                        if ((diffLoc - sameLoc) > 0 && sameLoc > 0) {
+                            val performanceEntity = PerformanceEntity()
+                            performanceEntity.date = AppUtils.getCurrentDateForShopActi()
+                            performanceEntity.ideal_duration = (diffLoc - sameLoc).toString()
+                            Log.e(TAG, "duration------------------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc - sameLoc))
+                            AppDatabase.getDBInstance()!!.performanceDao().insert(performanceEntity)
+                            diffLoc = 0
+                            sameLoc = 0
+                        }
+                    } else {
+                        if (TextUtils.isEmpty(performance.ideal_duration)) {
+                            if ((diffLoc - sameLoc) > 0 && sameLoc > 0) {
+                                AppDatabase.getDBInstance()!!.performanceDao().updateIdealDuration((diffLoc - sameLoc).toString(), AppUtils.getCurrentDateForShopActi())
+                                Log.e(TAG, "duration------------------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc - sameLoc))
+                                diffLoc = 0
+                                sameLoc = 0
+                            }
+                        } else {
+                            if ((diffLoc - sameLoc) > 0 && sameLoc > 0) {
+                                val duration = diffLoc - sameLoc
+                                val totalDuration = performance.ideal_duration?.toLong()!! + duration
+                                AppDatabase.getDBInstance()!!.performanceDao().updateIdealDuration(totalDuration.toString(), AppUtils.getCurrentDateForShopActi())
+                                Log.e(TAG, "duration------------------> " + AppUtils.getTimeInHourMinuteFormat(diffLoc - sameLoc))
+                                diffLoc = 0
+                                sameLoc = 0
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }*/
+
+                XLog.e(TAG, "ON LOCATION CHANGED: ")
+                //location.accuracy = 200f
+                XLog.d("onLocationChanged : " + "Location : " + location.latitude + "," + location.longitude + " Time : " + AppUtils.getCurrentDateTime() + ", Accuracy :" + location.accuracy)
 //        System.gc()
 //        trackDeviceMemory()
 
-        if (location.isFromMockProvider)
-            XLog.e("==================Mock Location is on (Location Fuzed Serive)====================")
-        else
-            XLog.e("==================Mock Location is off (Location Fuzed Serive)====================")
+                if (location.isFromMockProvider)
+                    XLog.e("==================Mock Location is on (Location Fuzed Serive)====================")
+                else
+                    XLog.e("==================Mock Location is off (Location Fuzed Serive)====================")
 
-        /*try {
+                /*try {
 
-            val currentTimeStamp = LocationWizard.getTimeStamp()
+                    val currentTimeStamp = LocationWizard.getTimeStamp()
 
-            if (accuracyStatus.equals("inaccurate", ignoreCase = true)) {
-                val list = AppDatabase.getDBInstance()!!.inaccurateLocDao().all
-                var inaccurateTimeStamp = ""
+                    if (accuracyStatus.equals("inaccurate", ignoreCase = true)) {
+                        val list = AppDatabase.getDBInstance()!!.inaccurateLocDao().all
+                        var inaccurateTimeStamp = ""
 
-                if (list != null && list.size > 0) {
-                    inaccurateTimeStamp = list[list.size - 1].timestamp!!
+                        if (list != null && list.size > 0) {
+                            inaccurateTimeStamp = list[list.size - 1].timestamp!!
 
-                    val timeStampLong = inaccurateTimeStamp.toLong()
+                            val timeStampLong = inaccurateTimeStamp.toLong()
 
-                    if (inaccurateTimeStamp >= currentTimeStamp) {
-                        XLog.e("=====Invalid inaccurate onlocationchange=======")
+                            if (inaccurateTimeStamp >= currentTimeStamp) {
+                                XLog.e("=====Invalid inaccurate onlocationchange=======")
+                                return
+                            }
+                        }
+                    } else {
+                        val accurateList = AppDatabase.getDBInstance()!!.userLocationDataDao().all
+                        var accurateTimeStamp = ""
+                        if (accurateList != null && accurateList.size > 0) {
+                            accurateTimeStamp = accurateList[accurateList.size - 1].timestamp
+
+                            val timeStampLong = accurateTimeStamp.toLong()
+
+                            if (accurateTimeStamp >= currentTimeStamp) {
+                                XLog.e("=====Invalid accurate onlocationchange=======")
+                                return
+                            }
+                        }
+                    }
+
+
+                    if (currentOnLocationChangedTimeStamp != 0L && currentOnLocationChangedTimeStamp != previousOnLocationChangedTimeStamp) {
+                        XLog.e("onLocationChanged: ===previousOnLocationChangedTimeStamp is not equal to old currentOnLocationChangedTimeStamp===")
                         return
                     }
-                }
-            } else {
-                val accurateList = AppDatabase.getDBInstance()!!.userLocationDataDao().all
-                var accurateTimeStamp = ""
-                if (accurateList != null && accurateList.size > 0) {
-                    accurateTimeStamp = accurateList[accurateList.size - 1].timestamp
 
-                    val timeStampLong = accurateTimeStamp.toLong()
+                    currentOnLocationChangedTimeStamp = AppUtils.getTimeStamp(AppUtils.getCurrentDateTime()) //System.currentTimeMillis()
 
-                    if (accurateTimeStamp >= currentTimeStamp) {
-                        XLog.e("=====Invalid accurate onlocationchange=======")
-                        return
+                    if (previousOnLocationChangedTimeStamp != 0L) {
+                        //synchronized(this) {
+
+                        val interval = currentOnLocationChangedTimeStamp - previousOnLocationChangedTimeStamp
+                        val intervalInSec = (interval / 1000)
+
+                        XLog.e("onLocationChanged previousOnLocationChangedTimeStamp====> $previousOnLocationChangedTimeStamp")
+                        XLog.e("onLocationChanged currentOnLocationChangedTimeStamp====> $currentOnLocationChangedTimeStamp")
+                        XLog.e("onLocationChanged interval====> $intervalInSec sec(s)")
+
+                        previousOnLocationChangedTimeStamp = currentOnLocationChangedTimeStamp
+
+                        XLog.e("onLocationChanged new previousOnLocationChangedTimeStamp====> $previousOnLocationChangedTimeStamp")
+
+                        if (interval <= 40 * 1000) {
+                            return
+                        }
+                        //}
+                    } else
+                        previousOnLocationChangedTimeStamp = currentOnLocationChangedTimeStamp
+
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }*/
+
+                if (Pref.willAutoRevisitEnable){
+                    if(Pref.IsShowDayStart){
+                        if(Pref.DayStartMarked){
+                            checkAutoRevisit()
+                        }
                     }
                 }
-            }
+                else
+                    XLog.e("====================Auto Revisit Disable (Location Fuzed Service)====================")
 
+                //saveAllLocation(location)
+                checkMeetingDistance()
 
-            if (currentOnLocationChangedTimeStamp != 0L && currentOnLocationChangedTimeStamp != previousOnLocationChangedTimeStamp) {
-                XLog.e("onLocationChanged: ===previousOnLocationChangedTimeStamp is not equal to old currentOnLocationChangedTimeStamp===")
-                return
-            }
-
-            currentOnLocationChangedTimeStamp = AppUtils.getTimeStamp(AppUtils.getCurrentDateTime()) //System.currentTimeMillis()
-
-            if (previousOnLocationChangedTimeStamp != 0L) {
-                //synchronized(this) {
-
-                val interval = currentOnLocationChangedTimeStamp - previousOnLocationChangedTimeStamp
-                val intervalInSec = (interval / 1000)
-
-                XLog.e("onLocationChanged previousOnLocationChangedTimeStamp====> $previousOnLocationChangedTimeStamp")
-                XLog.e("onLocationChanged currentOnLocationChangedTimeStamp====> $currentOnLocationChangedTimeStamp")
-                XLog.e("onLocationChanged interval====> $intervalInSec sec(s)")
-
-                previousOnLocationChangedTimeStamp = currentOnLocationChangedTimeStamp
-
-                XLog.e("onLocationChanged new previousOnLocationChangedTimeStamp====> $previousOnLocationChangedTimeStamp")
-
-                if (interval <= 40 * 1000) {
-                    return
+                /*Sync all data*/
+                if(Pref.IsShowDayStart){
+                    if(Pref.DayStartMarked){
+                syncLocationActivity()
+                    }
                 }
-                //}
-            } else
-                previousOnLocationChangedTimeStamp = currentOnLocationChangedTimeStamp
 
+                //if (!BaseActivity.isApiInitiated)
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }*/
+                callShopDurationApi()
+                //syncShopVisitImage()
 
-        if (Pref.willAutoRevisitEnable)
-            checkAutoRevisit()
-        else
-            XLog.e("====================Auto Revisit Disable (Location Fuzed Service)====================")
+                //callCompetetorImgUploadApi()
 
-        //saveAllLocation(location)
-        checkMeetingDistance()
+                syncIdealLocData()
 
-        /*Sync all data*/
-        syncLocationActivity()
+                syncMeetingData()
 
-        //if (!BaseActivity.isApiInitiated)
+                if (Pref.isAppInfoEnable) {
+                    saveBatteryNetData()
 
-        callShopDurationApi()
-        //syncShopVisitImage()
+                    syncBatteryNetData()
+                }
 
-        //callCompetetorImgUploadApi()
-
-        syncIdealLocData()
-
-        syncMeetingData()
-
-        if (Pref.isAppInfoEnable) {
-            saveBatteryNetData()
-
-            syncBatteryNetData()
-        }
-
-        /*if (location.isFromMockProvider *//*|| AppUtils.areThereMockPermissionApps(this)*//*) {
+                /*if (location.isFromMockProvider *//*|| AppUtils.areThereMockPermissionApps(this)*//*) {
             XLog.e("==================Mock Location is on (Location Fuzed Serive)====================")
             return
         }
 
         XLog.e("==================Mock Location is off (Location Fuzed Serive)====================")*/
 
-        Pref.current_latitude = location.latitude.toString()
-        Pref.current_longitude = location.longitude.toString()
-        AppUtils.mLocation = location
-        AppUtils.saveSharedPreferencesLocation(this, location)
+                Pref.current_latitude = location.latitude.toString()
+                Pref.current_longitude = location.longitude.toString()
+                AppUtils.mLocation = location
+                AppUtils.saveSharedPreferencesLocation(this, location)
 
-        Pref.logout_latitude = location.latitude.toString()
-        Pref.logout_longitude = location.longitude.toString()
+                Pref.logout_latitude = location.latitude.toString()
+                Pref.logout_longitude = location.longitude.toString()
 
-        showNotification()
+                showNotification()
 
-        var accuracy = 0f
-        accuracy = if (AppUtils.isOnline(this))
-            AppUtils.minAccuracy.toFloat()
-        else
-            800f
+                var accuracy = 0f
+                accuracy = if (AppUtils.isOnline(this))
+                    AppUtils.minAccuracy.toFloat()
+                else
+                    800f
 
-        /*Discard Data if Inaccurate*/
-        if (location.accuracy > accuracy /*&& shouldLocationUpdate()*/) {
+                /*Discard Data if Inaccurate*/
+                if (location.accuracy > accuracy /*&& shouldLocationUpdate()*/) {
 
-            /*LOCATION_ACTIVITY_INTERVAL = 0
-            updateInaccurateLocation(location)*/
+                    /*LOCATION_ACTIVITY_INTERVAL = 0
+                    updateInaccurateLocation(location)*/
 
-            accuracyStatus = "inaccurate"
+                    accuracyStatus = "inaccurate"
 
-            XLog.e("=============Inaccurate location (Location Fuzed Service)============")
+                    XLog.e("=============Inaccurate location (Location Fuzed Service)============")
 
-            if (!TextUtils.isEmpty(Pref.home_latitude) && !TextUtils.isEmpty(Pref.home_longitude)) {
-                val distance = LocationWizard.getDistance(Pref.home_latitude.toDouble(), Pref.home_longitude.toDouble(), location.latitude, location.longitude)
+                    if (!TextUtils.isEmpty(Pref.home_latitude) && !TextUtils.isEmpty(Pref.home_longitude)) {
+                        val distance = LocationWizard.getDistance(Pref.home_latitude.toDouble(), Pref.home_longitude.toDouble(), location.latitude, location.longitude)
 
-                if (distance * 1000 > Pref.homeLocDistance.toDouble()) {
-                    calculateInaccurateDistance(location)
-                } else {
-                    XLog.e("==========User is at home location (Location Fuzed Service)==========")
-                    if (Pref.isAddAttendence)
-                        calculateIdleTime(location, "inaccurate")
-                    else
-                        XLog.e("=====Attendance is not added for today (Inaccurate idle time)======")
+                        if (distance * 1000 > Pref.homeLocDistance.toDouble()) {
+                            calculateInaccurateDistance(location)
+                        } else {
+                            XLog.e("==========User is at home location (Location Fuzed Service)==========")
+                            if (Pref.isAddAttendence)
+                                calculateIdleTime(location, "inaccurate")
+                            else
+                                XLog.e("=====Attendance is not added for today (Inaccurate idle time)======")
+                        }
+                    } else
+                        calculateInaccurateDistance(location)
+
+                    XLog.e("Temp Distance for inaccurate====> $tempDistance")
+
+                    updateInaccurateLocation(location)
+
+                    lastLat = location.latitude
+                    lastLng = location.longitude
+
+                    return
                 }
-            } else
-                calculateInaccurateDistance(location)
-
-            XLog.e("Temp Distance for inaccurate====> $tempDistance")
-
-            updateInaccurateLocation(location)
-
-            lastLat = location.latitude
-            lastLng = location.longitude
-
-            return
-        }
 
 
 //        if (AppUtils.isShopVisited) {
 
-        if( Pref.isShopVisited){
-            if (shouldShopDurationComplete()) {
+                if( Pref.isShopVisited){
+                    if (shouldShopDurationComplete()) {
 
-                val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedShopForADay(AppUtils.getCurrentDateForShopActi(), false, true)
-                if (list != null && list.isNotEmpty()) {
-                    val shopId = list[0].shopid
+                        val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedShopForADay(AppUtils.getCurrentDateForShopActi(), false, true)
+                        if (list != null && list.isNotEmpty()) {
+                            val shopId = list[0].shopid
 
-                    val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shopId)
+                            val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shopId)
 
-                    val distance = LocationWizard.getDistance(shop.shopLat, shop.shopLong, location.latitude, location.longitude)
+                            val distance = LocationWizard.getDistance(shop.shopLat, shop.shopLong, location.latitude, location.longitude)
 
-                    XLog.e("Location Fuzed Service: Distance between current location & visited shop location====> $distance km(s)")
-                    XLog.e("Location Fuzed Service: Gps accuracy====> " + Pref.gpsAccuracy + " m(s)")
+                            XLog.e("Location Fuzed Service: Distance between current location & visited shop location====> $distance km(s)")
+                            XLog.e("Location Fuzed Service: Gps accuracy====> " + Pref.gpsAccuracy + " m(s)")
 
-                    if (distance * 1000 > Pref.gpsAccuracy.toInt()) {
-                        endShopDuration(shopId!!)
+                            if (distance * 1000 > Pref.gpsAccuracy.toInt()) {
+                                endShopDuration(shopId!!)
+                            }
+
+
+
+                        }
                     }
-
-
-
                 }
+
+
+                XLog.e("Temp Distance for accurate====> $tempDistance")
+
+                lastLat = location.latitude
+                lastLng = location.longitude
+
+                Pref.latitude = location.latitude.toString()
+                Pref.longitude = location.longitude.toString()
+
+                /*if (Pref.login_date != AppUtils.getCurrentDateChanged())
+                    return
+
+
+                Pref.latitude = location.latitude.toString()
+                Pref.longitude = location.longitude.toString()
+
+                if (Pref.user_id.isNullOrEmpty())
+                    return*/
+
+                //cancelShopDuration()
+                accuracyStatus = "accurate"
+                continueToAccurateFlow(location)
+
+                /*if (mLastLocation == null) {
+                    mLastLocation = location
+                    Pref.prevTimeStamp = System.currentTimeMillis()
+                    updateLocation(mLastLocation!!, location)
+                    LOCATION_ACTIVITY_INTERVAL = 2
+                } else if (shouldLocationUpdate()) {
+                    updateLocation(mLastLocation!!, location)
+                    mLastLocation = location
+                    LOCATION_ACTIVITY_INTERVAL = 2
+                    val i = Intent("android.intent.action.MAIN").putExtra("some_msg", "LOCATION_DETECTED")
+                    this.sendBroadcast(i)
+                }*/
+
+                val intent = Intent()
+                intent.action = "UPDATE_PJP_LIST"
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+            }else{
+                XLog.d("LocationFuzedService : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" returning " + AppUtils.getCurrentDateTime())
+                return
             }
         }
-
-
-        XLog.e("Temp Distance for accurate====> $tempDistance")
-
-        lastLat = location.latitude
-        lastLng = location.longitude
-
-        Pref.latitude = location.latitude.toString()
-        Pref.longitude = location.longitude.toString()
-
-        /*if (Pref.login_date != AppUtils.getCurrentDateChanged())
-            return
-
-
-        Pref.latitude = location.latitude.toString()
-        Pref.longitude = location.longitude.toString()
-
-        if (Pref.user_id.isNullOrEmpty())
-            return*/
-
-        //cancelShopDuration()
-        accuracyStatus = "accurate"
-        continueToAccurateFlow(location)
-
-        /*if (mLastLocation == null) {
-            mLastLocation = location
-            Pref.prevTimeStamp = System.currentTimeMillis()
-            updateLocation(mLastLocation!!, location)
-            LOCATION_ACTIVITY_INTERVAL = 2
-        } else if (shouldLocationUpdate()) {
-            updateLocation(mLastLocation!!, location)
-            mLastLocation = location
-            LOCATION_ACTIVITY_INTERVAL = 2
-            val i = Intent("android.intent.action.MAIN").putExtra("some_msg", "LOCATION_DETECTED")
-            this.sendBroadcast(i)
-        }*/
-
-        val intent = Intent()
-        intent.action = "UPDATE_PJP_LIST"
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
     }
 

@@ -3336,6 +3336,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         when (p0!!.id) {
             R.id.login_TV -> {
 
+                Pref.DayStartMarked = false
+                Pref.DayEndMarked = false
+                XLog.d("R.id.login_TV : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
+
                 var andrV = Build.VERSION.SDK_INT.toInt()
 
                 if (andrV < 26) {
@@ -3504,7 +3508,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }
         val megAvailable = bytesAvailable / (1024 * 1024)
         val megTotal = bytesTotal / (1024 * 1024)
-        println("phone_storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime());
         XLog.d("phone storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime())
 
         if (megAvailable < 1024) {
@@ -4193,7 +4196,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
 
-        XLog.d("LoginApiResponse : " + "\n" + "GPS SETTINGS=====> " + Pref.gpsAccuracy)
+        XLog.d("LoginApiResponse : GPS SETTINGS=====> " + Pref.gpsAccuracy)
 
         if (!TextUtils.isEmpty(loginResponse.user_details!!.add_attendence_time))
             Pref.add_attendence_time = loginResponse.user_details!!.add_attendence_time
@@ -4275,7 +4278,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("Login DayStart : RESPONSE " + result.status)
+                                XLog.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
                                 val response = result as StatusDayStartEnd
                                 if (response.status == NetworkConstant.SUCCESS) {
 
@@ -4300,25 +4303,31 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     }
 
                                 } else {
+                                    Pref.DayStartMarked = false
+                                    Pref.DayEndMarked = false
                                     Pref.IsDDvistedOnceByDay = false
                                     getListFromDatabase()
                                 }
                             }, { error ->
                                 if (error == null) {
-                                    XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                                    XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
                                 } else {
-                                    XLog.d("Login DayStart : ERROR " + error.localizedMessage)
+                                    XLog.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
                                     error.printStackTrace()
                                 }
                                 Pref.IsDDvistedOnceByDay = false
+                                Pref.DayStartMarked = false
+                                Pref.DayEndMarked = false
                                 getListFromDatabase()
                             })
             )
         } catch (ex: java.lang.Exception) {
+            XLog.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
             ex.printStackTrace()
+            Pref.DayStartMarked = false
+            Pref.DayEndMarked = false
             getListFromDatabase()
         }
-
     }
 
 
@@ -4761,6 +4770,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             val response = result as UserConfigResponseModel
                             if (response.status == NetworkConstant.SUCCESS) {
                                 try {
+                                    XLog.d("callUserConfigApi response : "+response.status+" "+ AppUtils.getCurrentDateTimeNew())
                                     Log.e("Login", "willLeaveApprovalEnable================> " + Pref.willLeaveApprovalEnable)
 
                                     if (response.getconfigure != null && response.getconfigure!!.size > 0) {
@@ -5592,6 +5602,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             //gotoHomeActivity()
 
                         }, { error ->
+                            XLog.d("callUserConfigApi Error response : "+error.message+" "+ AppUtils.getCurrentDateTimeNew())
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             getConfigFetchApi()

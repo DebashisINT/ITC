@@ -5625,6 +5625,10 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             } else if (logoutResponse.status == NetworkConstant.SESSION_MISMATCH) {
                                 //clearData()
                                 (mContext as DashboardActivity).isChangedPassword = false
+
+                                Pref.DayStartMarked = false
+                                Pref.DayEndMarked = false
+
                                 startActivity(Intent(mContext, LoginActivity::class.java))
                                 (mContext as DashboardActivity).overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                                 (mContext as DashboardActivity).finishAffinity()
