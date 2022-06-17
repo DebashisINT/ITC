@@ -98,6 +98,7 @@ import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.*
+import java.time.LocalTime
 import java.util.*
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
@@ -5597,10 +5598,23 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         XLog.d("LOGOUT : LOCATION====> $location")
         XLog.d("=====================================")
 
+
+        var apiHitDateTime = AppUtils.getCurrentDateTime()
+        if((mContext as DashboardActivity).isForceLogout){
+            var logOutD = apiHitDateTime
+            var onlyTime = logOutD.split(" ").get(1)
+            var onlydate = logOutD!!.split(" ").get(0)
+            var timeEndGlobal = LocalTime.parse(Pref.approvedOutTimeServerFormat)
+            var finalD = onlydate + " " + timeEndGlobal
+            apiHitDateTime = finalD
+            (mContext as DashboardActivity).isForceLogout=false
+        }
+
         val repository = LogoutRepositoryProvider.provideLogoutRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
-                repository.logout(user_id, session_id, Pref.logout_latitude, Pref.logout_longitude, AppUtils.getCurrentDateTime(), distance.toString(),
+                //repository.logout(user_id, session_id, Pref.logout_latitude, Pref.logout_longitude, AppUtils.getCurrentDateTime(), distance.toString(),
+                repository.logout(user_id, session_id, Pref.logout_latitude, Pref.logout_longitude, apiHitDateTime, distance.toString(),
                         "0", location)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())

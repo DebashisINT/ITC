@@ -59,6 +59,7 @@ import com.breezefsmdsm.features.dashboard.presentation.api.ShopVisitImageUpload
 import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.model.DaystartDayendRequest
 import com.breezefsmdsm.features.dashboard.presentation.model.ShopVisitImageUploadInputModel
+import com.breezefsmdsm.features.dashboard.presentation.model.StatusDayStartEnd
 import com.breezefsmdsm.features.location.*
 import com.breezefsmdsm.features.location.model.ShopDurationRequest
 import com.breezefsmdsm.features.location.model.ShopDurationRequestData
@@ -73,6 +74,7 @@ import com.google.android.gms.location.LocationRequest
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login_new.*
 import net.alexandroid.gps.GpsStatusDetector
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -532,14 +534,94 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun initiateLogoutApi() {
-        getProgressInstance().showDialogForLoading(this@BaseActivity)
+
+
+        /*getProgressInstance().showDialogForLoading(this@BaseActivity)
         Pref.logout_time = "11:59 PM"
         if(Pref.DayStartMarked && Pref.IsShowDayStart){
             singleLocationEnd()
         }else{
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+        }*/
+        //checkDayStartEndStatus()
+        syncShopList()
+    }
+
+    fun checkDayStartEndStatus() {
+        try {
+            var lastLoginDate = Pref.login_date_time.toString().split(" ").get(0)
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                repository.dayStartEndStatus(lastLoginDate)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        XLog.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
+                        val response = result as StatusDayStartEnd
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            Pref.DayStartMarked = response.DayStartMarked!!
+                            Pref.DayEndMarked = response.DayEndMarked!!
+                            Pref.DayStartShopType = response.day_start_shop_type!!
+                            Pref.DayStartShopID = response.day_start_shop_id!!
+                            Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
+
+                            getProgressInstance().showDialogForLoading(this@BaseActivity)
+                            Pref.logout_time = "11:59 PM"
+                            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                                singleLocationEnd()
+                            }else{
+                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            }
+                        } else {
+                            Pref.DayStartMarked = false
+                            Pref.DayEndMarked = false
+                            Pref.IsDDvistedOnceByDay = false
+
+                            getProgressInstance().showDialogForLoading(this@BaseActivity)
+                            Pref.logout_time = "11:59 PM"
+                            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                                singleLocationEnd()
+                            }else{
+                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            }
+
+                        }
+                    }, { error ->
+                        if (error == null) {
+                            XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+                        } else {
+                            XLog.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
+                            error.printStackTrace()
+                        }
+                        Pref.IsDDvistedOnceByDay = false
+                        Pref.DayStartMarked = false
+                        Pref.DayEndMarked = false
+
+                        getProgressInstance().showDialogForLoading(this@BaseActivity)
+                        Pref.logout_time = "11:59 PM"
+                        if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                            singleLocationEnd()
+                        }else{
+                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                        }
+                    })
+            )
+        } catch (ex: java.lang.Exception) {
+            XLog.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+            ex.printStackTrace()
+            Pref.DayStartMarked = false
+            Pref.DayEndMarked = false
+
+            getProgressInstance().showDialogForLoading(this@BaseActivity)
+            Pref.logout_time = "11:59 PM"
+            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                singleLocationEnd()
+            }else{
+                calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+            }
         }
     }
+
 
     private fun singleLocationEnd() {
 
@@ -760,16 +842,22 @@ private fun calllogoutApi(user_id: String, session_id: String) {
     XLog.d("AUTO_LOGOUT : LOCATION=======> $location")
     XLog.d("=======================================")
 
+    var logOutD = AppUtils.getCurrentDateTime12(Pref.login_date!!)
+    var onlyTime = logOutD.split(" ").get(1)
+    var onlydate = logOutD!!.split(" ").get(0)
+    var timeEndGlobal = LocalTime.parse(Pref.approvedOutTimeServerFormat)
+    var finalD = onlydate + " " + timeEndGlobal
 
     val repository = LogoutRepositoryProvider.provideLogoutRepository()
     BaseActivity.compositeDisposable.add(
-            repository.logout(user_id, session_id, Pref.logout_latitude, Pref.logout_longitude, /*"2018-12-21 23:59:00"*/AppUtils.getCurrentDateTime12(Pref.login_date!!),
+            //repository.logout(user_id, session_id, Pref.logout_latitude, Pref.logout_longitude, /*"2018-12-21 23:59:00"*/AppUtils.getCurrentDateTime12(Pref.login_date!!),
+            repository.logout(user_id, session_id, Pref.logout_latitude, Pref.logout_longitude, /*"2018-12-21 23:59:00"*/finalD,
                     distance.toString(), "1", location)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ result ->
                         val logoutResponse = result as BaseResponse
-                        XLog.d("AUTO_LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
+                        XLog.d("AUTO_LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + finalD +"  "+AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                         if (logoutResponse.status == NetworkConstant.SUCCESS) {
 
                             Pref.tempDistance = "0.0"
@@ -1200,17 +1288,13 @@ fun isMonitorServiceRunning(): Boolean {
     lateinit var ShopActivityEntityListNew: List<ShopActivityEntity>
 
     private fun uploadShopRevisitData(){
-        //AppDatabase.getDBInstance()!!.shopActivityDao().xtest(false,"2021-11-27")
-        //AppDatabase.getDBInstance()!!.shopActivityDao().xtest1(false,"2021-11-27")
         var logout_date=AppUtils.convertLoginTimeToAutoLogoutTimeFormatyymmdd(Pref.login_date!!)
 
         XLog.d("AUTO_LOGOUT New: logout_date_prev" + logout_date)
 
-        //logout_date="2021-11-28"
         ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(logout_date)
         Collections.reverse(ShopActivityEntityListNew)
 
-        // tested on 23-11-2021 begin
         for (i in ShopActivityEntityListNew.indices) {
             if (!ShopActivityEntityListNew[i].isDurationCalculated && ShopActivityEntityListNew[i].startTimeStamp != "0" && ShopActivityEntityListNew[i].isUploaded==false) {
                 Pref.durationCompletedShopId = ShopActivityEntityListNew[i].shopid!!
@@ -1253,18 +1337,12 @@ fun isMonitorServiceRunning(): Boolean {
                     AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
                             AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), ShopActivityEntityListNew[i].shopid!!, logout_date, ShopActivityEntityListNew[i].startTimeStamp)
                 }
-//                    AppUtils.isShopVisited = false
 
                 Pref.isShopVisited=false
-                /*if (Pref.willShowShopVisitReason && totalMinute.toInt() < Pref.minVisitDurationSpentTime.toInt()) {
-                    Pref.isShowShopVisitReason = true
-                    showRevisitReasonDialog(shopActivityList[i].startTimeStamp)
-                }*/
             }
         }
         ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(logout_date)
         Collections.reverse(ShopActivityEntityListNew)
-        // tested on 23-11-2021 end
 
         XLog.d("AUTO_LOGOUT New: uploadShopRevisitData" + AppUtils.getCurrentDateTime())
 
@@ -1287,14 +1365,16 @@ fun isMonitorServiceRunning(): Boolean {
                     }
                 }
 
-
                 if (list.size > 0)
                     syncAllShopActivity(list[i].shopid!!, list,logout_date)
-                else
-                    syncShopVisitImage()
+                else{
+                    //syncShopVisitImage()
+                    checkDayStartEndStatus()
+                }
 
             } else {
-                syncShopVisitImage()
+                checkDayStartEndStatus()
+                //syncShopVisitImage()
             }
         }
         else {
@@ -1505,7 +1585,6 @@ fun isMonitorServiceRunning(): Boolean {
 
     }
 
-
     private fun syncAllShopActivity(shopId: String, list_: ArrayList<ShopActivityEntity>,selectedDate:String) {
         if (!AppUtils.isOnline(this)) {
             (this as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
@@ -1515,7 +1594,6 @@ fun isMonitorServiceRunning(): Boolean {
         if (mList.isEmpty())
             return
         val shopActivity = mList[0]
-//        var shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityForId(shopId)
         val shopDurationApiReq = ShopDurationRequest()
         shopDurationApiReq.user_id = Pref.user_id
         shopDurationApiReq.session_token = Pref.session_token
@@ -1588,31 +1666,7 @@ fun isMonitorServiceRunning(): Boolean {
 
         BaseActivity.isShopActivityUpdating = true
 
-        XLog.d("========SYNC ALL VISITED SHOP DATA AUTO_LOGOUT New (AVERAGE SHOP)=====" + " date-time : "+AppUtils.getCurrentDateTime())
-        XLog.d("SHOP ID======> " + shopDurationData.shop_id)
-        XLog.d("SPENT DURATION======> " + shopDurationData.spent_duration)
-        XLog.d("VISIT DATE=========> " + shopDurationData.visited_date)
-        XLog.d("VISIT DATE TIME==========> " + shopDurationData.visited_date)
-        XLog.d("TOTAL VISIT COUNT========> " + shopDurationData.total_visit_count)
-        XLog.d("DISTANCE TRAVELLED========> " + shopDurationData.distance_travelled)
-        XLog.d("FEEDBACK========> " + shopDurationData.feedback)
-        XLog.d("isFirstShopVisited========> " + shopDurationData.isFirstShopVisited)
-        XLog.d("distanceFromHomeLoc========> " + shopDurationData.distanceFromHomeLoc)
-        XLog.d("next_visit_date========> " + shopDurationData.next_visit_date)
-        XLog.d("early_revisit_reason========> " + shopDurationData.early_revisit_reason)
-        XLog.d("device_model========> " + shopDurationData.device_model)
-        XLog.d("android_version========> " + shopDurationData.android_version)
-        XLog.d("battery========> " + shopDurationData.battery)
-        XLog.d("net_status========> " + shopDurationData.net_status)
-        XLog.d("net_type========> " + shopDurationData.net_type)
-        XLog.d("in_time========> " + shopDurationData.in_time)
-        XLog.d("out_time========> " + shopDurationData.out_time)
-        XLog.d("start_timestamp========> " + shopDurationData.start_timestamp)
-        XLog.d("in_location========> " + shopDurationData.in_location)
-        XLog.d("out_location========> " + shopDurationData.out_location)
-        XLog.d("=======================================================")
 
-        ////////
         revisitStatusList.clear()
         var key:String = ""
         for(i in 0..list_?.size-1){
@@ -1645,42 +1699,26 @@ fun isMonitorServiceRunning(): Boolean {
                                     ", SHOP: " + mList[0].shop_name+" date-time : "+AppUtils.getCurrentDateTime())
                             if (result.status == NetworkConstant.SUCCESS) {
 
-
                                 if(!revisitStatusList.isEmpty()){
                                     callRevisitStatusUploadApi(revisitStatusList!!)
                                 }
 
-                                callCompetetorImgUploadApi(shopId)
-
+                                //callCompetetorImgUploadApi(shopId)
 
                                 if (!Pref.isMultipleVisitEnable)
                                     AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, shopId, selectedDate)
                                 else
                                     AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, shopId, selectedDate, shopActivity.startTimeStamp)
 
-                                //
                                 i++
                                 if (i < list_.size) {
-
-                                    /*val unSyncedList = ArrayList<ShopVisitImageModelEntity>()
-                                    for (i in shopDataList.indices) {
-                                        val unSyncedData = AppDatabase.getDBInstance()!!.shopVisitImageDao().getTodaysUnSyncedListAccordingToShopId(false, shopDataList[i].shop_id!!, shopDataList[i].visited_date!!)
-
-                                        if (unSyncedData != null && unSyncedData.isNotEmpty()) {
-                                            unSyncedList.add(unSyncedData[0])
-                                        }
-                                    }*/
-
-                                    /*if (unSyncedList.size > 0) {
-                                        callShopVisitImageUploadApi(unSyncedList, true, list_)
-                                    } else {*/
                                     BaseActivity.isShopActivityUpdating = false
                                     syncAllShopActivity(list_[i].shopid!!, list_,selectedDate)
-                                    //}
-
                                 }
                                 else {
-                                    i = 0
+                                    checkDayStartEndStatus()
+
+                                    /*i = 0
                                     val unSyncedList = ArrayList<ShopVisitImageModelEntity>()
 
                                     if (!Pref.isMultipleVisitEnable) {
@@ -1703,15 +1741,12 @@ fun isMonitorServiceRunning(): Boolean {
                                         }
                                     }
 
-
                                     if (unSyncedList.size > 0) {
                                         j = 0
-                                        //callShopVisitImageUploadApi(unSyncedList, true, list_)
                                         BaseActivity.isShopActivityUpdating = false
                                         callShopVisitImageUploadApiForAll(unSyncedList)
                                     }
                                     else {
-
                                         val unSyncedAudioList = ArrayList<ShopVisitAudioEntity>()
                                         if (!Pref.isMultipleVisitEnable) {
                                             for (i in ShopActivityEntityListNew.indices) {
@@ -1731,54 +1766,34 @@ fun isMonitorServiceRunning(): Boolean {
                                                 }
                                             }
                                         }
-
                                         if (unSyncedAudioList.isNotEmpty()) {
                                             j = 0
                                             BaseActivity.isShopActivityUpdating = false
                                             callShopVisitAudioUploadApiForAll(unSyncedAudioList)
                                         } else {
                                             BaseActivity.isShopActivityUpdating = false
-
                                             val dateWiseList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(selectedDate)
-
-                                            XLog.d("=======UPDATE ADAPTER FOR SYNC ALL VISIT SHOP DATA (AVERAGE SHOP)=======")
-                                            XLog.d("shop list size====> " + dateWiseList.size)
-                                            XLog.d("specific date====> $selectedDate")
-
-                                            //averageShopListAdapter.updateList(dateWiseList)
                                             ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
                                             Collections.reverse(ShopActivityEntityListNew)
                                         }
-                                    }
-
-                                    /*BaseActivity.isShopActivityUpdating = false
-                                    averageShopListAdapter.updateList(AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(selectedDate))
-
-                                    ShopActivityEntityList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
-
-                                    Collections.reverse(ShopActivityEntityList)*/
+                                    }*/
                                 }
-
                             } else {
-
                                 (this as DashboardActivity).showSnackMessage(this.getString(R.string.unable_to_sync))
                                 BaseActivity.isShopActivityUpdating = false
                                 ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(selectedDate)
 
                                 Collections.reverse(ShopActivityEntityListNew)
                             }
-
                         }, { error ->
-
+                            (this as DashboardActivity).showSnackMessage(this.getString(R.string.unable_to_sync))
                             error.printStackTrace()
                             BaseActivity.isShopActivityUpdating = false
                             if (error != null) {
-                                XLog.d("ShopActivityFromAverageShop BaseActivity : ERROR:= " + error.localizedMessage + "\nUser Id" + Pref.user_id +
+                                XLog.d("Base Activity ShopActivityFromAverageShop BaseActivity : ERROR:= " + error.localizedMessage + "\nUser Id" + Pref.user_id +
                                         ", Session Token" + Pref.session_token + ", SHOP_ID: " + mList[0].shopid + ", SHOP: " + mList[0].shop_name)
                                 (this as DashboardActivity).showSnackMessage(this.getString(R.string.unable_to_sync))
-
                                 ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(selectedDate)
-
                                 Collections.reverse(ShopActivityEntityListNew)
                             }
                         })
@@ -2040,14 +2055,12 @@ fun isMonitorServiceRunning(): Boolean {
 
                                 j++
                                 if (j < unSyncedList.size) {
-
                                     BaseActivity.isShopActivityUpdating = false
                                     callShopVisitAudioUploadApiForAll(unSyncedList)
                                 } else {
                                     j = 0
                                     BaseActivity.isShopActivityUpdating = false
                                     (this as DashboardActivity).showSnackMessage("Sync Successful")
-
 
                                     //callShopDurationApi()
                                 }
@@ -2171,80 +2184,12 @@ fun isMonitorServiceRunning(): Boolean {
             return
         }
 
-        XLog.d("=============SyncShop Input Params=================")
-        XLog.d("shop id=======> " + addShop.shop_id)
         val index = addShop.shop_id!!.indexOf("_")
-        XLog.d("decoded shop id=======> " + addShop.user_id + "_" + AppUtils.getDate(addShop.shop_id!!.substring(index + 1, addShop.shop_id!!.length).toLong()))
-        XLog.d("shop added date=======> " + addShop.added_date)
-        XLog.d("shop address=======> " + addShop.address)
-        XLog.d("assigned to dd id=======> " + addShop.assigned_to_dd_id)
-        XLog.d("assigned to pp id=======> " + addShop.assigned_to_pp_id)
-        XLog.d("date aniversery=======> " + addShop.date_aniversary)
-        XLog.d("dob=======> " + addShop.dob)
-        XLog.d("shop owner phn no=======> " + addShop.owner_contact_no)
-        XLog.d("shop owner email=======> " + addShop.owner_email)
-        XLog.d("shop owner name=======> " + addShop.owner_name)
-        XLog.d("shop pincode=======> " + addShop.pin_code)
-        XLog.d("session token=======> " + addShop.session_token)
-        XLog.d("shop lat=======> " + addShop.shop_lat)
-        XLog.d("shop long=======> " + addShop.shop_long)
-        XLog.d("shop name=======> " + addShop.shop_name)
-        XLog.d("shop type=======> " + addShop.type)
-        XLog.d("user id=======> " + addShop.user_id)
-        XLog.d("amount=======> " + addShop.amount)
-        XLog.d("area id=======> " + addShop.area_id)
-        XLog.d("model id=======> " + addShop.model_id)
-        XLog.d("primary app id=======> " + addShop.primary_app_id)
-        XLog.d("secondary app id=======> " + addShop.secondary_app_id)
-        XLog.d("lead id=======> " + addShop.lead_id)
-        XLog.d("stage id=======> " + addShop.stage_id)
-        XLog.d("funnel stage id=======> " + addShop.funnel_stage_id)
-        XLog.d("booking amount=======> " + addShop.booking_amount)
-        XLog.d("type id=======> " + addShop.type_id)
-
         if (shop_imgPath != null)
             XLog.d("shop image path=======> $shop_imgPath")
 
-        XLog.d("director name=======> " + addShop.director_name)
-        XLog.d("family member dob=======> " + addShop.family_member_dob)
-        XLog.d("key person's name=======> " + addShop.key_person_name)
-        XLog.d("phone no=======> " + addShop.phone_no)
-        XLog.d("additional dob=======> " + addShop.addtional_dob)
-        XLog.d("additional doa=======> " + addShop.addtional_doa)
-        XLog.d("family member dob=======> " + addShop.family_member_dob)
-        XLog.d("key person's name=======> " + addShop.key_person_name)
-        XLog.d("phone no=======> " + addShop.phone_no)
-        XLog.d("additional dob=======> " + addShop.addtional_dob)
-        XLog.d("additional doa=======> " + addShop.addtional_doa)
-        XLog.d("doctor family member dob=======> " + addShop.doc_family_member_dob)
-        XLog.d("specialization=======> " + addShop.specialization)
-        XLog.d("average patient count per day=======> " + addShop.average_patient_per_day)
-        XLog.d("category=======> " + addShop.category)
-        XLog.d("doctor address=======> " + addShop.doc_address)
-        XLog.d("doctor pincode=======> " + addShop.doc_pincode)
-        XLog.d("chambers or hospital under same headquarter=======> " + addShop.is_chamber_same_headquarter)
-        XLog.d("chamber related remarks=======> " + addShop.is_chamber_same_headquarter_remarks)
-        XLog.d("chemist name=======> " + addShop.chemist_name)
-        XLog.d("chemist name=======> " + addShop.chemist_address)
-        XLog.d("chemist pincode=======> " + addShop.chemist_pincode)
-        XLog.d("assistant name=======> " + addShop.assistant_name)
-        XLog.d("assistant contact no=======> " + addShop.assistant_contact_no)
-        XLog.d("assistant dob=======> " + addShop.assistant_dob)
-        XLog.d("assistant date of anniversary=======> " + addShop.assistant_doa)
-        XLog.d("assistant family dob=======> " + addShop.assistant_family_dob)
-        XLog.d("entity id=======> " + addShop.entity_id)
-        XLog.d("party status id=======> " + addShop.party_status_id)
-        XLog.d("retailer id=======> " + addShop.retailer_id)
-        XLog.d("dealer id=======> " + addShop.dealer_id)
-        XLog.d("beat id=======> " + addShop.beat_id)
-        XLog.d("assigned to shop id=======> " + addShop.assigned_to_shop_id)
-        XLog.d("actual address=======> " + addShop.actual_address)
-
         if (degree_imgPath != null)
             XLog.d("doctor degree image path=======> $degree_imgPath")
-        XLog.d("====================================================")
-
-
 
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
@@ -2260,11 +2205,7 @@ fun isMonitorServiceRunning(): Boolean {
                                     NetworkConstant.SUCCESS -> {
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
 
-                                        //doAsync {
-                                            //uiThread {
-                                                syncShopList()
-                                            //}
-                                        //}
+                                        syncShopList()
                                     }
                                     NetworkConstant.DUPLICATE_SHOP_ID -> {
                                         XLog.d("DuplicateShop : BaseActivity " + ", SHOP: " + addShop.shop_name)

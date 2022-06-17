@@ -103,13 +103,12 @@ import com.breezefsmdsm.features.dailyPlan.prsentation.DailyPlanListFragment
 import com.breezefsmdsm.features.dailyPlan.prsentation.PlanDetailsFragment
 import com.breezefsmdsm.features.dashboard.presentation.api.ShopVisitImageUploadRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.api.dashboardApi.DashboardRepoProvider
+import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.api.otpsentapi.OtpSentRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.api.otpverifyapi.OtpVerificationRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.api.unreadnotificationapi.UnreadNotificationRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.getcontentlisapi.GetContentListRepoProvider
-import com.breezefsmdsm.features.dashboard.presentation.model.ContentListResponseModel
-import com.breezefsmdsm.features.dashboard.presentation.model.ShopVisitImageUploadInputModel
-import com.breezefsmdsm.features.dashboard.presentation.model.UnreadNotificationResponseModel
+import com.breezefsmdsm.features.dashboard.presentation.model.*
 import com.breezefsmdsm.features.device_info.presentation.DeviceInfoListFragment
 import com.breezefsmdsm.features.document.DocumentRepoFeatureNewFragment
 import com.breezefsmdsm.features.document.presentation.DocumentListFragment
@@ -229,6 +228,7 @@ import net.alexandroid.gps.GpsStatusDetector
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.*
+import java.time.LocalTime
 import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
@@ -10945,8 +10945,16 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                             override fun onOkClick() {
                                 if (AppUtils.isOnline(this@DashboardActivity)) {
-                                    isForceLogout = true
-                                    loadFragment(FragType.LogoutSyncFragment, true, "")
+                                    if(Pref.IsShowDayStart){
+                                        checkDayStartEndStatusForAuto()
+                                    }else{
+                                        isForceLogout = true
+                                        loadFragment(FragType.LogoutSyncFragment, true, "")
+                                    }
+                                    //isForceLogout = true
+                                    //loadFragment(FragType.LogoutSyncFragment, true, "")
+                                    // autologout new work
+
                                 } else
                                     Toaster.msgShort(this@DashboardActivity, getString(R.string.no_internet))
                             }
@@ -10956,6 +10964,151 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                 }, 200)
             }
+        }
+
+
+    }
+
+
+    fun checkDayStartEndStatusForAuto() {
+        try {
+            var lastLoginDate = Pref.login_date_time.toString().split(" ").get(0)
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                repository.dayStartEndStatus(lastLoginDate)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        XLog.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
+                        val response = result as StatusDayStartEnd
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            Pref.DayStartMarked = response.DayStartMarked!!
+                            Pref.DayEndMarked = response.DayEndMarked!!
+                            Pref.DayStartShopType = response.day_start_shop_type!!
+                            Pref.DayStartShopID = response.day_start_shop_id!!
+                            Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
+
+                            Pref.logout_time = "11:59 PM"
+                            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                                var lloc:Location = Location("")
+                                lloc.latitude=Pref.current_latitude.toDouble()
+                                lloc.longitude=Pref.current_longitude.toDouble()
+                                endDayForAuto(lloc)
+                            }else{
+                                isForceLogout = true
+                                loadFragment(FragType.LogoutSyncFragment, true, "")
+                            }
+                        } else {
+                            Pref.DayStartMarked = false
+                            Pref.DayEndMarked = false
+                            Pref.IsDDvistedOnceByDay = false
+
+                            Pref.logout_time = "11:59 PM"
+                            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                                var lloc:Location = Location("")
+                                lloc.latitude=Pref.current_latitude.toDouble()
+                                lloc.longitude=Pref.current_longitude.toDouble()
+                                endDayForAuto(lloc)
+                            }else{
+                                isForceLogout = true
+                                loadFragment(FragType.LogoutSyncFragment, true, "")
+                            }
+
+                        }
+                    }, { error ->
+                        if (error == null) {
+                            XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+                        } else {
+                            XLog.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
+                            error.printStackTrace()
+                        }
+                        Pref.IsDDvistedOnceByDay = false
+                        Pref.DayStartMarked = false
+                        Pref.DayEndMarked = false
+
+                        Pref.logout_time = "11:59 PM"
+                        if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                            var lloc:Location = Location("")
+                            lloc.latitude=Pref.current_latitude.toDouble()
+                            lloc.longitude=Pref.current_longitude.toDouble()
+                            endDayForAuto(lloc)
+                        }else{
+                            isForceLogout = true
+                            loadFragment(FragType.LogoutSyncFragment, true, "")
+                        }
+                    })
+            )
+        } catch (ex: java.lang.Exception) {
+            XLog.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+            ex.printStackTrace()
+            Pref.DayStartMarked = false
+            Pref.DayEndMarked = false
+
+            Pref.logout_time = "11:59 PM"
+            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                var lloc:Location = Location("")
+                lloc.latitude=Pref.current_latitude.toDouble()
+                lloc.longitude=Pref.current_longitude.toDouble()
+                endDayForAuto(lloc)
+            }else{
+                isForceLogout = true
+                loadFragment(FragType.LogoutSyncFragment, true, "")
+            }
+        }
+    }
+
+    fun endDayForAuto(location: Location) {
+        try{
+            var saleValue: String = ""
+            var dayst: DaystartDayendRequest = DaystartDayendRequest()
+            dayst.user_id = Pref.user_id
+            dayst.session_token = Pref.session_token
+            //dayst.date = AppUtils.getCurrentDateTime()
+            dayst.date = AppUtils.getCurrentDateTime12(Pref.login_date!!)
+
+            //new time work
+            //Pref.approvedOutTimeServerFormat="15:21:11"
+            var onlyTime = dayst.date!!.split(" ").get(1)
+            var onlydate = dayst.date!!.split(" ").get(0)
+            var timeEndGlobal = LocalTime.parse(Pref.approvedOutTimeServerFormat)
+            dayst.date = onlydate + " " + timeEndGlobal
+
+            dayst.location_name = LocationWizard.getNewLocationName(this, location.latitude, location.longitude)
+            dayst.latitude = location.latitude.toString()
+            dayst.longitude = location.longitude.toString()
+            dayst.shop_type = ""
+            dayst.shop_id = ""
+            dayst.isStart = "0"
+            dayst.isEnd = "1"
+            dayst.sale_Value = "0.0"
+            dayst.remarks = "No Day End Value for auto logout"
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                repository.dayStart(dayst)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        XLog.d("BaseActivity DayEnd : RESPONSE " + result.status)
+                        val response = result as BaseResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            isForceLogout = true
+                            loadFragment(FragType.LogoutSyncFragment, true, "")
+                        }
+                    }, { error ->
+                        if (error == null) {
+                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            XLog.d("BaseActivity DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                        } else {
+                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+                            XLog.d("BaseActivity DayEnd : ERROR " + error.localizedMessage)
+                            error.printStackTrace()
+                        }
+                    })
+            )
+        }
+        catch (ex:java.lang.Exception){
+            ex.printStackTrace()
+            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
         }
 
 
