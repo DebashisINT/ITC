@@ -356,6 +356,14 @@ class AverageShopListAdapter(context: Context, userLocationDataEntity: List<Shop
                     (context as DashboardActivity).loadFragment(FragType.CompetetorStockFragment, true, userLocationDataEntity[adapterPosition].shopid!!)
                 }
 
+                if (Pref.willActivityShow) {
+                    itemView.ll_activity.visibility = View.VISIBLE
+                    itemView.activity_vieww.visibility = View.VISIBLE
+                }else{
+                    itemView.ll_activity.visibility = View.GONE
+                    itemView.activity_vieww.visibility = View.GONE
+                }
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
