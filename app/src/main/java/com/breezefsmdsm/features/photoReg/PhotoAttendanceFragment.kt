@@ -683,7 +683,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val options = FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
                 //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-                .setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
+                .setContourMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+                //.setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
                 .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                 .build()
 
@@ -853,7 +854,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(mContext, DetectorActivity::class.java)
             startActivityForResult(intent, 172)
-        }, 1000)
+        }, 200)
 
 
 //        startActivity(new Intent(this,DetectorActivity.class));

@@ -170,11 +170,11 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
             new FaceDetectorOptions.Builder()
                     .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
                     //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-                    //.setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
                     .setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
-                    .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
+                    //.setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
+                    .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
                     //.setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
-                    .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
+                    .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
                     .build();
 
 
@@ -538,9 +538,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
     for (Face face : faces) {
 
-      //Float f=face.getLeftEyeOpenProbability();
-      //Float ff=face.getRightEyeOpenProbability();
-
+      Float f=face.getLeftEyeOpenProbability();
+      Float ff=face.getRightEyeOpenProbability();
       //Float fff=face.getSmilingProbability();
       //List l=face.getAllLandmarks();
       //Toast.makeText(this,String.valueOf(f)+"-"+String.valueOf(ff)+"-"+String.valueOf(fff),Toast.LENGTH_SHORT).show();
@@ -569,13 +568,13 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
       //Toast.makeText(this,String.valueOf(leftEar.getPosition())+" :: "+String.valueOf(rightEar.getPosition())+" :: "+String.valueOf(ad.getPosition()),Toast.LENGTH_SHORT).show();
       //Toast.makeText(this,String.valueOf(rotx)+" :: "+String.valueOf(rotY)+" :: "+String.valueOf(rotZ),Toast.LENGTH_SHORT).show();
 
-      /*if(f<0.7 || ff<0.7 ){
+      if(f<0.5 || ff<0.5 ){
         isTrueFace=true;
       }else{
         isTrueFace=false;
-      }*/
-
-      isTrueFace=true;
+      }
+      //LOGGER.i("face_match eye "+ f.toString()+ " " + ff.toString());
+      //isTrueFace=true;
 
       //System.out.println("onFacesDetected");
 
@@ -676,7 +675,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
 
                 XLog.d("DetectorActivity green: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
-
+                //Toast.makeText(this,"inner",Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("valueD",true);
                 setResult(Activity.RESULT_OK,returnIntent);
