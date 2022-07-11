@@ -312,7 +312,8 @@ class PhotoRegAadhaarFragment: BaseFragment(), View.OnClickListener {
                         XLog.d("face-doc-Compare : idfy response : isMatch "+isMatch.toString() + " matchScore : "+matchScore.toString() )
                         if(isMatch){
                             if(matchScore>45.00){
-                                extractAadhaarDtls(CustomStatic.AadhaarPicRegUrl)
+                                //extractAadhaarDtls(CustomStatic.AadhaarPicRegUrl)
+                                submitCheckAadhaarData(user_name+"($user_id)","1990-02-28","null")
                             }else{
                                 (mContext as DashboardActivity).showSnackMessage("Face Not Match")
                                 deletePicApi(user_id!!,"Face Not Match.")
