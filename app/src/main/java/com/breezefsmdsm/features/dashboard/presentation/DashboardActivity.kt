@@ -892,7 +892,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     fun checkToShowHomeLocationAlert() {
         if (!Pref.isHomeLocAvailable) {
-            showHomeLocationAlert()
+//            showHomeLocationAlert()
+            if(Pref.IsShowHomeLocationMapGlobal && Pref.IsShowHomeLocationMap){
+                showHomeLocationAlert()
+            }
         } else {
             //Toaster.msgShort(this,"checkToShowAddAttendanceAlert")
             if(Pref.MarkAttendNotification)

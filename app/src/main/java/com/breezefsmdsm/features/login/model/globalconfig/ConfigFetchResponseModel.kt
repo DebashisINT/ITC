@@ -72,6 +72,8 @@ class ConfigFetchResponseModel : BaseResponse() {
     var IsShowMyDetails:Boolean? = null
     var IsAttendVisitShowInDashboard:Boolean? = null
     var IsShowInPortalManualPhotoRegn:Boolean? = null
+    var IsShowHomeLocationMap:Boolean? = null
+
 
 
 

@@ -452,6 +452,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.IsShowInPortalManualPhotoRegn != null)
                                     Pref.IsShowInPortalManualPhotoRegn = configResponse.IsShowInPortalManualPhotoRegn!!
 
+                                if (configResponse.IsShowHomeLocationMap != null)
+                                    Pref.IsShowHomeLocationMapGlobal = configResponse.IsShowHomeLocationMap!!
+
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
 
@@ -5571,6 +5574,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 Pref.LogoutWithLogFile = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.LogoutWithLogFile = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("IsShowHomeLocationMap", ignoreCase = true)) {
+                                                Pref.IsShowHomeLocationMap = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowHomeLocationMap = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
 

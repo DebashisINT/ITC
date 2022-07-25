@@ -5897,6 +5897,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         }
                                     }
 
+                                    else if (response.getconfigure?.get(i)?.Key.equals("IsShowHomeLocationMap", ignoreCase = true)) {
+                                        Pref.IsShowHomeLocationMap = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowHomeLocationMap = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }
+
 
 
 
@@ -6116,6 +6123,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (configResponse.IsShowInPortalManualPhotoRegn != null)
                             Pref.IsShowInPortalManualPhotoRegn =
                                 configResponse.IsShowInPortalManualPhotoRegn!!
+
+                        if (configResponse.IsShowHomeLocationMap != null)
+                            Pref.IsShowHomeLocationMapGlobal = configResponse.IsShowHomeLocationMap!!
+
+
 
                     }
                     BaseActivity.isApiInitiated = false

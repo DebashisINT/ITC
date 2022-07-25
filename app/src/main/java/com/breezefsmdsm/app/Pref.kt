@@ -376,4 +376,6 @@ object Pref : PreferenceHolder() {
     var LogoutWithLogFile: Boolean by bindToPreferenceField(false, "LogoutWithLogFile")
 
     var approvedOutTimeServerFormat: String by bindToPreferenceField("0", "approvedOutTimeServerFormat")
+    var IsShowHomeLocationMap: Boolean by bindToPreferenceField(true, "IsShowHomeLocationMap")
+    var IsShowHomeLocationMapGlobal: Boolean by bindToPreferenceField(true, "IsShowHomeLocationMap")
 }
