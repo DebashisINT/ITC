@@ -568,7 +568,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
       //Toast.makeText(this,String.valueOf(leftEar.getPosition())+" :: "+String.valueOf(rightEar.getPosition())+" :: "+String.valueOf(ad.getPosition()),Toast.LENGTH_SHORT).show();
       //Toast.makeText(this,String.valueOf(rotx)+" :: "+String.valueOf(rotY)+" :: "+String.valueOf(rotZ),Toast.LENGTH_SHORT).show();
 
-      if(f<0.5 || ff<0.5 ){
+      if(f<0.6 || ff<0.6 ){
         isTrueFace=true;
       }else{
         isTrueFace=false;
