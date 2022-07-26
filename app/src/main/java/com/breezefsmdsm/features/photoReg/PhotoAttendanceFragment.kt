@@ -1078,6 +1078,12 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
     fun getLocforStart(usrID:String) {
         if (AppUtils.isOnline(mContext)) {
+            startDay(AppUtils.mLocation!!,usrID)
+        }else{
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+        }
+
+        /*if (AppUtils.isOnline(mContext)) {
             if (AppUtils.mLocation != null) {
                 if (AppUtils.mLocation!!.accuracy <= Pref.gpsAccuracy.toInt()) {
                     if (AppUtils.mLocation!!.accuracy <= Pref.shopLocAccuracy.toFloat()) {
@@ -1095,7 +1101,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 singleLocation(usrID)
             }
         } else
-            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))*/
 
     }
 
