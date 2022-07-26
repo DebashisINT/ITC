@@ -568,7 +568,11 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                             getProgressInstance().showDialogForLoading(this@BaseActivity)
                             Pref.logout_time = "11:59 PM"
                             if(Pref.DayStartMarked && Pref.IsShowDayStart){
-                                singleLocationEnd()
+                                //singleLocationEnd()
+                                var lloc:Location = Location("")
+                                lloc.latitude=Pref.current_latitude.toDouble()
+                                lloc.longitude=Pref.current_longitude.toDouble()
+                                endDay(lloc)
                             }else{
                                 calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                             }
@@ -624,7 +628,6 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
 
 
     private fun singleLocationEnd() {
-
         SingleShotLocationProvider.requestSingleUpdate(this,
                 object : SingleShotLocationProvider.LocationCallback {
                     override fun onStatusChanged(status: String) {
