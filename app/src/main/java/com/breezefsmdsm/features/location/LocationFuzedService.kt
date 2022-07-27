@@ -528,6 +528,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         Log.e(TAG, "onConnected: ")
         val lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleAPIClient)
         if (lastLocation != null && lastLocation.latitude != null && lastLocation.latitude != 0.0) {
+            AppUtils.mLocation = lastLocation
             Pref.current_latitude = lastLocation.latitude.toString()
             Pref.current_longitude = lastLocation.longitude.toString()
         }

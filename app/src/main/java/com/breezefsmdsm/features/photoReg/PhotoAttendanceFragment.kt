@@ -1078,7 +1078,15 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
     fun getLocforStart(usrID:String) {
         if (AppUtils.isOnline(mContext)) {
-            startDay(AppUtils.mLocation!!,usrID)
+            if(AppUtils.mLocation!=null && false){
+                startDay(AppUtils.mLocation!!,usrID)
+            }else{
+                var locNw = Location("")
+                locNw.latitude = Pref.current_latitude.toDouble()
+                locNw.longitude = Pref.current_longitude.toDouble()
+                AppUtils.mLocation = locNw
+                startDay(AppUtils.mLocation!!,usrID)
+            }
         }else{
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
         }
