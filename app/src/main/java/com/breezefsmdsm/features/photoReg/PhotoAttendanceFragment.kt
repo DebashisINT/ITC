@@ -683,9 +683,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         val options = FaceDetectorOptions.Builder()
                 .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
                 //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-                .setContourMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+                .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
                 //.setContourMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
-                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+                .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
+            .setContourMode(FaceDetectorOptions.CONTOUR_MODE_NONE)
                 .build()
 
         val detector = FaceDetection.getClient(options)
@@ -1011,9 +1012,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     private fun doAttendance(){
         XLog.d("PhotoAttendance : doAttendance " +AppUtils.getCurrentDateTime())
         XLog.d("PhotoAttendance : doAttendance :add_attendence_time " +addAttendenceModel.add_attendence_time)
-        XLog.d("PhotoAttendance : doAttendance :work_date_time " +addAttendenceModel.work_date_time)
+        //XLog.d("PhotoAttendance : doAttendance :work_date_time " +addAttendenceModel.work_date_time)
         XLog.d("PhotoAttendance : doAttendance :work_lat : work_long " +addAttendenceModel.work_lat + " "+addAttendenceModel.work_long)
-        XLog.d("PhotoAttendance : doAttendance :add_attendence_time " +addAttendenceModel.add_attendence_time)
+        XLog.d("PhotoAttendance : doAttendance :user_id " +addAttendenceModel.user_id)
 
         BaseActivity.isApiInitiated = true
         val repository = AddAttendenceRepoProvider.addAttendenceRepo()
@@ -1034,7 +1035,11 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                     Pref.isAddAttendence=true
                                 }
                                 //showAttendSuccessMsg()
-                                getLocforStart(obj_temp!!.user_id.toString())
+
+                                Handler().postDelayed(Runnable {
+                                    getLocforStart(obj_temp!!.user_id.toString())
+                                }, 500)
+
                             } else {
                                 BaseActivity.isApiInitiated = false
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
@@ -1237,7 +1242,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 enableScreen()
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
-                                    endDay(loc,usrID)
+                                    Handler().postDelayed(Runnable {
+                                        endDay(loc,usrID)
+                                    }, 500)
+
                                 }
                             }, { error ->
                                 enableScreen()
@@ -1253,6 +1261,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             )
 
         } catch (ex: Exception) {
+            XLog.d("DayStart (PhotoAttendanceFragment) : exception " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
             enableScreen()
             ex.printStackTrace()
             progress_wheel.stopSpinning()
@@ -1318,7 +1327,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 enableScreen()
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
-                                    calllogoutApi(loc,usrID)
+                                    Handler().postDelayed(Runnable {
+                                        calllogoutApi(loc,usrID)
+                                    }, 500)
+
                                 }
                             }, { error ->
                                 enableScreen()

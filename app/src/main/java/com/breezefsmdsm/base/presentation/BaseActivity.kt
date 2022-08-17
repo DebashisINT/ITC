@@ -691,6 +691,9 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                                 XLog.d("BaseActivity DayEnd : RESPONSE " + result.status)
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
+                                    Pref.DayStartMarked = false
+                                    Pref.DayEndMarked = false
+
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                                 }
                             }, { error ->

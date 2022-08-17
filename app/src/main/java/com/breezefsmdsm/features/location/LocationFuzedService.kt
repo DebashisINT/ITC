@@ -1103,8 +1103,14 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         AppUtils.changeLanguage(this,"en")
                         val endTimeStamp = System.currentTimeMillis().toString()
                         changeLocale()
-                        val duration = AppUtils.getTimeFromTimeSpan(shopList[i].startTimeStamp, endTimeStamp)
+                        var duration = AppUtils.getTimeFromTimeSpan(shopList[i].startTimeStamp, endTimeStamp)
                         val totalMinute = AppUtils.getMinuteFromTimeStamp(shopList[i].startTimeStamp, endTimeStamp)
+
+                        XLog.d("revisitShop LocFuzedS=> startT: ${shopList[i].startTimeStamp} endTime: $endTimeStamp   duration: $duration totalMinute:$totalMinute")
+                        if(duration.contains("-")){
+                            duration="00:00:00"
+                        }
+
                         //If duration is greater than 20 hour then stop incrementing
                         if (totalMinute.toInt() > 20 * 60) {
                             AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())

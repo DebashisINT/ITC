@@ -40,11 +40,14 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_body"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/_30sdp"
-        android:layout_below="@+id/tv_body"
-        android:src="@drawable/map"/>
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_30sdp"
+        android:src="@drawable/map" />
 
     <com.breezefsmdsm.widgets.AppCustomTextView
         android:id="@+id/tv_ok"

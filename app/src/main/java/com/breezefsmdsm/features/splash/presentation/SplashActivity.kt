@@ -178,7 +178,12 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
                     } else {
                         requestLocPermission()
                     }*/
-                    initPermissionCheck()
+
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R && Pref.isLocationHintPermissionGranted == false){
+                        locDesc()
+                    }else{
+                        initPermissionCheck()
+                    }
                 }
                 else {
                     LocationPermissionDialog.newInstance(object : LocationPermissionDialog.OnItemSelectedListener {
@@ -189,7 +194,12 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
                               } else {
                                   requestLocPermission()
                               }*/
-                            initPermissionCheck()
+
+                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R && Pref.isLocationHintPermissionGranted == false){
+                                locDesc()
+                            }else{
+                                initPermissionCheck()
+                            }
                         }
 
                         override fun onCrossClick() {
@@ -203,6 +213,15 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
             permissionCheck()
         }
 
+    }
+
+    private fun locDesc(){
+        LocationHintDialog.newInstance(object : LocationHintDialog.OnItemSelectedListener {
+            override fun onOkClick() {
+                Pref.isLocationHintPermissionGranted = true
+                initPermissionCheck()
+            }
+        }).show(supportFragmentManager, "")
     }
 
     private fun permissionCheck() {
@@ -465,7 +484,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         }
     }
 
-    private fun goToNextScreen() {
+    /*private fun goToNextScreen() {
         var manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         //if (/*manager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&*/ PermissionHelper.checkLocationPermission(this, 0)) {
         if (TextUtils.isEmpty(Pref.user_id) || Pref.user_id.isNullOrBlank()) {
@@ -487,6 +506,56 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finish()
         }*/
+    }*/
+
+    private fun goToNextScreen() {
+        addAutoStartup()
+    }
+
+
+    private fun addAutoStartup() {
+        try {
+            val intent = Intent()
+            val manufacturer = Build.MANUFACTURER
+            if ("xiaomi".equals(manufacturer, ignoreCase = true)) {
+                intent.component = ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
+            } else if ("oppo".equals(manufacturer, ignoreCase = true)) {
+                intent.component = ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity")
+            } else if ("vivo".equals(manufacturer, ignoreCase = true)) {
+                intent.component = ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity")
+            } else if ("Letv".equals(manufacturer, ignoreCase = true)) {
+                intent.component = ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity")
+            } else if ("Honor".equals(manufacturer, ignoreCase = true)) {
+                intent.component = ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity")
+            }
+            val list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+            if (list.size > 0 && Pref.AutostartPermissionStatus==false) {
+                //startActivity(intent)
+                Pref.AutostartPermissionStatus = true
+                startActivityForResult(intent,401)
+            }else{
+                goTONextActi()
+            }
+        } catch (e: java.lang.Exception) {
+            Log.e("exc", e.toString())
+            goTONextActi()
+        }
+    }
+
+    fun goTONextActi(){
+        if (TextUtils.isEmpty(Pref.user_id) || Pref.user_id.isNullOrBlank()) {
+            if (!isLoginLoaded) {
+                isLoginLoaded = true
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                finish()
+            }
+
+        } else {
+            startActivity(Intent(this@SplashActivity, DashboardActivity::class.java))
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            finish()
+        }
     }
 
     override fun onResume() {

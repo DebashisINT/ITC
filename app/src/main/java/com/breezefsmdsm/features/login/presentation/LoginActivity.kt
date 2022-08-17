@@ -3715,11 +3715,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             isApiInitiated = false
 
                         }, { error ->
+                            XLog.d(" Login callNewSettingsApi : error : " +error.message.toString() + "${AppUtils.getCurrentDateTime()}")
                             isApiInitiated = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             login_TV.isEnabled = true
-                            showSnackMessage(getString(R.string.something_went_wrong))
+                            showSnackMessage(getString(R.string.something_went_wrong_new))
                         })
         )
     }
@@ -6659,6 +6660,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             error.printStackTrace()
+                            XLog.d(" Login uploadSelfie : error : " +error.message.toString() + "${AppUtils.getCurrentDateTime()}")
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
                             showSnackMessage(getString(R.string.something_went_wrong))

@@ -378,4 +378,7 @@ object Pref : PreferenceHolder() {
     var approvedOutTimeServerFormat: String by bindToPreferenceField("0", "approvedOutTimeServerFormat")
     var IsShowHomeLocationMap: Boolean by bindToPreferenceField(true, "IsShowHomeLocationMap")
     var IsShowHomeLocationMapGlobal: Boolean by bindToPreferenceField(true, "IsShowHomeLocationMap")
+
+    var isLocationHintPermissionGranted: Boolean by bindToPreferenceField(false, "isLocationHintPermissionGranted")
+    var AutostartPermissionStatus: Boolean by bindToPreferenceField(false, "AutostartPermissionStatus")
 }

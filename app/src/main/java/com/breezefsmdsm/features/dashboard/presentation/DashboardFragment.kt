@@ -32,10 +32,7 @@ import com.breezefsmdsm.app.domain.*
 import com.breezefsmdsm.app.types.DashboardType
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.uiaction.IntentActionable
-import com.breezefsmdsm.app.utils.AppUtils
-import com.breezefsmdsm.app.utils.FTStorageUtils
-import com.breezefsmdsm.app.utils.PermissionUtils
-import com.breezefsmdsm.app.utils.ProcessImageUtils_v1
+import com.breezefsmdsm.app.utils.*
 import com.breezefsmdsm.app.widgets.MovableFloatingActionButton
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
@@ -118,6 +115,7 @@ import com.pnikosis.materialishprogress.ProgressWheel
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONArray
@@ -7696,9 +7694,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
             XLog.d("DAYEND" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby dd found")
             endDay(finalNearByShop, finalNearByDD, location, false)
+            //checkDayStartEndStatus(finalNearByShop, finalNearByDD, location, false)
         } else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
             XLog.d("DAYEND" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby shop found")
             endDay(finalNearByShop, finalNearByDD, location, true)
+            //checkDayStartEndStatus(finalNearByShop, finalNearByDD, location, true)
         } else {
             XLog.d("DAYEND" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "no nearby shop/dd " + "user lat: " + location.latitude.toString() + " long :" + location.longitude)
             progress_wheel.stopSpinning()
@@ -7728,6 +7728,50 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 //            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
         }
 
+    }
+
+    fun checkDayStartEndStatus(nearByShop: AddShopDBModelEntity, nearByDD: AssignToDDEntity, loc: Location, isShop: Boolean) {
+        try {
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                repository.dayStartEndStatus(AppUtils.getCurrentDateyymmdd())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        XLog.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
+                        val response = result as StatusDayStartEnd
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            Pref.DayStartMarked = response.DayStartMarked!!
+                            Pref.DayEndMarked = response.DayEndMarked!!
+                            Pref.DayStartShopType = response.day_start_shop_type!!
+                            Pref.DayStartShopID = response.day_start_shop_id!!
+                            Pref.IsDDvistedOnceByDay = response.IsDDvistedOnceByDay!!
+                            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                                endDay(nearByShop, nearByDD, loc, isShop)
+                            }
+                        }else{
+                            Pref.DayStartMarked = false
+                            Pref.DayEndMarked = false
+                            Toaster.msgShort(mContext,"Day Start not found for ${AppUtils.getCurrentDateyymmdd()}")
+                        }
+                    }, { error ->
+                        if (error == null) {
+                            XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+                        } else {
+                            XLog.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
+                            error.printStackTrace()
+                        }
+                        Pref.DayStartMarked = false
+                        Pref.DayEndMarked = false
+                        Toaster.msgShort(mContext,"Day Start not found for ${AppUtils.getCurrentDateyymmdd()}")
+
+                    })
+            )
+        } catch (ex: java.lang.Exception) {
+            XLog.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+            ex.printStackTrace()
+            Toaster.msgShort(mContext,"Something went wrong.")
+        }
     }
 
     fun endDay(nearByShop: AddShopDBModelEntity, nearByDD: AssignToDDEntity, loc: Location, isShop: Boolean) {
