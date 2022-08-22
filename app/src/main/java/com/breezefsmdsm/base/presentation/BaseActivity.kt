@@ -167,6 +167,11 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
 
         //Pref.isAutoLogout=true
         if (Pref.isAutoLogout) {
+
+            Pref.isAddAttendence = false
+            Pref.DayStartMarked = false
+            Pref.DayEndMarked = false
+
             performLogout()
 
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -543,8 +548,8 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
         }else{
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
         }*/
-        //checkDayStartEndStatus()
-        syncShopList()
+        checkDayStartEndStatus()
+        //syncShopList()
     }
 
     fun checkDayStartEndStatus() {
@@ -786,8 +791,7 @@ private fun calllogoutApi(user_id: String, session_id: String) {
     intent.action = CustomConstants.STOP_MONITOR_SERVICE
     //mContext.startService(intent)
     stopService(intent)
-
-        SendBrod.stopBrod(this)
+    SendBrod.stopBrod(this)
 
     var distance = 0.0
     val list = AppDatabase.getDBInstance()!!.userLocationDataDao().all
@@ -2178,9 +2182,6 @@ fun isMonitorServiceRunning(): Boolean {
             callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, shopList, true,
                     mAddShopDBModelEntity.doc_degree)
         }
-
-
-
     }
 
     fun callAddShopApi(addShop: AddShopRequestData, shop_imgPath: String?, shopList: MutableList<AddShopDBModelEntity>?,

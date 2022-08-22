@@ -344,7 +344,6 @@ object Pref : PreferenceHolder() {
     var IsShowInPortalManualPhotoRegn: Boolean by bindToPreferenceField(false, "IsShowInPortalManualPhotoRegn")
     var IsShowManualPhotoRegnInApp: Boolean by bindToPreferenceField(false, "IsShowManualPhotoRegnInApp")
 
-
     var IsDayEndBackPressedRestrict: Boolean by bindToPreferenceField(false, "IsDayEndBackPressedRestrict")
     var IsIMEICheck: Boolean by bindToPreferenceField(false, "IsIMEICheck")
     var UpdateUserName: Boolean by bindToPreferenceField(false, "UpdateUserName")

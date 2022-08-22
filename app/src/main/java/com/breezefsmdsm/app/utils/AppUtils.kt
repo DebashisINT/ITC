@@ -22,8 +22,6 @@ import android.provider.CalendarContract
 import android.provider.MediaStore
 import android.provider.Settings
 import android.provider.Settings.SettingNotFoundException
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import android.telephony.TelephonyManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -33,8 +31,11 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.app.utils.RotateImage.calculateInSampleSize
 import com.breezefsmdsm.features.login.model.LoginStateListDataModel
 import com.breezefsmdsm.features.login.model.productlistmodel.ProductRateDataModel
 import com.elvishew.xlog.XLog
@@ -1950,7 +1951,7 @@ class AppUtils {
                 //Convert bitmap to byte array
                 val bos = ByteArrayOutputStream()
                 //bitmap.compress(Bitmap.CompressFormat.PNG, 2, bos);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 20, bos)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 10, bos)
                 val bitmapdata = bos.toByteArray()
 
                 //write the bytes in file
@@ -1973,6 +1974,7 @@ class AppUtils {
             }
             return 0
         }
+
 
         fun getCompressBillingImage(filePath: String, context: Context): Long {
             var updatedFilePath = ""

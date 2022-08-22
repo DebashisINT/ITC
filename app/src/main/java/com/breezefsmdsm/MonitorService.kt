@@ -3,6 +3,9 @@ package com.breezefsmdsm
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.Service
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -11,11 +14,13 @@ import android.os.*
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.breezefsmdsm.MonitorBroadcast
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.FTStorageUtils
 import com.breezefsmdsm.features.location.LocationFuzedService
+import com.breezefsmdsm.features.location.LocationJobService
 import com.breezefsmdsm.mappackage.SendBrod
 import com.elvishew.xlog.XLog
 import java.util.*
@@ -136,6 +141,9 @@ class MonitorService:Service() {
                     cancelGpsBroadcast()
                 }*/
             }else{
+                if (!FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, this)) {
+                    restartLocationService()
+                }
                 XLog.d("MonitorService LocationFuzedService : " + "false" + "," + " Time :" + AppUtils.getCurrentDateTime())
                 XLog.d("MonitorService  Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
                 XLog.d("Monitor Service Stopped" + "" + "," + " Time :" + AppUtils.getCurrentDateTime())
@@ -235,5 +243,47 @@ class MonitorService:Service() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    fun restartLocationService() {
+        try {
+            if(Pref.IsLeavePressed== true && Pref.IsLeaveGPSTrack == false){
+                return
+            }
+            val serviceLauncher = Intent(this, LocationFuzedService::class.java)
+            if (Pref.user_id != null && Pref.user_id!!.isNotEmpty()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                    val componentName = ComponentName(this, LocationJobService::class.java)
+                    val jobInfo = JobInfo.Builder(12, componentName)
+                        //.setRequiresCharging(true)
+                        .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                        //.setRequiresDeviceIdle(true)
+                        .setOverrideDeadline(1000)
+                        .build()
 
+                    val resultCode = jobScheduler.schedule(jobInfo)
+
+                    if (resultCode == JobScheduler.RESULT_SUCCESS) {
+                        XLog.d("===============================From MonitorS LocationFuzedService   Job scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "============================")
+                    } else {
+                        XLog.d("=====================From MonitorS LocationFuzedService Job not scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "====================================")
+                    }
+                } else
+                    startService(serviceLauncher)
+            } else {
+                /*stopService(serviceLauncher)
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                    jobScheduler.cancelAll()
+                    XLog.d("===============================From MonitorS LocationFuzedService Job scheduler cancel (Base Activity)" + AppUtils.getCurrentDateTime() + "============================")
+                }
+
+                AlarmReceiver.stopServiceAlarm(this, 123)
+                XLog.d("===========From MonitorS LocationFuzedService Service alarm is stopped (Base Activity)================")*/
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 }
