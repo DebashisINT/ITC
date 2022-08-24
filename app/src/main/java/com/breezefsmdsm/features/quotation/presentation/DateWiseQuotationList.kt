@@ -1129,6 +1129,17 @@ class DateWiseQuotationList : BaseFragment(), DatePickerListener {
             shopDurationData.in_location = shopActivity.in_loc
             shopDurationData.out_location = shopActivity.out_loc
 
+            //duration garbage fix
+            try{
+                if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                {
+                    shopDurationData.spent_duration="00:00:10"
+                }
+            }catch (ex:Exception){
+                shopDurationData.spent_duration="00:00:10"
+            }
+
+
             shopDataList.add(shopDurationData)
         }
         else {
@@ -1184,6 +1195,17 @@ class DateWiseQuotationList : BaseFragment(), DatePickerListener {
                 shopDurationData.start_timestamp = shopActivity.startTimeStamp
                 shopDurationData.in_location = shopActivity.in_loc
                 shopDurationData.out_location = shopActivity.out_loc
+
+                //duration garbage fix
+                try{
+                    if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                    {
+                        shopDurationData.spent_duration="00:00:10"
+                    }
+                }catch (ex:Exception){
+                    shopDurationData.spent_duration="00:00:10"
+                }
+
 
                 shopDataList.add(shopDurationData)
             }

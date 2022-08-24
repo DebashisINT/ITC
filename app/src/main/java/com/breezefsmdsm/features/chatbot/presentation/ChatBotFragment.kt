@@ -1099,6 +1099,16 @@ class ChatBotFragment : BaseFragment(), View.OnClickListener {
                     shopDurationData.in_location = shopActivity.in_loc
                     shopDurationData.out_location = shopActivity.out_loc
 
+                    //duration garbage fix
+                    try{
+                        if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                        {
+                            shopDurationData.spent_duration="00:00:10"
+                        }
+                    }catch (ex:Exception){
+                        shopDurationData.spent_duration="00:00:10"
+                    }
+
                     shopDataList.add(shopDurationData)
 
                     XLog.d("====SYNC VISITED SHOP DATA (ChatBot)====")
@@ -1170,6 +1180,16 @@ class ChatBotFragment : BaseFragment(), View.OnClickListener {
                     shopDurationData.start_timestamp = it.startTimeStamp
                     shopDurationData.in_location = it.in_loc
                     shopDurationData.out_location = it.out_loc
+
+                    //duration garbage fix
+                    try{
+                        if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                        {
+                            shopDurationData.spent_duration="00:00:10"
+                        }
+                    }catch (ex:Exception){
+                        shopDurationData.spent_duration="00:00:10"
+                    }
 
                     shopDataList.add(shopDurationData)
 

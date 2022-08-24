@@ -305,6 +305,16 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
             shopDurationData.out_location = shopActivity.out_loc
             shopDurationData.shop_revisit_uniqKey=shopActivity.shop_revisit_uniqKey
 
+            //duration garbage fix
+            try{
+                if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                {
+                    shopDurationData.spent_duration="00:00:10"
+                }
+            }catch (ex:Exception){
+                shopDurationData.spent_duration="00:00:10"
+            }
+
             shopDataList.add(shopDurationData)
 
             XLog.d("========SYNC ALL VISITED SHOP DATA (AVERAGE SHOP)=====")
@@ -750,6 +760,16 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
             shopDurationData.start_timestamp = shopActivity.startTimeStamp
             shopDurationData.in_location = shopActivity.in_loc
             shopDurationData.out_location = shopActivity.out_loc
+
+            //duration garbage fix
+            try{
+                if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                {
+                    shopDurationData.spent_duration="00:00:10"
+                }
+            }catch (ex:Exception){
+                shopDurationData.spent_duration="00:00:10"
+            }
 
             shopDataList.add(shopDurationData)
 
@@ -1473,6 +1493,16 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
                 shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
 
+                //duration garbage fix
+                try{
+                    if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                    {
+                        shopDurationData.spent_duration="00:00:10"
+                    }
+                }catch (ex:Exception){
+                    shopDurationData.spent_duration="00:00:10"
+                }
+
                 shopDataList.add(shopDurationData)
             }
             else {
@@ -1530,6 +1560,16 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                     shopDurationData.out_location = shopActivity.out_loc
 
                     shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+
+                    //duration garbage fix
+                    try{
+                        if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                        {
+                            shopDurationData.spent_duration="00:00:10"
+                        }
+                    }catch (ex:Exception){
+                        shopDurationData.spent_duration="00:00:10"
+                    }
 
                     shopDataList.add(shopDurationData)
                 }
@@ -1912,6 +1952,15 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         shopDurationData.out_location = shopActivity.out_loc
         shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey
 
+        //duration garbage fix
+        try{
+            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+            {
+                shopDurationData.spent_duration="00:00:10"
+            }
+        }catch (ex:Exception){
+            shopDurationData.spent_duration="00:00:10"
+        }
 
         shopDataList.add(shopDurationData)
 

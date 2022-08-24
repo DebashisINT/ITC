@@ -1481,6 +1481,16 @@ fun isMonitorServiceRunning(): Boolean {
             shopDurationData.out_location = shopActivity.out_loc
             shopDurationData.shop_revisit_uniqKey=shopActivity.shop_revisit_uniqKey
 
+            //duration garbage fix
+            try{
+                if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                {
+                    shopDurationData.spent_duration="00:00:10"
+                }
+            }catch (ex:Exception){
+                shopDurationData.spent_duration="00:00:10"
+            }
+
             shopDataList.add(shopDurationData)
 
             XLog.d("========SYNC ALL VISITED SHOP DATA (AVERAGE SHOP)=====")
@@ -1662,6 +1672,16 @@ fun isMonitorServiceRunning(): Boolean {
         shopDurationData.in_location = shopActivity.in_loc
         shopDurationData.out_location = shopActivity.out_loc
         shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey
+
+        //duration garbage fix
+        try{
+            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+            {
+                shopDurationData.spent_duration="00:00:10"
+            }
+        }catch (ex:Exception){
+            shopDurationData.spent_duration="00:00:10"
+        }
 
 
         shopDataList.add(shopDurationData)
