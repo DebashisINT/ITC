@@ -571,7 +571,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 Pref.current_longitude = location.longitude.toString()
                 //lastLat = location.latitude
                 //lastLng = location.longitude
-                XLog.d("onLocationChanged : loc_update : lat - ${Pref.current_latitude.toString()} long - ${Pref.current_longitude.toString()}" + AppUtils.getCurrentDateTime())
+                XLog.d("onLocationChanged : loc_update : lat - ${Pref.current_latitude.toString()} long - ${Pref.current_longitude.toString()} " + AppUtils.getCurrentDateTime())
             }
         }catch (ex:Exception){
             ex.printStackTrace()

@@ -78,19 +78,6 @@ class MonitorService:Service() {
 
     fun serviceStatusActionable(){
 
-
-       /* if (!TextUtils.isEmpty(Pref.approvedOutTime)) {
-            println("Monitor_Out - ${Pref.approvedOutTime}")
-            val currentTimeInLong = AppUtils.convertTimeWithMeredianToLong(AppUtils.getCurrentTimeWithMeredian())
-            val approvedOutTimeInLong = AppUtils.convertTimeWithMeredianToLong(Pref.approvedOutTime)
-
-            if (currentTimeInLong >= approvedOutTimeInLong) {
-                (this as DashboardActivity).showForceLogoutPopup()
-            }
-        }*/
-
-
-
         //XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
         Log.e("MonitorService_abc", "startabc" )
         monitorBroadcast=MonitorBroadcast()

@@ -1470,9 +1470,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
     private fun apiCallOnClearAttenReject(usrID:String) {  // clearing leave if isOnLeave is true
 
-        simpleDialogProcess.dismiss()
+        /*simpleDialogProcess.dismiss()
         (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-        return
+        return*/
 
         var req : clearAttendanceonRejectReqModelRejectReqModel = clearAttendanceonRejectReqModelRejectReqModel()
         req.user_id=usrID

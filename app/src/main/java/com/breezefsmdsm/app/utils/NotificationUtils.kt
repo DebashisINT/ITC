@@ -23,6 +23,7 @@ import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.EntityTypeEntity
 import com.breezefsmdsm.app.domain.PartyStatusEntity
 import com.breezefsmdsm.app.domain.ShopDeactivateEntity
+import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.features.alarm.model.AlarmData
 import com.breezefsmdsm.features.broadcastreceiver.ActionReceiver
 import com.breezefsmdsm.features.chat.model.ChatListDataModel
