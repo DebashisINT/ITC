@@ -1023,6 +1023,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
             dialogHeaderProcess.text = "Submitting Visit, Please wait...."
             val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            dialogYes.setOnClickListener {
+                simpleDialogProcess.dismiss()
+            }
             simpleDialogProcess.show()
 
             doAttendance()
@@ -1470,8 +1473,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
     private fun apiCallOnClearAttenReject(usrID:String) {  // clearing leave if isOnLeave is true
 
-        /*simpleDialogProcess.dismiss()
-        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+        simpleDialogProcess.dismiss()
+        /*(mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
         return*/
 
         var req : clearAttendanceonRejectReqModelRejectReqModel = clearAttendanceonRejectReqModelRejectReqModel()
