@@ -1,7 +1,9 @@
 package com.breezefsmdsm.features.addAttendence.api.leavetytpeapi
 
 import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.addAttendence.model.LeaveTypeResponseModel
+import com.breezefsmdsm.features.photoReg.model.clearAttendanceonRejectReqModelRejectReqModel
 import io.reactivex.Observable
 
 /**
@@ -10,5 +12,9 @@ import io.reactivex.Observable
 class LeaveTypeRepo(val apiService: LeaveTypeApi) {
     fun getLeaveTypeList(): Observable<LeaveTypeResponseModel> {
         return apiService.getLeaveTypeList(Pref.session_token!!, Pref.user_id!!)
+    }
+
+    fun clearAttendanceonRejectclick(clearAttendanceonRejectReModel: clearAttendanceonRejectReqModelRejectReqModel): Observable<BaseResponse> {
+        return apiService.clearAttendanceonRejectclick(clearAttendanceonRejectReModel)
     }
 }

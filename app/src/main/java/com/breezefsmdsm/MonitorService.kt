@@ -12,15 +12,22 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.os.*
 import android.provider.Settings
+import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.breezefsmdsm.MonitorBroadcast
 import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.FTStorageUtils
+import com.breezefsmdsm.app.utils.Toaster
+import com.breezefsmdsm.features.commondialogsinglebtn.CommonDialogSingleBtn
+import com.breezefsmdsm.features.commondialogsinglebtn.OnDialogClickListener
+import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.location.LocationFuzedService
 import com.breezefsmdsm.features.location.LocationJobService
+import com.breezefsmdsm.features.logoutsync.presentation.LogoutSyncFragment
 import com.breezefsmdsm.mappackage.SendBrod
 import com.elvishew.xlog.XLog
 import java.util.*
@@ -70,6 +77,20 @@ class MonitorService:Service() {
     }
 
     fun serviceStatusActionable(){
+
+
+       /* if (!TextUtils.isEmpty(Pref.approvedOutTime)) {
+            println("Monitor_Out - ${Pref.approvedOutTime}")
+            val currentTimeInLong = AppUtils.convertTimeWithMeredianToLong(AppUtils.getCurrentTimeWithMeredian())
+            val approvedOutTimeInLong = AppUtils.convertTimeWithMeredianToLong(Pref.approvedOutTime)
+
+            if (currentTimeInLong >= approvedOutTimeInLong) {
+                (this as DashboardActivity).showForceLogoutPopup()
+            }
+        }*/
+
+
+
         //XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
         Log.e("MonitorService_abc", "startabc" )
         monitorBroadcast=MonitorBroadcast()
@@ -286,4 +307,5 @@ class MonitorService:Service() {
             e.printStackTrace()
         }
     }
+
 }

@@ -41,6 +41,7 @@ import com.breezefsmdsm.faceRec.tflite.SimilarityClassifier
 import com.breezefsmdsm.faceRec.tflite.TFLiteObjectDetectionAPIModel
 import com.breezefsmdsm.features.addAttendence.PrimaryValueAdapter
 import com.breezefsmdsm.features.addAttendence.api.addattendenceapi.AddAttendenceRepoProvider
+import com.breezefsmdsm.features.addAttendence.api.leavetytpeapi.LeaveTypeRepoProvider
 import com.breezefsmdsm.features.addAttendence.model.AddAttendenceInpuModel
 import com.breezefsmdsm.features.addAttendence.model.PrimaryValueDataModel
 import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
@@ -60,6 +61,7 @@ import com.breezefsmdsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezefsmdsm.features.photoReg.model.GetUserListResponse
 import com.breezefsmdsm.features.photoReg.model.ProsCustom
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
+import com.breezefsmdsm.features.photoReg.model.clearAttendanceonRejectReqModelRejectReqModel
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.elvishew.xlog.XLog
@@ -112,6 +114,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     }
 
     lateinit var obj_temp :UserListResponseModel
+
+    lateinit var simpleDialogProcess : Dialog
+    lateinit var dialogHeaderProcess: AppCustomTextView
+    lateinit var dialog_yes_no_headerTVProcess: AppCustomTextView
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -171,6 +177,12 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         }
         tv_prospect.text=prosCusList.get(0).prosName
 
+        simpleDialogProcess = Dialog(mContext)
+        simpleDialogProcess.setCancelable(false)
+        simpleDialogProcess.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialogProcess.setContentView(R.layout.dialog_message)
+        dialogHeaderProcess = simpleDialogProcess.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        dialog_yes_no_headerTVProcess = simpleDialogProcess.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
 
         progress_wheel.spin()
         Handler(Looper.getMainLooper()).postDelayed({
@@ -1001,6 +1013,18 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
             addAttendenceModel.distance = ""
 
+
+
+            try{
+                dialog_yes_no_headerTVProcess.text = AppUtils.hiFirstNameText()!!+"!"
+            }catch (ex:Exception){
+                dialog_yes_no_headerTVProcess.text = "Hi"+"!"
+            }
+
+            dialogHeaderProcess.text = "Submitting Visit, Please wait...."
+            val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+            simpleDialogProcess.show()
+
             doAttendance()
 
         } catch (e: Exception) {
@@ -1038,18 +1062,22 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
                                 Handler().postDelayed(Runnable {
                                     getLocforStart(obj_temp!!.user_id.toString())
-                                }, 500)
+                                }, 1500)
 
                             } else {
                                 BaseActivity.isApiInitiated = false
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
                             }
                         }, { error ->
+
+                            //delete attendance-daystartend
+                            apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
+
                             XLog.d("VISIT AddAttendance team Response Msg=========> " + error.message)
                             enableScreen()
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
-                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            //(mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )
     }
@@ -1178,12 +1206,10 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             dayst.session_token = Pref.session_token
             //dayst.date = AppUtils.getCurrentDateTime()
             dayst.date = AppUtils.getCurrentDateTimeNew()
-
             if(dayst.date.equals("") || dayst.date==null){
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                 return
             }
-
             if (!TextUtils.isEmpty(loc.latitude.toString()) && !TextUtils.isEmpty(loc.longitude.toString())) {
             dayst.location_name = LocationWizard.getNewLocationName(mContext, loc.latitude, loc.longitude)
             }else{
@@ -1217,7 +1243,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             }catch (ex:Exception){
                 addr=""
             }
-
             try{
                 XLog.d("PhotoAtendFrag : startDay : getCurrentDateTime() " +AppUtils.getCurrentDateTime())
                 XLog.d("PhotoAtendFrag : startDay : getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
@@ -1244,11 +1269,15 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     Handler().postDelayed(Runnable {
                                         endDay(loc,usrID)
-                                    }, 500)
+                                    }, 1500)
 
                                 }
                             }, { error ->
                                 enableScreen()
+
+                                //delete attendance-daystartend
+                                apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
+
                                 if (error == null) {
                                     XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                                 } else {
@@ -1256,16 +1285,19 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                     error.printStackTrace()
                                 }
                                 progress_wheel.stopSpinning()
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                //(mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             })
             )
 
         } catch (ex: Exception) {
+            //delete attendance-daystartend
+            apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
+
             XLog.d("DayStart (PhotoAttendanceFragment) : exception " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
             enableScreen()
             ex.printStackTrace()
             progress_wheel.stopSpinning()
-            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+            //(mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
         }
 
     }
@@ -1300,7 +1332,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             }catch (ex:Exception){
                 addr=""
             }
-
             try{
                 XLog.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTime() " +AppUtils.getCurrentDateTime())
                 XLog.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
@@ -1313,7 +1344,6 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             }catch (ex:Exception){
                 ex.printStackTrace()
             }
-
 
             val repository = DayStartEndRepoProvider.dayStartRepositiry()
             BaseActivity.compositeDisposable.add(
@@ -1329,11 +1359,14 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     Handler().postDelayed(Runnable {
                                         calllogoutApi(loc,usrID)
-                                    }, 500)
-
+                                    }, 1500)
                                 }
                             }, { error ->
                                 enableScreen()
+
+                                //delete attendance-daystartend
+                                apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
+
                                 if (error == null) {
                                     XLog.d("DayEnd (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                                 } else {
@@ -1341,33 +1374,34 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                     error.printStackTrace()
                                 }
                                 progress_wheel.stopSpinning()
-                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                //(mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             })
             )
 
         } catch (ex: Exception) {
+            XLog.d("DayEnd (PhotoAttendanceFragment) : ERRORRR " + " usr_id : "+usrID+" err $ex "+AppUtils.getCurrentDateTime())
             enableScreen()
+
+            //delete attendance-daystartend
+            apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
+
             ex.printStackTrace()
             progress_wheel.stopSpinning()
-            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+            //(mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
         }
 
     }
 
     private fun calllogoutApi(loc: Location,usrID:String) {
-
-
         disableScreen()
         var distance = 0.0
         var location = ""
 
         if (loc.latitude.toString() != "0.0" && loc.longitude.toString() != "0.0") {
             location = LocationWizard.getAdressFromLatlng(mContext, loc.latitude.toDouble(), loc.longitude.toDouble())
-
             if (location.contains("http"))
                 location = "Unknown"
         }
-
         val repository = LogoutRepositoryProvider.provideLogoutRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -1380,6 +1414,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             val logoutResponse = result as BaseResponse
                             XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + logoutResponse.message)
                             enableScreen()
+                            simpleDialogProcess.dismiss()
                             if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                 (mContext as DashboardActivity).isChangedPassword = false
                                 Pref.tempDistance = "0.0"
@@ -1407,14 +1442,19 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             enableScreen()
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
+                            simpleDialogProcess.dismiss()
                             error.printStackTrace()
                             XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(error.localizedMessage)
+
+                            //delete attendance-daystartend
+                            apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
 
                             if ((mContext as DashboardActivity).isChangedPassword) {
                                 (mContext as DashboardActivity).isChangedPassword = false
                                 (mContext as DashboardActivity).onBackPressed()
                             }
+
                         })
         )
     }
@@ -1427,5 +1467,127 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     private fun enableScreen(){
         requireActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
+
+    private fun apiCallOnClearAttenReject(usrID:String) {  // clearing leave if isOnLeave is true
+
+        simpleDialogProcess.dismiss()
+        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+        return
+
+        var req : clearAttendanceonRejectReqModelRejectReqModel = clearAttendanceonRejectReqModelRejectReqModel()
+        req.user_id=usrID
+        req.leave_apply_date=AppUtils.getCurrentDateForShopActi()
+        req.isOnLeave=true
+        req.IsLeaveDelete = "1"
+
+        val repository = LeaveTypeRepoProvider.leaveTypeListRepoProvider()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+            repository.clearAttendanceonRejectclick(req)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    val response = result as BaseResponse
+                    progress_wheel.stopSpinning()
+                    if (response.status == NetworkConstant.SUCCESS) {
+                        Handler().postDelayed(Runnable {
+                            apiCallOnClearAttenReject1(usrID)
+                        }, 500)
+
+                    }
+                }, { error ->
+                    progress_wheel.stopSpinning()
+                    (mContext as DashboardActivity).showSnackMessage("ERROR")
+                })
+        )
+    }
+
+    private fun apiCallOnClearAttenReject1(usrID:String) { // clearing attendance if isOnLeave is false
+        var req : clearAttendanceonRejectReqModelRejectReqModel = clearAttendanceonRejectReqModelRejectReqModel()
+        req.user_id=usrID
+        req.leave_apply_date=AppUtils.getCurrentDateForShopActi()
+        req.isOnLeave=false
+        req.IsLeaveDelete = "1"
+
+        val repository = LeaveTypeRepoProvider.leaveTypeListRepoProvider()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+            repository.clearAttendanceonRejectclick(req)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    val response = result as BaseResponse
+                    progress_wheel.stopSpinning()
+                    if (response.status == NetworkConstant.SUCCESS) {
+                        Handler().postDelayed(Runnable {
+                            deleteDaystartEnd(usrID)
+                        }, 500)
+
+                    }
+                }, { error ->
+                    progress_wheel.stopSpinning()
+                    (mContext as DashboardActivity).showSnackMessage("ERROR")
+                })
+        )
+    }
+
+    fun deleteDaystartEnd(usrID:String) {
+        progress_wheel.spin()
+        try {
+            val repository = DayStartEndRepoProvider.dayStartRepositiry()
+            BaseActivity.compositeDisposable.add(
+                repository.daystartendDelete(Pref.session_token.toString(),usrID,AppUtils.getCurrentDateForShopActi(),"1","1")
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        progress_wheel.stopSpinning()
+                        enableScreen()
+                        val response = result as BaseResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            Handler().postDelayed(Runnable {
+                                tryAgainMsg()
+                            }, 500)
+
+                        }
+                    }, { error ->
+                        enableScreen()
+                        if (error == null) {
+                            XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+                        } else {
+                            XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
+                            error.printStackTrace()
+                        }
+                        progress_wheel.stopSpinning()
+                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                    })
+            )
+
+        } catch (ex: Exception) {
+            XLog.d("DayStart (PhotoAttendanceFragment) : exception " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+            enableScreen()
+            ex.printStackTrace()
+            progress_wheel.stopSpinning()
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+        }
+    }
+
+    fun tryAgainMsg(){
+        val simpleDialog = Dialog(mContext)
+        simpleDialog.setCancelable(false)
+        simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialog.setContentView(R.layout.dialog_message)
+        val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        val dialog_yes_no_headerTV = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+        dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText()!!+"!"
+        dialogHeader.text = "Please try Again."
+        val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        dialogYes.setOnClickListener({ view ->
+            simpleDialog.cancel()
+            callUSerListApi()
+            //(mContext as DashboardActivity).loadFragment(FragType.PhotoAttendanceFragment, false, "")
+        })
+        simpleDialog.show()
+    }
+
 
 }

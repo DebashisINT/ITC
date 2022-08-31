@@ -561,11 +561,16 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onLocationChanged(location: Location) {
+        //Pref.IsShowDayStart = true
+        //Pref.DayStartMarked = true
+
         try{
             if(location!=null){
                 AppUtils.mLocation = location
                 Pref.current_latitude = location.latitude.toString()
                 Pref.current_longitude = location.longitude.toString()
+                //lastLat = location.latitude
+                //lastLng = location.longitude
                 XLog.d("onLocationChanged : loc_update : lat - ${Pref.current_latitude.toString()} long - ${Pref.current_longitude.toString()}" + AppUtils.getCurrentDateTime())
             }
         }catch (ex:Exception){
@@ -727,7 +732,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 if (Pref.willAutoRevisitEnable){
                     if(Pref.IsShowDayStart){
                         if(Pref.DayStartMarked){
-                            checkAutoRevisit()
+                            //checkAutoRevisit()
+                            checkAutoRevisitAll()
                         }
                     }
                 }
@@ -740,13 +746,14 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 /*Sync all data*/
                 if(Pref.IsShowDayStart){
                     if(Pref.DayStartMarked){
-                syncLocationActivity()
+                        syncLocationActivity()
                     }
                 }
 
                 //if (!BaseActivity.isApiInitiated)
 
                 callShopDurationApi()
+
                 //syncShopVisitImage()
 
                 //callCompetetorImgUploadApi()
@@ -822,29 +829,31 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
 //        if (AppUtils.isShopVisited) {
 
-                if( Pref.isShopVisited){
-                    if (shouldShopDurationComplete()) {
+                try{
+                    if( Pref.isShopVisited){
+                        if (shouldShopDurationComplete()) {
 
-                        val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedShopForADay(AppUtils.getCurrentDateForShopActi(), false, true)
-                        if (list != null && list.isNotEmpty()) {
-                            val shopId = list[0].shopid
+                            val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedShopForADay(AppUtils.getCurrentDateForShopActi(), false, true)
+                            if (list != null && list.isNotEmpty()) {
+                                val shopId = list[0].shopid
 
-                            val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shopId)
+                                val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shopId)
 
-                            val distance = LocationWizard.getDistance(shop.shopLat, shop.shopLong, location.latitude, location.longitude)
+                                val distance = LocationWizard.getDistance(shop.shopLat, shop.shopLong, location.latitude, location.longitude)
 
-                            XLog.e("Location Fuzed Service: Distance between current location & visited shop location====> $distance km(s)")
-                            XLog.e("Location Fuzed Service: Gps accuracy====> " + Pref.gpsAccuracy + " m(s)")
+                                XLog.e("Location Fuzed Service: Distance between current location & visited shop location====> $distance km(s)")
+                                XLog.e("Location Fuzed Service: Gps accuracy====> " + Pref.gpsAccuracy + " m(s)")
 
-                            if (distance * 1000 > Pref.gpsAccuracy.toInt()) {
-                                endShopDuration(shopId!!)
+                                if (distance * 1000 > Pref.gpsAccuracy.toInt()) {
+                                    endShopDuration(shopId!!)
+                                }
                             }
-
-
-
                         }
                     }
+                }catch (ex:Exception){
+
                 }
+
 
 
                 XLog.e("Temp Distance for accurate====> $tempDistance")
@@ -950,11 +959,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                 val currentTimeStamp = System.currentTimeMillis()
                                 changeLocale()
                                 if (prevRevisitTimeStamp != 0L) {
-
                                     if (shop_id == allShopList[i].shop_id) {
-
                                         val interval = currentTimeStamp - prevRevisitTimeStamp
-
                                         val intervalInMins = (interval / 1000) / 60
                                         /*4-05-2022*/
                                         val intervalInSec = (interval / 1000)
@@ -987,9 +993,83 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         }
     }
 
-    private fun revisitShop() {
-        try {
+    private fun checkAutoRevisitAll() {
 
+
+        if (!Pref.isAddAttendence) {
+            XLog.e("====================Attendance is not given (Location Fuzed Service)====================")
+            return
+        }
+        if (lastLat == 0.0 || lastLng == 0.0) {
+            XLog.e("====================1st time check auto revisit====================")
+            return
+        }
+
+        var distance = LocationWizard.getDistance(lastLat, lastLng, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
+        distance=0.9
+        XLog.e("==checkAutoRevisit==")
+
+        var autoRevDistance : Double = 0.0
+        if (AppUtils.isOnline(this)) {
+            autoRevDistance = Pref.autoRevisitDistance.toDouble()
+        }else{
+            if(Pref.OfflineShopAccuracy.toDouble() > Pref.autoRevisitDistance.toDouble())
+                autoRevDistance = Pref.OfflineShopAccuracy.toDouble()
+            else
+                autoRevDistance = Pref.autoRevisitDistance.toDouble()
+        }
+
+        shopCodeListNearby= ArrayList()
+
+        if (distance * 1000 > autoRevDistance) {
+            val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
+            if (allShopList != null && allShopList.size > 0) {
+                for (i in 0 until allShopList.size) {
+                    val shopLat: Double = allShopList[i].shopLat
+                    val shopLong: Double = allShopList[i].shopLong
+                    if (shopLat != null && shopLong != null) {
+                        val shopLocation = Location("")
+                        shopLocation.latitude = shopLat
+                        shopLocation.longitude = shopLong
+                        shop_id = allShopList[i].shop_id
+                        val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
+                        println("autorev ${allShopList[i].shopName}  $isShopNearby")
+                        if (isShopNearby) {
+                            val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(allShopList[i].shop_id, AppUtils.getCurrentDateForShopActi())
+                            if (shopActivityList == null || shopActivityList.isEmpty()) {
+
+                                shopCodeListNearby.add(shop_id)
+
+                            } else
+                                XLog.e("==" + allShopList[i].shopName + " is visiting now normally (Loc Fuzed Service)==")
+                        }
+                    }
+                }
+                println("autorev total nearby size ${shopCodeListNearby.size}")
+                revisitShopAll()
+            }
+        }
+    }
+
+    var shopCodeListNearby:ArrayList<String> = ArrayList()
+
+    private fun revisitShopAll() {
+
+        if(shopCodeListNearby.size == 0)
+            return
+
+        try {
+            shop_id = shopCodeListNearby.get(0)
+            if(shopCodeListNearby.size>0)
+                shopCodeListNearby.removeAt(0)
+        }catch (ex:Exception){
+            println("autorev error")
+            return
+        }
+
+
+
+        try {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(shop_id.hashCode())
 
@@ -1029,12 +1109,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     LocationWizard.getNewLocationName(this, shop.shopLat.toDouble(), shop.shopLong.toDouble())
 
                 if (Pref.isOnLeave.equals("false", ignoreCase = true)) {
-
                     XLog.e("=====User is at work (At auto revisit time)=======")
 
                     val locationList = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationUpdateForADay(AppUtils.getCurrentDateForShopActi())
-
-                    //val distance = LocationWizard.getDistance(shop.shopLat, shop.shopLong, location.latitude, location.longitude)
 
                     val userlocation = UserLocationDataEntity()
                     userlocation.latitude = shop.shopLat.toString()
@@ -1044,7 +1121,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                     if (locationList != null && locationList.isNotEmpty()) {
                         loc_distance = LocationWizard.getDistance(locationList[locationList.size - 1].latitude.toDouble(), locationList[locationList.size - 1].longitude.toDouble(),
-                                userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
+                            userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
                     }
                     val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
 
@@ -1087,8 +1164,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 mShopActivityEntity.in_time = AppUtils.getCurrentTimeWithMeredian()
                 mShopActivityEntity.in_loc = address
 
-//                AppUtils.isShopVisited = true
-
                 Pref.isShopVisited=true
 
                 var shopAll = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
@@ -1112,10 +1187,10 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         }
 
                         //If duration is greater than 20 hour then stop incrementing
-                        if (totalMinute.toInt() > 20 * 60) {
+                        /*if (totalMinute.toInt() > 20 * 60) {
                             AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
                             return
-                        }
+                        }*/
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateEndTimeOfShop(endTimeStamp, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateTotalMinuteForDayOfShop(shopList[i].shopid!!, totalMinute, AppUtils.getCurrentDateForShopActi())
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateTimeDurationForDayOfShop(shopList[i].shopid!!, duration, AppUtils.getCurrentDateForShopActi())
@@ -1134,7 +1209,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                             "Mobile ${AppUtils.mobNetType(this)}"
 
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
-                                AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                            AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
                     }
                 }
             }
@@ -1163,21 +1238,200 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 AppDatabase.getDBInstance()!!.performanceDao().insert(performanceEntity)
             }
 
-            /*val shopDetail = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(mShopId)
-            if (shopDetail.is_otp_verified.equals("false", ignoreCase = true)) {
-                if (AppUtils.isOnline(this@DashboardActivity))
-                    showShopVerificationDialog()
-                else
-                    loadFragment(FragType.ShopDetailFragment, true, mShopId)
-            } else
-                loadFragment(FragType.ShopDetailFragment, true, mShopId)*/
-
             AppUtils.isAutoRevisit = false
             XLog.e("Fuzed Location: auto revisit endes ${AppUtils.getCurrentDateTime()}")
             val intent = Intent()
             intent.action = "AUTO_REVISIT_BROADCAST"
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
+            Handler().postDelayed(Runnable {
+                revisitShopAll()
+            }, 100)
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
+    private fun revisitShop() {
+
+            try {
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                notificationManager.cancel(shop_id.hashCode())
+
+                val shopActivityEntity = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(shop_id, AppUtils.getCurrentDateForShopActi())
+                val imageUpDateTime = AppUtils.getCurrentISODateTime()
+
+                val mAddShopDBModelEntity = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shop_id)
+
+                if (shopActivityEntity.isEmpty() || shopActivityEntity[0].date != AppUtils.getCurrentDateForShopActi()) {
+                    val mShopActivityEntity = ShopActivityEntity()
+                    AppUtils.changeLanguage(this,"en")
+                    mShopActivityEntity.startTimeStamp = System.currentTimeMillis().toString()
+                    changeLocale()
+                    mShopActivityEntity.isUploaded = false
+                    mShopActivityEntity.isVisited = true
+                    mShopActivityEntity.shop_name = mAddShopDBModelEntity?.shopName
+                    mShopActivityEntity.duration_spent = "00:00:00"
+                    mShopActivityEntity.date = AppUtils.getCurrentDateForShopActi()
+                    mShopActivityEntity.shop_address = mAddShopDBModelEntity?.address
+                    mShopActivityEntity.shopid = mAddShopDBModelEntity?.shop_id
+                    mShopActivityEntity.visited_date = imageUpDateTime //AppUtils.getCurrentISODateTime()
+                    mShopActivityEntity.isDurationCalculated = false
+                    if (mAddShopDBModelEntity?.totalVisitCount != null && mAddShopDBModelEntity?.totalVisitCount != "") {
+                        val visitCount = mAddShopDBModelEntity?.totalVisitCount?.toInt()!! + 1
+                        AppDatabase.getDBInstance()!!.addShopEntryDao().updateTotalCount(visitCount.toString(), shop_id)
+                        AppDatabase.getDBInstance()!!.addShopEntryDao().updateLastVisitDate(AppUtils.getCurrentDateChanged(), shop_id)
+                    }
+
+                    var distance = 0.0
+                    var address = ""
+                    XLog.e("======New Distance (At auto revisit time)=========")
+
+                    val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shop_id)
+                    address = if (!TextUtils.isEmpty(shop.actual_address))
+                        shop.actual_address
+                    else
+                        LocationWizard.getNewLocationName(this, shop.shopLat.toDouble(), shop.shopLong.toDouble())
+
+                    if (Pref.isOnLeave.equals("false", ignoreCase = true)) {
+                        XLog.e("=====User is at work (At auto revisit time)=======")
+
+                        val locationList = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationUpdateForADay(AppUtils.getCurrentDateForShopActi())
+
+                        val userlocation = UserLocationDataEntity()
+                        userlocation.latitude = shop.shopLat.toString()
+                        userlocation.longitude = shop.shopLong.toString()
+
+                        var loc_distance = 0.0
+
+                        if (locationList != null && locationList.isNotEmpty()) {
+                            loc_distance = LocationWizard.getDistance(locationList[locationList.size - 1].latitude.toDouble(), locationList[locationList.size - 1].longitude.toDouble(),
+                                userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
+                        }
+                        val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
+
+                        XLog.e("===Distance (At auto shop revisit time)===")
+                        XLog.e("Temp Distance====> " + Pref.tempDistance)
+                        XLog.e("Normal Distance====> $loc_distance")
+                        XLog.e("Total Distance====> $finalDistance")
+                        XLog.e("===========================================")
+
+                        userlocation.distance = finalDistance
+                        userlocation.locationName = LocationWizard.getNewLocationName(this, userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
+                        userlocation.timestamp = LocationWizard.getTimeStamp()
+                        userlocation.time = LocationWizard.getFormattedTime24Hours(true)
+                        userlocation.meridiem = LocationWizard.getMeridiem()
+                        userlocation.hour = LocationWizard.getHour()
+                        userlocation.minutes = LocationWizard.getMinute()
+                        userlocation.isUploaded = false
+                        userlocation.shops = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi()).size.toString()
+                        userlocation.updateDate = AppUtils.getCurrentDateForShopActi()
+                        userlocation.updateDateTime = AppUtils.getCurrentDateTime()
+                        userlocation.network_status = if (AppUtils.isOnline(this)) "Online" else "Offline"
+                        userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
+                        AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
+
+                        XLog.e("=====Shop auto revisit data added=======")
+
+                        Pref.totalS2SDistance = (Pref.totalS2SDistance.toDouble() + userlocation.distance.toDouble()).toString()
+
+                        distance = Pref.totalS2SDistance.toDouble()
+                        Pref.totalS2SDistance = "0.0"
+                        Pref.tempDistance = "0.0"
+                    } else {
+                        XLog.e("=====User is on leave (At auto revisit time)=======")
+                        distance = 0.0
+                    }
+
+                    XLog.e("shop to shop distance (At auto revisit time)=====> $distance")
+
+                    mShopActivityEntity.distance_travelled = distance.toString()
+                    mShopActivityEntity.in_time = AppUtils.getCurrentTimeWithMeredian()
+                    mShopActivityEntity.in_loc = address
+
+                    Pref.isShopVisited=true
+
+                    var shopAll = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityAll()
+                    mShopActivityEntity.shop_revisit_uniqKey = Pref.user_id + System.currentTimeMillis().toString()
+
+                    AppDatabase.getDBInstance()!!.shopActivityDao().insertAll(mShopActivityEntity)
+
+                    /*Terminate All other Shop Visit*/
+                    val shopList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+                    for (i in 0 until shopList.size) {
+                        if (shopList[i].shopid != mShopActivityEntity.shopid && !shopList[i].isDurationCalculated) {
+                            AppUtils.changeLanguage(this,"en")
+                            val endTimeStamp = System.currentTimeMillis().toString()
+                            changeLocale()
+                            var duration = AppUtils.getTimeFromTimeSpan(shopList[i].startTimeStamp, endTimeStamp)
+                            val totalMinute = AppUtils.getMinuteFromTimeStamp(shopList[i].startTimeStamp, endTimeStamp)
+
+                            XLog.d("revisitShop LocFuzedS=> startT: ${shopList[i].startTimeStamp} endTime: $endTimeStamp   duration: $duration totalMinute:$totalMinute")
+                            if(duration.contains("-")){
+                                duration="00:00:00"
+                            }
+
+                            //If duration is greater than 20 hour then stop incrementing
+                            /*if (totalMinute.toInt() > 20 * 60) {
+                                AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                                return
+                            }*/
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateEndTimeOfShop(endTimeStamp, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateTotalMinuteForDayOfShop(shopList[i].shopid!!, totalMinute, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateTimeDurationForDayOfShop(shopList[i].shopid!!, duration, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateOutTime(AppUtils.getCurrentTimeWithMeredian(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateOutLocation(LocationWizard.getNewLocationName(this, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble()), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi(), shopList[i].startTimeStamp)
+
+                            val netStatus = if (AppUtils.isOnline(this))
+                                "Online"
+                            else
+                                "Offline"
+
+                            val netType = if (AppUtils.getNetworkType(this).equals("wifi", ignoreCase = true))
+                                AppUtils.getNetworkType(this)
+                            else
+                                "Mobile ${AppUtils.mobNetType(this)}"
+
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
+                                AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
+                        }
+                    }
+                }
+
+                AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdList(shop_id)!![0].visited = true
+
+                val performance = AppDatabase.getDBInstance()!!.performanceDao().getTodaysData(AppUtils.getCurrentDateForShopActi())
+                if (performance != null) {
+                    val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedVisitedShopForADay(AppUtils.getCurrentDateForShopActi(), true)
+                    AppDatabase.getDBInstance()!!.performanceDao().updateTotalShopVisited(list.size.toString(), AppUtils.getCurrentDateForShopActi())
+                    var totalTimeSpentForADay = 0
+                    for (i in list.indices) {
+                        totalTimeSpentForADay += list[i].totalMinute.toInt()
+                    }
+                    AppDatabase.getDBInstance()!!.performanceDao().updateTotalDuration(totalTimeSpentForADay.toString(), AppUtils.getCurrentDateForShopActi())
+                } else {
+                    val list = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedVisitedShopForADay(AppUtils.getCurrentDateForShopActi(), true)
+                    val performanceEntity = PerformanceEntity()
+                    performanceEntity.date = AppUtils.getCurrentDateForShopActi()
+                    performanceEntity.total_shop_visited = list.size.toString()
+                    var totalTimeSpentForADay = 0
+                    for (i in list.indices) {
+                        totalTimeSpentForADay += list[i].totalMinute.toInt()
+                    }
+                    performanceEntity.total_duration_spent = totalTimeSpentForADay.toString()
+                    AppDatabase.getDBInstance()!!.performanceDao().insert(performanceEntity)
+                }
+
+                AppUtils.isAutoRevisit = false
+                XLog.e("Fuzed Location: auto revisit endes ${AppUtils.getCurrentDateTime()}")
+                val intent = Intent()
+                intent.action = "AUTO_REVISIT_BROADCAST"
+                LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -2244,7 +2498,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 10) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 6) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2257,7 +2511,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldLocationActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevLocationActivityTimeStamp) > 1000 * 60 * 2) {
+        return if (abs(System.currentTimeMillis() - Pref.prevLocationActivityTimeStamp) > 1000 * 60 * 4) {
             Pref.prevLocationActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2768,279 +3022,285 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         val revisitStatusList : MutableList<ShopRevisitStatusRequestData> = ArrayList()
 
-        for (k in 0 until syncedShopList.size) {
 
-            if (!Pref.isMultipleVisitEnable) {
-                /* Get shop activity that has completed time duration calculation*/
-                val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(syncedShopList[k].shop_id, true, false)
+        doAsync {
 
-                if (shopActivity == null) {
-                    val shop_activity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForTodayShop(syncedShopList[k].shop_id,true, true,
+            for (k in 0 until syncedShopList.size) {
+
+                if (!Pref.isMultipleVisitEnable) {
+                    /* Get shop activity that has completed time duration calculation*/
+                    val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(syncedShopList[k].shop_id, true, false)
+
+                    if (shopActivity == null) {
+                        val shop_activity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForTodayShop(syncedShopList[k].shop_id,true, true,
                             AppUtils.getCurrentDateForShopActi())
-                    if (shop_activity != null)
-                        syncedShop.add(shop_activity)
+                        if (shop_activity != null)
+                            syncedShop.add(shop_activity)
 
-                } else {
-                    val shopDurationData = ShopDurationRequestData()
-                    shopDurationData.shop_id = shopActivity.shopid
-                    shopDurationData.spent_duration = shopActivity.duration_spent
-                    shopDurationData.visited_date = shopActivity.visited_date
-                    shopDurationData.visited_time = shopActivity.visited_date
-                    if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity.shopid) != null)
-                        shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity.shopid).totalVisitCount
-                    else
-                        shopDurationData.total_visit_count = "1"
+                    } else {
+                        val shopDurationData = ShopDurationRequestData()
+                        shopDurationData.shop_id = shopActivity.shopid
+                        shopDurationData.spent_duration = shopActivity.duration_spent
+                        shopDurationData.visited_date = shopActivity.visited_date
+                        shopDurationData.visited_time = shopActivity.visited_date
+                        if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity.shopid) != null)
+                            shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity.shopid).totalVisitCount
+                        else
+                            shopDurationData.total_visit_count = "1"
 
-                    if (TextUtils.isEmpty(shopActivity.distance_travelled))
-                        shopActivity.distance_travelled = "0.0"
-                    shopDurationData.distance_travelled = shopActivity.distance_travelled
+                        if (TextUtils.isEmpty(shopActivity.distance_travelled))
+                            shopActivity.distance_travelled = "0.0"
+                        shopDurationData.distance_travelled = shopActivity.distance_travelled
 
-                    val currentShopVisitDateNumber = AppUtils.getTimeStampFromDateOnly(shopActivity.date!!)
+                        val currentShopVisitDateNumber = AppUtils.getTimeStampFromDateOnly(shopActivity.date!!)
 
-                    if (shopId == shopActivity.shopid && previousShopVisitDateNumber == currentShopVisitDateNumber)
-                        continue
+                        if (shopId == shopActivity.shopid && previousShopVisitDateNumber == currentShopVisitDateNumber)
+                            continue
 
-                    shopId = shopActivity.shopid!!
-                    shopVisitDate = shopActivity.date!!
-                    previousShopVisitDateNumber = currentShopVisitDateNumber
+                        shopId = shopActivity.shopid!!
+                        shopVisitDate = shopActivity.date!!
+                        previousShopVisitDateNumber = currentShopVisitDateNumber
 
-                    if (!TextUtils.isEmpty(shopActivity.feedback))
-                        shopDurationData.feedback = shopActivity.feedback
-                    else
-                        shopDurationData.feedback = ""
+                        if (!TextUtils.isEmpty(shopActivity.feedback))
+                            shopDurationData.feedback = shopActivity.feedback
+                        else
+                            shopDurationData.feedback = ""
 
-                    shopDurationData.isFirstShopVisited = shopActivity.isFirstShopVisited
-                    shopDurationData.distanceFromHomeLoc = shopActivity.distance_from_home_loc
+                        shopDurationData.isFirstShopVisited = shopActivity.isFirstShopVisited
+                        shopDurationData.distanceFromHomeLoc = shopActivity.distance_from_home_loc
 
-                    shopDurationData.next_visit_date = shopActivity.next_visit_date
+                        shopDurationData.next_visit_date = shopActivity.next_visit_date
 
-                    if (!TextUtils.isEmpty(shopActivity.early_revisit_reason))
-                        shopDurationData.early_revisit_reason = shopActivity.early_revisit_reason
-                    else
-                        shopDurationData.early_revisit_reason = ""
+                        if (!TextUtils.isEmpty(shopActivity.early_revisit_reason))
+                            shopDurationData.early_revisit_reason = shopActivity.early_revisit_reason
+                        else
+                            shopDurationData.early_revisit_reason = ""
 
-                    shopDurationData.device_model = shopActivity.device_model
-                    shopDurationData.android_version = shopActivity.android_version
-                    shopDurationData.battery = shopActivity.battery
-                    shopDurationData.net_status = shopActivity.net_status
-                    shopDurationData.net_type = shopActivity.net_type
-                    shopDurationData.in_time = shopActivity.in_time
-                    shopDurationData.out_time = shopActivity.out_time
-                    shopDurationData.start_timestamp = shopActivity.startTimeStamp
-                    shopDurationData.in_location = shopActivity.in_loc
-                    shopDurationData.out_location = shopActivity.out_loc
-                    shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+                        shopDurationData.device_model = shopActivity.device_model
+                        shopDurationData.android_version = shopActivity.android_version
+                        shopDurationData.battery = shopActivity.battery
+                        shopDurationData.net_status = shopActivity.net_status
+                        shopDurationData.net_type = shopActivity.net_type
+                        shopDurationData.in_time = shopActivity.in_time
+                        shopDurationData.out_time = shopActivity.out_time
+                        shopDurationData.start_timestamp = shopActivity.startTimeStamp
+                        shopDurationData.in_location = shopActivity.in_loc
+                        shopDurationData.out_location = shopActivity.out_loc
+                        shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
 
-                    //duration garbage fix
-                    try{
-                        if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
-                        {
+                        //duration garbage fix
+                        try{
+                            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                            {
+                                shopDurationData.spent_duration="00:00:10"
+                            }
+                        }catch (ex:Exception){
                             shopDurationData.spent_duration="00:00:10"
                         }
-                    }catch (ex:Exception){
-                        shopDurationData.spent_duration="00:00:10"
+
+                        shopDataList.add(shopDurationData)
+
+
+
+                        //////////////////////////
+                        var revisitStatusObj=ShopRevisitStatusRequestData()
+                        var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                        if(data != null ){
+                            revisitStatusObj.shop_id=data.shop_id
+                            revisitStatusObj.order_status=data.order_status
+                            revisitStatusObj.order_remarks=data.order_remarks
+                            revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                            revisitStatusList.add(revisitStatusObj)
+                        }
+
+
+
+                        XLog.d("====SYNC VISITED SHOP DATA (LOCATION FUZED SERVICE)====")
+                        XLog.d("SHOP ID======> " + shopDurationData.shop_id)
+                        XLog.d("SPENT DURATION======> " + shopDurationData.spent_duration)
+                        XLog.d("VISIT DATE=========> " + shopDurationData.visited_date)
+                        XLog.d("VISIT DATE TIME==========> " + shopDurationData.visited_date)
+                        XLog.d("TOTAL VISIT COUNT========> " + shopDurationData.total_visit_count)
+                        XLog.d("DISTANCE TRAVELLED========> " + shopDurationData.distance_travelled)
+                        XLog.d("FEEDBACK========> " + shopDurationData.feedback)
+                        XLog.d("isFirstShopVisited========> " + shopDurationData.isFirstShopVisited)
+                        XLog.d("distanceFromHomeLoc========> " + shopDurationData.distanceFromHomeLoc)
+                        XLog.d("next_visit_date========> " + shopDurationData.next_visit_date)
+                        XLog.d("device_model========> " + shopDurationData.device_model)
+                        XLog.d("android_version========> " + shopDurationData.android_version)
+                        XLog.d("battery========> " + shopDurationData.battery)
+                        XLog.d("net_status========> " + shopDurationData.net_status)
+                        XLog.d("net_type========> " + shopDurationData.net_type)
+                        XLog.d("in_time========> " + shopDurationData.in_time)
+                        XLog.d("out_time========> " + shopDurationData.out_time)
+                        XLog.d("start_timestamp========> " + shopDurationData.start_timestamp)
+                        XLog.d("in_location========> " + shopDurationData.in_location)
+                        XLog.d("out_location========> " + shopDurationData.out_location)
+                        XLog.d("========================================================")
                     }
-
-                    shopDataList.add(shopDurationData)
-
-
-
-                    //////////////////////////
-                    var revisitStatusObj=ShopRevisitStatusRequestData()
-                    var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
-                    if(data != null ){
-                        revisitStatusObj.shop_id=data.shop_id
-                        revisitStatusObj.order_status=data.order_status
-                        revisitStatusObj.order_remarks=data.order_remarks
-                        revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
-                        revisitStatusList.add(revisitStatusObj)
-                    }
-
-
-
-                    XLog.d("====SYNC VISITED SHOP DATA (LOCATION FUZED SERVICE)====")
-                    XLog.d("SHOP ID======> " + shopDurationData.shop_id)
-                    XLog.d("SPENT DURATION======> " + shopDurationData.spent_duration)
-                    XLog.d("VISIT DATE=========> " + shopDurationData.visited_date)
-                    XLog.d("VISIT DATE TIME==========> " + shopDurationData.visited_date)
-                    XLog.d("TOTAL VISIT COUNT========> " + shopDurationData.total_visit_count)
-                    XLog.d("DISTANCE TRAVELLED========> " + shopDurationData.distance_travelled)
-                    XLog.d("FEEDBACK========> " + shopDurationData.feedback)
-                    XLog.d("isFirstShopVisited========> " + shopDurationData.isFirstShopVisited)
-                    XLog.d("distanceFromHomeLoc========> " + shopDurationData.distanceFromHomeLoc)
-                    XLog.d("next_visit_date========> " + shopDurationData.next_visit_date)
-                    XLog.d("device_model========> " + shopDurationData.device_model)
-                    XLog.d("android_version========> " + shopDurationData.android_version)
-                    XLog.d("battery========> " + shopDurationData.battery)
-                    XLog.d("net_status========> " + shopDurationData.net_status)
-                    XLog.d("net_type========> " + shopDurationData.net_type)
-                    XLog.d("in_time========> " + shopDurationData.in_time)
-                    XLog.d("out_time========> " + shopDurationData.out_time)
-                    XLog.d("start_timestamp========> " + shopDurationData.start_timestamp)
-                    XLog.d("in_location========> " + shopDurationData.in_location)
-                    XLog.d("out_location========> " + shopDurationData.out_location)
-                    XLog.d("========================================================")
                 }
-            }
-            else {
-                val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShopList(syncedShopList[k].shop_id, true,
+                else {
+                    val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShopList(syncedShopList[k].shop_id, true,
                         false)
 
-                shopActivity?.forEach {
-                    val shopDurationData = ShopDurationRequestData()
-                    shopDurationData.shop_id = it.shopid
-                    shopDurationData.spent_duration = it.duration_spent
-                    shopDurationData.visited_date = it.visited_date
-                    shopDurationData.visited_time = it.visited_date
-                    if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid) != null)
-                        shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid).totalVisitCount
-                    else
-                        shopDurationData.total_visit_count = "1"
+                    shopActivity?.forEach {
+                        val shopDurationData = ShopDurationRequestData()
+                        shopDurationData.shop_id = it.shopid
+                        shopDurationData.spent_duration = it.duration_spent
+                        shopDurationData.visited_date = it.visited_date
+                        shopDurationData.visited_time = it.visited_date
+                        if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid) != null)
+                            shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid).totalVisitCount
+                        else
+                            shopDurationData.total_visit_count = "1"
 
-                    if (TextUtils.isEmpty(it.distance_travelled))
-                        it.distance_travelled = "0.0"
-                    shopDurationData.distance_travelled = it.distance_travelled
+                        if (TextUtils.isEmpty(it.distance_travelled))
+                            it.distance_travelled = "0.0"
+                        shopDurationData.distance_travelled = it.distance_travelled
 
-                    if (!TextUtils.isEmpty(it.feedback))
-                        shopDurationData.feedback = it.feedback
-                    else
-                        shopDurationData.feedback = ""
+                        if (!TextUtils.isEmpty(it.feedback))
+                            shopDurationData.feedback = it.feedback
+                        else
+                            shopDurationData.feedback = ""
 
-                    shopDurationData.isFirstShopVisited = it.isFirstShopVisited
-                    shopDurationData.distanceFromHomeLoc = it.distance_from_home_loc
+                        shopDurationData.isFirstShopVisited = it.isFirstShopVisited
+                        shopDurationData.distanceFromHomeLoc = it.distance_from_home_loc
 
-                    shopDurationData.next_visit_date = it.next_visit_date
+                        shopDurationData.next_visit_date = it.next_visit_date
 
-                    if (!TextUtils.isEmpty(it.early_revisit_reason))
-                        shopDurationData.early_revisit_reason = it.early_revisit_reason
-                    else
-                        shopDurationData.early_revisit_reason = ""
+                        if (!TextUtils.isEmpty(it.early_revisit_reason))
+                            shopDurationData.early_revisit_reason = it.early_revisit_reason
+                        else
+                            shopDurationData.early_revisit_reason = ""
 
-                    shopDurationData.device_model = it.device_model
-                    shopDurationData.android_version = it.android_version
-                    shopDurationData.battery = it.battery
-                    shopDurationData.net_status = it.net_status
-                    shopDurationData.net_type = it.net_type
-                    shopDurationData.in_time = it.in_time
-                    shopDurationData.out_time = it.out_time
-                    shopDurationData.start_timestamp = it.startTimeStamp
-                    shopDurationData.in_location = it.in_loc
-                    shopDurationData.out_location = it.out_loc
-                    shopDurationData.shop_revisit_uniqKey=it.shop_revisit_uniqKey!!
+                        shopDurationData.device_model = it.device_model
+                        shopDurationData.android_version = it.android_version
+                        shopDurationData.battery = it.battery
+                        shopDurationData.net_status = it.net_status
+                        shopDurationData.net_type = it.net_type
+                        shopDurationData.in_time = it.in_time
+                        shopDurationData.out_time = it.out_time
+                        shopDurationData.start_timestamp = it.startTimeStamp
+                        shopDurationData.in_location = it.in_loc
+                        shopDurationData.out_location = it.out_loc
+                        shopDurationData.shop_revisit_uniqKey=it.shop_revisit_uniqKey!!
 
-                    //duration garbage fix
-                    try{
-                        if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
-                        {
+                        //duration garbage fix
+                        try{
+                            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                            {
+                                shopDurationData.spent_duration="00:00:10"
+                            }
+                        }catch (ex:Exception){
                             shopDurationData.spent_duration="00:00:10"
                         }
-                    }catch (ex:Exception){
-                        shopDurationData.spent_duration="00:00:10"
+
+                        shopDataList.add(shopDurationData)
+
+                        //////////////////////////
+                        var revisitStatusObj=ShopRevisitStatusRequestData()
+                        var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                        if(data != null ){
+                            revisitStatusObj.shop_id=data.shop_id
+                            revisitStatusObj.order_status=data.order_status
+                            revisitStatusObj.order_remarks=data.order_remarks
+                            revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                            revisitStatusList.add(revisitStatusObj)
+                        }
+
+
+
+                        XLog.d("====SYNC VISITED SHOP DATA (LOCATION FUZED SERVICE)====")
+                        XLog.d("SHOP ID======> " + shopDurationData.shop_id)
+                        XLog.d("SPENT DURATION======> " + shopDurationData.spent_duration)
+                        XLog.d("VISIT DATE=========> " + shopDurationData.visited_date)
+                        XLog.d("VISIT DATE TIME==========> " + shopDurationData.visited_date)
+                        XLog.d("TOTAL VISIT COUNT========> " + shopDurationData.total_visit_count)
+                        XLog.d("DISTANCE TRAVELLED========> " + shopDurationData.distance_travelled)
+                        XLog.d("FEEDBACK========> " + shopDurationData.feedback)
+                        XLog.d("isFirstShopVisited========> " + shopDurationData.isFirstShopVisited)
+                        XLog.d("distanceFromHomeLoc========> " + shopDurationData.distanceFromHomeLoc)
+                        XLog.d("next_visit_date========> " + shopDurationData.next_visit_date)
+                        XLog.d("device_model========> " + shopDurationData.device_model)
+                        XLog.d("android_version========> " + shopDurationData.android_version)
+                        XLog.d("battery========> " + shopDurationData.battery)
+                        XLog.d("net_status========> " + shopDurationData.net_status)
+                        XLog.d("net_type========> " + shopDurationData.net_type)
+                        XLog.d("in_time========> " + shopDurationData.in_time)
+                        XLog.d("out_time========> " + shopDurationData.out_time)
+                        XLog.d("start_timestamp========> " + shopDurationData.start_timestamp)
+                        XLog.d("in_location========> " + shopDurationData.in_location)
+                        XLog.d("out_location========> " + shopDurationData.out_location)
+                        XLog.d("========================================================")
                     }
-
-                    shopDataList.add(shopDurationData)
-
-                    //////////////////////////
-                    var revisitStatusObj=ShopRevisitStatusRequestData()
-                    var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
-                    if(data != null ){
-                        revisitStatusObj.shop_id=data.shop_id
-                        revisitStatusObj.order_status=data.order_status
-                        revisitStatusObj.order_remarks=data.order_remarks
-                        revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
-                        revisitStatusList.add(revisitStatusObj)
-                    }
-
-
-
-                    XLog.d("====SYNC VISITED SHOP DATA (LOCATION FUZED SERVICE)====")
-                    XLog.d("SHOP ID======> " + shopDurationData.shop_id)
-                    XLog.d("SPENT DURATION======> " + shopDurationData.spent_duration)
-                    XLog.d("VISIT DATE=========> " + shopDurationData.visited_date)
-                    XLog.d("VISIT DATE TIME==========> " + shopDurationData.visited_date)
-                    XLog.d("TOTAL VISIT COUNT========> " + shopDurationData.total_visit_count)
-                    XLog.d("DISTANCE TRAVELLED========> " + shopDurationData.distance_travelled)
-                    XLog.d("FEEDBACK========> " + shopDurationData.feedback)
-                    XLog.d("isFirstShopVisited========> " + shopDurationData.isFirstShopVisited)
-                    XLog.d("distanceFromHomeLoc========> " + shopDurationData.distanceFromHomeLoc)
-                    XLog.d("next_visit_date========> " + shopDurationData.next_visit_date)
-                    XLog.d("device_model========> " + shopDurationData.device_model)
-                    XLog.d("android_version========> " + shopDurationData.android_version)
-                    XLog.d("battery========> " + shopDurationData.battery)
-                    XLog.d("net_status========> " + shopDurationData.net_status)
-                    XLog.d("net_type========> " + shopDurationData.net_type)
-                    XLog.d("in_time========> " + shopDurationData.in_time)
-                    XLog.d("out_time========> " + shopDurationData.out_time)
-                    XLog.d("start_timestamp========> " + shopDurationData.start_timestamp)
-                    XLog.d("in_location========> " + shopDurationData.in_location)
-                    XLog.d("out_location========> " + shopDurationData.out_location)
-                    XLog.d("========================================================")
                 }
             }
-        }
 
-        if (shopDataList.isEmpty()) {
-            //isShopActivityUpdating = false
+            uiThread {
 
-            val unSyncedList = ArrayList<ShopVisitImageModelEntity>()
-            if (syncedShop != null && syncedShop.isNotEmpty()) {
-                for (j in syncedShop.indices) {
-                    val unSyncImage = AppDatabase.getDBInstance()!!.shopVisitImageDao().getUnSyncedData(false, syncedShop[j].shopid!!)
-                    if (unSyncImage != null)
-                        unSyncedList.add(unSyncImage)
-                }
-                if (unSyncedList != null && unSyncedList.isNotEmpty()) {
-                    i = 0
-                    callShopVisitImageUploadApi(unSyncedList)
-                } else {
+                if (shopDataList.isEmpty()) {
+                    //isShopActivityUpdating = false
 
-                    val unSyncedAudioList = ArrayList<ShopVisitAudioEntity>()
-                    syncedShop.forEach {
-                        val unSyncAudio = AppDatabase.getDBInstance()!!.shopVisitAudioDao().getUnSyncedData(false, it.shopid!!)
-                        if (unSyncAudio != null)
-                            unSyncedAudioList.add(unSyncAudio)
-                    }
+                    val unSyncedList = ArrayList<ShopVisitImageModelEntity>()
+                    if (syncedShop != null && syncedShop.isNotEmpty()) {
+                        for (j in syncedShop.indices) {
+                            val unSyncImage = AppDatabase.getDBInstance()!!.shopVisitImageDao().getUnSyncedData(false, syncedShop[j].shopid!!)
+                            if (unSyncImage != null)
+                                unSyncedList.add(unSyncImage)
+                        }
+                        if (unSyncedList != null && unSyncedList.isNotEmpty()) {
+                            i = 0
+                            callShopVisitImageUploadApi(unSyncedList)
+                        } else {
 
-                    if (unSyncedAudioList.isNotEmpty()) {
-                        i = 0
-                        callShopVisitAudioUploadApi(unSyncedAudioList)
+                            val unSyncedAudioList = ArrayList<ShopVisitAudioEntity>()
+                            syncedShop.forEach {
+                                val unSyncAudio = AppDatabase.getDBInstance()!!.shopVisitAudioDao().getUnSyncedData(false, it.shopid!!)
+                                if (unSyncAudio != null)
+                                    unSyncedAudioList.add(unSyncAudio)
+                            }
+
+                            if (unSyncedAudioList.isNotEmpty()) {
+                                i = 0
+                                callShopVisitAudioUploadApi(unSyncedAudioList)
+                            } else
+                                isShopActivityUpdating = false
+                        }
                     } else
                         isShopActivityUpdating = false
                 }
-            } else
-                isShopActivityUpdating = false
-        } else {
+                else {
 
-            XLog.e("====SYNC VISITED SHOP (LOCATION FUZED SERVICE)====")
-            XLog.e("ShopData List size===> " + shopDataList.size)
+                    XLog.e("====SYNC VISITED SHOP (LOCATION FUZED SERVICE)====")
+                    XLog.e("ShopData List size===> " + shopDataList.size)
 
-            //val newShopList = FTStorageUtils.removeDuplicateData(shopDataList)
+                    //val newShopList = FTStorageUtils.removeDuplicateData(shopDataList)
 
-            val hashSet = HashSet<ShopDurationRequestData>()
-            val newShopList = ArrayList<ShopDurationRequestData>()
+                    val hashSet = HashSet<ShopDurationRequestData>()
+                    val newShopList = ArrayList<ShopDurationRequestData>()
 
-            if (!Pref.isMultipleVisitEnable) {
-                for (i in shopDataList.indices) {
-                    if (hashSet.add(shopDataList[i]))
-                        newShopList.add(shopDataList[i])
-                }
-            }
+                    if (!Pref.isMultipleVisitEnable) {
+                        for (i in shopDataList.indices) {
+                            if (hashSet.add(shopDataList[i]))
+                                newShopList.add(shopDataList[i])
+                        }
+                    }
 
-            val shopDurationApiReq = ShopDurationRequest()
-            shopDurationApiReq.user_id = Pref.user_id
-            shopDurationApiReq.session_token = Pref.session_token
-            if (newShopList.size > 0) {
-                XLog.e("Unique ShopData List size===> " + newShopList.size)
-                shopDurationApiReq.shop_list = newShopList
-            } else
-                shopDurationApiReq.shop_list = shopDataList
+                    val shopDurationApiReq = ShopDurationRequest()
+                    shopDurationApiReq.user_id = Pref.user_id
+                    shopDurationApiReq.session_token = Pref.session_token
+                    if (newShopList.size > 0) {
+                        XLog.e("Unique ShopData List size===> " + newShopList.size)
+                        shopDurationApiReq.shop_list = newShopList
+                    } else
+                        shopDurationApiReq.shop_list = shopDataList
 
-            val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
+                    val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
 
-            XLog.d("callShopDurationApi : REQUEST")
+                    XLog.d("callShopDurationApi : REQUEST")
 
-            compositeDisposable.add(
-                    repository.shopDuration(shopDurationApiReq)
+                    compositeDisposable.add(
+                        repository.shopDuration(shopDurationApiReq)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
 //                        .timeout(60 * 1, TimeUnit.SECONDS)
@@ -3088,10 +3348,14 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                 }
 
 
-//                                (mContext as DashboardActivity).showSnackMessage("ERROR")
+                                //(mContext as DashboardActivity).showSnackMessage("ERROR")
                             })
-            )
+                    )
+                }
+
+            }
         }
+
     }
 
 
