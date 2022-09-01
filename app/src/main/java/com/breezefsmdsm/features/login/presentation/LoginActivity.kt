@@ -7094,7 +7094,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         try {
             var currentDBPath = dbpath
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                currentDBPath="/data/user/0/com.demo/databases/fts_db"
+                currentDBPath="/data/user/0/com.breezefsmdsm/databases/fts_db"
             }
             val shareIntent = Intent(Intent.ACTION_SEND)
             val fileUrl = Uri.parse(File(currentDBPath, "").path);
@@ -7108,6 +7108,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             startActivity(Intent.createChooser(shareIntent, "Share log using"));
         } catch (e: Exception) {
             e.printStackTrace()
+            Toaster.msgLong(this, e.toString())
         }
     }
 }
