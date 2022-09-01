@@ -380,4 +380,6 @@ object Pref : PreferenceHolder() {
 
     var isLocationHintPermissionGranted: Boolean by bindToPreferenceField(false, "isLocationHintPermissionGranted")
     var AutostartPermissionStatus: Boolean by bindToPreferenceField(false, "AutostartPermissionStatus")
+
+    var WillRoomDBShareinLogin: Boolean by bindToPreferenceField(false, "WillRoomDBShareinLogin")
 }
