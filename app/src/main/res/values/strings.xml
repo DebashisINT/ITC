@@ -1521,4 +1521,5 @@
     <string name="login_net_disconnected1" translatable="false">Please switch on the internet.</string>
     <string name="login_net_connected1" translatable="false">You can login now.</string>
 
+    <string name="share_db" translatable="false">Share db</string>
 </resources>

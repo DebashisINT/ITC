@@ -5915,6 +5915,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             Pref.IsShowHomeLocationMap = response.getconfigure?.get(i)?.Value == "1"
                                         }
                                     }
+                                    else if (response.getconfigure?.get(i)?.Key.equals("WillRoomDBShareinLogin", ignoreCase = true)) {
+                                        Pref.WillRoomDBShareinLogin = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.WillRoomDBShareinLogin = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }
 
 
 

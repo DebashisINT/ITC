@@ -78,6 +78,23 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_10sdp" />
 
+        <com.breezefsmdsm.widgets.AppCustomTextView
+            android:id="@+id/activity_login_tvappdbLogs"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_gravity="center|center_vertical"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/selector_green_botton_bg_1"
+            android:gravity="center"
+            android:drawablePadding="@dimen/_5sdp"
+            android:drawableLeft="@drawable/ic_data_sync"
+            android:drawableTint="@color/white"
+            android:paddingHorizontal="@dimen/_30sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:text="@string/share_db"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp" />
+
     </LinearLayout>
 
       </LinearLayout>

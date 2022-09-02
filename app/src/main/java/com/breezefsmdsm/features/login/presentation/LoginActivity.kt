@@ -137,6 +137,7 @@ import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.io.*
+import java.nio.channels.FileChannel
 import java.util.*
 import java.util.concurrent.ExecutionException
 import kotlin.collections.ArrayList
@@ -3435,6 +3436,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 }
             }*/
 
+
+
             R.id.activity_login_tvappCustomAnydeskInfo -> {
                 val simpleDialog = Dialog(mContext)
                 simpleDialog.setCancelable(true)
@@ -3442,7 +3445,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 simpleDialog.setContentView(R.layout.dialog_settings)
                 val tvappCustomAnydesk = simpleDialog.findViewById(R.id.activity_login_tvappCustomAnydesk) as AppCustomTextView
                 val tvappCustomSharelog = simpleDialog.findViewById(R.id.activity_login_tvappCustomLogs) as AppCustomTextView
+                val tvappDbShare = simpleDialog.findViewById(R.id.activity_login_tvappdbLogs) as AppCustomTextView
 
+                if(Pref.WillRoomDBShareinLogin)
+                    tvappDbShare.visibility = View.VISIBLE
+                else
+                    tvappDbShare.visibility = View.GONE
+
+                tvappDbShare.setOnClickListener {
+                    copyFile()
+                    simpleDialog.dismiss()
+
+                }
                 tvappCustomAnydesk.setOnClickListener {
                     var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
                     if (launchIntent != null) {
@@ -5583,6 +5597,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     Pref.IsShowHomeLocationMap = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
+                                            else if (response.getconfigure?.get(i)?.Key.equals("WillRoomDBShareinLogin", ignoreCase = true)) {
+                                                Pref.WillRoomDBShareinLogin = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.WillRoomDBShareinLogin = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {
                                                 if (!TextUtilsDash.isEmpty(response.getconfigure?.get(i)?.Value)) {
@@ -7042,5 +7062,53 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             simpleDialog.cancel()
         })
         simpleDialog.show()
+    }
+
+    private fun copyFile() {
+        var ppath:String=""
+        try {
+            val sd = Environment.getExternalStorageDirectory()
+            val data = Environment.getDataDirectory()
+            if (sd.canWrite()) {
+                val currentDBPath = getDatabasePath("fts_db").absolutePath
+                val backupDBPath = "fts_db.db"
+                ppath = currentDBPath
+                val currentDB = File(currentDBPath)
+                val backupDB = File(sd, backupDBPath)
+                if (currentDB.exists()) {
+                    val src: FileChannel = FileInputStream(currentDB).getChannel()
+                    val dst: FileChannel = FileOutputStream(backupDB).getChannel()
+                    dst.transferFrom(src, 0, src.size())
+                    src.close()
+                    dst.close()
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+
+        openShareDB(ppath)
+
+    }
+    fun openShareDB(dbpath:String) {
+        try {
+            var currentDBPath = dbpath
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                currentDBPath="/data/user/0/com.breezefsmdsm/databases/fts_db"
+            }
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            val fileUrl = Uri.parse(File(currentDBPath, "").path);
+            val file = File(fileUrl.path)
+            if (!file.exists()) {
+                return
+            }
+            val uri: Uri = FileProvider.getUriForFile(this, applicationContext.packageName.toString() + ".provider", file)
+            shareIntent.type = "image/*"
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+            startActivity(Intent.createChooser(shareIntent, "Share log using"));
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toaster.msgLong(this, e.toString())
+        }
     }
 }
