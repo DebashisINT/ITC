@@ -126,6 +126,7 @@ import java.io.*
 import java.net.URL
 import java.time.LocalTime
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
 /**
@@ -398,8 +399,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     override fun onResume() {
         super.onResume()
-
-
         if (hbRecorder != null) {
             if (hbRecorder!!.isBusyRecording) {
                 iv_screen_status.setImageResource(R.drawable.green_round)
@@ -8003,6 +8002,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                                             dialogYes.setOnClickListener({ view ->
                                                 simpleDialog.cancel()
+                                                callShopActivityApiForActivityCheck()
                                             })
                                             simpleDialog.show()
 //                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
@@ -10311,9 +10311,64 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 }
             }
         }
+    }
 
+    private fun callShopActivityApiForActivityCheck() {
+
+        dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
+        val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        simpleDialogProcess.show()
+
+        var shopActivity = ShopActivityRequest()
+        shopActivity.user_id = Pref.user_id
+        shopActivity.session_token = Pref.session_token
+        shopActivity.date_span = "30"
+        shopActivity.from_date = ""
+        shopActivity.to_date = ""
+        val repository = ShopActivityRepositoryProvider.provideShopActivityRepository()
+
+        BaseActivity.compositeDisposable.add(
+            repository.fetchShopActivitynew(Pref.session_token!!, Pref.user_id!!, "30", "", "")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    var shopActityResponse = result as ShopActivityResponse
+                    simpleDialogProcess.dismiss()
+                    if (shopActityResponse.status == "200") {
+                        if(shopActityResponse.date_list!!.size>0){
+                            var actiList = shopActityResponse.date_list as ArrayList<ShopActivityResponseDataList>
+                            if(actiList!!.size>1){
+                                actiList.removeAt(actiList!!.size-1)
+                                updateActivityGarbage(actiList)
+                            }
+                        }
+                    }
+                }, { error ->
+                    simpleDialogProcess.dismiss()
+                    error.printStackTrace()
+                })
+        )
+    }
+
+    fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>){
+        doAsync {
+            for(i in 0..listUnsync.size-1){
+                var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(listUnsync.get(i)!!.date!!.toString()) as ArrayList<String>
+                var shopListApi : ArrayList<String> = listUnsync.get(i)?.shop_list!!.map { it.shopid } as ArrayList<String>
+                if(shopListRoom.size > shopListApi.size){
+                    var unsyncedList: List<String> = shopListRoom - shopListApi
+                    for(j in 0..unsyncedList.size-1){
+                        AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZero(false,unsyncedList.get(j),listUnsync.get(i)!!.date!!.toString())
+                    }
+                }
+            }
+            uiThread {
+                simpleDialogProcess.dismiss()
+            }
+        }
 
 
     }
+
 
 }

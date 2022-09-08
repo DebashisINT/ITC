@@ -177,4 +177,11 @@ interface ShopActivityDao {
     fun getNewShopActivityKey(shopId: String,isUploaded: Boolean): ShopActivityEntity
 
 
+
+    @Query("Select shopid from shop_activity where date=:date")
+    fun getAllShopActivityByDate(date:String): List<String>
+
+    @Query("update shop_activity set isUploaded=:isUploaded where shopid=:shopId and date=:date")
+    fun updateShopForIsuploadZero(isUploaded: Boolean, shopId: String, date: String)
+
 }
