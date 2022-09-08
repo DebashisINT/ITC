@@ -43,6 +43,7 @@ import com.breezefsmdsm.faceRec.FaceStartActivity
 import com.breezefsmdsm.faceRec.tflite.SimilarityClassifier
 import com.breezefsmdsm.faceRec.tflite.TFLiteObjectDetectionAPIModel
 import com.breezefsmdsm.features.SearchLocation.locationInfoModel
+import com.breezefsmdsm.features.addshop.api.AddShopRepositoryProvider
 import com.breezefsmdsm.features.addshop.api.assignToPPList.AssignToPPListRepoProvider
 import com.breezefsmdsm.features.addshop.api.assignedToDDList.AssignToDDListRepoProvider
 import com.breezefsmdsm.features.addshop.api.typeList.TypeListRepoProvider
@@ -8017,7 +8018,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             //(mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
 
                                             Handler().postDelayed(Runnable {
-                                                callShopDurationApi()
+                                                //callShopDurationApi()
+                                                syncShopListOnebyOne()
                                             }, 350)
 
 
@@ -9631,10 +9633,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
     private fun callShopDurationApi() {
-
-        dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
-        val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
-        simpleDialogProcess.show()
+        XLog.e("visit_tag : callShopDurationApi")
+        //dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
+        //val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        //simpleDialogProcess.show()
 
         var shopId = ""
         var previousShopVisitDateNumber = 0L
@@ -9932,5 +9934,386 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         )
     }
 
+    /////////////////////////////////////////////
+
+    private fun syncShopListOnebyOne() {
+        dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
+        val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        simpleDialogProcess.show()
+
+        val shopList = AppDatabase.getDBInstance()!!.addShopEntryDao().getUnSyncedShops(false)
+        if (shopList.isEmpty() || shopList.size==0){
+            callShopDurationApiOneByOne()
+        }else{
+            val addShopData = AddShopRequestData()
+            val mAddShopDBModelEntity = shopList[0]
+            addShopData.session_token = Pref.session_token
+            addShopData.address = mAddShopDBModelEntity.address
+            addShopData.owner_contact_no = mAddShopDBModelEntity.ownerContactNumber
+            addShopData.owner_email = mAddShopDBModelEntity.ownerEmailId
+            addShopData.owner_name = mAddShopDBModelEntity.ownerName
+            addShopData.pin_code = mAddShopDBModelEntity.pinCode
+            addShopData.shop_lat = mAddShopDBModelEntity.shopLat.toString()
+            addShopData.shop_long = mAddShopDBModelEntity.shopLong.toString()
+            addShopData.shop_name = mAddShopDBModelEntity.shopName.toString()
+            addShopData.type = mAddShopDBModelEntity.type.toString()
+            addShopData.shop_id = mAddShopDBModelEntity.shop_id
+            addShopData.user_id = Pref.user_id
+            addShopData.assigned_to_dd_id = mAddShopDBModelEntity.assigned_to_dd_id
+            addShopData.assigned_to_pp_id = mAddShopDBModelEntity.assigned_to_pp_id
+            addShopData.added_date = mAddShopDBModelEntity.added_date
+            addShopData.amount = mAddShopDBModelEntity.amount
+            addShopData.area_id = mAddShopDBModelEntity.area_id
+            addShopData.model_id = mAddShopDBModelEntity.model_id
+            addShopData.primary_app_id = mAddShopDBModelEntity.primary_app_id
+            addShopData.secondary_app_id = mAddShopDBModelEntity.secondary_app_id
+            addShopData.lead_id = mAddShopDBModelEntity.lead_id
+            addShopData.stage_id = mAddShopDBModelEntity.stage_id
+            addShopData.funnel_stage_id = mAddShopDBModelEntity.funnel_stage_id
+            addShopData.booking_amount = mAddShopDBModelEntity.booking_amount
+            addShopData.type_id = mAddShopDBModelEntity.type_id
+
+            addShopData.director_name = mAddShopDBModelEntity.director_name
+            addShopData.key_person_name = mAddShopDBModelEntity.person_name
+            addShopData.phone_no = mAddShopDBModelEntity.person_no
+
+            if (!TextUtils.isEmpty(mAddShopDBModelEntity.family_member_dob))
+                addShopData.family_member_dob = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.family_member_dob)
+
+            if (!TextUtils.isEmpty(mAddShopDBModelEntity.add_dob))
+                addShopData.addtional_dob = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.add_dob)
+
+            if (!TextUtils.isEmpty(mAddShopDBModelEntity.add_doa))
+                addShopData.addtional_doa = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.add_doa)
+
+            addShopData.specialization = mAddShopDBModelEntity.specialization
+            addShopData.category = mAddShopDBModelEntity.category
+            addShopData.doc_address = mAddShopDBModelEntity.doc_address
+            addShopData.doc_pincode = mAddShopDBModelEntity.doc_pincode
+            addShopData.is_chamber_same_headquarter = mAddShopDBModelEntity.chamber_status.toString()
+            addShopData.is_chamber_same_headquarter_remarks = mAddShopDBModelEntity.remarks
+            addShopData.chemist_name = mAddShopDBModelEntity.chemist_name
+            addShopData.chemist_address = mAddShopDBModelEntity.chemist_address
+            addShopData.chemist_pincode = mAddShopDBModelEntity.chemist_pincode
+            addShopData.assistant_contact_no = mAddShopDBModelEntity.assistant_no
+            addShopData.average_patient_per_day = mAddShopDBModelEntity.patient_count
+            addShopData.assistant_name = mAddShopDBModelEntity.assistant_name
+
+            if (!TextUtils.isEmpty(mAddShopDBModelEntity.doc_family_dob))
+                addShopData.doc_family_member_dob = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.doc_family_dob)
+
+            if (!TextUtils.isEmpty(mAddShopDBModelEntity.assistant_dob))
+                addShopData.assistant_dob = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.assistant_dob)
+
+            if (!TextUtils.isEmpty(mAddShopDBModelEntity.assistant_doa))
+                addShopData.assistant_doa = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.assistant_doa)
+
+            if (!TextUtils.isEmpty(mAddShopDBModelEntity.assistant_family_dob))
+                addShopData.assistant_family_dob = AppUtils.changeAttendanceDateFormatToCurrent(mAddShopDBModelEntity.assistant_family_dob)
+
+            addShopData.entity_id = mAddShopDBModelEntity.entity_id
+            addShopData.party_status_id = mAddShopDBModelEntity.party_status_id
+            addShopData.retailer_id = mAddShopDBModelEntity.retailer_id
+            addShopData.dealer_id = mAddShopDBModelEntity.dealer_id
+            addShopData.beat_id = mAddShopDBModelEntity.beat_id
+            addShopData.assigned_to_shop_id = mAddShopDBModelEntity.assigned_to_shop_id
+            addShopData.actual_address = mAddShopDBModelEntity.actual_address
+
+            var uniqKeyObj=AppDatabase.getDBInstance()!!.shopActivityDao().getNewShopActivityKey(mAddShopDBModelEntity.shop_id,false)
+            addShopData.shop_revisit_uniqKey=uniqKeyObj?.shop_revisit_uniqKey!!
+
+            // duplicate shop api call
+            addShopData.isShopDuplicate=mAddShopDBModelEntity.isShopDuplicate
+
+            callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, shopList, true,
+                mAddShopDBModelEntity.doc_degree)
+        }
+    }
+
+    fun callAddShopApi(addShop: AddShopRequestData, shop_imgPath: String?, shopList: MutableList<AddShopDBModelEntity>?,
+                       isFromInitView: Boolean, degree_imgPath: String?) {
+        if (!AppUtils.isOnline(mContext)) {
+            (this as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            return
+        }
+
+        val index = addShop.shop_id!!.indexOf("_")
+        if (shop_imgPath != null)
+            XLog.d("shop image path=======> $shop_imgPath")
+
+        if (degree_imgPath != null)
+            XLog.d("doctor degree image path=======> $degree_imgPath")
+
+        if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
+            val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.addShop(addShop)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val addShopResult = result as AddShopResponse
+                        XLog.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+
+                        when (addShopResult.status) {
+                            NetworkConstant.SUCCESS -> {
+                                AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
+
+                                syncShopListOnebyOne()
+                            }
+                            NetworkConstant.DUPLICATE_SHOP_ID -> {
+                                XLog.d("DuplicateShop : BaseActivity " + ", SHOP: " + addShop.shop_name)
+                                AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
+
+
+                                if (AppDatabase.getDBInstance()!!.addShopEntryDao().getDuplicateShopData(addShop.owner_contact_no).size > 0) {
+                                    AppDatabase.getDBInstance()!!.addShopEntryDao().deleteShopById(addShop.shop_id)
+                                    AppDatabase.getDBInstance()!!.shopActivityDao().deleteShopByIdAndDate(addShop.shop_id!!, AppUtils.getCurrentDateForShopActi())
+                                }
+                                doAsync {
+                                    uiThread {
+                                        syncShopListOnebyOne()
+                                    }
+                                }
+
+                            }
+                            else -> {
+                                (this as DashboardActivity).showSnackMessage(addShopResult.message!!)
+                            }
+                        }
+                    }, { error ->
+                        error.printStackTrace()
+                        (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
+                        if (error != null)
+                            XLog.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
+                    })
+            )
+        }
+        else {
+            val repository = AddShopRepositoryProvider.provideAddShopRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.addShopWithImage(addShop, shop_imgPath, degree_imgPath, mContext)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val addShopResult = result as AddShopResponse
+                        XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+
+                        when (addShopResult.status) {
+                            NetworkConstant.SUCCESS -> {
+                                AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
+
+
+                                doAsync {
+                                    uiThread {
+                                        syncShopListOnebyOne()
+                                    }
+                                }
+                            }
+                            NetworkConstant.DUPLICATE_SHOP_ID -> {
+                                XLog.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
+                                AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
+
+                                if (AppDatabase.getDBInstance()!!.addShopEntryDao().getDuplicateShopData(addShop.owner_contact_no).size > 0) {
+                                    AppDatabase.getDBInstance()!!.addShopEntryDao().deleteShopById(addShop.shop_id)
+                                    AppDatabase.getDBInstance()!!.shopActivityDao().deleteShopByIdAndDate(addShop.shop_id!!, AppUtils.getCurrentDateForShopActi())
+                                }
+                                doAsync {
+                                    uiThread {
+                                        syncShopListOnebyOne()
+                                    }
+                                }
+
+                            }
+                            else -> {
+                                (this as DashboardActivity).showSnackMessage(addShopResult.message!!)
+                            }
+                        }
+                    }, { error ->
+                        error.printStackTrace()
+                        (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
+                        if (error != null)
+                            XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
+                    })
+            )
+        }
+    }
+
+    fun callShopDurationApiOneByOne() {
+        var shopId = ""
+        var previousShopVisitDateNumber = 0L
+        var shopVisitDate = ""
+
+        var unsyncRevisitList = AppDatabase.getDBInstance()!!.shopActivityDao().getDurationCalculatedVisitedShopForAlDay(true,false)
+        if (unsyncRevisitList.isEmpty() || unsyncRevisitList.size==0){
+            callShopDurationApi()
+        }else{
+            XLog.e("visit_tag : callShopDurationApiOneByOne")
+            BaseActivity.isShopActivityUpdating = true
+            val shopDataList: MutableList<ShopDurationRequestData> = ArrayList()
+            val syncedShop = ArrayList<ShopActivityEntity>()
+            val revisitStatusList : MutableList<ShopRevisitStatusRequestData> = ArrayList()
+            doAsync {
+                if (!Pref.isMultipleVisitEnable) {
+                    var IsShopUploaded:Boolean = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(unsyncRevisitList[0].shopid).isUploaded
+                    if(IsShopUploaded){
+                        val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(unsyncRevisitList[0].shopid.toString(), true, false)
+                        if (shopActivity == null) {
+                            val shop_activity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForTodayShop(unsyncRevisitList[0].shopid.toString(),true, true,
+                                AppUtils.getCurrentDateForShopActi())
+                            if (shop_activity != null)
+                                syncedShop.add(shop_activity)
+
+                        }
+                        else {
+                            val shopDurationData = ShopDurationRequestData()
+                            shopDurationData.shop_id = shopActivity.shopid
+                            shopDurationData.spent_duration = shopActivity.duration_spent
+                            shopDurationData.visited_date = shopActivity.visited_date
+                            shopDurationData.visited_time = shopActivity.visited_date
+                            if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity.shopid) != null)
+                                shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity.shopid).totalVisitCount
+                            else
+                                shopDurationData.total_visit_count = "1"
+
+                            if (TextUtils.isEmpty(shopActivity.distance_travelled))
+                                shopActivity.distance_travelled = "0.0"
+                            shopDurationData.distance_travelled = shopActivity.distance_travelled
+
+                            val currentShopVisitDateNumber = AppUtils.getTimeStampFromDateOnly(shopActivity.date!!)
+
+                            if (shopId == shopActivity.shopid && previousShopVisitDateNumber == currentShopVisitDateNumber)
+                                return@doAsync
+
+                            shopId = shopActivity.shopid!!
+                            shopVisitDate = shopActivity.date!!
+                            previousShopVisitDateNumber = currentShopVisitDateNumber
+
+                            if (!TextUtils.isEmpty(shopActivity.feedback))
+                                shopDurationData.feedback = shopActivity.feedback
+                            else
+                                shopDurationData.feedback = ""
+
+                            shopDurationData.isFirstShopVisited = shopActivity.isFirstShopVisited
+                            shopDurationData.distanceFromHomeLoc = shopActivity.distance_from_home_loc
+
+                            shopDurationData.next_visit_date = shopActivity.next_visit_date
+
+                            if (!TextUtils.isEmpty(shopActivity.early_revisit_reason))
+                                shopDurationData.early_revisit_reason = shopActivity.early_revisit_reason
+                            else
+                                shopDurationData.early_revisit_reason = ""
+
+                            shopDurationData.device_model = shopActivity.device_model
+                            shopDurationData.android_version = shopActivity.android_version
+                            shopDurationData.battery = shopActivity.battery
+                            shopDurationData.net_status = shopActivity.net_status
+                            shopDurationData.net_type = shopActivity.net_type
+                            shopDurationData.in_time = shopActivity.in_time
+                            shopDurationData.out_time = shopActivity.out_time
+                            shopDurationData.start_timestamp = shopActivity.startTimeStamp
+                            shopDurationData.in_location = shopActivity.in_loc
+                            shopDurationData.out_location = shopActivity.out_loc
+                            shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+
+                            //duration garbage fix
+                            try{
+                                if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                                {
+                                    shopDurationData.spent_duration="00:00:10"
+                                }
+                            }catch (ex:Exception){
+                                shopDurationData.spent_duration="00:00:10"
+                            }
+
+                            shopDataList.add(shopDurationData)
+
+                            //////////////////////////
+                            var revisitStatusObj=ShopRevisitStatusRequestData()
+                            var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                            if(data != null ){
+                                revisitStatusObj.shop_id=data.shop_id
+                                revisitStatusObj.order_status=data.order_status
+                                revisitStatusObj.order_remarks=data.order_remarks
+                                revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                                revisitStatusList.add(revisitStatusObj)
+                            }
+                        }
+
+                    }
+                }
+                uiThread {
+                    if (shopDataList.isEmpty()) {
+                        callShopDurationApi()
+                    }
+                    else {
+                        val hashSet = HashSet<ShopDurationRequestData>()
+                        val newShopList = ArrayList<ShopDurationRequestData>()
+                        if (!Pref.isMultipleVisitEnable) {
+                            for (i in shopDataList.indices) {
+                                if (hashSet.add(shopDataList[i]))
+                                    newShopList.add(shopDataList[i])
+                            }
+                        }
+                        val shopDurationApiReq = ShopDurationRequest()
+                        shopDurationApiReq.user_id = Pref.user_id
+                        shopDurationApiReq.session_token = Pref.session_token
+                        if (newShopList.size > 0) {
+                            shopDurationApiReq.shop_list = newShopList
+                        } else
+                            shopDurationApiReq.shop_list = shopDataList
+
+                        val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
+                        compositeDisposable.add(
+                            repository.shopDuration(shopDurationApiReq)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ result ->
+                                    XLog.d("callShopDurationApi : RESPONSE " + result.status)
+                                    if (result.status == NetworkConstant.SUCCESS) {
+                                        if(!revisitStatusList.isEmpty()){
+                                            callRevisitStatusUploadApi(revisitStatusList!!)
+                                        }
+                                        if (newShopList.size > 0) {
+                                            for (i in 0 until newShopList.size) {
+                                                AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, newShopList[i].shop_id!!, AppUtils.changeAttendanceDateFormatToCurrent(newShopList[i].visited_date!!) /*AppUtils.getCurrentDateForShopActi()*/)
+                                            }
+                                        } else {
+                                            if (!Pref.isMultipleVisitEnable) {
+                                                for (i in 0 until shopDataList.size) {
+                                                    AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, shopDataList[i].shop_id!!, AppUtils.changeAttendanceDateFormatToCurrent(shopDataList[i].visited_date!!) /*AppUtils.getCurrentDateForShopActi()*/)
+                                                }
+                                            }
+                                            else {
+                                                for (i in 0 until shopDataList.size) {
+                                                    AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, shopDataList[i].shop_id!!, AppUtils.changeAttendanceDateFormatToCurrent(shopDataList[i].visited_date!!), shopDataList[i].start_timestamp!!)
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Handler().postDelayed(Runnable {
+                                        callShopDurationApiOneByOne()
+                                    }, 150)
+                                    BaseActivity.isShopActivityUpdating = false
+                                }, { error ->
+                                    callShopDurationApi()
+                                    BaseActivity.isShopActivityUpdating = false
+                                    if (error == null) {
+                                        XLog.d("callShopDurationApi : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
+                                    } else {
+                                        XLog.d("callShopDurationApi : ERROR " + error.localizedMessage)
+                                        error.printStackTrace()
+                                    }
+                                })
+                        )
+                    }
+
+                }
+            }
+        }
+
+
+
+    }
 
 }

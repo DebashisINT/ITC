@@ -903,8 +903,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     private fun checkAutoRevisit() {
-
-
         if (!Pref.isAddAttendence) {
             XLog.e("====================Attendance is not given (Location Fuzed Service)====================")
             return
@@ -2498,7 +2496,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 6) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 3) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -3037,7 +3035,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         if (shop_activity != null)
                             syncedShop.add(shop_activity)
 
-                    } else {
+                    }
+                    else {
                         val shopDurationData = ShopDurationRequestData()
                         shopDurationData.shop_id = shopActivity.shopid
                         shopDurationData.spent_duration = shopActivity.duration_spent
@@ -3100,8 +3099,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                         shopDataList.add(shopDurationData)
 
-
-
                         //////////////////////////
                         var revisitStatusObj=ShopRevisitStatusRequestData()
                         var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
@@ -3113,6 +3110,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                             revisitStatusList.add(revisitStatusObj)
                         }
 
+                        break
 
 
                         XLog.d("====SYNC VISITED SHOP DATA (LOCATION FUZED SERVICE)====")
