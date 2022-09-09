@@ -10025,8 +10025,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             // duplicate shop api call
             addShopData.isShopDuplicate=mAddShopDBModelEntity.isShopDuplicate
 
-            callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, shopList, true,
-                mAddShopDBModelEntity.doc_degree)
+
+            Handler().postDelayed(Runnable {
+                callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, shopList, true,
+                    mAddShopDBModelEntity.doc_degree)
+            }, 150)
+
+
         }
     }
 
@@ -10339,7 +10344,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             var actiList = shopActityResponse.date_list as ArrayList<ShopActivityResponseDataList>
                             if(actiList!!.size>1){
                                 actiList.removeAt(actiList!!.size-1)
-                                updateActivityGarbage(actiList)
+                                Handler().postDelayed(Runnable {
+                                    updateActivityGarbage(actiList)
+                                }, 150)
+
                             }
                         }
                     }
