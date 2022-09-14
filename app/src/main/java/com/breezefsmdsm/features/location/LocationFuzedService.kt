@@ -47,6 +47,12 @@ import com.breezefsmdsm.base.presentation.BaseActivity.Companion.isMeetingUpdati
 import com.breezefsmdsm.base.presentation.BaseActivity.Companion.isShopActivityUpdating
 import com.breezefsmdsm.features.addshop.api.AddShopRepositoryProvider
 import com.breezefsmdsm.features.addshop.model.AddShopRequestCompetetorImg
+import com.breezefsmdsm.features.averageshop.api.ShopActivityRepositoryProvider
+import com.breezefsmdsm.features.averageshop.model.ShopActivityRequest
+import com.breezefsmdsm.features.averageshop.model.ShopActivityResponse
+import com.breezefsmdsm.features.averageshop.model.ShopActivityResponseDataList
+import com.breezefsmdsm.features.commondialogsinglebtn.CommonDialogSingleBtn
+import com.breezefsmdsm.features.commondialogsinglebtn.OnDialogClickListener
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.dashboard.presentation.SystemEventReceiver
 import com.breezefsmdsm.features.dashboard.presentation.api.ShopVisitImageUploadRepoProvider
@@ -66,6 +72,7 @@ import com.breezefsmdsm.features.orderhistory.api.LocationUpdateRepositoryProvid
 import com.breezefsmdsm.features.orderhistory.model.LocationData
 import com.breezefsmdsm.features.orderhistory.model.LocationUpdateRequest
 import com.breezefsmdsm.mappackage.SendBrod.Companion.monitorNotiID
+import com.breezefsmdsm.widgets.AppCustomTextView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -578,6 +585,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             XLog.d("onLocationChanged : loc_update error" + AppUtils.getCurrentDateTime())
         }
 
+        //Pref.CommonAINotification = true
+        //showAttendNotification()
+
         //XLog.d("onLocationChanged : LocationFuzedService " + AppUtils.getCurrentDateTime())
 
         if (Pref.login_date != AppUtils.getCurrentDateChanged()) {
@@ -742,6 +752,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                 //saveAllLocation(location)
                 checkMeetingDistance()
+
 
                 /*Sync all data*/
                 if(Pref.IsShowDayStart){
@@ -1573,6 +1584,41 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         val notification = NotificationUtils(getString(R.string.app_name), "", "", "")
         val body = "Thanks for being active. Your current location detected as: " + LocationWizard.getLocationName(this, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
         notification.sendLocNotification(this, body)
+    }
+
+    private var attendanceAlertDialog: CommonDialogSingleBtn? = null
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showAttendNotification() {
+
+
+        var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(AppUtils.getCurrentDateForShopActi()) as ArrayList<String>
+        var timeGapMin = 30
+        if(!Pref.isAddAttendence)
+            timeGapMin = 5
+        else if(Pref.IsShowDayStart && !Pref.DayStartMarked)
+            timeGapMin = 5
+        else if(shopListRoom.size==0){
+            timeGapMin = 30
+        }
+
+        if ( !shouldUpdateAttendanceNotificationDuration(timeGapMin)) {
+            XLog.e("===============Should not show notification data(Location Fuzed Service)==============")
+            return
+        }
+
+
+        val intent = Intent()
+        intent.action = "IDEAL_ATTEND_BROADCAST"
+        if(!Pref.isAddAttendence)
+            intent.putExtra("data_msg","Please mark your attendance for today. Thanks.")
+        else if(Pref.IsShowDayStart && !Pref.DayStartMarked)
+            intent.putExtra("data_msg","Please start your day for today. Thanks.")
+        else if(shopListRoom.size==0){
+            intent.putExtra("data_msg","Please visit/revisit shops. Thanks.")
+        }else
+            intent.putExtra("data_msg","")
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+
     }
 
 
@@ -2496,7 +2542,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 3) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 5) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2547,6 +2593,19 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         }
     }
 
+    private fun shouldRevisitGarbageFixComplete(): Boolean {
+        AppUtils.changeLanguage(this,"en")
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageDurationTimeStamp) > 1000 * 60 * 10) {
+            Pref.prevRevisitGarbageDurationTimeStamp = System.currentTimeMillis()
+            changeLocale()
+            true
+            //server timestamp is within 5 minutes of current system time
+        } else {
+            changeLocale()
+            false
+        }
+    }
+
     private fun shouldUpdateMeetingDuration(): Boolean {
         AppUtils.changeLanguage(this,"en")
         XLog.e("PREVIOUS MEETING SYNC API CALL TIME==================> " + getDateTimeFromTimeStamp(Pref.prevMeetingDurationTimeStamp))
@@ -2586,6 +2645,19 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         return if (abs(System.currentTimeMillis() - Pref.prevBatNetSyncTimeStamp) > 1000 * 60 * 15) {
             Pref.prevBatNetSyncTimeStamp = System.currentTimeMillis()
+            changeLocale()
+            true
+            //server timestamp is within 10 minutes of current system time
+        } else {
+            changeLocale()
+            false
+        }
+    }
+
+    private fun shouldUpdateAttendanceNotificationDuration(timeGapMin:Int): Boolean {
+        AppUtils.changeLanguage(this,"en")
+        return if (abs(System.currentTimeMillis() - Pref.prevAttendanceNotiDurationTimeStamp) > 1000 * 60 * timeGapMin) {
+            Pref.prevAttendanceNotiDurationTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
             //server timestamp is within 10 minutes of current system time
@@ -3109,9 +3181,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                             revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
                             revisitStatusList.add(revisitStatusObj)
                         }
-
-                        break
-
 
                         XLog.d("====SYNC VISITED SHOP DATA (LOCATION FUZED SERVICE)====")
                         XLog.d("SHOP ID======> " + shopDurationData.shop_id)

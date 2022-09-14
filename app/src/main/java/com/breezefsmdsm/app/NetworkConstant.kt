@@ -28,12 +28,12 @@ class NetworkConstant {
         //var BASE_URL = "http://fts.indusnettechnologies.com:8094/API/"
         //var ADD_SHOP_BASE_URL = "http://fts.indusnettechnologies.com:8094/"
 
-        var BASE_URL = "http://fts.indusnettechnologies.com:7007/API/"
-        var ADD_SHOP_BASE_URL = "http://fts.indusnettechnologies.com:7007/"
+        //var BASE_URL = "http://fts.indusnettechnologies.com:7007/API/"
+        //var ADD_SHOP_BASE_URL = "http://fts.indusnettechnologies.com:7007/"
 
 
-        //var BASE_URL = "http://3.7.30.86:82/API/"  //  local
-        //var ADD_SHOP_BASE_URL = "http://3.7.30.86:82/"  //  local
+        var BASE_URL = "http://3.7.30.86:82/API/"  //  local
+        var ADD_SHOP_BASE_URL = "http://3.7.30.86:82/"  //  local
 
 
         //LIVE
@@ -82,9 +82,9 @@ class NetworkConstant {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             return OkHttpClient().newBuilder()
-                    .connectTimeout(60 * 10, TimeUnit.SECONDS)
-                    .readTimeout(60 * 10, TimeUnit.SECONDS)
-                    .writeTimeout(60 * 10, TimeUnit.SECONDS)
+                    .connectTimeout(60 * 30, TimeUnit.SECONDS)
+                    .readTimeout(60 * 30, TimeUnit.SECONDS)
+                    .writeTimeout(60 * 30, TimeUnit.SECONDS)
                     .addInterceptor(loggingInterceptor)
                     .retryOnConnectionFailure(false)
                     .build()
@@ -96,9 +96,9 @@ class NetworkConstant {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             return OkHttpClient().newBuilder()
-                    .connectTimeout(60 * 3, TimeUnit.SECONDS)
-                    .readTimeout(60 * 3, TimeUnit.SECONDS)
-                    .writeTimeout(60 * 3, TimeUnit.SECONDS)
+                    .connectTimeout(60 * 30, TimeUnit.SECONDS)
+                    .readTimeout(60 * 30, TimeUnit.SECONDS)
+                    .writeTimeout(60 * 30, TimeUnit.SECONDS)
                     .addInterceptor(loggingInterceptor)
                     .retryOnConnectionFailure(false)
                     .build()
@@ -110,9 +110,9 @@ class NetworkConstant {
             loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
             return OkHttpClient().newBuilder()
-                    .connectTimeout(60 * 4, TimeUnit.SECONDS)
-                    .readTimeout(60 * 4, TimeUnit.SECONDS)
-                    .writeTimeout(60 * 4, TimeUnit.SECONDS)
+                    .connectTimeout(60 * 30, TimeUnit.SECONDS)
+                    .readTimeout(60 * 30, TimeUnit.SECONDS)
+                    .writeTimeout(60 * 30, TimeUnit.SECONDS)
                     .addInterceptor(loggingInterceptor)
                     .retryOnConnectionFailure(false)
                     .build()

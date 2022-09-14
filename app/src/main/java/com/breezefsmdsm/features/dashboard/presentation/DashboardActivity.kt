@@ -461,6 +461,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     lateinit var teamHierarchy: ArrayList<String>
     private var idealLocAlertDialog: CommonDialogSingleBtn? = null
+    private var attendNotiAlertDialog: CommonDialogSingleBtn? = null
     private var forceLogoutDialog: CommonDialogSingleBtn? = null
 
     public fun setSearchListener(searchListener: SearchListener) {
@@ -741,6 +742,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         LocalBroadcastManager.getInstance(this).registerReceiver(fcmClearDataReceiver, IntentFilter("FCM_ACTION_RECEIVER_CLEAR_DATA"))
         LocalBroadcastManager.getInstance(this).registerReceiver(fcmReceiver, IntentFilter("FCM_ACTION_RECEIVER"))
         LocalBroadcastManager.getInstance(this).registerReceiver(idealLocReceiver, IntentFilter("IDEAL_LOC_BROADCAST"))
+        LocalBroadcastManager.getInstance(this).registerReceiver(attendNotiReceiver, IntentFilter("IDEAL_ATTEND_BROADCAST"))
         LocalBroadcastManager.getInstance(this).registerReceiver(collectionAlertReceiver, IntentFilter("ALERT_RECIEVER_BROADCAST"))
         LocalBroadcastManager.getInstance(this).registerReceiver(forceLogoutReceiver, IntentFilter("FORCE_LOGOUT_BROADCAST"))
         LocalBroadcastManager.getInstance(this).registerReceiver(autoRevisit, IntentFilter("AUTO_REVISIT_BROADCAST"))
@@ -1502,6 +1504,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         if (idealLocReceiver != null) {
             LocalBroadcastManager.getInstance(this).unregisterReceiver(idealLocReceiver)
+        }
+
+        if (attendNotiReceiver != null) {
+            LocalBroadcastManager.getInstance(this).unregisterReceiver(attendNotiReceiver)
         }
 
         if (fcmReceiver != null)
@@ -10732,6 +10738,32 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 })//.show(supportFragmentManager, "CommonDialogSingleBtn")
 
                 idealLocAlertDialog?.show(supportFragmentManager, "CommonDialogSingleBtn")
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private val attendNotiReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            try {
+                if (attendNotiAlertDialog != null) {
+                    attendNotiAlertDialog?.dismissAllowingStateLoss()
+                    attendNotiAlertDialog = null
+                }
+
+                var msg:String = intent.getStringExtra("data_msg").toString()
+                if(msg==null || msg.length==0)
+                    return
+
+                attendNotiAlertDialog = CommonDialogSingleBtn.getInstance(AppUtils.hiFirstNameText(), msg!!, getString(R.string.ok), object : OnDialogClickListener {
+                    override fun onOkClick() {
+
+                    }
+                })
+
+                attendNotiAlertDialog?.show(supportFragmentManager, "CommonDialogSingleBtn")
 
             } catch (e: Exception) {
                 e.printStackTrace()

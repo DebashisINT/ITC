@@ -611,7 +611,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         simpleDialogProcess = Dialog(mContext)
         simpleDialogProcess.setCancelable(false)
         simpleDialogProcess.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        simpleDialogProcess.setContentView(R.layout.dialog_message)
+        simpleDialogProcess.setContentView(R.layout.dialog_message_progress)
         dialogHeaderProcess = simpleDialogProcess.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
         dialog_yes_no_headerTVProcess = simpleDialogProcess.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
 
@@ -2347,8 +2347,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
             R.id.fab -> {
-
-
                 if (!Pref.isAddAttendence)
                     (mContext as DashboardActivity).checkToShowAddAttendanceAlert()
                 else {
@@ -9747,6 +9745,35 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     revisitStatusList.add(revisitStatusObj)
                                 }
                             }
+
+                            try{
+                                XLog.d("====SYNC VISITED SHOP DATA (Dashboard)====")
+                                XLog.d("SHOP ID======> " + shopDurationData!!.shop_id)
+                                XLog.d("SPENT DURATION======> " + shopDurationData!!.spent_duration)
+                                XLog.d("VISIT DATE=========> " + shopDurationData?.visited_date)
+                                XLog.d("VISIT DATE TIME==========> " + shopDurationData?.visited_date)
+                                XLog.d("TOTAL VISIT COUNT========> " + shopDurationData?.total_visit_count)
+                                XLog.d("DISTANCE TRAVELLED========> " + shopDurationData?.distance_travelled)
+                                XLog.d("FEEDBACK========> " + shopDurationData?.feedback)
+                                XLog.d("isFirstShopVisited========> " + shopDurationData?.isFirstShopVisited)
+                                XLog.d("distanceFromHomeLoc========> " + shopDurationData?.distanceFromHomeLoc)
+                                XLog.d("next_visit_date========> " + shopDurationData?.next_visit_date)
+                                XLog.d("device_model========> " + shopDurationData?.device_model)
+                                XLog.d("android_version========> " + shopDurationData?.android_version)
+                                XLog.d("battery========> " + shopDurationData?.battery)
+                                XLog.d("net_status========> " + shopDurationData?.net_status)
+                                XLog.d("net_type========> " + shopDurationData?.net_type)
+                                XLog.d("in_time========> " + shopDurationData?.in_time)
+                                XLog.d("out_time========> " + shopDurationData?.out_time)
+                                XLog.d("start_timestamp========> " + shopDurationData?.start_timestamp)
+                                XLog.d("in_location========> " + shopDurationData?.in_location)
+                                XLog.d("out_location========> " + shopDurationData?.out_location)
+                                XLog.d("========================================================")
+                            }catch (ex:Exception){
+
+                            }
+
+
                         }
                         else {
                             val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShopList(syncedShopList[k].shop_id, true,
@@ -9939,11 +9966,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private fun syncShopListOnebyOne() {
         dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
         val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        val progD = simpleDialogProcess.findViewById(R.id.progress_wheel_progress) as ProgressWheel
+        progD.spin()
         simpleDialogProcess.show()
 
         val shopList = AppDatabase.getDBInstance()!!.addShopEntryDao().getUnSyncedShops(false)
         if (shopList.isEmpty() || shopList.size==0){
-            callShopDurationApiOneByOne()
+            //callShopDurationApiOneByOne()
+            callShopDurationApi()
         }else{
             val addShopData = AddShopRequestData()
             val mAddShopDBModelEntity = shopList[0]
@@ -10029,7 +10059,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             Handler().postDelayed(Runnable {
                 callAddShopApi(addShopData, mAddShopDBModelEntity.shopImageLocalPath, shopList, true,
                     mAddShopDBModelEntity.doc_degree)
-            }, 150)
+            }, 100)
 
 
         }
@@ -10041,7 +10071,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             (this as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             return
         }
-
         val index = addShop.shop_id!!.indexOf("_")
         if (shop_imgPath != null)
             XLog.d("shop image path=======> $shop_imgPath")
@@ -10088,6 +10117,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     }, { error ->
                         error.printStackTrace()
                         (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
+                        syncShopListOnebyOne()
                         if (error != null)
                             XLog.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
                     })
@@ -10136,6 +10166,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     }, { error ->
                         error.printStackTrace()
                         (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
+                        syncShopListOnebyOne()
                         if (error != null)
                             XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
                     })
@@ -10322,6 +10353,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
         dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
         val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        val progD = simpleDialogProcess.findViewById(R.id.progress_wheel_progress) as ProgressWheel
+        progD.spin()
         simpleDialogProcess.show()
 
         var shopActivity = ShopActivityRequest()
@@ -10374,8 +10407,6 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 simpleDialogProcess.dismiss()
             }
         }
-
-
     }
 
 

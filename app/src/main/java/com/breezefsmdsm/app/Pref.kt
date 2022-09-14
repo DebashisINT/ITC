@@ -5,6 +5,7 @@ import com.marcinmoskala.kotlinpreferences.PreferenceHolder
 /**
  * Created by Pratishruti on 08-11-2017.
  */
+
 object Pref : PreferenceHolder() {
     var text: String? by bindToPreferenceFieldNullable()
     var num: Int by bindToPreferenceField(0, "SomeIntKey")
@@ -382,4 +383,8 @@ object Pref : PreferenceHolder() {
     var AutostartPermissionStatus: Boolean by bindToPreferenceField(false, "AutostartPermissionStatus")
 
     var WillRoomDBShareinLogin: Boolean by bindToPreferenceField(false, "WillRoomDBShareinLogin")
+    var CommonAINotification: Boolean by bindToPreferenceField(false, "CommonAINotification")
+
+    var prevAttendanceNotiDurationTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceNotiDurationTimeStamp")
+    var prevRevisitGarbageDurationTimeStamp: Long by bindToPreferenceField(0, "prevRevisitGarbageDurationTimeStamp")
 }
