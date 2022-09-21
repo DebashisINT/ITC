@@ -384,6 +384,7 @@ object Pref : PreferenceHolder() {
 
     var WillRoomDBShareinLogin: Boolean by bindToPreferenceField(false, "WillRoomDBShareinLogin")
     var CommonAINotification: Boolean by bindToPreferenceField(false, "CommonAINotification")
+    var IsFaceRecognitionOnEyeblink: Boolean by bindToPreferenceField(false, "IsFaceRecognitionOnEyeblink")
 
     var prevAttendanceNotiDurationTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceNotiDurationTimeStamp")
     var prevRevisitGarbageDurationTimeStamp: Long by bindToPreferenceField(0, "prevRevisitGarbageDurationTimeStamp")

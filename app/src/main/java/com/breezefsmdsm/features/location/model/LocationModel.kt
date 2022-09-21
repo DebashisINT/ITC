@@ -8,7 +8,10 @@ import java.io.Serializable
  */
 data class AppInfoInputModel(var session_token: String = "",
                              var user_id: String = "",
-                             var app_info_list: ArrayList<AppInfoDataModel>?= null): Serializable
+                             var app_info_list: ArrayList<AppInfoDataModel>?= null,
+                             var total_visit_revisit_count: String = "",
+                             var total_visit_revisit_count_synced:String ="",
+                             var total_visit_revisit_count_unsynced:String = ""): Serializable
 
 data class AppInfoDataModel(var id: String = "",
                             var date_time: String = "",

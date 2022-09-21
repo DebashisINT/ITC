@@ -573,7 +573,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
       }else{
         isTrueFace=false;
       }
-      isTrueFace=true;
+      if(!CustomStatic.IsFaceRecognitionOnEyeblink)
+        isTrueFace=true;
 
       //LOGGER.i("face_match eye "+ f.toString()+ " " + ff.toString());
       //isTrueFace=true;

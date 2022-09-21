@@ -73,6 +73,7 @@ import com.breezefsmdsm.features.location.LocationFuzedService
 import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
 import com.breezefsmdsm.features.location.UserLocationDataEntity
+import com.breezefsmdsm.features.location.api.LocationRepoProvider
 import com.breezefsmdsm.features.location.model.*
 import com.breezefsmdsm.features.location.shopRevisitStatus.ShopRevisitStatusRepositoryProvider
 import com.breezefsmdsm.features.location.shopdurationapi.ShopDurationRepositoryProvider
@@ -645,6 +646,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     simpleDialogV.cancel()
                     CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                     CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
+                    CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                     val stat = StatFs(Environment.getExternalStorageDirectory().path)
                     val bytesAvailable: Long
                     bytesAvailable =
@@ -959,6 +961,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             } else {
                 CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                 CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
+                CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                 val stat = StatFs(Environment.getExternalStorageDirectory().path)
                 val bytesAvailable: Long
                 bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -1297,6 +1300,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     simpleDialogV.cancel()
                     CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                     CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
+                    CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                     val stat = StatFs(Environment.getExternalStorageDirectory().path)
                     val bytesAvailable: Long
                     bytesAvailable =
@@ -1405,6 +1409,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             } else {
                 CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                 CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
+                CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                 val stat = StatFs(Environment.getExternalStorageDirectory().path)
                 val bytesAvailable: Long
                 bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -1537,6 +1542,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     simpleDialogV.cancel()
                     CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                     CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
+                    CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                     val stat = StatFs(Environment.getExternalStorageDirectory().path)
                     val bytesAvailable: Long
                     bytesAvailable =
@@ -1641,6 +1647,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             } else {
                 CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                 CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
+                CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                 val stat = StatFs(Environment.getExternalStorageDirectory().path)
                 val bytesAvailable: Long
                 bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -5918,6 +5925,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                             Pref.WillRoomDBShareinLogin = response.getconfigure?.get(i)?.Value == "1"
                                         }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("CommonAINotification", ignoreCase = true)) {
+                                        Pref.CommonAINotification = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.CommonAINotification = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsFaceRecognitionOnEyeblink", ignoreCase = true)) {
+                                        Pref.IsFaceRecognitionOnEyeblink = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsFaceRecognitionOnEyeblink = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                        CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                                     }
 
 
@@ -9906,17 +9924,29 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             }
                                             BaseActivity.isShopActivityUpdating = false
                                             simpleDialogProcess.dismiss()
-                                            (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                            if(Pref.isAppInfoEnable){
+                                                callAppInfoApi()
+                                            }else{
+                                                (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                            }
                                         }else{
                                             BaseActivity.isShopActivityUpdating = false
                                             simpleDialogProcess.dismiss()
-                                            (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                            if(Pref.isAppInfoEnable){
+                                                callAppInfoApi()
+                                            }else{
+                                                (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                            }
                                         }
                                         BaseActivity.isShopActivityUpdating = false
                                     }, { error ->
                                         BaseActivity.isShopActivityUpdating = false
                                         simpleDialogProcess.dismiss()
-                                        (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                        if(Pref.isAppInfoEnable){
+                                            callAppInfoApi()
+                                        }else{
+                                            (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                                        }
                                         if (error == null) {
                                             XLog.d("callShopDurationApi : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
                                         } else {
@@ -9959,6 +9989,63 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     }
                 })
         )
+    }
+
+    private fun callAppInfoApi() {
+        try{
+            if (Pref.isAppInfoEnable) {
+
+                doAsync {
+
+                    val stat = StatFs(Environment.getExternalStorageDirectory().path)
+                    val totalSt = StatFs(Environment.getExternalStorageDirectory().path)
+                    val bytesAvailable: Long
+                    bytesAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        stat.blockSizeLong * stat.availableBlocksLong
+                    } else {
+                        stat.blockSize.toLong() * stat.availableBlocks.toLong()
+                    }
+                    val bytesTotal: Long
+                    bytesTotal = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        totalSt.blockCountLong * totalSt.blockSizeLong
+                    } else {
+                        totalSt.blockCountLong.toLong() * totalSt.blockSizeLong.toLong()
+                    }
+                    val megAvailable = bytesAvailable / (1024 * 1024)
+                    val megTotal = bytesTotal / (1024 * 1024)
+                    println("phone_storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime());
+                    val batNetEntity = BatteryNetStatusEntity()
+                    AppDatabase.getDBInstance()?.batteryNetDao()?.insert(batNetEntity.apply {
+                        AppUtils.changeLanguage(mContext,"en")
+                        bat_net_id = Pref.user_id + "_batNet_" + System.currentTimeMillis()
+                        changeLocale()
+                        date_time = AppUtils.getCurrentISODateTime()
+                        date = AppUtils.getCurrentDateForShopActi()
+                        bat_status = AppUtils.getBatteryStatus(mContext)
+                        bat_level = AppUtils.getBatteryPercentage(mContext).toString()
+                        net_type = AppUtils.getNetworkType(mContext)
+                        mob_net_type = AppUtils.mobNetType(mContext)
+                        device_model = AppUtils.getDeviceName()
+                        android_version = Build.VERSION.SDK_INT.toString()
+                        Available_Storage= megAvailable.toString()+"mb"
+                        Total_Storage=megTotal.toString()+"mb"
+                        isUploaded = false
+                    })
+
+                    uiThread {
+                        (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                    }
+                }
+
+
+
+            }else{
+                (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+            }
+        }catch (ex:Exception){
+            (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+        }
+
     }
 
     /////////////////////////////////////////////

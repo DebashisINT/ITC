@@ -290,7 +290,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         })
 
-        println("load_frag "+mFragType.toString() + " gl: "+Pref.Show_App_Logout_Notification_Global + " usr: "+Pref.user_id)
+        println("load_frag "+mFragType.toString() + " gl: "+ Pref.approvedOutTime + " usr: "+Pref.user_id)
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
@@ -7781,12 +7781,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     } else {
                         when {
                             getCurrentFragType() == FragType.RegisTerFaceFragment -> {
-                                val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
+                                val fileSize = AppUtils.getCompressOldImageForFace(resultUri.toString(), this)
                                 getAddFacePic(fileSize, resultUri)
                             }
 
                             getCurrentFragType() == FragType.PhotoRegAadhaarFragment -> {
-                                val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
+                                val fileSize = AppUtils.getCompressOldImageForFace(resultUri.toString(), this)
                                 getAddAadhaarVerifyPic(fileSize, resultUri)
                             }
                             getCurrentFragType() == FragType.AddShopFragment -> {

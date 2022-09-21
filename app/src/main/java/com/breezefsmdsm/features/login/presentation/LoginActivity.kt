@@ -3340,6 +3340,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         when (p0!!.id) {
             R.id.login_TV -> {
 
+                Pref.prevAttendanceNotiDurationTimeStamp = System.currentTimeMillis()
+
                 Pref.DayStartMarked = false
                 Pref.DayEndMarked = false
                 XLog.d("R.id.login_TV : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
@@ -5602,6 +5604,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.WillRoomDBShareinLogin = response.getconfigure?.get(i)?.Value == "1"
                                                 }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("CommonAINotification", ignoreCase = true)) {
+                                                Pref.CommonAINotification = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.CommonAINotification = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsFaceRecognitionOnEyeblink", ignoreCase = true)) {
+                                                Pref.IsFaceRecognitionOnEyeblink = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsFaceRecognitionOnEyeblink = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                                CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
                                             }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {

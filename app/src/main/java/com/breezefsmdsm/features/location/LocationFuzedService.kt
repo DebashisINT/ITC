@@ -585,8 +585,13 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             XLog.d("onLocationChanged : loc_update error" + AppUtils.getCurrentDateTime())
         }
 
-        //Pref.CommonAINotification = true
-        //showAttendNotification()
+        if(Pref.CommonAINotification){
+            showAttendNotification()
+            Handler().postDelayed(Runnable {
+                showDayEndNotification()
+            }, 100)
+
+        }
 
         //XLog.d("onLocationChanged : LocationFuzedService " + AppUtils.getCurrentDateTime())
 
@@ -1503,7 +1508,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
 
     private fun syncBatteryNetData() {
-
        if (!shouldBatNetSyncDuration()) {
             XLog.e("===============Should not sync Battery Internet status data(Location Fuzed Service)==============")
             return
@@ -1532,7 +1536,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     it.device_model!!, it.android_version!!,it.Available_Storage!!,it.Total_Storage!!))
         }
 
-        val appInfoInput = AppInfoInputModel(Pref.session_token!!, Pref.user_id!!, appInfoList)
+
+        var totalVisitRevisitCount = AppDatabase.getDBInstance()!!.shopActivityDao().getVisitRevisitCountByDate(AppUtils.getCurrentDateForShopActi())
+        var totalVisitRevisitCountSynced = AppDatabase.getDBInstance()!!.shopActivityDao().getVisitRevisitCountByDateSyncedUnSynced(AppUtils.getCurrentDateForShopActi(),true)
+        var totalVisitRevisitCountUnSynced = AppDatabase.getDBInstance()!!.shopActivityDao().getVisitRevisitCountByDateSyncedUnSynced(AppUtils.getCurrentDateForShopActi(),false)
+
+        val appInfoInput = AppInfoInputModel(Pref.session_token!!, Pref.user_id!!, appInfoList,totalVisitRevisitCount.toString(),totalVisitRevisitCountSynced.toString(),totalVisitRevisitCountUnSynced.toString())
 
         XLog.d("============App Info Input(Location Fuzed Service)===========")
         XLog.d("session_token==========> " + appInfoInput.session_token)
@@ -1619,6 +1628,21 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             intent.putExtra("data_msg","")
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
 
+    }
+
+    private fun showDayEndNotification(){
+
+        val currentTimeInLong = AppUtils.convertTimeWithMeredianToLong(AppUtils.getCurrentTimeWithMeredian())
+        val approvedOutTimeInLong1 = AppUtils.convertTimeWithMeredianToLong("08:15 PM")
+        val approvedOutTimeInLong2 = AppUtils.convertTimeWithMeredianToLong("08:30 PM")
+        val approvedOutTimeInLong3 = AppUtils.convertTimeWithMeredianToLong("08:45 PM")
+
+        if(currentTimeInLong > approvedOutTimeInLong1 || currentTimeInLong > approvedOutTimeInLong2 || currentTimeInLong > approvedOutTimeInLong3){
+            val intent = Intent()
+            intent.action = "IDEAL_ATTEND_BROADCAST"
+            intent.putExtra("data_msg","You Dayend time set at 9 PM. Please mark your Dayend before 9 PM.")
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
+        }
     }
 
 

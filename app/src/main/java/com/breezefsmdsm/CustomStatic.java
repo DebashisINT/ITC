@@ -14,10 +14,12 @@ public class CustomStatic {
     public static Boolean IsCameraFacingFromTeamAttd=false;
     public static Boolean IsCameraFacingFromTeamAttdCametaStatus=false;
 
+
     public static Boolean IsTeamAttendUserWise=false;
 
     public static String FaceDetectionAccuracyLower="";
     public static String FaceDetectionAccuracyUpper="";
+    public static Boolean IsFaceRecognitionOnEyeblink=false;
 
     public static String FacePicRegUrl="";
     public static String AadhaarPicRegUrl="";

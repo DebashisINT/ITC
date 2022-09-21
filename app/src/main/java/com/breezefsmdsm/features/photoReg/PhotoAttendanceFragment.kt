@@ -1064,7 +1064,12 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 //showAttendSuccessMsg()
 
                                 Handler().postDelayed(Runnable {
-                                    getLocforStart(obj_temp!!.user_id.toString())
+                                    //getLocforStart(obj_temp!!.user_id.toString())
+
+                                    var locc : Location = Location("")
+                                    locc.latitude=Pref.current_latitude.toDouble()
+                                    locc.longitude=Pref.current_longitude.toDouble()
+                                    calllogoutApi(locc,obj_temp!!.user_id.toString())
                                 }, 1500)
 
                             } else {

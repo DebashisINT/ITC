@@ -6367,7 +6367,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     it.mob_net_type!!, it.device_model!!, it.android_version!!,it.Available_Storage!!,it.Total_Storage!!))
         }
 
-        val appInfoInput = AppInfoInputModel(Pref.session_token!!, Pref.user_id!!, appInfoList)
+
+        var totalVisitRevisitCount = AppDatabase.getDBInstance()!!.shopActivityDao().getVisitRevisitCountByDate(AppUtils.getCurrentDateForShopActi())
+        var totalVisitRevisitCountSynced = AppDatabase.getDBInstance()!!.shopActivityDao().getVisitRevisitCountByDateSyncedUnSynced(AppUtils.getCurrentDateForShopActi(),true)
+        var totalVisitRevisitCountUnSynced = AppDatabase.getDBInstance()!!.shopActivityDao().getVisitRevisitCountByDateSyncedUnSynced(AppUtils.getCurrentDateForShopActi(),false)
+
+        val appInfoInput = AppInfoInputModel(Pref.session_token!!, Pref.user_id!!, appInfoList,totalVisitRevisitCount.toString(),totalVisitRevisitCountSynced.toString(),totalVisitRevisitCountUnSynced.toString())
 
         XLog.d("============App Info Input(Logout Sync)===========")
         XLog.d("session_token==========> " + appInfoInput.session_token)

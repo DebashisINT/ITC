@@ -1,6 +1,7 @@
 package com.breezefsmdsm.app.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -1244,6 +1245,7 @@ class AppUtils {
             return networkType
         }
 
+        @SuppressLint("MissingPermission")
         fun mobNetType(context: Context): String {
             val netType = getNetworkType(context)
             if (TextUtils.isEmpty(netType) || netType.equals("WiFi", ignoreCase = true))
@@ -1952,6 +1954,48 @@ class AppUtils {
                 val bos = ByteArrayOutputStream()
                 //bitmap.compress(Bitmap.CompressFormat.PNG, 2, bos);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 5, bos)
+                val bitmapdata = bos.toByteArray()
+
+                //write the bytes in file
+                val fos = FileOutputStream(file)
+                fos.write(bitmapdata)
+                fos.flush()
+                fos.close()
+
+                Log.e("Dashboard", "image file path-----------------> $filePath")
+                Log.e("Dashboard", "image file size after compression-----------------> " + file.length())
+                return file.length()
+            } catch (e: FileNotFoundException) {
+                // TODO Auto-generated catch block
+                e.printStackTrace()
+            } catch (e: IOException) {
+                // TODO Auto-generated catch block
+                e.printStackTrace()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return 0
+        }
+
+        fun getCompressOldImageForFace(filePath: String, context: Context): Long {
+            var updatedFilePath = ""
+            if (filePath.contains("file://")) {
+                updatedFilePath = filePath.substring(6, filePath.length)
+            }
+            val file = File(updatedFilePath)
+            val file_path = Uri.fromFile(file)
+
+            Log.e("Dashboard", "file uri-----------------> $file_path")
+            Log.e("Dashboard", "image file size before compression-----------------> " + file.length())
+
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, Uri.parse(filePath))
+                //bitmap.compress(Bitmap.CompressFormat.JPEG, 2, FileOutputStream(file))
+
+                //Convert bitmap to byte array
+                val bos = ByteArrayOutputStream()
+                //bitmap.compress(Bitmap.CompressFormat.PNG, 2, bos);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos)
                 val bitmapdata = bos.toByteArray()
 
                 //write the bytes in file
