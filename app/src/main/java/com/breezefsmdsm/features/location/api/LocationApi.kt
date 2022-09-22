@@ -2,10 +2,7 @@ package com.breezefsmdsm.features.location.api
 
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.base.BaseResponse
-import com.breezefsmdsm.features.location.model.AppInfoInputModel
-import com.breezefsmdsm.features.location.model.AppInfoResponseModel
-import com.breezefsmdsm.features.location.model.MeetingDurationInputParams
-import com.breezefsmdsm.features.location.model.ShopDurationRequest
+import com.breezefsmdsm.features.location.model.*
 import com.breezefsmdsm.features.location.shopdurationapi.ShopDurationApi
 import io.reactivex.Observable
 import retrofit2.Retrofit
@@ -23,6 +20,9 @@ interface LocationApi {
 
     @POST("AppInfo/DeviceInformatio")
     fun submitAppInfo(@Body appInfo: AppInfoInputModel?): Observable<BaseResponse>
+
+    @POST("AppInfo/UserWiseGPSNetStatus")
+    fun submitGpsNetInfo(@Body appInfo: GpsNetInputModel?): Observable<BaseResponse>
 
     @FormUrlEncoded
     @POST("AppInfo/GetDeviceInformation")

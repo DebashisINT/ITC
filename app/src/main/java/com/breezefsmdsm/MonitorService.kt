@@ -16,8 +16,12 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.breezefsmdsm.MonitorBroadcast
+import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.app.domain.BatteryNetStatusEntity
+import com.breezefsmdsm.app.domain.NewGpsStatusEntity
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.FTStorageUtils
@@ -78,6 +82,8 @@ class MonitorService:Service() {
 
     fun serviceStatusActionable(){
 
+
+
         //XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
         Log.e("MonitorService_abc", "startabc" )
         monitorBroadcast=MonitorBroadcast()
@@ -86,6 +92,7 @@ class MonitorService:Service() {
         val powerManager = this.getSystemService(POWER_SERVICE) as PowerManager
        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             if(powerManager.isPowerSaveMode){
+                Pref.PowerSaverStatus = "On"
                 powerMode = "Power Save Mode ON"
 
                 println("MonitorService_abc - Power Save Mode ON");
@@ -111,6 +118,7 @@ class MonitorService:Service() {
                 powerSaver=true
                 //sendGPSOffBroadcast()
             }else{
+                Pref.PowerSaverStatus = "Off"
                 powerMode = "Power Save Mode OFF"
                 powerSaver=false
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -139,7 +147,10 @@ class MonitorService:Service() {
             }
         }*/
 
+        val newNetStatusObj = NewGpsStatusEntity()
         if(shouldShopActivityUpdate()){
+            newNetStatusObj.date_time = AppUtils.getCurrentDateTime()
+            newNetStatusObj.network_status = if(AppUtils.isOnline(this)) "Online" else "Offline"
             if (FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, this)) {
                 //XLog.d("MonitorService LocationFuzedService : " + "true" + "," + " Time :" + AppUtils.getCurrentDateTime())
                 //XLog.d("MonitorService Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
@@ -148,7 +159,9 @@ class MonitorService:Service() {
                 }else{
                     cancelGpsBroadcast()
                 }*/
+                newNetStatusObj.gps_service_status = "Started"
             }else{
+                newNetStatusObj.gps_service_status = "Stopped"
                 if (!FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, this)) {
                     restartLocationService()
                 }
@@ -161,8 +174,36 @@ class MonitorService:Service() {
                 }
                 isFirst=false
             }
+
+            Log.e("inside outside shouldGpsNetSyncDuration", AppUtils.getCurrentDateTime() )
+            if (shouldGpsNetSyncDuration() && !Pref.GPSNetworkIntervalMins.equals("0")) {
+                Log.e("inside shouldGpsNetSyncDuration", AppUtils.getCurrentDateTime() )
+                AppDatabase.getDBInstance()?.newGpsStatusDao()?.insert(newNetStatusObj)
+            }
+
         }
 
+    }
+    private fun shouldGpsNetSyncDuration(): Boolean {
+        AppUtils.changeLanguage(this,"en")
+
+        var t = Math.abs(System.currentTimeMillis() - Pref.prevGpsNetSyncTimeStamp)
+
+        return if (Math.abs(System.currentTimeMillis() - Pref.prevGpsNetSyncTimeStamp) > 1000 * 60 * Pref.GPSNetworkIntervalMins.toInt()) {
+            Pref.prevGpsNetSyncTimeStamp = System.currentTimeMillis()
+            //changeLocale()
+            true
+            //server timestamp is within 10 minutes of current system time
+        } else {
+            //changeLocale()
+            false
+        }
+    }
+
+    private fun changeLocale() {
+        val intent = Intent()
+        intent.action = "CHANGE_LOCALE_BROADCAST"
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
     }
 
     fun sendGPSOffBroadcast(){

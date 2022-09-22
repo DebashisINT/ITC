@@ -388,4 +388,9 @@ object Pref : PreferenceHolder() {
 
     var prevAttendanceNotiDurationTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceNotiDurationTimeStamp")
     var prevRevisitGarbageDurationTimeStamp: Long by bindToPreferenceField(0, "prevRevisitGarbageDurationTimeStamp")
+
+    var PowerSaverStatus: String by bindToPreferenceField("Off", "PowerSaverStatus")
+
+    var GPSNetworkIntervalMins: String by bindToPreferenceField("0", "GPSNetworkIntervalMins")
+    var prevGpsNetSyncTimeStamp: Long by bindToPreferenceField(0, "prevGpsNetSyncTimeStamp")
 }

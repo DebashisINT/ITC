@@ -108,6 +108,8 @@ public interface AppConstant {
 
     String PROSPECT_TABLE_MASTER = "prospect_list_master";
 
+    String NEW_GPS_STATUS = "new_gps_status";
+
 
     /*Foreground service intent*/
     int FOREGROUND_SERVICE = 911;

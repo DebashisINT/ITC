@@ -784,6 +784,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     syncBatteryNetData()
                 }
 
+                if(!Pref.GPSNetworkIntervalMins.equals("0"))
+                    syncGpsNetData()
+
+
+
                 /*if (location.isFromMockProvider *//*|| AppUtils.areThereMockPermissionApps(this)*//*) {
             XLog.e("==================Mock Location is on (Location Fuzed Serive)====================")
             return
@@ -1269,6 +1274,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     }
 
+    @SuppressLint("SuspiciousIndentation")
     private fun revisitShop() {
 
             try {
@@ -1503,6 +1509,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             Available_Storage= megAvailable.toString()+"mb"
             Total_Storage=megTotal.toString()+"mb"
             isUploaded = false
+            Power_Saver_Status = Pref.PowerSaverStatus
         })
     }
 
@@ -1533,7 +1540,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         unSyncData.forEach {
             appInfoList.add(AppInfoDataModel(it.bat_net_id!!, it.date_time!!, it.bat_status!!, it.bat_level!!, it.net_type!!, it.mob_net_type!!,
-                    it.device_model!!, it.android_version!!,it.Available_Storage!!,it.Total_Storage!!))
+                    it.device_model!!, it.android_version!!,it.Available_Storage!!,it.Total_Storage!!,it.Power_Saver_Status))
         }
 
 
@@ -1547,6 +1554,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         XLog.d("session_token==========> " + appInfoInput.session_token)
         XLog.d("user_id==========> " + appInfoInput.user_id)
         XLog.d("app_info_list.size==========> " + appInfoInput.app_info_list?.size)
+        XLog.d("powerSaverStatus==========> " + Pref.PowerSaverStatus)
         XLog.d("==============================================================")
 
         val repository = LocationRepoProvider.provideLocationRepository()
@@ -1575,6 +1583,66 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                 error.printStackTrace()
                             }
                         })
+        )
+    }
+
+    private fun syncGpsNetData() {
+        if (!shouldGpsNetSyncDuration()) {
+            XLog.e("===============Should not sync Battery Internet status data(Location Fuzed Service)==============")
+            return
+        }
+
+        if (!AppUtils.isOnline(this)) {
+            XLog.d("App Info Input(Location Fuzed Service)======> No internet connected")
+            return
+        }
+
+        val unSyncData = AppDatabase.getDBInstance()?.newGpsStatusDao()?.getNotUploaded(false)
+
+
+        if (unSyncData == null || unSyncData.isEmpty())
+            return
+
+        val gps_net_status_list = ArrayList<NewGpsStatusEntity>()
+
+        unSyncData.forEach {
+            var obj :NewGpsStatusEntity = NewGpsStatusEntity()
+            obj.apply {
+                id=it.id
+                date_time = it.date_time
+                gps_service_status = it.gps_service_status
+                network_status = it.network_status
+            }
+            gps_net_status_list.add(obj)
+        }
+
+        var sendObj : GpsNetInputModel = GpsNetInputModel()
+        sendObj.user_id = Pref.user_id!!
+        sendObj.session_token = Pref.session_token!!
+        sendObj.gps_net_status_list = gps_net_status_list
+
+
+        val repository = LocationRepoProvider.provideLocationRepository()
+        compositeDisposable.add(
+            repository.gpsNetInfo(sendObj)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+//                        .timeout(60 * 1, TimeUnit.SECONDS)
+                .subscribe({ result ->
+                    val response = result as BaseResponse
+                    if (response.status == NetworkConstant.SUCCESS) {
+                        unSyncData.forEach {
+                            AppDatabase.getDBInstance()?.newGpsStatusDao()?.updateIsUploadedAccordingToId(true, it.id)
+                        }
+                    }
+                }, { error ->
+                    if (error == null) {
+                        XLog.d("App Info : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
+                    } else {
+                        XLog.d("App Info : ERROR : " + error.localizedMessage)
+                        error.printStackTrace()
+                    }
+                })
         )
     }
 
@@ -2669,6 +2737,22 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         return if (abs(System.currentTimeMillis() - Pref.prevBatNetSyncTimeStamp) > 1000 * 60 * 15) {
             Pref.prevBatNetSyncTimeStamp = System.currentTimeMillis()
+            changeLocale()
+            true
+            //server timestamp is within 10 minutes of current system time
+        } else {
+            changeLocale()
+            false
+        }
+    }
+
+    private fun shouldGpsNetSyncDuration(): Boolean {
+        AppUtils.changeLanguage(this,"en")
+        XLog.e("PREVIOUS BAT NET SYNC API CALL TIME==================> " + getDateTimeFromTimeStamp(Pref.prevGpsNetSyncTimeStamp))
+        XLog.e("CURRENT TIME==================> " + getDateTimeFromTimeStamp(System.currentTimeMillis()))
+
+        return if (abs(System.currentTimeMillis() - Pref.prevGpsNetSyncTimeStamp) > 1000 * 60 * Pref.GPSNetworkIntervalMins.toInt()) {
+            Pref.prevGpsNetSyncTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
             //server timestamp is within 10 minutes of current system time

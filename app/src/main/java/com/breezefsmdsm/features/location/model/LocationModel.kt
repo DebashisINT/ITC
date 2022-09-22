@@ -1,5 +1,6 @@
 package com.breezefsmdsm.features.location.model
 
+import com.breezefsmdsm.app.domain.NewGpsStatusEntity
 import com.breezefsmdsm.base.BaseResponse
 import java.io.Serializable
 
@@ -11,7 +12,8 @@ data class AppInfoInputModel(var session_token: String = "",
                              var app_info_list: ArrayList<AppInfoDataModel>?= null,
                              var total_visit_revisit_count: String = "",
                              var total_visit_revisit_count_synced:String ="",
-                             var total_visit_revisit_count_unsynced:String = ""): Serializable
+                             var total_visit_revisit_count_unsynced:String = "",
+                             var power_saver_status:String = ""): Serializable
 
 data class AppInfoDataModel(var id: String = "",
                             var date_time: String = "",
@@ -22,7 +24,8 @@ data class AppInfoDataModel(var id: String = "",
                             var device_model: String = "",
                             var android_version: String = "",
                             var Available_Storage: String = "",
-                            var Total_Storage:String = ""): Serializable
+                            var Total_Storage:String = "",
+                            var power_saver_status:String = ""): Serializable
 
 data class AppInfoResponseModel(var app_info_list: ArrayList<AppInfoDataModel>?= null): BaseResponse(), Serializable
 
@@ -30,3 +33,8 @@ data class VisitRemarksResponseModel(var remarks_list: ArrayList<VisitRemarksDat
 
 data class VisitRemarksDataModel(var id: String = "",
                                  var name: String = "") : Serializable
+
+
+data class GpsNetInputModel(var session_token: String = "",
+                             var user_id: String = "",
+                             var gps_net_status_list: ArrayList<NewGpsStatusEntity>? = null): Serializable

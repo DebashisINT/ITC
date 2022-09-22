@@ -5936,6 +5936,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             Pref.IsFaceRecognitionOnEyeblink = response.getconfigure?.get(i)?.Value == "1"
                                         }
                                         CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("GPSNetworkIntervalMins", ignoreCase = true)) {
+                                        try{
+                                            Pref.GPSNetworkIntervalMins =response.getconfigure!![i].Value!!
+                                        }catch (e: Exception) {
+                                            e.printStackTrace()
+                                            Pref.GPSNetworkIntervalMins = "0"
+                                        }
                                     }
 
 
@@ -8035,7 +8042,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                                             Handler().postDelayed(Runnable {
                                                 //callShopDurationApi()
-                                                syncShopListOnebyOne()
+                                                //syncShopListOnebyOne()
+                                                syncGpsNetData()
                                             }, 350)
 
 
@@ -10030,6 +10038,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         Available_Storage= megAvailable.toString()+"mb"
                         Total_Storage=megTotal.toString()+"mb"
                         isUploaded = false
+                        Power_Saver_Status = Pref.PowerSaverStatus
                     })
 
                     uiThread {
@@ -10049,6 +10058,64 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     /////////////////////////////////////////////
+
+    private fun syncGpsNetData() {
+        val unSyncData = AppDatabase.getDBInstance()?.newGpsStatusDao()?.getNotUploaded(false)
+        if (unSyncData == null || unSyncData.isEmpty()){
+            syncShopListOnebyOne()
+        }else{
+            progress_wheel.spin()
+            val gps_net_status_list = ArrayList<NewGpsStatusEntity>()
+            unSyncData.forEach {
+                var obj :NewGpsStatusEntity = NewGpsStatusEntity()
+                obj.apply {
+                    id=it.id
+                    date_time = it.date_time
+                    gps_service_status = it.gps_service_status
+                    network_status = it.network_status
+                }
+                gps_net_status_list.add(obj)
+            }
+
+            var sendObj : GpsNetInputModel = GpsNetInputModel()
+            sendObj.user_id = Pref.user_id!!
+            sendObj.session_token = Pref.session_token!!
+            sendObj.gps_net_status_list = gps_net_status_list
+
+            val repository = LocationRepoProvider.provideLocationRepository()
+            compositeDisposable.add(
+                repository.gpsNetInfo(sendObj)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as BaseResponse
+                        progress_wheel.stopSpinning()
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            doAsync {
+                                unSyncData.forEach {
+                                    AppDatabase.getDBInstance()?.newGpsStatusDao()?.updateIsUploadedAccordingToId(true, it.id)
+                                }
+                                uiThread {
+                                    syncShopListOnebyOne()
+                                }
+                            }
+                        }else{
+                            syncShopListOnebyOne()
+                        }
+                    }, { error ->
+                        if (error == null) {
+                            XLog.d("App Info : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
+                        } else {
+                            XLog.d("App Info : ERROR : " + error.localizedMessage)
+                            error.printStackTrace()
+                        }
+                        progress_wheel.stopSpinning()
+                        syncShopListOnebyOne()
+                    })
+            )
+        }
+
+    }
 
     private fun syncShopListOnebyOne() {
         dialogHeaderProcess.text = "Syncing Important Data. Please wait..."

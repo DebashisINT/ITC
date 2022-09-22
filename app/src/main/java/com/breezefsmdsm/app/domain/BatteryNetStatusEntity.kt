@@ -50,4 +50,7 @@ class BatteryNetStatusEntity {
 
     @ColumnInfo(name = "Total_Storage")
     var Total_Storage: String? = null
+
+    @ColumnInfo(name = "Power_Saver_Status")
+    var Power_Saver_Status: String = "Off"
 }

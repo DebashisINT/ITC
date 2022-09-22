@@ -54,8 +54,8 @@ import com.breezefsmdsm.features.stockCompetetorStock.model.CompetetorStockData
         VisitRemarksEntity::class,ShopVisitCompetetorModelEntity::class,
         OrderStatusRemarksModelEntity::class,CurrentStockEntryModelEntity::class,CurrentStockEntryProductModelEntity::class,
            CcompetetorStockEntryModelEntity::class,CompetetorStockEntryProductModelEntity::class,
-        ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class ),
-        version = 5, exportSchema = false)
+        ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class,NewGpsStatusEntity::class ),
+        version = 6, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -160,6 +160,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun prosDao(): ProspectDao
     abstract fun shopDeactivateDao(): ShopDeactivateDao
 
+    abstract fun newGpsStatusDao(): NewGpsStatusDao
+
     companion object {
         var INSTANCE: AppDatabase? = null
 
@@ -169,7 +171,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // allow queries on the main thread.
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
-                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5)
+                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5,MIGRATION_5_6)
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -205,6 +207,12 @@ abstract class AppDatabase : RoomDatabase() {
         val MIGRATION_4_5: Migration = object : Migration(4, 5) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE shop_detail ADD COLUMN isShopDuplicate INTEGER NOT NULL DEFAULT 0 ")
+            }
+        }
+        val MIGRATION_5_6: Migration = object : Migration(5, 6) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Power_Saver_Status TEXT NOT NULL DEFAULT 'Off' ")
+                database.execSQL("create TABLE new_gps_status  (id INTEGER NOT NULL PRIMARY KEY , date_time  TEXT , gps_service_status TEXT, network_status  TEXT , isUploaded INTEGER NOT NULL DEFAULT 0) ")
             }
         }
     }
