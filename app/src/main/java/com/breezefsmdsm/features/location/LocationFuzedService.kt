@@ -2748,11 +2748,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldGpsNetSyncDuration(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        XLog.e("PREVIOUS BAT NET SYNC API CALL TIME==================> " + getDateTimeFromTimeStamp(Pref.prevGpsNetSyncTimeStamp))
-        XLog.e("CURRENT TIME==================> " + getDateTimeFromTimeStamp(System.currentTimeMillis()))
 
-        return if (abs(System.currentTimeMillis() - Pref.prevGpsNetSyncTimeStamp) > 1000 * 60 * Pref.GPSNetworkIntervalMins.toInt()) {
-            Pref.prevGpsNetSyncTimeStamp = System.currentTimeMillis()
+        return if (abs(System.currentTimeMillis() - Pref.prevGpsNetSyncTimeStampService) > 1000 * 60 * Pref.GPSNetworkIntervalMins.toInt()) {
+            Pref.prevGpsNetSyncTimeStampService = System.currentTimeMillis()
             changeLocale()
             true
             //server timestamp is within 10 minutes of current system time

@@ -393,4 +393,5 @@ object Pref : PreferenceHolder() {
 
     var GPSNetworkIntervalMins: String by bindToPreferenceField("0", "GPSNetworkIntervalMins")
     var prevGpsNetSyncTimeStamp: Long by bindToPreferenceField(0, "prevGpsNetSyncTimeStamp")
+    var prevGpsNetSyncTimeStampService: Long by bindToPreferenceField(0, "prevGpsNetSyncTimeStampService")
 }
