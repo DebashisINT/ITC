@@ -1588,7 +1588,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun syncGpsNetData() {
         if (!shouldGpsNetSyncDuration()) {
-            XLog.e("===============Should not sync Battery Internet status data(Location Fuzed Service)==============")
+            XLog.e("===============Should not sync syncGpsNetData(Location Fuzed Service)==============")
             return
         }
 
@@ -2735,7 +2735,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         XLog.e("PREVIOUS BAT NET SYNC API CALL TIME==================> " + getDateTimeFromTimeStamp(Pref.prevBatNetSyncTimeStamp))
         XLog.e("CURRENT TIME==================> " + getDateTimeFromTimeStamp(System.currentTimeMillis()))
 
-        return if (abs(System.currentTimeMillis() - Pref.prevBatNetSyncTimeStamp) > 1000 * 60 * 15) {
+        return if (abs(System.currentTimeMillis() - Pref.prevBatNetSyncTimeStamp) > 1000 * 60 * 10) {
             Pref.prevBatNetSyncTimeStamp = System.currentTimeMillis()
             changeLocale()
             true

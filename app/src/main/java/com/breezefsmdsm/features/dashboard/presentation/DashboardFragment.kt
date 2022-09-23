@@ -9878,7 +9878,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (shopDataList.isEmpty()) {
                             BaseActivity.isShopActivityUpdating = false
                             simpleDialogProcess.dismiss()
-                            (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                            if(Pref.isAppInfoEnable){
+                                callAppInfoApi()
+                            }else{
+                                (mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
+                            }
+                            //(mContext as DashboardActivity).loadFragment(FragType.LogoutSyncFragment, false, "")
                         } else {
                             val hashSet = HashSet<ShopDurationRequestData>()
                             val newShopList = ArrayList<ShopDurationRequestData>()
