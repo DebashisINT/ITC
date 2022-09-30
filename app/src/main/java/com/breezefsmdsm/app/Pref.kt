@@ -35,6 +35,7 @@ object Pref : PreferenceHolder() {
     var isLocationActivitySynced: Boolean by bindToPreferenceField(true, "isLocationActivitySynced")
     var prevShopActivityTimeStamp: Long by bindToPreferenceField(0, "prevTimeStamp")
     var prevLocationActivityTimeStamp: Long by bindToPreferenceField(0, "prevLocTimeStamp")
+    var prevRevisitGarbageTimeStamp: Long by bindToPreferenceField(0, "prevLocTimeStamp")
     var prevIdealLocationActivityTimeStamp: Long by bindToPreferenceField(0, "prevIdealLocTimeStamp")
     var prevShopActivityTimeStampMonitorService: Long by bindToPreferenceField(0, "prevTimeStampMonitor")
     var prevShopDurationTimeStamp: Long by bindToPreferenceField(0, "prevShopDurationTimeStamp")

@@ -184,6 +184,9 @@ interface ShopActivityDao {
     @Query("update shop_activity set isUploaded=:isUploaded where shopid=:shopId and date=:date")
     fun updateShopForIsuploadZero(isUploaded: Boolean, shopId: String, date: String)
 
+    @Query("update shop_activity set isUploaded=:isUploaded where date=:date")
+    fun updateShopForIsuploadZeroByDate(isUploaded: Boolean,  date: String)
+
     @Query("Select count(*) from shop_activity where date=:date")
     fun getVisitRevisitCountByDate(date:String): Int
 

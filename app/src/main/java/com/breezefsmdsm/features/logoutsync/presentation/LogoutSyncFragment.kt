@@ -6343,7 +6343,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         if (!Pref.isAppInfoEnable) {
             //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             deleteConcurrentUserDtls()
-            return
+            //return
         }
 
         val unSyncData = AppDatabase.getDBInstance()?.batteryNetDao()?.getDataSyncStateWise(false)

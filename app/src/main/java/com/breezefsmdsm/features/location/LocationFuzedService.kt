@@ -73,6 +73,7 @@ import com.breezefsmdsm.features.orderhistory.model.LocationData
 import com.breezefsmdsm.features.orderhistory.model.LocationUpdateRequest
 import com.breezefsmdsm.mappackage.SendBrod.Companion.monitorNotiID
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -762,13 +763,26 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 /*Sync all data*/
                 if(Pref.IsShowDayStart){
                     if(Pref.DayStartMarked){
-                        syncLocationActivity()
+                        if(AppUtils.isOnline(this)){
+                            syncLocationActivity()
+                        }
                     }
                 }
 
                 //if (!BaseActivity.isApiInitiated)
 
-                callShopDurationApi()
+                if(AppUtils.isOnline(this)){
+                    callShopDurationApi()
+                }
+
+                Handler().postDelayed(Runnable {
+                    if(AppUtils.isOnline(this))
+                        callShopActivityApiForActivityCheck()
+                }, 1000)
+
+
+
+
 
                 //syncShopVisitImage()
 
@@ -2634,7 +2648,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 5) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 8) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2656,7 +2670,19 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             changeLocale()
             false
         }
+    }
 
+    private fun shouldUpdateRevisitGarbage(): Boolean {
+        AppUtils.changeLanguage(this,"en")
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 18) {
+            Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
+            changeLocale()
+            true
+            //server timestamp is within 5 minutes of current system time
+        } else {
+            changeLocale()
+            false
+        }
     }
 
     private fun shouldIdealLocationUpdate(): Boolean {
@@ -3519,8 +3545,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                     XLog.d("callShopDurationApi : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
-
-
                                 //(mContext as DashboardActivity).showSnackMessage("ERROR")
                             })
                     )
@@ -3528,7 +3552,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
             }
         }
-
     }
 
 
@@ -4311,6 +4334,68 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             }
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    private fun callShopActivityApiForActivityCheck() {
+        if(!shouldUpdateRevisitGarbage()){
+            return
+        }
+        var shopActivity = ShopActivityRequest()
+        shopActivity.user_id = Pref.user_id
+        shopActivity.session_token = Pref.session_token
+        shopActivity.date_span = "30"
+        shopActivity.from_date = ""
+        shopActivity.to_date = ""
+        val repository = ShopActivityRepositoryProvider.provideShopActivityRepository()
+
+        BaseActivity.compositeDisposable.add(
+            repository.fetchShopActivitynew(Pref.session_token!!, Pref.user_id!!, "30", "", "")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    var shopActityResponse = result as ShopActivityResponse
+                    if (shopActityResponse.status == "200") {
+                        if(shopActityResponse.date_list!!.size>0){
+                            var actiList = shopActityResponse.date_list as ArrayList<ShopActivityResponseDataList>
+                            if(actiList!!.size>1){
+                                //actiList.removeAt(actiList!!.size-1)
+                                Handler().postDelayed(Runnable {
+                                    updateActivityGarbage(actiList)
+                                }, 150)
+
+                            }
+                        }
+                    }
+                }, { error ->
+                    error.printStackTrace()
+                })
+        )
+    }
+
+    fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>){
+        doAsync {
+            try{
+                var lastobj = listUnsync.get(listUnsync.size-1)
+                if(!lastobj.date.equals(AppUtils.getCurrentDateForShopActi())){
+                    AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,AppUtils.getCurrentDateForShopActi())
+                }
+            }catch (ex:Exception){ex.printStackTrace()}
+
+
+            for(i in 0..listUnsync.size-1){
+                var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(listUnsync.get(i)!!.date!!.toString()) as ArrayList<String>
+                var shopListApi : ArrayList<String> = listUnsync.get(i)?.shop_list!!.map { it.shopid } as ArrayList<String>
+                if(shopListRoom.size > shopListApi.size){
+                    var unsyncedList: List<String> = shopListRoom - shopListApi
+                    for(j in 0..unsyncedList.size-1){
+                        AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZero(false,unsyncedList.get(j),listUnsync.get(i)!!.date!!.toString())
+                    }
+                }
+            }
+            uiThread {
+
+            }
         }
     }
 

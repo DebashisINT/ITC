@@ -108,8 +108,8 @@ class TeamAttendanceFragment: BaseFragment(), CompoundButton.OnCheckedChangeList
             attendanceReq.session_token = Pref.session_token
             attendanceReq.start_date = ""
             attendanceReq.end_date = ""
-            //callAttendanceListApi(attendanceReq)
-            getDaystartDayendList(attendanceReq)
+            callAttendanceListApi(attendanceReq)
+            //getDaystartDayendList(attendanceReq)
         } else {
             if (!AppUtils.isOnline(mContext))
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
