@@ -2648,7 +2648,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 8) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 10) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2674,7 +2674,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 18) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 23) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
