@@ -80,11 +80,11 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
       // AlarmReceiver.setAlarm(this, 17, 45, 2017)
 
 
-        FirebaseMessaging.getInstance().subscribeToTopic("newss").addOnSuccessListener(object : OnSuccessListener<Void?> {
+        /*FirebaseMessaging.getInstance().subscribeToTopic("newss").addOnSuccessListener(object : OnSuccessListener<Void?> {
             override fun onSuccess(aVoid: Void?) {
                 //Toast.makeText(applicationContext, "Success", Toast.LENGTH_LONG).show()
             }
-        })
+        })*/
 
         val receiver = ComponentName(this, AlarmBootReceiver::class.java)
         packageManager.setComponentEnabledSetting(receiver, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
