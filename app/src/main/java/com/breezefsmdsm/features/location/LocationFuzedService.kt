@@ -776,7 +776,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 }
 
                 Handler().postDelayed(Runnable {
-                    if(AppUtils.isOnline(this))
+                   if(AppUtils.isOnline(this))
                         callShopActivityApiForActivityCheck()
                 }, 1000)
 
@@ -2674,7 +2674,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 23) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 13) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -3469,12 +3469,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         isShopActivityUpdating = false
                 }
                 else {
-
                     XLog.e("====SYNC VISITED SHOP (LOCATION FUZED SERVICE)====")
                     XLog.e("ShopData List size===> " + shopDataList.size)
-
                     //val newShopList = FTStorageUtils.removeDuplicateData(shopDataList)
-
                     val hashSet = HashSet<ShopDurationRequestData>()
                     val newShopList = ArrayList<ShopDurationRequestData>()
 
@@ -4361,7 +4358,21 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                             if(actiList!!.size>1){
                                 //actiList.removeAt(actiList!!.size-1)
                                 Handler().postDelayed(Runnable {
-                                    updateActivityGarbage(actiList)
+                                    var mListSynced : ArrayList<ShopActivityResponseDataList> = ArrayList()
+
+                                    var isCurrdatefound  = false
+                                    for(i in 0..actiList.size-1){
+                                        if(actiList.get(i).date.equals(AppUtils.getCurrentDateForShopActi())){
+                                            mListSynced.add(actiList.get(i))
+                                            isCurrdatefound = true
+                                        }
+                                    }
+                                    if(isCurrdatefound){
+                                        updateActivityGarbage(mListSynced)
+                                    }else{
+                                        mListSynced.add(actiList.get(actiList.size-1))
+                                        updateActivityGarbage(mListSynced)
+                                    }
                                 }, 150)
 
                             }
@@ -4385,7 +4396,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
             for(i in 0..listUnsync.size-1){
                 var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(listUnsync.get(i)!!.date!!.toString()) as ArrayList<String>
-                var shopListApi : ArrayList<String> = listUnsync.get(i)?.shop_list!!.map { it.shopid } as ArrayList<String>
+                var objList = listUnsync.get(i)?.shop_list!!
+                var shopListApi : ArrayList<String> = ArrayList()
+                for(m in 0..objList.size-1){
+                    shopListApi.add(objList.get(m).shopid!!)
+                }
+                //var shopListApi : ArrayList<String> = objList.map { it.shopid } as ArrayList<String>
                 if(shopListRoom.size > shopListApi.size){
                     var unsyncedList: List<String> = shopListRoom - shopListApi
                     for(j in 0..unsyncedList.size-1){
