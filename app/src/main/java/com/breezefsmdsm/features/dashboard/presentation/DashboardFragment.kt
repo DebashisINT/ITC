@@ -9688,6 +9688,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                 doAsync {
 
+                    var counterShopList:Int = 0
+
                     for (k in 0 until syncedShopList.size) {
 
                         if (!Pref.isMultipleVisitEnable) {
@@ -9749,7 +9751,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 shopDurationData.start_timestamp = shopActivity.startTimeStamp
                                 shopDurationData.in_location = shopActivity.in_loc
                                 shopDurationData.out_location = shopActivity.out_loc
-                                shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+                                try{
+                                    shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+                                }catch (ex:Exception){
+                                    ex.printStackTrace()
+                                    shopDurationData.shop_revisit_uniqKey =Pref.user_id + System.currentTimeMillis().toString()
+                                }
 
                                 //duration garbage fix
                                 try{
@@ -9773,6 +9780,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
                                     revisitStatusList.add(revisitStatusObj)
                                 }
+
+                                counterShopList++
+                                if(counterShopList > 35){
+                                    break
+                                }
+
                             }
 
                             try{
@@ -10591,7 +10604,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         var shopVisitDate = ""
 
         doAsync {
+
+            var counterShopList:Int = 0
+
             for (k in 0 until syncedShopList.size) {
+
                 if (!Pref.isMultipleVisitEnable) {
                     /* Get shop activity that has completed time duration calculation*/
                     val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(syncedShopList[k].shop_id, true, false)
@@ -10675,6 +10692,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             revisitStatusObj.order_remarks=data.order_remarks
                             revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
                             revisitStatusList.add(revisitStatusObj)
+                        }
+
+                        counterShopList++
+                        if(counterShopList > 35){
+                            break
                         }
 
                     }

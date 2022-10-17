@@ -2648,7 +2648,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 10) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 9) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2674,7 +2674,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 13) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 12) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -3227,10 +3227,13 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         doAsync {
 
+            var counterShopList:Int = 0
+
             for (k in 0 until syncedShopList.size) {
 
                 if (!Pref.isMultipleVisitEnable) {
                     /* Get shop activity that has completed time duration calculation*/
+
                     val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(syncedShopList[k].shop_id, true, false)
 
                     if (shopActivity == null) {
@@ -3289,7 +3292,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         shopDurationData.start_timestamp = shopActivity.startTimeStamp
                         shopDurationData.in_location = shopActivity.in_loc
                         shopDurationData.out_location = shopActivity.out_loc
-                        shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+                        try{
+                            shopDurationData.shop_revisit_uniqKey = shopActivity.shop_revisit_uniqKey!!
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                            shopDurationData.shop_revisit_uniqKey = Pref.user_id + System.currentTimeMillis().toString()
+                        }
 
                         //duration garbage fix
                         try{
@@ -3336,6 +3344,13 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         XLog.d("in_location========> " + shopDurationData.in_location)
                         XLog.d("out_location========> " + shopDurationData.out_location)
                         XLog.d("========================================================")
+
+
+                        counterShopList++
+                        if(counterShopList > 25){
+                            break
+                        }
+
                     }
                 }
                 else {

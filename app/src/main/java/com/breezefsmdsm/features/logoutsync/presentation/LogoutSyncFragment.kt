@@ -2510,292 +2510,298 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
             val revisitStatusList : MutableList<ShopRevisitStatusRequestData> = ArrayList()
 
-            for (k in 0 until syncedShopList.size) {
+            doAsync {
 
-                if (!Pref.isMultipleVisitEnable) {
-                    /* Get shop activity that has completed time duration calculation*/
-                    val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(syncedShopList[k].shop_id, true,
+                var counterShopList:Int = 0
+
+                for (k in 0 until syncedShopList.size) {
+
+                    if (!Pref.isMultipleVisitEnable) {
+                        /* Get shop activity that has completed time duration calculation*/
+                        val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(syncedShopList[k].shop_id, true,
                             false)
-                    if (shopActivity == null) {
-
-                        val shop_activity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForTodayShop(syncedShopList[k].shop_id,
+                        if (shopActivity == null) {
+                            val shop_activity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForTodayShop(syncedShopList[k].shop_id,
                                 true, true, AppUtils.getCurrentDateForShopActi())
-                        if (shop_activity != null)
-                            syncedShop.add(shop_activity)
+                            if (shop_activity != null)
+                                syncedShop.add(shop_activity)
+                        } else {
+                            val shopDurationData = ShopDurationRequestData()
+                            shopDurationData.shop_id = shopActivity?.shopid
+                            shopDurationData.spent_duration = shopActivity?.duration_spent
+                            shopDurationData.visited_date = shopActivity?.visited_date
+                            shopDurationData.visited_time = shopActivity?.visited_date
+                            if (TextUtils.isEmpty(shopActivity.distance_travelled))
+                                shopActivity.distance_travelled = "0.0"
+                            shopDurationData.distance_travelled = shopActivity.distance_travelled
+                            if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity?.shopid) != null)
+                                shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity?.shopid).totalVisitCount
+                            else
+                                shopDurationData.total_visit_count = "1"
 
-                    } else {
-                        val shopDurationData = ShopDurationRequestData()
-                        shopDurationData.shop_id = shopActivity?.shopid
-                        shopDurationData.spent_duration = shopActivity?.duration_spent
-                        shopDurationData.visited_date = shopActivity?.visited_date
-                        shopDurationData.visited_time = shopActivity?.visited_date
-                        if (TextUtils.isEmpty(shopActivity.distance_travelled))
-                            shopActivity.distance_travelled = "0.0"
-                        shopDurationData.distance_travelled = shopActivity.distance_travelled
-                        if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity?.shopid) != null)
-                            shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopActivity?.shopid).totalVisitCount
-                        else
-                            shopDurationData.total_visit_count = "1"
+                            val currentShopVisitDateNumber = AppUtils.getTimeStampFromDateOnly(shopActivity.date!!)
 
-                        val currentShopVisitDateNumber = AppUtils.getTimeStampFromDateOnly(shopActivity.date!!)
+                            if (shopId == shopActivity.shopid && previousShopVisitDateNumber == currentShopVisitDateNumber)
+                                continue
 
-                        if (shopId == shopActivity.shopid && previousShopVisitDateNumber == currentShopVisitDateNumber)
-                            continue
+                            shopId = shopActivity.shopid!!
+                            shopVisitDate = shopActivity.date!!
+                            previousShopVisitDateNumber = currentShopVisitDateNumber
 
-                        shopId = shopActivity.shopid!!
-                        shopVisitDate = shopActivity.date!!
-                        previousShopVisitDateNumber = currentShopVisitDateNumber
+                            if (!TextUtils.isEmpty(shopActivity.feedback))
+                                shopDurationData.feedback = shopActivity.feedback
+                            else
+                                shopDurationData.feedback = ""
 
-                        if (!TextUtils.isEmpty(shopActivity.feedback))
-                            shopDurationData.feedback = shopActivity.feedback
-                        else
-                            shopDurationData.feedback = ""
+                            shopDurationData.isFirstShopVisited = shopActivity.isFirstShopVisited
+                            shopDurationData.distanceFromHomeLoc = shopActivity.distance_from_home_loc
+                            shopDurationData.next_visit_date = shopActivity.next_visit_date
 
-                        shopDurationData.isFirstShopVisited = shopActivity.isFirstShopVisited
-                        shopDurationData.distanceFromHomeLoc = shopActivity.distance_from_home_loc
-                        shopDurationData.next_visit_date = shopActivity.next_visit_date
+                            if (!TextUtils.isEmpty(shopActivity.early_revisit_reason))
+                                shopDurationData.early_revisit_reason = shopActivity.early_revisit_reason
+                            else
+                                shopDurationData.early_revisit_reason = ""
 
-                        if (!TextUtils.isEmpty(shopActivity.early_revisit_reason))
-                            shopDurationData.early_revisit_reason = shopActivity.early_revisit_reason
-                        else
-                            shopDurationData.early_revisit_reason = ""
+                            shopDurationData.device_model = shopActivity.device_model
+                            shopDurationData.android_version = shopActivity.android_version
+                            shopDurationData.battery = shopActivity.battery
+                            shopDurationData.net_status = shopActivity.net_status
+                            shopDurationData.net_type = shopActivity.net_type
+                            shopDurationData.in_time = shopActivity.in_time
+                            shopDurationData.out_time = shopActivity.out_time
+                            shopDurationData.start_timestamp = shopActivity.startTimeStamp
+                            shopDurationData.in_location = shopActivity.in_loc
+                            shopDurationData.out_location = shopActivity.out_loc
+                            try{
+                                shopDurationData.shop_revisit_uniqKey=shopActivity.shop_revisit_uniqKey
+                            }catch (ex:java.lang.Exception){
+                                shopDurationData.shop_revisit_uniqKey = Pref.user_id + System.currentTimeMillis().toString()
+                            }
 
-                        shopDurationData.device_model = shopActivity.device_model
-                        shopDurationData.android_version = shopActivity.android_version
-                        shopDurationData.battery = shopActivity.battery
-                        shopDurationData.net_status = shopActivity.net_status
-                        shopDurationData.net_type = shopActivity.net_type
-                        shopDurationData.in_time = shopActivity.in_time
-                        shopDurationData.out_time = shopActivity.out_time
-                        shopDurationData.start_timestamp = shopActivity.startTimeStamp
-                        shopDurationData.in_location = shopActivity.in_loc
-                        shopDurationData.out_location = shopActivity.out_loc
-                        try{
-                            shopDurationData.shop_revisit_uniqKey=shopActivity.shop_revisit_uniqKey
-                        }catch (ex:java.lang.Exception){
-
-                        }
-
-                        //duration garbage fix
-                        try{
-                            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
-                            {
+                            //duration garbage fix
+                            try{
+                                if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                                {
+                                    shopDurationData.spent_duration="00:00:10"
+                                }
+                            }catch (ex:Exception){
                                 shopDurationData.spent_duration="00:00:10"
                             }
-                        }catch (ex:Exception){
-                            shopDurationData.spent_duration="00:00:10"
-                        }
 
-                        shopDataList.add(shopDurationData)
+                            shopDataList.add(shopDurationData)
 
 
-                        //////////////////////////
-                        try{
-                            var revisitStatusObj=ShopRevisitStatusRequestData()
-                            var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
-                            if(data != null){
-                                revisitStatusObj.shop_id=data.shop_id
-                                revisitStatusObj.order_status=data.order_status
-                                revisitStatusObj.order_remarks=data.order_remarks
-                                revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
-                                revisitStatusList.add(revisitStatusObj)
+                            //////////////////////////
+                            try{
+                                var revisitStatusObj=ShopRevisitStatusRequestData()
+                                var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                                if(data != null){
+                                    revisitStatusObj.shop_id=data.shop_id
+                                    revisitStatusObj.order_status=data.order_status
+                                    revisitStatusObj.order_remarks=data.order_remarks
+                                    revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                                    revisitStatusList.add(revisitStatusObj)
+                                }
+                            }catch (ex:java.lang.Exception){
+
                             }
-                        }catch (ex:java.lang.Exception){
+
+                            counterShopList++
+                            if(counterShopList > 300){
+                                break
+                            }
+
 
                         }
-
                     }
-                }
-                else {
-                    val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShopList(syncedShopList[k].shop_id, true,
+                    else {
+                        val shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShopList(syncedShopList[k].shop_id, true,
                             false)
 
-                    shopActivity?.forEach {
-                        val shopDurationData = ShopDurationRequestData()
-                        shopDurationData.shop_id = it.shopid
-                        shopDurationData.spent_duration = it.duration_spent
-                        shopDurationData.visited_date = it.visited_date
-                        shopDurationData.visited_time = it.visited_date
-                        if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid) != null)
-                            shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid).totalVisitCount
-                        else
-                            shopDurationData.total_visit_count = "1"
+                        shopActivity?.forEach {
+                            val shopDurationData = ShopDurationRequestData()
+                            shopDurationData.shop_id = it.shopid
+                            shopDurationData.spent_duration = it.duration_spent
+                            shopDurationData.visited_date = it.visited_date
+                            shopDurationData.visited_time = it.visited_date
+                            if (AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid) != null)
+                                shopDurationData.total_visit_count = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(it.shopid).totalVisitCount
+                            else
+                                shopDurationData.total_visit_count = "1"
 
-                        if (TextUtils.isEmpty(it.distance_travelled))
-                            it.distance_travelled = "0.0"
-                        shopDurationData.distance_travelled = it.distance_travelled
+                            if (TextUtils.isEmpty(it.distance_travelled))
+                                it.distance_travelled = "0.0"
+                            shopDurationData.distance_travelled = it.distance_travelled
 
-                        if (!TextUtils.isEmpty(it.feedback))
-                            shopDurationData.feedback = it.feedback
-                        else
-                            shopDurationData.feedback = ""
+                            if (!TextUtils.isEmpty(it.feedback))
+                                shopDurationData.feedback = it.feedback
+                            else
+                                shopDurationData.feedback = ""
 
-                        shopDurationData.isFirstShopVisited = it.isFirstShopVisited
-                        shopDurationData.distanceFromHomeLoc = it.distance_from_home_loc
+                            shopDurationData.isFirstShopVisited = it.isFirstShopVisited
+                            shopDurationData.distanceFromHomeLoc = it.distance_from_home_loc
 
-                        shopDurationData.next_visit_date = it.next_visit_date
+                            shopDurationData.next_visit_date = it.next_visit_date
 
-                        if (!TextUtils.isEmpty(it.early_revisit_reason))
-                            shopDurationData.early_revisit_reason = it.early_revisit_reason
-                        else
-                            shopDurationData.early_revisit_reason = ""
+                            if (!TextUtils.isEmpty(it.early_revisit_reason))
+                                shopDurationData.early_revisit_reason = it.early_revisit_reason
+                            else
+                                shopDurationData.early_revisit_reason = ""
 
-                        shopDurationData.device_model = it.device_model
-                        shopDurationData.android_version = it.android_version
-                        shopDurationData.battery = it.battery
-                        shopDurationData.net_status = it.net_status
-                        shopDurationData.net_type = it.net_type
-                        shopDurationData.in_time = it.in_time
-                        shopDurationData.out_time = it.out_time
-                        shopDurationData.start_timestamp = it.startTimeStamp
-                        shopDurationData.in_location = it.in_loc
-                        shopDurationData.out_location = it.out_loc
+                            shopDurationData.device_model = it.device_model
+                            shopDurationData.android_version = it.android_version
+                            shopDurationData.battery = it.battery
+                            shopDurationData.net_status = it.net_status
+                            shopDurationData.net_type = it.net_type
+                            shopDurationData.in_time = it.in_time
+                            shopDurationData.out_time = it.out_time
+                            shopDurationData.start_timestamp = it.startTimeStamp
+                            shopDurationData.in_location = it.in_loc
+                            shopDurationData.out_location = it.out_loc
 
-                        try{
-                            shopDurationData.shop_revisit_uniqKey=it.shop_revisit_uniqKey
-                        }catch (ex:Exception){
+                            try{
+                                shopDurationData.shop_revisit_uniqKey=it.shop_revisit_uniqKey
+                            }catch (ex:Exception){
 
-                        }
+                            }
 
-                        //duration garbage fix
-                        try{
-                            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
-                            {
+                            //duration garbage fix
+                            try{
+                                if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+                                {
+                                    shopDurationData.spent_duration="00:00:10"
+                                }
+                            }catch (ex:Exception){
                                 shopDurationData.spent_duration="00:00:10"
                             }
-                        }catch (ex:Exception){
-                            shopDurationData.spent_duration="00:00:10"
+
+                            shopDataList.add(shopDurationData)
+
+
+                            //////////////////////////
+
+                            try{
+                                var revisitStatusObj=ShopRevisitStatusRequestData()
+                                var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                                if(data != null ){
+                                    revisitStatusObj.shop_id=data.shop_id
+                                    revisitStatusObj.order_status=data.order_status
+                                    revisitStatusObj.order_remarks=data.order_remarks
+                                    revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
+                                    revisitStatusList.add(revisitStatusObj)
+                                }
+                            }catch (ex:Exception){
+
+                            }
+
+
+                        }
+                    }
+                }
+
+                uiThread {
+                    if (shopDataList.isEmpty()) {
+                        //isShopActivityUpdating = false
+
+                        val unSyncedList = ArrayList<ShopVisitImageModelEntity>()
+                        if (syncedShop != null && syncedShop.isNotEmpty()) {
+                            for (j in syncedShop.indices) {
+                                val unSyncImage = AppDatabase.getDBInstance()!!.shopVisitImageDao().getUnSyncedData(false, syncedShop[j].shopid!!)
+                                if (unSyncImage != null)
+                                    unSyncedList.add(unSyncImage)
+                            }
+                            if (unSyncedList != null && unSyncedList.isNotEmpty()) {
+                                i = 0
+                                BaseActivity.isShopActivityUpdating = false
+                                callShopVisitImageUploadApi(unSyncedList)
+                            } else {
+
+                                /*revisitTickImg.visibility = View.VISIBLE
+                                revisitSyncImg.visibility = View.GONE
+
+                                BaseActivity.isShopActivityUpdating = false
+                                calllogoutApi(Pref.user_id!!, Pref.session_token!!)*/
+
+                                val unSyncedAudioList = ArrayList<ShopVisitAudioEntity>()
+                                syncedShop.forEach {
+                                    val unSyncAudio = AppDatabase.getDBInstance()!!.shopVisitAudioDao().getUnSyncedData(false, it.shopid!!)
+                                    if (unSyncAudio != null)
+                                        unSyncedAudioList.add(unSyncAudio)
+                                }
+
+                                if (unSyncedAudioList.isNotEmpty()) {
+                                    i = 0
+                                    BaseActivity.isShopActivityUpdating = false
+                                    callShopVisitAudioUploadApi(unSyncedAudioList)
+                                } else
+                                    checkToRetryVisitButton()
+                            }
+                        } else {
+
+                            /*revisitTickImg.visibility = View.VISIBLE
+                            revisitSyncImg.visibility = View.GONE
+
+                            BaseActivity.isShopActivityUpdating = false
+                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)*/
+
+                            checkToRetryVisitButton()
+                        }
+                    }
+                    else {
+
+                        XLog.e("====SYNC VISITED SHOP (LOGOUT SYNC)====")
+                        XLog.e("ShopData List size===> " + shopDataList.size)
+
+                        //val newShopList = FTStorageUtils.removeDuplicateData(shopDataList)
+
+                        val hashSet = HashSet<ShopDurationRequestData>()
+                        val newShopList = ArrayList<ShopDurationRequestData>()
+
+                        if (!Pref.isMultipleVisitEnable) {
+                            for (i in shopDataList.indices) {
+                                if (hashSet.add(shopDataList[i]))
+                                    newShopList.add(shopDataList[i])
+                            }
                         }
 
-                        shopDataList.add(shopDurationData)
+                        val shopDurationApiReq = ShopDurationRequest()
+                        shopDurationApiReq.user_id = Pref.user_id
+                        shopDurationApiReq.session_token = Pref.session_token
+                        if (newShopList.size > 0) {
+                            XLog.e("Unique ShopData List size===> " + newShopList.size)
+                            shopDurationApiReq.shop_list = newShopList
+                        } else
+                            shopDurationApiReq.shop_list = shopDataList
 
+                        val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
 
-                        //////////////////////////
+                        XLog.d("callShopDurationApi (Logout Sync): REQUEST")
+
 
                         try{
-                            var revisitStatusObj=ShopRevisitStatusRequestData()
-                            var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getSingleItem(shopDurationData.shop_revisit_uniqKey.toString())
+                            revisitStatusList.clear()
+                            var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getUnsyncedList()
                             if(data != null ){
-                                revisitStatusObj.shop_id=data.shop_id
-                                revisitStatusObj.order_status=data.order_status
-                                revisitStatusObj.order_remarks=data.order_remarks
-                                revisitStatusObj.shop_revisit_uniqKey=data.shop_revisit_uniqKey
-                                revisitStatusList.add(revisitStatusObj)
+                                for(i in data?.indices){
+                                    var revisitStatusObj=ShopRevisitStatusRequestData()
+                                    revisitStatusObj.shop_id=data?.get(i)?.shop_id!!
+                                    revisitStatusObj.order_status=data?.get(i)?.order_status!!
+                                    revisitStatusObj.order_remarks=data?.get(i)?.order_remarks!!
+                                    revisitStatusObj.shop_revisit_uniqKey=data?.get(i)?.shop_revisit_uniqKey!!
+                                    revisitStatusList.add(revisitStatusObj)
+                                }
                             }
                         }catch (ex:Exception){
 
                         }
-
-
-                    }
-                }
-            }
-
-            if (shopDataList.isEmpty()) {
-                //isShopActivityUpdating = false
-
-                val unSyncedList = ArrayList<ShopVisitImageModelEntity>()
-                if (syncedShop != null && syncedShop.isNotEmpty()) {
-                    for (j in syncedShop.indices) {
-                        val unSyncImage = AppDatabase.getDBInstance()!!.shopVisitImageDao().getUnSyncedData(false, syncedShop[j].shopid!!)
-                        if (unSyncImage != null)
-                            unSyncedList.add(unSyncImage)
-                    }
-                    if (unSyncedList != null && unSyncedList.isNotEmpty()) {
-                        i = 0
-                        BaseActivity.isShopActivityUpdating = false
-                        callShopVisitImageUploadApi(unSyncedList)
-                    } else {
-
-                        /*revisitTickImg.visibility = View.VISIBLE
-                        revisitSyncImg.visibility = View.GONE
-
-                        BaseActivity.isShopActivityUpdating = false
-                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)*/
-
-                        val unSyncedAudioList = ArrayList<ShopVisitAudioEntity>()
-                        syncedShop.forEach {
-                            val unSyncAudio = AppDatabase.getDBInstance()!!.shopVisitAudioDao().getUnSyncedData(false, it.shopid!!)
-                            if (unSyncAudio != null)
-                                unSyncedAudioList.add(unSyncAudio)
-                        }
-
-                        if (unSyncedAudioList.isNotEmpty()) {
-                            i = 0
-                            BaseActivity.isShopActivityUpdating = false
-                            callShopVisitAudioUploadApi(unSyncedAudioList)
-                        } else
-                            checkToRetryVisitButton()
-                    }
-                } else {
-
-                    /*revisitTickImg.visibility = View.VISIBLE
-                    revisitSyncImg.visibility = View.GONE
-
-                    BaseActivity.isShopActivityUpdating = false
-                    calllogoutApi(Pref.user_id!!, Pref.session_token!!)*/
-
-                    checkToRetryVisitButton()
-                }
-            } else {
-
-                XLog.e("====SYNC VISITED SHOP (LOGOUT SYNC)====")
-                XLog.e("ShopData List size===> " + shopDataList.size)
-
-                //val newShopList = FTStorageUtils.removeDuplicateData(shopDataList)
-
-                val hashSet = HashSet<ShopDurationRequestData>()
-                val newShopList = ArrayList<ShopDurationRequestData>()
-
-                if (!Pref.isMultipleVisitEnable) {
-                    for (i in shopDataList.indices) {
-                        if (hashSet.add(shopDataList[i]))
-                            newShopList.add(shopDataList[i])
-                    }
-                }
-
-                val shopDurationApiReq = ShopDurationRequest()
-                shopDurationApiReq.user_id = Pref.user_id
-                shopDurationApiReq.session_token = Pref.session_token
-                if (newShopList.size > 0) {
-                    XLog.e("Unique ShopData List size===> " + newShopList.size)
-                    shopDurationApiReq.shop_list = newShopList
-                } else
-                    shopDurationApiReq.shop_list = shopDataList
-
-                val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
-
-                XLog.d("callShopDurationApi (Logout Sync): REQUEST")
-
-
-                try{
-                    revisitStatusList.clear()
-                    var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getUnsyncedList()
-                    if(data != null ){
-                        for(i in data?.indices){
-                            var revisitStatusObj=ShopRevisitStatusRequestData()
-                            revisitStatusObj.shop_id=data?.get(i)?.shop_id!!
-                            revisitStatusObj.order_status=data?.get(i)?.order_status!!
-                            revisitStatusObj.order_remarks=data?.get(i)?.order_remarks!!
-                            revisitStatusObj.shop_revisit_uniqKey=data?.get(i)?.shop_revisit_uniqKey!!
-                            revisitStatusList.add(revisitStatusObj)
-                        }
-                    }
-                }catch (ex:Exception){
-
-                }
-
-
-
-                BaseActivity.compositeDisposable.add(
-                        repository.shopDuration(shopDurationApiReq)
+                        BaseActivity.compositeDisposable.add(
+                            repository.shopDuration(shopDurationApiReq)
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
 //                        .timeout(60 * 1, TimeUnit.SECONDS)
                                 .subscribe({ result ->
                                     XLog.d("callShopDurationApi : RESPONSE " + result.status)
                                     if (result.status == NetworkConstant.SUCCESS) {
-
 
                                         if(!revisitStatusList.isEmpty()){
                                             callRevisitStatusUploadApi(revisitStatusList!!)
@@ -2829,12 +2835,6 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                                 checkToRetryVisitButton()
                                             }
                                         }
-
-
-
-
-
-
                                     } else {
                                         BaseActivity.isShopActivityUpdating = false
                                         /*revisitTickImg.visibility = View.VISIBLE
@@ -2857,7 +2857,9 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     checkToRetryVisitButton()
 //                                (mContext as DashboardActivity).showSnackMessage("ERROR")
                                 })
-                )
+                        )
+                    }
+                }
             }
         } else {
             stopAnimation(revisitSyncImg)
@@ -3001,6 +3003,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             val shopDataList: MutableList<ShopDurationRequestData> = ArrayList()
             val syncedShop = ArrayList<ShopActivityEntity>()
 
+            var counterShopList:Int = 0
+
             for (k in 0 until syncedShopList.size) {
 
                 if (!Pref.isMultipleVisitEnable) {
@@ -3031,6 +3035,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         }
 
                         shopDataList.add(shopDurationData)
+
+                        counterShopList++
+                        if(counterShopList > 300){
+                            break
+                        }
+
                     }
                 }
                 else {
@@ -3068,7 +3078,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             unSyncedList.add(unSyncImage)
                     }
                     if (unSyncedList != null && unSyncedList.isNotEmpty()) {
-                        tv_revisit_retry.visibility = View.VISIBLE
+                        //hardcode revisit retry gone
+                        //tv_revisit_retry.visibility = View.VISIBLE
 
                         if (!isRetryVisit)
                             checkToCallBillingApi()
@@ -3085,7 +3096,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         }
 
                         if (unSyncAudioList.isNotEmpty()) {
-                            tv_revisit_retry.visibility = View.VISIBLE
+                            //hardcode revisit retry gone
+                            //tv_revisit_retry.visibility = View.VISIBLE
 
                             if (!isRetryVisit)
                                 checkToCallBillingApi()
@@ -3111,7 +3123,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         isRetryVisit = true
                 }
             } else {
-                tv_revisit_retry.visibility = View.VISIBLE
+                //hardcode revisit retry gone
+                //tv_revisit_retry.visibility = View.VISIBLE
 
                 if (!isRetryVisit)
                     checkToCallBillingApi()
