@@ -2607,8 +2607,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             }
 
                             counterShopList++
-                            if(counterShopList > 300){
-                                break
+                            if(counterShopList > 350){
+                                //break
                             }
 
 
@@ -3037,8 +3037,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         shopDataList.add(shopDurationData)
 
                         counterShopList++
-                        if(counterShopList > 300){
-                            break
+                        if(counterShopList > 350){
+                            //break
                         }
 
                     }

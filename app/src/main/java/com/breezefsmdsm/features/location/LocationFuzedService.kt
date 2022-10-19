@@ -1058,6 +1058,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
             if (allShopList != null && allShopList.size > 0) {
                 for (i in 0 until allShopList.size) {
+
                     val shopLat: Double = allShopList[i].shopLat
                     val shopLong: Double = allShopList[i].shopLong
                     if (shopLat != null && shopLong != null) {
@@ -2648,7 +2649,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 9) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 45) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2674,7 +2675,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 12) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 75) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -3347,8 +3348,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
 
                         counterShopList++
-                        if(counterShopList > 25){
-                            break
+                        if(counterShopList > 300){
+                            //break
                         }
 
                     }
@@ -4402,11 +4403,14 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>){
         doAsync {
             try{
-                var lastobj = listUnsync.get(listUnsync.size-1)
+                XLog.d("updateActivityGarbage FuzedService started " + AppUtils.getCurrentDateTime())
+                var  lastobj = listUnsync.get(listUnsync.size-1)
                 if(!lastobj.date.equals(AppUtils.getCurrentDateForShopActi())){
                     AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,AppUtils.getCurrentDateForShopActi())
                 }
-            }catch (ex:Exception){ex.printStackTrace()}
+            }catch (ex:Exception){
+                ex.printStackTrace()
+            }
 
 
             for(i in 0..listUnsync.size-1){
@@ -4420,6 +4424,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 if(shopListRoom.size > shopListApi.size){
                     var unsyncedList: List<String> = shopListRoom - shopListApi
                     for(j in 0..unsyncedList.size-1){
+                        try{
+                            XLog.d("updateActivityGarbage FuzedService marked unsync for  ${unsyncedList.get(j)}" + AppUtils.getCurrentDateTime())
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZero(false,unsyncedList.get(j),listUnsync.get(i)!!.date!!.toString())
                     }
                 }

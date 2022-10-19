@@ -9782,8 +9782,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 }
 
                                 counterShopList++
-                                if(counterShopList > 35){
-                                    break
+                                if(counterShopList > 300){
+                                    //break
                                 }
 
                             }
@@ -10569,12 +10569,18 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>){
         doAsync {
+            XLog.d("updateActivityGarbage DashFrag started " + AppUtils.getCurrentDateTime())
             for(i in 0..listUnsync.size-1){
                 var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(listUnsync.get(i)!!.date!!.toString()) as ArrayList<String>
                 var shopListApi : ArrayList<String> = listUnsync.get(i)?.shop_list!!.map { it.shopid } as ArrayList<String>
                 if(shopListRoom.size > shopListApi.size){
                     var unsyncedList: List<String> = shopListRoom - shopListApi
                     for(j in 0..unsyncedList.size-1){
+                        try{
+                            XLog.d("updateActivityGarbage DashFrag marked unsync for  ${unsyncedList.get(j)}" + AppUtils.getCurrentDateTime())
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZero(false,unsyncedList.get(j),listUnsync.get(i)!!.date!!.toString())
                     }
                 }
@@ -10695,8 +10701,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }
 
                         counterShopList++
-                        if(counterShopList > 35){
-                            break
+                        if(counterShopList > 300){
+                            //break
                         }
 
                     }

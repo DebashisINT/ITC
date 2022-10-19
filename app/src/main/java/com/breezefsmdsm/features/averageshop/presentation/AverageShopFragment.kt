@@ -1,10 +1,12 @@
 package com.breezefsmdsm.features.averageshop.presentation
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import androidx.core.content.ContextCompat
@@ -96,6 +98,10 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
     val revisitStatusList : MutableList<ShopRevisitStatusRequestData> = ArrayList()
 
+    lateinit var simpleDialogProcess : Dialog
+    lateinit var dialogHeaderProcess: AppCustomTextView
+    lateinit var dialog_yes_no_headerTVProcess: AppCustomTextView
+
     private lateinit var mContext: Context
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -112,6 +118,12 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
     private fun initView(view: View) {
 
+        simpleDialogProcess = Dialog(mContext)
+        simpleDialogProcess.setCancelable(false)
+        simpleDialogProcess.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        simpleDialogProcess.setContentView(R.layout.dialog_message_progress)
+        dialogHeaderProcess = simpleDialogProcess.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+        dialog_yes_no_headerTVProcess = simpleDialogProcess.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
 
         /*NEW CALENDER*/
         picker = view.findViewById<HorizontalPicker>(R.id.datePicker)
@@ -172,7 +184,12 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                 //AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,"2022-09-28")
                 //AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,"2022-09-30")
 
-                callShopActivityApiForActivityCheck()
+                if(!isShopActivityUpdating){
+                    if(AppUtils.isOnline(mContext)){
+                    callShopActivityApiForActivityCheck()
+                        //callShopDurationApiNew()
+                    }
+                }
                 //callShopDurationApiNew()
             /*
                 Handler().postDelayed(Runnable {
@@ -253,7 +270,15 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         }
     }
 
+
     private fun callShopActivityApiForActivityCheck() {
+        dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
+        val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        val progD = simpleDialogProcess.findViewById(R.id.progress_wheel_progress) as ProgressWheel
+        progD.spin()
+        simpleDialogProcess.show()
+
+
         progress_wheel.spin()
         var shopActivity = ShopActivityRequest()
         shopActivity.user_id = Pref.user_id
@@ -283,6 +308,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                         callShopDurationApiNew()
                     }
                 }, { error ->
+                    simpleDialogProcess.dismiss()
                     progress_wheel.stopSpinning()
                     error.printStackTrace()
                     callShopDurationApiNew()
@@ -292,6 +318,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
     fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>){
         progress_wheel.spin()
+
         doAsync {
             for(i in 0..listUnsync.size-1){
                 var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(listUnsync.get(i)!!.date!!.toString()) as ArrayList<String>
@@ -305,6 +332,11 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                 if(shopListRoom.size > shopListApi.size){
                     var unsyncedList: List<String> = shopListRoom - shopListApi
                     for(j in 0..unsyncedList.size-1){
+                        try{
+                            XLog.d("updateActivityGarbage averageshopfrag marked unsync for  ${unsyncedList.get(j)}" + AppUtils.getCurrentDateTime())
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZero(false,unsyncedList.get(j),listUnsync.get(i)!!.date!!.toString())
                     }
                 }
@@ -2344,8 +2376,10 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
 
     private fun callShopDurationApiNew() {
-        if (Pref.user_id.isNullOrEmpty() || isShopActivityUpdating)
+        if (Pref.user_id.isNullOrEmpty() || isShopActivityUpdating){
+            simpleDialogProcess.dismiss()
             return
+        }
 
         val syncedShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().getUnSyncedShops(true)
         if (syncedShopList.isEmpty())
@@ -2461,8 +2495,8 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                         }
 
                         counterShopList++
-                        if(counterShopList > 25){
-                            break
+                        if(counterShopList > 300){
+                            //break
                         }
 
 
@@ -2548,6 +2582,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                 if (shopDataList.isEmpty()) {
                     BaseActivity.isShopActivityUpdating = false
                     progress_wheel.stopSpinning()
+                    simpleDialogProcess.dismiss()
                     //callShopDurationApiNewAfter()
                     Handler().postDelayed(Runnable {
                         progress_wheel.stopSpinning()
@@ -2581,6 +2616,8 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
+                                simpleDialogProcess.dismiss()
+                                XLog.e("averageshopfrag callShopDurationApiNew response " + newShopList.size)
                                 if (result.status == NetworkConstant.SUCCESS) {
                                     if(!revisitStatusList.isEmpty()){
                                         callRevisitStatusUploadApi(revisitStatusList!!)
@@ -2611,12 +2648,13 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                                     initShopList()
                                 }, 500)
                             }, { error ->
+                                simpleDialogProcess.dismiss()
                                 BaseActivity.isShopActivityUpdating = false
                                 progress_wheel.stopSpinning()
                                 if (error == null) {
-                                    XLog.d("callShopDurationApii : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
+                                    XLog.d("averageshopfrag callShopDurationApii : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
                                 } else {
-                                    XLog.d("callShopDurationApii : ERROR " + error.localizedMessage)
+                                    XLog.d("averageshopfrag callShopDurationApii : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                                 //ShopActivityEntityList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())

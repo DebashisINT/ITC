@@ -223,5 +223,11 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("CREATE INDEX ACTIVITY_ID_DATE ON shop_activity (shopid,visited_date)")
             }
         }
+        val MIGRATION_7_8: Migration = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITYID' ")
+                database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITY_ID_DATE' ")
+            }
+        }
     }
 }

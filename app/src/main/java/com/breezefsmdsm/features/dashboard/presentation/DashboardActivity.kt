@@ -11389,6 +11389,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
             if (allShopList != null && allShopList.size > 0) {
                 for (i in 0 until allShopList.size) {
+
+
+
                     val shopLat: Double = allShopList[i].shopLat
                     val shopLong: Double = allShopList[i].shopLong
                     if (shopLat != null && shopLong != null) {
@@ -11396,8 +11399,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         shopLocation.latitude = shopLat
                         shopLocation.longitude = shopLong
                         shop_id = allShopList[i].shop_id
-                        val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
+                        var isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
                         println("autorev ${allShopList[i].shopName}  $isShopNearby")
+
+
+
                         if (isShopNearby) {
                             val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(allShopList[i].shop_id, AppUtils.getCurrentDateForShopActi())
                             if (shopActivityList == null || shopActivityList.isEmpty()) {
