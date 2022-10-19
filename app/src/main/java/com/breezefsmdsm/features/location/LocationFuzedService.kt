@@ -1057,6 +1057,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         if (distance * 1000 > autoRevDistance) {
             val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
             if (allShopList != null && allShopList.size > 0) {
+                var nearbyAddCount:Int = 0
                 for (i in 0 until allShopList.size) {
 
                     val shopLat: Double = allShopList[i].shopLat
@@ -1067,12 +1068,19 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         shopLocation.longitude = shopLong
                         shop_id = allShopList[i].shop_id
                         val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
-                        println("autorev ${allShopList[i].shopName}  $isShopNearby")
+
                         if (isShopNearby) {
                             val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(allShopList[i].shop_id, AppUtils.getCurrentDateForShopActi())
                             if (shopActivityList == null || shopActivityList.isEmpty()) {
 
                                 shopCodeListNearby.add(shop_id)
+                                println("autorev ${allShopList[i].shopName}  $isShopNearby  added")
+
+                                nearbyAddCount++
+                                if(nearbyAddCount>200)
+                                {
+                                    //break
+                                }
 
                             } else
                                 XLog.e("==" + allShopList[i].shopName + " is visiting now normally (Loc Fuzed Service)==")
@@ -1096,12 +1104,14 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             shop_id = shopCodeListNearby.get(0)
             if(shopCodeListNearby.size>0)
                 shopCodeListNearby.removeAt(0)
+
+            println("autorev postDelayed ${shopCodeListNearby.size}")
         }catch (ex:Exception){
             println("autorev error")
             return
         }
 
-
+        XLog.e("LocFuzed revisitShopAll started ${AppUtils.getCurrentDateTime()} with shop:  $shop_id")
 
         try {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -1137,8 +1147,10 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 XLog.e("======New Distance (At auto revisit time)=========")
 
                 val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shop_id)
-                address = if (!TextUtils.isEmpty(shop.actual_address))
-                    shop.actual_address
+                //address = if (!TextUtils.isEmpty(shop.actual_address))
+                address = if (!TextUtils.isEmpty(shop.address))
+                    shop.address
+                    //shop.actual_address
                 else
                     LocationWizard.getNewLocationName(this, shop.shopLat.toDouble(), shop.shopLong.toDouble())
 
@@ -1280,7 +1292,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
             Handler().postDelayed(Runnable {
                 revisitShopAll()
-            }, 100)
+            }, 50)
 
 
         } catch (e: Exception) {
@@ -2649,7 +2661,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldShopActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 45) {
+        return if (abs(System.currentTimeMillis() - Pref.prevShopActivityTimeStamp) > 1000 * 60 * 10) {
             Pref.prevShopActivityTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2675,7 +2687,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 75) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 14) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
