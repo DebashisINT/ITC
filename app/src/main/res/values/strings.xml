@@ -566,6 +566,7 @@
     <string name="no_internet" translatable="false">Please check your internet connection.</string>
     <string name="alert_nolocation" translatable="false">Please enable your device location.</string>
     <string name="something_went_wrong" translatable="false">Something went wrong. Please try again later</string>
+    <string name="try_again_later" translatable="false">Please try again later</string>
     <string name="something_went_wrong_new" translatable="false">Something went wrong. Please try again later..</string>
     <string name="no_value" translatable="false">Please Insert Value</string>
     <string name="unable_to_sync" translatable="false">Unable to sync</string>

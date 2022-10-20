@@ -7440,7 +7440,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
         }
 
-        if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
+        if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1 ) {
             XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby dd found")
             startDay(finalNearByShop, finalNearByDD, location, false)
         } else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
