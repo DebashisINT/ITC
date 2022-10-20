@@ -281,9 +281,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private fun getShopActivityList() {
         if (AppDatabase.getDBInstance()!!.shopActivityDao().getAll().isEmpty()) {
             Handler().postDelayed(Runnable {
-                println("load_frag callShopActivityApi")
+                XLog.d("DashFrag callShopActivityApi started ${AppUtils.getCurrentDateTime()}")
                 callShopActivityApi()
-            }, 500)
+            }, 100)
         } else
             checkToCallMemberList()
     }
@@ -304,32 +304,39 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 .subscribeOn(Schedulers.io())
                 .subscribe({ result ->
                     var shopActityResponse = result as ShopActivityResponse
-                    println("load_frag callShopActivityApi ${shopActityResponse.status}")
+                    XLog.d("DashFrag callShopActivityApi ${shopActityResponse.status} ${AppUtils.getCurrentDateTime()}")
                     if (shopActityResponse.status == "200") {
+
+
+
                         updateShopTableInDB(shopActityResponse.date_list)
-                        var list = AppDatabase.getDBInstance()!!.shopActivityDao()
-                            .getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
-                        var totalMinute = InfoWizard.getTotalShopVisitTimeForActi()
-                        Pref.totalShopVisited =
-                            (Pref.totalShopVisited.toInt() - list.size).toString()
-                        Pref.totalTimeSpenAtShop =
-                            (Pref.totalTimeSpenAtShop.toInt() - totalMinute).toString()
 
-                        val todaysShopVisitCount = InfoWizard.getAvergareShopVisitCount()
-                        XLog.e("=======RESPONSE FROM SHOP ACTIVITY API (DASHBOARD FRAGMENT)=======")
-                        XLog.e("Today's Shop Visit Count====> $todaysShopVisitCount")
 
-                        avgShop.text = todaysShopVisitCount
-                        avgTime.text = InfoWizard.getAverageShopVisitTimeDuration() + " Hrs"
+                                var list = AppDatabase.getDBInstance()!!.shopActivityDao()
+                                    .getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+                                var totalMinute = InfoWizard.getTotalShopVisitTimeForActi()
+                                Pref.totalShopVisited =
+                                    (Pref.totalShopVisited.toInt() - list.size).toString()
+                                Pref.totalTimeSpenAtShop =
+                                    (Pref.totalTimeSpenAtShop.toInt() - totalMinute).toString()
 
-                        when {
-                            Pref.willActivityShow -> avgOrder.text =
-                                InfoWizard.getActivityForToday()
-                            Pref.isQuotationShow -> avgOrder.text =
-                                getString(R.string.rupee_symbol) + InfoWizard.getTotalQuotAmountForToday()
-                            else -> avgOrder.text =
-                                getString(R.string.rupee_symbol) + InfoWizard.getTotalOrderAmountForToday()
-                        }
+                                val todaysShopVisitCount = InfoWizard.getAvergareShopVisitCount()
+                                XLog.e("=======RESPONSE FROM SHOP ACTIVITY API (DASHBOARD FRAGMENT)=======")
+                                XLog.e("Today's Shop Visit Count====> $todaysShopVisitCount")
+
+                                avgShop.text = todaysShopVisitCount
+                                avgTime.text = InfoWizard.getAverageShopVisitTimeDuration() + " Hrs"
+
+                                when {
+                                    Pref.willActivityShow -> avgOrder.text =
+                                        InfoWizard.getActivityForToday()
+                                    Pref.isQuotationShow -> avgOrder.text =
+                                        getString(R.string.rupee_symbol) + InfoWizard.getTotalQuotAmountForToday()
+                                    else -> avgOrder.text =
+                                        getString(R.string.rupee_symbol) + InfoWizard.getTotalOrderAmountForToday()
+                                }
+
+
 
 //                                (mContext as DashboardActivity).showSnackMessage(result.message!!)
                     } else {
@@ -342,6 +349,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     checkToCallMemberList()
                     (mContext as DashboardActivity).takeActionOnGeofence()
                 }, { error ->
+                    XLog.d("DashFrag callShopActivityApi error ${error.message} ${AppUtils.getCurrentDateTime()}")
                     println("load_frag callShopActivityApi error")
                     error.printStackTrace()
                     //(mContext as DashboardActivity).showSnackMessage("ERROR")
@@ -354,50 +362,60 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun updateShopTableInDB(date_list: List<ShopActivityResponseDataList>?) {
-        for (i in date_list!!.indices) {
-            for (j in 0 until date_list[i].shop_list!!.size) {
-                var shopActivityEntity = ShopActivityEntity()
-                shopActivityEntity.shopid = date_list[i].shop_list!![j].shopid
-                shopActivityEntity.shop_name = date_list[i].shop_list!![j].shop_name
-                shopActivityEntity.shop_address = date_list[i].shop_list!![j].shop_address
-                shopActivityEntity.date = date_list[i].shop_list!![j].date
-                if (date_list[i].shop_list!![j].duration_spent!!.contains("."))
-                    shopActivityEntity.duration_spent =
-                        date_list[i].shop_list!![j].duration_spent!!.split(".")[0]
-                else
-                    shopActivityEntity.duration_spent = date_list[i].shop_list!![j].duration_spent!!
-                shopActivityEntity.totalMinute =
-                    AppUtils.convertMinuteFromHHMMSS(shopActivityEntity.duration_spent)
 
-                if (!TextUtils.isEmpty(date_list[i].shop_list!![j].start_timestamp))
-                    shopActivityEntity.startTimeStamp =
-                        date_list[i].shop_list!![j].start_timestamp!!
-                else
-                    shopActivityEntity.startTimeStamp = "0"
+        doAsync {
 
-                shopActivityEntity.endTimeStamp = "0"
-                shopActivityEntity.visited_date = date_list[i].shop_list!![j].visited_date
-                shopActivityEntity.isUploaded = true
-                shopActivityEntity.isVisited = true
-                shopActivityEntity.isDurationCalculated = true
-                shopActivityEntity.isFirstShopVisited = false
-                shopActivityEntity.distance_from_home_loc = ""
+            for (i in date_list!!.indices) {
+                for (j in 0 until date_list[i].shop_list!!.size) {
+                    var shopActivityEntity = ShopActivityEntity()
+                    shopActivityEntity.shopid = date_list[i].shop_list!![j].shopid
+                    shopActivityEntity.shop_name = date_list[i].shop_list!![j].shop_name
+                    shopActivityEntity.shop_address = date_list[i].shop_list!![j].shop_address
+                    shopActivityEntity.date = date_list[i].shop_list!![j].date
+                    if (date_list[i].shop_list!![j].duration_spent!!.contains("."))
+                        shopActivityEntity.duration_spent =
+                            date_list[i].shop_list!![j].duration_spent!!.split(".")[0]
+                    else
+                        shopActivityEntity.duration_spent = date_list[i].shop_list!![j].duration_spent!!
+                    shopActivityEntity.totalMinute =
+                        AppUtils.convertMinuteFromHHMMSS(shopActivityEntity.duration_spent)
 
-                shopActivityEntity.device_model = date_list[i].shop_list!![j].device_model
-                shopActivityEntity.android_version = date_list[i].shop_list!![j].android_version
-                shopActivityEntity.battery = date_list[i].shop_list!![j].battery
-                shopActivityEntity.net_status = date_list[i].shop_list!![j].net_status
-                shopActivityEntity.net_type = date_list[i].shop_list!![j].net_type
+                    if (!TextUtils.isEmpty(date_list[i].shop_list!![j].start_timestamp))
+                        shopActivityEntity.startTimeStamp =
+                            date_list[i].shop_list!![j].start_timestamp!!
+                    else
+                        shopActivityEntity.startTimeStamp = "0"
 
-                shopActivityEntity.in_time = date_list[i].shop_list!![j].in_time
-                shopActivityEntity.out_time = date_list[i].shop_list!![j].out_time
+                    shopActivityEntity.endTimeStamp = "0"
+                    shopActivityEntity.visited_date = date_list[i].shop_list!![j].visited_date
+                    shopActivityEntity.isUploaded = true
+                    shopActivityEntity.isVisited = true
+                    shopActivityEntity.isDurationCalculated = true
+                    shopActivityEntity.isFirstShopVisited = false
+                    shopActivityEntity.distance_from_home_loc = ""
 
-                shopActivityEntity.in_loc = date_list[i].shop_list!![j].in_location
-                shopActivityEntity.out_loc = date_list[i].shop_list!![j].out_location
-                shopActivityEntity.shop_revisit_uniqKey = date_list[i].shop_list!![j].Key!!
-                AppDatabase.getDBInstance()!!.shopActivityDao().insertAll(shopActivityEntity)
+                    shopActivityEntity.device_model = date_list[i].shop_list!![j].device_model
+                    shopActivityEntity.android_version = date_list[i].shop_list!![j].android_version
+                    shopActivityEntity.battery = date_list[i].shop_list!![j].battery
+                    shopActivityEntity.net_status = date_list[i].shop_list!![j].net_status
+                    shopActivityEntity.net_type = date_list[i].shop_list!![j].net_type
+
+                    shopActivityEntity.in_time = date_list[i].shop_list!![j].in_time
+                    shopActivityEntity.out_time = date_list[i].shop_list!![j].out_time
+
+                    shopActivityEntity.in_loc = date_list[i].shop_list!![j].in_location
+                    shopActivityEntity.out_loc = date_list[i].shop_list!![j].out_location
+                    shopActivityEntity.shop_revisit_uniqKey = date_list[i].shop_list!![j].Key!!
+                    AppDatabase.getDBInstance()!!.shopActivityDao().insertAll(shopActivityEntity)
+                }
+            }
+
+            uiThread {
+                XLog.d("DashFrag callShopActivityApi updateShopTableInDB finished ${AppUtils.getCurrentDateTime()}")
             }
         }
+
+
 
     }
 
@@ -10559,10 +10577,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                             }
                         }
+                    }else{
+                        endShopDuration()
                     }
                 }, { error ->
                     simpleDialogProcess.dismiss()
                     error.printStackTrace()
+                    endShopDuration()
                 })
         )
     }

@@ -160,7 +160,114 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         total_shop_TV.text = InfoWizard.getTotalShopVisitCount()
         noOfShop.text = InfoWizard.getAvergareShopVisitCount()
         sync_all_tv.setOnClickListener(this)
+
+
+        if (AppDatabase.getDBInstance()!!.shopActivityDao().getAll().isEmpty()) {
+            Handler().postDelayed(Runnable {
+                XLog.d("DashFrag callShopActivityApi started ${AppUtils.getCurrentDateTime()}")
+                callShopActivityApi()
+            }, 100)
+        }else{
+            initShopList()
+        }
+
+        /*Handler().postDelayed(Runnable {
         initShopList()
+        }, 2000)*/
+    }
+
+    private fun callShopActivityApi() {
+        var shopActivity = ShopActivityRequest()
+        shopActivity.user_id = Pref.user_id
+        shopActivity.session_token = Pref.session_token
+        shopActivity.date_span = "30"
+        shopActivity.from_date = ""
+        shopActivity.to_date = ""
+        val repository = ShopActivityRepositoryProvider.provideShopActivityRepository()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+            repository.fetchShopActivitynew(Pref.session_token!!, Pref.user_id!!, "30", "", "")
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                        var shopActityResponse = result as ShopActivityResponse
+                    progress_wheel.stopSpinning()
+                        XLog.d("AverageShopFrag callShopActivityApi ${shopActityResponse.status} ${AppUtils.getCurrentDateTime()}")
+                        if (shopActityResponse.status == "200") {
+                            updateShopTableInDB(shopActityResponse.date_list)
+                        }else{
+                            initShopList()
+                        }
+                           }, { error ->
+                    error.printStackTrace()
+                    progress_wheel.stopSpinning()
+                    initShopList()
+                })
+        )
+    }
+
+    private fun updateShopTableInDB(date_list: List<ShopActivityResponseDataList>?) {
+
+        progress_wheel.spin()
+
+        doAsync {
+
+            for (i in date_list!!.indices) {
+                for (j in 0 until date_list[i].shop_list!!.size) {
+                    var shopActivityEntity = ShopActivityEntity()
+                    shopActivityEntity.shopid = date_list[i].shop_list!![j].shopid
+                    shopActivityEntity.shop_name = date_list[i].shop_list!![j].shop_name
+                    shopActivityEntity.shop_address = date_list[i].shop_list!![j].shop_address
+                    shopActivityEntity.date = date_list[i].shop_list!![j].date
+                    if (date_list[i].shop_list!![j].duration_spent!!.contains("."))
+                        shopActivityEntity.duration_spent =
+                            date_list[i].shop_list!![j].duration_spent!!.split(".")[0]
+                    else
+                        shopActivityEntity.duration_spent = date_list[i].shop_list!![j].duration_spent!!
+                    shopActivityEntity.totalMinute =
+                        AppUtils.convertMinuteFromHHMMSS(shopActivityEntity.duration_spent)
+
+                    if (!TextUtils.isEmpty(date_list[i].shop_list!![j].start_timestamp))
+                        shopActivityEntity.startTimeStamp =
+                            date_list[i].shop_list!![j].start_timestamp!!
+                    else
+                        shopActivityEntity.startTimeStamp = "0"
+
+                    shopActivityEntity.endTimeStamp = "0"
+                    shopActivityEntity.visited_date = date_list[i].shop_list!![j].visited_date
+                    shopActivityEntity.isUploaded = true
+                    shopActivityEntity.isVisited = true
+                    shopActivityEntity.isDurationCalculated = true
+                    shopActivityEntity.isFirstShopVisited = false
+                    shopActivityEntity.distance_from_home_loc = ""
+
+                    shopActivityEntity.device_model = date_list[i].shop_list!![j].device_model
+                    shopActivityEntity.android_version = date_list[i].shop_list!![j].android_version
+                    shopActivityEntity.battery = date_list[i].shop_list!![j].battery
+                    shopActivityEntity.net_status = date_list[i].shop_list!![j].net_status
+                    shopActivityEntity.net_type = date_list[i].shop_list!![j].net_type
+
+                    shopActivityEntity.in_time = date_list[i].shop_list!![j].in_time
+                    shopActivityEntity.out_time = date_list[i].shop_list!![j].out_time
+
+                    shopActivityEntity.in_loc = date_list[i].shop_list!![j].in_location
+                    shopActivityEntity.out_loc = date_list[i].shop_list!![j].out_location
+                    shopActivityEntity.shop_revisit_uniqKey = date_list[i].shop_list!![j].Key!!
+                    AppDatabase.getDBInstance()!!.shopActivityDao().insertAll(shopActivityEntity)
+                }
+            }
+
+            uiThread {
+                progress_wheel.stopSpinning()
+                Handler().postDelayed(Runnable {
+                    XLog.d("DashFrag callShopActivityApi started ${AppUtils.getCurrentDateTime()}")
+                    initShopList()
+                }, 2000)
+                XLog.d("AverageShopFrag callShopActivityApi updateShopTableInDB finished ${AppUtils.getCurrentDateTime()}")
+            }
+        }
+
+
 
     }
 

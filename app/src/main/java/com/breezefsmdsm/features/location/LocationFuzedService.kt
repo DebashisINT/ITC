@@ -779,13 +779,13 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 Handler().postDelayed(Runnable {
                 if(AppUtils.isOnline(this)){
                     callShopDurationApi()
-                } }, 2000)
+                } }, 1000)
 
 
                 Handler().postDelayed(Runnable {
                    if(AppUtils.isOnline(this))
                         callShopActivityApiForActivityCheck()
-                }, 2000)
+                }, 1000)
 
 
 
@@ -2694,7 +2694,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 19) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 21) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -3537,8 +3537,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 //                        .timeout(60 * 1, TimeUnit.SECONDS)
                             .subscribe({ result ->
                                 XLog.d("callShopDurationApi : RESPONSE " + result.status)
-                                if (result.status == NetworkConstant.SUCCESS) {
 
+                                if (result.status == NetworkConstant.SUCCESS) {
+                                    var responseShopList = result.shop_list
                                     //callCompetetorImgUploadApi()
 
                                     if(!revisitStatusList.isEmpty()){
