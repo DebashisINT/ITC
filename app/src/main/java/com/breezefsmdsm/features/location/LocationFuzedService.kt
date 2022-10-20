@@ -4558,10 +4558,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     fun callAddShopApi(addShop: AddShopRequestData, shop_imgPath: String?, shopList: MutableList<AddShopDBModelEntity>?,
                        isFromInitView: Boolean, degree_imgPath: String?) {
-        if (!AppUtils.isOnline(this)) {
-            (this as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-            return
-        }
         val index = addShop.shop_id!!.indexOf("_")
         if (shop_imgPath != null)
             XLog.d("shop image path=======> $shop_imgPath")
@@ -4602,12 +4598,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                             }
                             else -> {
-                                (this as DashboardActivity).showSnackMessage(addShopResult.message!!)
+
                             }
                         }
                     }, { error ->
                         error.printStackTrace()
-                        (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
+
                         syncShopListOnebyOne()
                         if (error != null)
                             XLog.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
@@ -4648,12 +4644,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                 }
                             }
                             else -> {
-                                (this as DashboardActivity).showSnackMessage(addShopResult.message!!)
+
                             }
                         }
                     }, { error ->
                         error.printStackTrace()
-                        (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
+
                         syncShopListOnebyOne()
                         if (error != null)
                             XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
