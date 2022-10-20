@@ -277,7 +277,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         }, { error ->
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
-//                            (mContext as DashboardActivity).showSnackMessage("ERROR")
+                            (mContext as DashboardActivity).showSnackMessage("Please try again later.")
                         })
         )
     }
