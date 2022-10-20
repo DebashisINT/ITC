@@ -16,11 +16,13 @@ import retrofit2.http.POST
  * Created by Pratishruti on 07-12-2017.
  */
 interface ShopActivityApi {
-    @POST("Daywiseshop/Records")
+    //@POST("Daywiseshop/Records")
+    @POST("Daywiseshop/ITCRecords")
     fun fetchShopActivity(@Body shopActivityRequest: ShopActivityRequest?): Observable<ShopActivityResponse>
 
     @FormUrlEncoded
-    @POST("Daywiseshop/Records")
+    //@POST("Daywiseshop/Records")
+    @POST("Daywiseshop/ITCRecords")
     fun fetchShopActivitynew(@Field("session_token") session_token: String, @Field("user_id") user_id: String, @Field("date_span") date_span: String,
                              @Field("from_date") from_date: String,@Field("to_date") to_date: String): Observable<ShopActivityResponse>
 

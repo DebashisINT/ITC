@@ -3724,7 +3724,17 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             } else {
                                 progress_wheel.stopSpinning()
                                 println("xyz - callNewSettingsApi " + newSettings.message!!);
-                                openDialogPopup(newSettings.message!!)
+                                try{
+                                    if(newSettings.message!!.contains("deadlock",ignoreCase = true) || newSettings.message!!.contains("timeout",ignoreCase = true)){
+                                        openDialogPopup("Please try again..")
+                                    }else{
+                                        openDialogPopup(newSettings.message!!)
+                                    }
+                                }catch (ex:Exception){
+                                    ex.printStackTrace()
+                                    openDialogPopup("Please try again..")
+                                }
+
 //                                showSnackMessage(newSettings.message!!)
                                 login_TV.isEnabled = true
                             }
@@ -4103,7 +4113,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 println("xyz - doLogin 220 " + loginResponse.message!!);
                                 openDialogPopup(loginResponse.message!!)
 //                                Toaster.msgLong(this, loginResponse.message!!)
-                            } else {
+                            }
+                            else {
                                 progress_wheel.stopSpinning()
 
                                 if(loginResponse.message!!.contains("IMEI",ignoreCase = true))
@@ -6449,8 +6460,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun deleteImei(){
         if(Pref.IsIMEICheck){
             XLog.d("deleteImei IsIMEICheck : " + Pref.IsIMEICheck.toString() + "Time : " + AppUtils.getCurrentDateTime())
-            //gotoHomeActivity()
-            deleteConcurrentUserDtls()
+            gotoHomeActivity()
+            //deleteConcurrentUserDtls()
         }else{
                    try {
                 val repository = ShopListRepositoryProvider.provideShopListRepository()
@@ -6462,22 +6473,22 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     val response = result as BaseResponse
                                     XLog.d("deleteImei " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                                     if (response.status == NetworkConstant.SUCCESS) {
-                                        //gotoHomeActivity()
-                                        deleteConcurrentUserDtls()
+                                        gotoHomeActivity()
+                                        //deleteConcurrentUserDtls()
                                     } else {
-                                        //gotoHomeActivity()
-                                        deleteConcurrentUserDtls()
+                                        gotoHomeActivity()
+                                        //deleteConcurrentUserDtls()
                                     }
                                 }, { error ->
                                     progress_wheel.stopSpinning()
-                                    //gotoHomeActivity()
-                                    deleteConcurrentUserDtls()
+                                    gotoHomeActivity()
+                                    //deleteConcurrentUserDtls()
                                 })
                 )
         } catch (ex: Exception) {
             ex.printStackTrace()
-            //gotoHomeActivity()
-         deleteConcurrentUserDtls()
+            gotoHomeActivity()
+         //deleteConcurrentUserDtls()
         }
         }
     }
@@ -7055,12 +7066,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
     fun openDialogPopup(text:String){
+
+        var msg = text
+
+        if(msg.contains("deadlock",ignoreCase = true) || msg.contains("timeout",ignoreCase = true)){
+            msg = "Please try again.."
+        }
+
         val simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(false)
         simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         simpleDialog.setContentView(R.layout.dialog_ok)
         val dialogHeader = simpleDialog.findViewById(R.id.dialog_yes_header_TV) as AppCustomTextView
-        dialogHeader.text = text
+        dialogHeader.text = msg
         val dialogYes = simpleDialog.findViewById(R.id.tv_dialog_yes) as AppCustomTextView
         dialogYes.setOnClickListener({ view ->
             simpleDialog.cancel()

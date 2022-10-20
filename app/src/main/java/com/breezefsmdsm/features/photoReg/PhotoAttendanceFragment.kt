@@ -277,7 +277,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         }, { error ->
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
-//                            (mContext as DashboardActivity).showSnackMessage("ERROR")
+                            (mContext as DashboardActivity).showSnackMessage("Please try again later.")
                         })
         )
     }
@@ -328,6 +328,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         }, { error ->
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.try_again_later))
 //                            (mContext as DashboardActivity).showSnackMessage("ERROR")
                         })
         )
@@ -1074,7 +1075,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
                             } else {
                                 BaseActivity.isApiInitiated = false
-                                (mContext as DashboardActivity).showSnackMessage(response.message!!)
+                                //(mContext as DashboardActivity).showSnackMessage(response.message!!)
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.try_again_later))
                             }
                         }, { error ->
 
@@ -1453,7 +1455,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             simpleDialogProcess.dismiss()
                             error.printStackTrace()
                             XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + error.localizedMessage)
-                            (mContext as DashboardActivity).showSnackMessage(error.localizedMessage)
+                            //(mContext as DashboardActivity).showSnackMessage(error.localizedMessage)
+
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.try_again_later))
 
                             //delete attendance-daystartend
                             apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
@@ -1505,7 +1509,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                     }
                 }, { error ->
                     progress_wheel.stopSpinning()
-                    (mContext as DashboardActivity).showSnackMessage("ERROR")
+                    //(mContext as DashboardActivity).showSnackMessage("ERROR")
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.try_again_later))
                 })
         )
     }
@@ -1534,7 +1539,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                     }
                 }, { error ->
                     progress_wheel.stopSpinning()
-                    (mContext as DashboardActivity).showSnackMessage("ERROR")
+                    //(mContext as DashboardActivity).showSnackMessage("ERROR")
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.try_again_later))
                 })
         )
     }
