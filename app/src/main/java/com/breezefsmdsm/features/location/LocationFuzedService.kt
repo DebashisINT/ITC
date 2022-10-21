@@ -776,6 +776,15 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     syncShopListOnebyOne()
                 }
 
+                if(shouldEndShopDurationUpdate()){
+                    XLog.d("endShopDuration : if ${AppUtils.getCurrentDateTime()}")
+                    endShopDuration()
+                }else{
+                    XLog.d("endShopDuration : else ${AppUtils.getCurrentDateTime()}")
+
+                }
+
+
                 Handler().postDelayed(Runnable {
                 if(AppUtils.isOnline(this)){
                     callShopDurationApi()
@@ -786,9 +795,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                    if(AppUtils.isOnline(this))
                         callShopActivityApiForActivityCheck()
                 }, 1000)
-
-
-
 
 
                 //syncShopVisitImage()
@@ -2679,6 +2685,19 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         }
     }
 
+    private fun shouldEndShopDurationUpdate(): Boolean {
+        AppUtils.changeLanguage(this,"en")
+        return if (abs(System.currentTimeMillis() - Pref.prevEnsShopDurationTimeStamp) > 1000 * 60 * 8) {
+            Pref.prevEnsShopDurationTimeStamp = System.currentTimeMillis()
+            changeLocale()
+            true
+            //server timestamp is within 5 minutes of current system time
+        } else {
+            changeLocale()
+            false
+        }
+    }
+
     private fun shouldLocationActivityUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
         return if (abs(System.currentTimeMillis() - Pref.prevLocationActivityTimeStamp) > 1000 * 60 * 4) {
@@ -3218,6 +3237,39 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             false
         else
             list[0].isDurationCalculated
+    }
+
+    fun endShopDuration(){
+        var isDurationPendingList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDurationWise(false,false)
+        if(isDurationPendingList.size > 0){
+            for(j in 0..isDurationPendingList.size-1){
+                val endTimeStamp = System.currentTimeMillis().toString()
+                val totalMinute = AppUtils.getMinuteFromTimeStamp(isDurationPendingList[j].startTimeStamp, endTimeStamp)
+                val duration = AppUtils.getTimeFromTimeSpan(isDurationPendingList[j].startTimeStamp, endTimeStamp)
+
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateTotalMinuteForDayOfShop(isDurationPendingList[j].shopid!!, totalMinute,  isDurationPendingList[j].date!!)
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateEndTimeOfShop(endTimeStamp, isDurationPendingList[j].shopid!!,  isDurationPendingList[j].date!!)
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateTimeDurationForDayOfShop(isDurationPendingList[j].shopid!!, duration,  isDurationPendingList[j].date!!)
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, isDurationPendingList[j].shopid!!,  isDurationPendingList[j].date!!)
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateIsUploaded(false, isDurationPendingList[j].shopid!!,  isDurationPendingList[j].date!!)
+
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateOutTime(AppUtils.getCurrentTimeWithMeredian(), isDurationPendingList[j].shopid!!,  isDurationPendingList[j].date!!, isDurationPendingList[j].startTimeStamp)
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateOutLocation(LocationWizard.getNewLocationName(this, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble()), isDurationPendingList[j].shopid!!, isDurationPendingList[j].date!!, isDurationPendingList[j].startTimeStamp)
+
+                val netStatus = if (AppUtils.isOnline(this))
+                    "Online"
+                else
+                    "Offline"
+
+                val netType = if (AppUtils.getNetworkType(this).equals("wifi", ignoreCase = true))
+                    AppUtils.getNetworkType(this)
+                else
+                    "Mobile ${AppUtils.mobNetType(this)}"
+
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
+                    AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), isDurationPendingList[j].shopid!!,isDurationPendingList[j].date!!)
+            }
+        }
     }
 
     private fun callShopDurationApi() {

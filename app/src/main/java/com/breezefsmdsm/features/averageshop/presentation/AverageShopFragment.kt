@@ -162,18 +162,18 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         sync_all_tv.setOnClickListener(this)
 
 
-        if (AppDatabase.getDBInstance()!!.shopActivityDao().getAll().isEmpty()) {
+        /*if (AppDatabase.getDBInstance()!!.shopActivityDao().getAll().isEmpty()) {
             Handler().postDelayed(Runnable {
                 XLog.d("DashFrag callShopActivityApi started ${AppUtils.getCurrentDateTime()}")
-                callShopActivityApi()
+                //callShopActivityApi()
             }, 100)
         }else{
             initShopList()
-        }
+        }*/
 
-        /*Handler().postDelayed(Runnable {
-        initShopList()
-        }, 2000)*/
+        Handler().postDelayed(Runnable {
+            initShopList()
+        }, 2000)
     }
 
     private fun callShopActivityApi() {

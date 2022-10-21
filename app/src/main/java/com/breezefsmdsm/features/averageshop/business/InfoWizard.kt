@@ -23,7 +23,9 @@ class InfoWizard {
             var shopsVisitedPerDay: Float = (AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi()).size.toFloat() + Pref.totalShopVisited.toFloat()) /
                     (Pref.totalAttendance.toFloat())*/
 
-            val list = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+            var list = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+
+            list = list.distinctBy { it.shopid }
 
             if (list == null)
                 return "0"
