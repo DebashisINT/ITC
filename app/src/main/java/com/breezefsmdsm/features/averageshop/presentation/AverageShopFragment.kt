@@ -430,6 +430,13 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         progress_wheel.spin()
 
         doAsync {
+
+            var dateL :ArrayList<String> = listUnsync.map { it.date } as ArrayList<String>
+
+            if(!dateL.contains(AppUtils.getCurrentDateForShopActi())){
+                AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,AppUtils.getCurrentDateForShopActi())
+            }
+
             for(i in 0..listUnsync.size-1){
                 var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(listUnsync.get(i)!!.date!!.toString()) as ArrayList<String>
                 //var shopListApi : ArrayList<String> = listUnsync.get(i)?.shop_list!!.map { it.shopid } as ArrayList<String>
@@ -1550,6 +1557,9 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
     @SuppressLint("WrongConstant")
     private fun initAdapter() {
+
+        ShopActivityEntityList = ShopActivityEntityList.distinctBy { it.shopid }
+
         tv_frag_avg_shop_total_visit_count.text="Total Visit (Count) : ${ShopActivityEntityList.size}"
         averageShopListAdapter = AverageShopListAdapter(mContext, ShopActivityEntityList, object : AverageShopListClickListener {
             override fun onSyncClick(position: Int) {
