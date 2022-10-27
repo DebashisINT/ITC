@@ -1409,6 +1409,8 @@
     <!--Splash-->
     <string name="use_location" translatable="false">Use your location</string>
     <string name="loc_msg" translatable="false">Field Sales Management App collects location data after you open and login into the App,\u0020to identify nearby Parties location even when the app is running in the background and not in use.</string>
+    <string name="loc_msg_new" translatable="false">Field Sales Management App collects location data after you open and login into the App,\u0020to identify nearby Parties location even when the app is running in the background and not in use.This app collects location data to enable nearby shops, GPS route,
+even when the app is closed or not in use.</string>
 
     <!--My Jobs-->
     <string name="view_details" translatable="false">View Details</string>

@@ -30,6 +30,8 @@ class ShopDurationRequestData {
     var shop_revisit_uniqKey: String? = null
     var IsShopUpdate: Boolean? = null
 
+    var shopid: String? = null
+
 //    "visited_date": "yyyy-MM-dd",
 //    "visited_time": "yyyy-MM-dd HH:mm:ss",
 //    "spent_duration": "HH:mm:ss"

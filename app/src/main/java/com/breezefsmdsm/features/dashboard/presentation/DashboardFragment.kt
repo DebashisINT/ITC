@@ -10544,7 +10544,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun callShopActivityApiForActivityCheck() {
-
+        XLog.d("DashboardFragment callShopActivityApiForActivityCheck started " + AppUtils.getCurrentDateTime())
         dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
         val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
         val progD = simpleDialogProcess.findViewById(R.id.progress_wheel_progress) as ProgressWheel
@@ -10565,7 +10565,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 .subscribeOn(Schedulers.io())
                 .subscribe({ result ->
                     var shopActityResponse = result as ShopActivityResponse
-                    simpleDialogProcess.dismiss()
+                    //simpleDialogProcess.dismiss()
+                    XLog.d("DashboardFragment callShopActivityApiForActivityCheck response ${shopActityResponse.status}" + AppUtils.getCurrentDateTime())
                     if (shopActityResponse.status == "200") {
                         if(shopActityResponse.date_list!!.size>0){
                             var actiList = shopActityResponse.date_list as ArrayList<ShopActivityResponseDataList>
@@ -10581,6 +10582,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         endShopDuration()
                     }
                 }, { error ->
+                    XLog.d("DashboardFragment callShopActivityApiForActivityCheck error" + AppUtils.getCurrentDateTime())
                     simpleDialogProcess.dismiss()
                     error.printStackTrace()
                     endShopDuration()
@@ -10598,7 +10600,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     var unsyncedList: List<String> = shopListRoom - shopListApi
                     for(j in 0..unsyncedList.size-1){
                         try{
-                            XLog.d("updateActivityGarbage DashFrag marked unsync for  ${unsyncedList.get(j)}" + AppUtils.getCurrentDateTime())
+                            XLog.d("updateActivityGarbage DashFrag marked unsync for  ${unsyncedList.get(j)} " + AppUtils.getCurrentDateTime())
                         }catch (ex:Exception){
                             ex.printStackTrace()
                         }
@@ -10607,8 +10609,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 }
             }
             uiThread {
-                simpleDialogProcess.dismiss()
+                //simpleDialogProcess.dismiss()
                 //callShopDurationApiNew()
+                XLog.d("DashboardFragment updateActivityGarbage success calling endShopDuration " + AppUtils.getCurrentDateTime())
                 endShopDuration()
             }
         }
@@ -10842,6 +10845,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 if (shopDataList.isEmpty()) {
                     BaseActivity.isShopActivityUpdating = false
                     progress_wheel.stopSpinning()
+                    simpleDialogProcess.dismiss()
                 }
                 else {
                     val hashSet = HashSet<ShopDurationRequestData>()
@@ -10893,9 +10897,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 }
                                 BaseActivity.isShopActivityUpdating = false
                                 progress_wheel.stopSpinning()
+                                simpleDialogProcess.dismiss()
                             }, { error ->
                                 BaseActivity.isShopActivityUpdating = false
                                 progress_wheel.stopSpinning()
+                                simpleDialogProcess.dismiss()
                                 if (error == null) {
                                     XLog.d("callShopDurationApii : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
                                 } else {

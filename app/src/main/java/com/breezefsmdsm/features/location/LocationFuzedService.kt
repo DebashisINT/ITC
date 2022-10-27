@@ -786,9 +786,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
 
                 Handler().postDelayed(Runnable {
-                if(AppUtils.isOnline(this)){
                     callShopDurationApi()
-                } }, 1000)
+                 }, 1000)
 
 
                 Handler().postDelayed(Runnable {
@@ -2687,7 +2686,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldEndShopDurationUpdate(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevEnsShopDurationTimeStamp) > 1000 * 60 * 8) {
+        return if (abs(System.currentTimeMillis() - Pref.prevEnsShopDurationTimeStamp) > 1000 * 60 * 4) {
             Pref.prevEnsShopDurationTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -2713,7 +2712,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 21) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 60 * 4) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true
@@ -3279,6 +3278,10 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         if (!shouldShopActivityUpdate())
             return
 
+        if(!AppUtils.isOnline(this)){
+            return
+        }
+
         Log.e("Location Fuzed Srvice", "isShopActivityUpdating=============> $isShopActivityUpdating")
 
         if (Pref.user_id.isNullOrEmpty() || isShopActivityUpdating)
@@ -3560,7 +3563,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     XLog.e("ShopData List size===> " + shopDataList.size)
                     //val newShopList = FTStorageUtils.removeDuplicateData(shopDataList)
                     val hashSet = HashSet<ShopDurationRequestData>()
-                    val newShopList = ArrayList<ShopDurationRequestData>()
+                    var newShopList = ArrayList<ShopDurationRequestData>()
 
                     if (!Pref.isMultipleVisitEnable) {
                         for (i in shopDataList.indices) {
@@ -3591,7 +3594,22 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                                 XLog.d("callShopDurationApi : RESPONSE " + result.status)
 
                                 if (result.status == NetworkConstant.SUCCESS) {
+
                                     var responseShopList = result.shop_list
+                                    newShopList = ArrayList()
+                                    for(l in 0..responseShopList!!.size-1){
+                                        var ob = ShopDurationRequestData()
+                                        ob.shop_id = responseShopList.get(l).shopid!!
+                                        ob.visited_date = responseShopList.get(l).visited_date!!
+                                        ob.visited_time = responseShopList.get(l).visited_time!!
+                                        ob.IsShopUpdate = responseShopList.get(l).IsShopUpdate
+                                        //ob.total_visit_count = responseShopList.get(l).total_visit_count!!.toString()
+                                        newShopList.add(ob)
+                                    }
+
+                                    //newShopList = responseShopList as ArrayList<ShopDurationRequestData>
+
+
                                     //callCompetetorImgUploadApi()
 
                                     if(!revisitStatusList.isEmpty()){
@@ -3600,8 +3618,14 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
                                     if (newShopList.size > 0) {
                                         for (i in 0 until newShopList.size) {
-                                            callCompetetorImgUploadApi(newShopList[i].shop_id!!)
-                                            AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, newShopList[i].shop_id!!, AppUtils.changeAttendanceDateFormatToCurrent(newShopList[i].visited_date!!) /*AppUtils.getCurrentDateForShopActi()*/)
+                                            try{
+                                                if(newShopList.get(i).IsShopUpdate!!) {
+                                                    //callCompetetorImgUploadApi(newShopList[i].shop_id!!)
+                                                    AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, newShopList[i].shop_id!!, AppUtils.changeAttendanceDateFormatToCurrent(newShopList[i].visited_date!!) /*AppUtils.getCurrentDateForShopActi()*/)
+                                                }
+                                            }catch (ex:Exception){
+                                                ex.printStackTrace()
+                                            }
                                         }
                                         syncShopVisitImage(newShopList)
                                     } else {
