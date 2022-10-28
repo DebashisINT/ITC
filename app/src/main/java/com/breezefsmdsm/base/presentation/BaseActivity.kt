@@ -165,7 +165,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
         } /*else
             Pref.isAutoLogout = false*/
 
-        //Pref.isAutoLogout=true
+//        Pref.isAutoLogout=true
         if (Pref.isAutoLogout) {
 
             Pref.isAddAttendence = false
