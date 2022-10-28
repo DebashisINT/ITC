@@ -2712,7 +2712,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
     private fun shouldUpdateRevisitGarbage(): Boolean {
         AppUtils.changeLanguage(this,"en")
-        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 60 * 4) {
+        return if (abs(System.currentTimeMillis() - Pref.prevRevisitGarbageTimeStamp) > 1000 * 60 * 60 * 5) {
             Pref.prevRevisitGarbageTimeStamp = System.currentTimeMillis()
             changeLocale()
             true

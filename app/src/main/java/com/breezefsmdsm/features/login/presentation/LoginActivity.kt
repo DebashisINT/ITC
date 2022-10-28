@@ -3667,7 +3667,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             println("xyz - initiateLogin end" + AppUtils.getCurrentDateTime());
             Handler(Looper.getMainLooper()).postDelayed({
                 callNewSettingsApi()
-            }, 400)
+            }, 500)
         }else {
             //showSnackMessage(getString(R.string.no_internet))
 //            tv_internet_info.setBackgroundColor(resources.getColor(R.color.color_custom_red))

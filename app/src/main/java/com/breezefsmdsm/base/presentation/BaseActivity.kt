@@ -247,12 +247,14 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
 
                     if (AppUtils.isOnline(this@BaseActivity)) {
 
-                        if (list != null && list.isNotEmpty()) {
+                        checkToCallLocationSync()
+
+                        /*if (list != null && list.isNotEmpty()) {
                             i = 0
                             callUpdateGpsStatusApi(list)
                         } else {
                             checkToCallLocationSync()
-                        }
+                        }*/
                     } else {
                         Toaster.msgShort(this@BaseActivity, getString(R.string.no_internet))
                         performLogout()
