@@ -574,7 +574,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
 
                             getProgressInstance().showDialogForLoading(this@BaseActivity)
                             Pref.logout_time = "11:59 PM"
-                            if(Pref.DayStartMarked && Pref.IsShowDayStart){
+                            if(Pref.DayStartMarked && Pref.IsShowDayStart && Pref.DayEndMarked == false){
                                 //singleLocationEnd()
                                 var lloc:Location = Location("")
                                 lloc.latitude=Pref.current_latitude.toDouble()
