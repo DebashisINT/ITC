@@ -125,6 +125,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.*
 import java.net.URL
+import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -10592,6 +10593,16 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>){
         doAsync {
+
+            var dateL :ArrayList<String> = listUnsync.map { it.date } as ArrayList<String>
+            var todayDatee: LocalDate = LocalDate.now()
+            for(p in 0..43){
+                todayDatee = AppUtils.findPrevDay(todayDatee)!!
+                if(!dateL.contains(todayDatee.toString())){
+                    AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,todayDatee.toString())
+                }
+            }
+
             XLog.d("updateActivityGarbage DashFrag started " + AppUtils.getCurrentDateTime())
             for(i in 0..listUnsync.size-1){
                 var shopListRoom = AppDatabase.getDBInstance()!!.shopActivityDao().getAllShopActivityByDate(listUnsync.get(i)!!.date!!.toString()) as ArrayList<String>
@@ -10647,10 +10658,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
                     AppUtils.getBatteryPercentage(mContext).toString(), netStatus, netType.toString(), isDurationPendingList[j].shopid!!,isDurationPendingList[j].date!!)
             }
-
-            callShopDurationApiNew()
+            progress_wheel.stopSpinning()
+            simpleDialogProcess.dismiss()
+            //callShopDurationApiNew()
         }else{
-            callShopDurationApiNew()
+            progress_wheel.stopSpinning()
+            simpleDialogProcess.dismiss()
+            //callShopDurationApiNew()
         }
     }
 

@@ -20,6 +20,10 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.breezefsmdsm.BuildConfig
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
@@ -113,6 +117,45 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
             checkGPSProvider()
         }
         permissionCheck()*/
+    }
+
+    fun test(){
+        /*val jsonObjectRequest: JsonObjectRequest = object : JsonObjectRequest("https://theultimate.io/api/SendMessage?token=907f0234-3ffa-11ed-a7c7-9606c7e32d76&phone=919830916971&tempid=optin_hsm", notification,
+            object : Response.Listener<JSONObject?> {
+                override fun onResponse(response: JSONObject?) {
+                    var jObj:JSONObject= JSONObject()
+                    jObj=response!!.getJSONObject("result")
+                }
+            },
+            object : Response.ErrorListener {
+                override fun onErrorResponse(error: VolleyError?) {
+                    progress_wheel.stopSpinning()
+            }) {
+            @Throws(AuthFailureError::class)
+            override fun getHeaders(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["tempid"] = "optin_hsm"
+                params["phone"] = "9830916971"
+                params["Content-Type"] = "application/json"
+                params["token"] = "907f0234-3ffa-11ed-a7c7-9606c7e32d76"
+                return params
+            }
+        }*/
+
+
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://theultimate.io/api/SendMessage?token=907f0234-3ffa-11ed-a7c7-9606c7e32d76&phone=919830916971&tempid=optin_hsm"
+
+        val stringRequest = StringRequest(
+            Request.Method.GET, url, Response.Listener<String> { response ->
+                var tt= "Response is: ${response.substring(0, 500)}"
+            },
+            Response.ErrorListener {
+                var ttt= "That didn't work!"
+            })
+
+        queue.add(stringRequest)
+
     }
 
     private fun storageSpace(){

@@ -167,25 +167,50 @@
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/_10sdp"
                 android:textStyle="normal" />
+
         </RelativeLayout>
+
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/tv_frag_avg_shop_total_visit_count"
+    <LinearLayout
+        android:id="@+id/ll_visit_count_root"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_30sdp"
-        android:text="Total Visit (Count) : 0 "
-        android:gravity="center|start"
-        android:textSize="@dimen/_12sdp"
-        android:paddingStart="@dimen/_10sdp"
-        android:textColor="@color/default_text_color"
-        android:layout_below="@id/date_CV"/>
+        android:orientation="horizontal"
+        android:layout_below="@id/date_CV"
+        android:paddingStart="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/tv_frag_avg_shop_total_visit_count"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Total Visit (Count) : 0 "
+            android:gravity="center|start"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/default_text_color" />
+
+        <com.breezefsmdsm.widgets.AppCustomTextView
+            android:id="@+id/sync_by_date_tv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Sync Selected Day"
+            android:gravity="center|end"
+            android:paddingEnd="@dimen/_5sdp"
+            android:textColor="@color/maroon"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shop_list_RCV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_frag_avg_shop_total_visit_count"
+        android:layout_below="@id/ll_visit_count_root"
         />
 
     <com.breezefsmdsm.widgets.AppCustomTextView

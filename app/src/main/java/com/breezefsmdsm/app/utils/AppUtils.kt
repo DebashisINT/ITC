@@ -572,6 +572,10 @@ class AppUtils {
             return spf.format(date)
         }
 
+        fun findPrevDay(localdate: LocalDate): LocalDate? {
+            return localdate.minusDays(1)
+        }
+
 
         fun substractDates(date1: Date, date2: Date): String {
             val restDatesinMillis = date1.time - date2.time

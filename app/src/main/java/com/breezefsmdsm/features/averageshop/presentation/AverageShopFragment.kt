@@ -71,6 +71,7 @@ import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.joda.time.DateTime
+import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -92,6 +93,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     private lateinit var progress_wheel: ProgressWheel
     private lateinit var selectedDate: String
     private lateinit var sync_all_tv: AppCustomTextView
+    private lateinit var sync_by_date_tv: AppCustomTextView
     private lateinit var tv_frag_avg_shop_total_visit_count: TextView
     var i: Int = 0
     private var j: Int = 0
@@ -130,7 +132,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         picker = view.findViewById<HorizontalPicker>(R.id.datePicker)
         picker.setListener(this)
                 .setDays(60)
-                .setOffset(30)
+                .setOffset(44)
                 .setDateSelectedColor(ContextCompat.getColor(mContext, R.color.colorPrimary))//box color
                 .setDateSelectedTextColor(ContextCompat.getColor(mContext, R.color.white))
                 .setMonthAndYearTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))//month color
@@ -155,11 +157,13 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         total_shop_TV = view.findViewById(R.id.total_shop_TV)
         progress_wheel = view.findViewById(R.id.progress_wheel)
         sync_all_tv = view.findViewById(R.id.sync_all_tv);
+        sync_by_date_tv = view.findViewById(R.id.sync_by_date_tv);
         tv_frag_avg_shop_total_visit_count = view.findViewById(R.id.tv_frag_avg_shop_total_visit_count);
         progress_wheel.stopSpinning()
         total_shop_TV.text = InfoWizard.getTotalShopVisitCount()
         noOfShop.text = InfoWizard.getAvergareShopVisitCount()
         sync_all_tv.setOnClickListener(this)
+        sync_by_date_tv.setOnClickListener(this)
 
 
         /*if (AppDatabase.getDBInstance()!!.shopActivityDao().getAll().isEmpty()) {
@@ -170,6 +174,9 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         }else{
             initShopList()
         }*/
+
+
+        sync_by_date_tv.text = "Sync for $selectedDate"
 
         Handler().postDelayed(Runnable {
             initShopList()
@@ -274,6 +281,14 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     override fun onClick(p0: View?) {
         i = 0
         when (p0?.id) {
+            R.id.sync_by_date_tv -> {
+                if(!isShopActivityUpdating){
+                    if(AppUtils.isOnline(mContext)){
+                        var selD = selectedDate
+                        callShopActivityApiForActivityCheckDateWise(selD,selD)
+                    }
+                }
+            }
             R.id.sync_all_tv -> {
                 /*if (ShopActivityEntityList != null && ShopActivityEntityList.isNotEmpty())
                     syncAllShopActivity(ShopActivityEntityList[i].shopid!!)
@@ -408,7 +423,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                             var actiList = shopActityResponse.date_list as ArrayList<ShopActivityResponseDataList>
                             if(actiList!!.size>1){
                                 Handler().postDelayed(Runnable {
-                                    updateActivityGarbage(actiList)
+                                    updateActivityGarbage(actiList,false)
                                 }, 150)
                             }
                         }
@@ -426,15 +441,74 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         )
     }
 
-    fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>){
+    private fun callShopActivityApiForActivityCheckDateWise(selected_fromDate:String,selected_toDate:String) {
+        dialogHeaderProcess.text = "Syncing Important Data. Please wait..."
+        val dialogYes = simpleDialogProcess.findViewById(R.id.tv_message_ok) as AppCustomTextView
+        val progD = simpleDialogProcess.findViewById(R.id.progress_wheel_progress) as ProgressWheel
+        progD.spin()
+        simpleDialogProcess.show()
+
+        progress_wheel.spin()
+        var shopActivity = ShopActivityRequest()
+        shopActivity.user_id = Pref.user_id
+        shopActivity.session_token = Pref.session_token
+        shopActivity.date_span = "30"
+        shopActivity.from_date = ""
+        shopActivity.to_date = ""
+        val repository = ShopActivityRepositoryProvider.provideShopActivityRepository()
+
+        BaseActivity.compositeDisposable.add(
+            repository.fetchShopActivitynew(Pref.session_token!!, Pref.user_id!!, "", selected_fromDate, selected_toDate)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    var shopActityResponse = result as ShopActivityResponse
+                    progress_wheel.stopSpinning()
+                    if (shopActityResponse.status == "200") {
+                        if(shopActityResponse.date_list!!.size>0){
+                            var actiList = shopActityResponse.date_list as ArrayList<ShopActivityResponseDataList>
+
+                            if(actiList!!.size > 0){
+                                Handler().postDelayed(Runnable {
+                                    updateActivityGarbage(actiList,true)
+                                }, 150)
+                            }
+                        }else{
+                            AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,selected_fromDate)
+                            endShopDuration()
+                        }
+                    }else{
+                        endShopDuration()
+                    }
+                }, { error ->
+                    simpleDialogProcess.dismiss()
+                    progress_wheel.stopSpinning()
+                    error.printStackTrace()
+                    //callShopDurationApiNew()
+                    endShopDuration()
+                })
+        )
+    }
+
+    fun updateActivityGarbage(listUnsync:ArrayList<ShopActivityResponseDataList>,isDayeWise:Boolean){
         progress_wheel.spin()
 
         doAsync {
 
             var dateL :ArrayList<String> = listUnsync.map { it.date } as ArrayList<String>
 
-            if(!dateL.contains(AppUtils.getCurrentDateForShopActi())){
+            if(!dateL.contains(AppUtils.getCurrentDateForShopActi()) && isDayeWise == false){
                 AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,AppUtils.getCurrentDateForShopActi())
+            }
+
+            if(isDayeWise == false){
+            var todayDate: LocalDate = LocalDate.now()
+            for(p in 0..43){
+                todayDate = AppUtils.findPrevDay(todayDate)!!
+                if(!dateL.contains(todayDate.toString())){
+                    AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,todayDate.toString())
+                }
+            }
             }
 
             for(i in 0..listUnsync.size-1){
@@ -1150,6 +1224,8 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         selectedDate = dateFormat
         ShopActivityEntityList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(dateFormat)
 
+        sync_by_date_tv.text = "Sync for $selectedDate"
+
         Collections.reverse(ShopActivityEntityList)
 
         if (ShopActivityEntityList.isNotEmpty()) {
@@ -1535,8 +1611,8 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     }
 
     private fun initShopList() {
-
-        ShopActivityEntityList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+        //ShopActivityEntityList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+        ShopActivityEntityList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(selectedDate)
 
         Collections.reverse(ShopActivityEntityList)
 
