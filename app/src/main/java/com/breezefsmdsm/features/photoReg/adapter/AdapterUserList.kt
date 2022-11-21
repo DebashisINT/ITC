@@ -147,7 +147,11 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 }
 
                 if(Pref.IsShowTypeInRegistration){
-                    click_for_update_type_tv.visibility=View.VISIBLE
+                    if(mList?.get(adapterPosition)?.IsShowTypeInRegistrationForSpecificUser!!){
+                        click_for_update_type_tv.visibility=View.VISIBLE
+                    }else{
+                        click_for_update_type_tv.visibility=View.GONE
+                    }
                 }else{
                     click_for_update_type_tv.visibility=View.GONE
                 }
