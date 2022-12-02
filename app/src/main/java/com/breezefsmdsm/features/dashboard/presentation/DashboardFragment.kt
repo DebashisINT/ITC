@@ -7434,7 +7434,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     ddLocation.latitude = ddLat
                     ddLocation.longitude = ddLong
                     //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
+                    var isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
                         location,
                         ddLocation,
                         Pref.DistributorGPSAccuracy.toInt()

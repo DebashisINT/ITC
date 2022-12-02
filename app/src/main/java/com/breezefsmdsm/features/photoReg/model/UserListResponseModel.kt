@@ -28,5 +28,6 @@ class UserListResponseModel {
     var UpdateUserID: Boolean? = true
     var OtherID: String? = ""
     var IsShowTypeInRegistrationForSpecificUser: Boolean? = false
+    var Employee_Designation: String? = ""
 }
 

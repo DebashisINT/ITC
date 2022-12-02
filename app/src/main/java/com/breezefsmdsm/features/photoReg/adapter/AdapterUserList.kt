@@ -206,6 +206,17 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
 
                 iv_aadhaar_ion.visibility=View.GONE
 
+                try{
+                    if(mList?.get(adapterPosition)?.Employee_Designation!!.length>0){
+                        photo_reg_user_designation_name_tv.text = mList?.get(adapterPosition)?.Employee_Designation!!
+                    }else{
+                        photo_reg_user_designation_name_tv.text = ""
+                    }
+                }catch (ex:Exception){
+                    photo_reg_user_designation_name_tv.text = ""
+                }
+
+
             }
         }
     }

@@ -103,6 +103,16 @@ class AdapterUserListAttenD(var mContext: Context, var customerList:ArrayList<Us
                     click_for_photo_attd.visibility=View.GONE
                 }
 
+                try{
+                    if(mList?.get(adapterPosition)?.Employee_Designation!!.length>0){
+                        photo_reg_designation_tv.text =mList?.get(adapterPosition)?.Employee_Designation!!
+                    }else{
+                        photo_reg_designation_tv.text = ""
+                    }
+                }catch (ex:Exception){
+                    photo_reg_designation_tv.text = ""
+                }
+
             }
         }
     }

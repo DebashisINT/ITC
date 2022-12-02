@@ -77,6 +77,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_splash)
         setContentView(R.layout.activity_splash_new)
+    AppUtils.changeLanguage(this, "en")
 //        Handler().postDelayed({ goToNextScreen() }, 2000)
 
         //Code by wasim

@@ -631,7 +631,9 @@
                             android:hint="@string/shop_name"
                             android:imeOptions="actionNext"
                             android:inputType="text"
+                            android:maxLength="50"
                             android:singleLine="true"
+                            android:digits="abcdefghijklmnopqrstuvwxyz1234567890 ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                             android:textSize="@dimen/_13sdp"
                             app:theme="@style/EvoEditTextTheme" />
                     </com.google.android.material.textfield.TextInputLayout>
