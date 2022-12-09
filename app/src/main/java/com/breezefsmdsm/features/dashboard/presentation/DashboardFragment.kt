@@ -213,9 +213,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var start_shop: AppCustomTextView
     private lateinit var enddate_TV: AppCustomTextView
 
-    private var isStartCall: Boolean = false
-    private var isCalledFromStart: Boolean = false
-    private var isEndCall: Boolean = false
+    //private var isStartCall: Boolean = false
+    //private var isCalledFromStart: Boolean = false
+   //private var isEndCall: Boolean = false
 
     /*horizontal scroll 01-10-2021*/
     private lateinit var ll_dash_total_visit_newD: LinearLayout
@@ -647,6 +647,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
             var andrV = Build.VERSION.SDK_INT.toInt()
             if (andrV < 26) {
+                XLog.d("start_TV.setOnClickListener  andrV < 26"  + " Time :" + AppUtils.getCurrentDateTime())
                 val simpleDialogV = Dialog(mContext)
                 simpleDialogV.setCancelable(false)
                 simpleDialogV.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -980,7 +981,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     }
                 })
                 simpleDialogV.show()
-            } else {
+            }
+            else {
+                XLog.d("start_TV.setOnClickListener  andrV < 26"  + " Time :" + AppUtils.getCurrentDateTime())
                 CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                 CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
                 CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
@@ -1155,7 +1158,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                     })
                     simpleDialog.show()
-                } else {
+                }
+                else {
                     if (Pref.BatterySettingGlobal && Pref.BatterySetting) {
                         if (AppUtils.getBatteryPercentage(mContext).toInt() <= 15) {
                             CustomDialog.getInstance(
@@ -7259,11 +7263,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             if (requestCode == 171) {
                 progress_wheel.stopSpinning()
                 println("reg_face - dashboard_frag face Detect Face Match" + AppUtils.getCurrentDateTime());
-                if (isCalledFromStart) {
-                    isStartCall = true
+                XLog.d("onActivityResult ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
+                if (Pref.isCalledFromStart) {
+                    Pref.isStartCall = true
+                    XLog.d("onActivityResult if ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
                     start_TV.performClick()
                 } else {
-                    isEndCall = true
+                    Pref.isEndCall = true
+                    XLog.d("onActivityResult else ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
                     end_TV.performClick()
                 }
             }
@@ -7301,13 +7308,16 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     //////start
     fun getLocforStart() {
+        XLog.d("getLocforStart check11 ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
         if (AppUtils.isOnline(mContext)) {
             if (AppUtils.mLocation != null) {
                 if (AppUtils.mLocation!!.accuracy <= Pref.gpsAccuracy.toInt()) {
                     if (AppUtils.mLocation!!.accuracy <= Pref.shopLocAccuracy.toFloat()) {
+                        XLog.d("=====getLocforStart getNearyShopList call=====")
                         getNearyShopList(AppUtils.mLocation!!)
                     } else {
                         //getDDList(AppUtils.mLocation!!)
+                        XLog.d("=====getLocforStart singleLocation call=====")
                         singleLocation()
                     }
                 } else {
@@ -7324,6 +7334,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun singleLocation() {
+
+        XLog.d("singleLocation call" + " , " + " Time :" + AppUtils.getCurrentDateTime())
+
         progress_wheel.spin()
         isGetLocation = -1
         SingleShotLocationProvider.requestSingleUpdate(mContext,
@@ -7341,13 +7354,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 }
 
                 override fun onNewLocationAvailable(location: Location) {
+
+                    XLog.d("singleLocation call onNewLocationAvailable" + " , " + " Time :" + AppUtils.getCurrentDateTime())
                     if (isGetLocation == -1) {
                         isGetLocation = 0
                         if (location.accuracy > Pref.gpsAccuracy.toInt()) {
                             (mContext as DashboardActivity).showSnackMessage("Unable to fetch accurate GPS data. Please try again.")
                             progress_wheel.stopSpinning()
-                        } else
+                        } else{
+                            XLog.d("singleLocation call getNearyShopList" + " , " + " Time :" + AppUtils.getCurrentDateTime())
                             getNearyShopList(location)
+                        }
                     }
                 }
             })
@@ -7371,128 +7388,137 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     fun getNearyShopList(location: Location) {
-        var nearestDist = 5000
-        //var nearBy: Double = Pref.shopLocAccuracy.toDouble()
-//        var nearBy: Double = 4000.00
-        var nearBy: Double = Pref.DistributorGPSAccuracy.toDouble()
-        var shop_id: String = ""
-        var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
-        var finalNearByDD: AssignToDDEntity = AssignToDDEntity()
 
-        val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
-        val newList = java.util.ArrayList<AddShopDBModelEntity>()
-        for (i in allShopList.indices) {
-            newList.add(allShopList[i])
-        }
 
-        if (newList != null && newList.size > 0) {
-            for (i in 0 until newList.size) {
-                val shopLat: Double = newList[i].shopLat
-                val shopLong: Double = newList[i].shopLong
-                if (shopLat != null && shopLong != null) {
-                    val shopLocation = Location("")
-                    shopLocation.latitude = shopLat
-                    shopLocation.longitude = shopLong
-                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
-                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
-                        location,
-                        shopLocation,
-                        Pref.DistributorGPSAccuracy.toInt()
-                    )
-                    var dist = location.distanceTo(shopLocation).toInt()  //21-10-2021
-                    if (isShopNearby) {
-                        if ((location.distanceTo(shopLocation)) < nearBy) {
-                            nearBy = location.distanceTo(shopLocation).toDouble()
-                            finalNearByShop = newList[i]
-                        }
-                        //startDay(newList[i], location)
-                        //break
-                    } else {
-                        if (dist < nearestDist) {
-                            nearestDist = dist
+        XLog.d("getNearyShopList DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime())
+
+        try{
+            var nearestDist = 5000
+            var nearBy: Double = Pref.DistributorGPSAccuracy.toDouble()
+            var shop_id: String = ""
+            var finalNearByShop: AddShopDBModelEntity = AddShopDBModelEntity()
+            var finalNearByDD: AssignToDDEntity = AssignToDDEntity()
+            val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
+            val newList = java.util.ArrayList<AddShopDBModelEntity>()
+            for (i in allShopList.indices) {
+                newList.add(allShopList[i])
+            }
+            XLog.d("getNearyShopList newList ${newList.size}" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby dd found")
+            if (newList != null && newList.size > 0) {
+                for (i in 0 until newList.size) {
+                    val shopLat: Double = newList[i].shopLat
+                    val shopLong: Double = newList[i].shopLong
+                    if (shopLat != null && shopLong != null) {
+                        val shopLocation = Location("")
+                        shopLocation.latitude = shopLat
+                        shopLocation.longitude = shopLong
+                        //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, LocationWizard.NEARBY_RADIUS)
+                        val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
+                            location,
+                            shopLocation,
+                            Pref.DistributorGPSAccuracy.toInt()
+                        )
+                        var dist = location.distanceTo(shopLocation).toInt()  //21-10-2021
+                        if (isShopNearby) {
+                            if ((location.distanceTo(shopLocation)) < nearBy) {
+                                nearBy = location.distanceTo(shopLocation).toDouble()
+                                finalNearByShop = newList[i]
+                            }
+                            //startDay(newList[i], location)
+                            //break
+                        } else {
+                            if (dist < nearestDist) {
+                                nearestDist = dist
+                            }
                         }
                     }
                 }
+
             }
+            else {
 
-        } else {
-            //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
-        }
-
-        val allDDList = AppDatabase.getDBInstance()!!.ddListDao().getAll()
-        val newDDList = java.util.ArrayList<AssignToDDEntity>()
-        for (i in allDDList.indices) {
-            newDDList.add(allDDList[i])
-        }
-
-        if (newDDList != null && newDDList.size > 0) {
-            for (i in 0 until newDDList.size) {
-                val ddLat: Double = newDDList[i].dd_latitude!!.toDouble()
-                val ddLong: Double = newDDList[i].dd_longitude!!.toDouble()
-                if (ddLat != null && ddLong != null) {
-                    val ddLocation = Location("")
-                    ddLocation.latitude = ddLat
-                    ddLocation.longitude = ddLong
-                    //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
-                    var isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
-                        location,
-                        ddLocation,
-                        Pref.DistributorGPSAccuracy.toInt()
-                    )
-                    var dist = location.distanceTo(ddLocation).toInt()  //21-10-2021
-                    if (isShopNearby) {
-                        if ((location.distanceTo(ddLocation)) < nearBy) {
-                            nearBy = location.distanceTo(ddLocation).toDouble()
-                            finalNearByDD = newDDList[i]
-                        }
-                        //startDay(newList[i], location)
-                        //break
-                    } else {
-                        if (dist < nearestDist) {
-                            nearestDist = dist
+            }
+            val allDDList = AppDatabase.getDBInstance()!!.ddListDao().getAll()
+            val newDDList = java.util.ArrayList<AssignToDDEntity>()
+            for (i in allDDList.indices) {
+                newDDList.add(allDDList[i])
+            }
+            XLog.d("getNearyShopList newDDList ${newDDList.size}" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby dd found")
+            if (newDDList != null && newDDList.size > 0) {
+                for (i in 0 until newDDList.size) {
+                    val ddLat: Double = newDDList[i].dd_latitude!!.toDouble()
+                    val ddLong: Double = newDDList[i].dd_longitude!!.toDouble()
+                    if (ddLat != null && ddLong != null) {
+                        val ddLocation = Location("")
+                        ddLocation.latitude = ddLat
+                        ddLocation.longitude = ddLong
+                        //val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, ddLocation, LocationWizard.NEARBY_RADIUS)
+                        var isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
+                            location,
+                            ddLocation,
+                            Pref.DistributorGPSAccuracy.toInt()
+                        )
+                        var dist = location.distanceTo(ddLocation).toInt()  //21-10-2021
+                        if (isShopNearby) {
+                            if ((location.distanceTo(ddLocation)) < nearBy) {
+                                nearBy = location.distanceTo(ddLocation).toDouble()
+                                finalNearByDD = newDDList[i]
+                            }
+                            //startDay(newList[i], location)
+                            //break
+                        } else {
+                            if (dist < nearestDist) {
+                                nearestDist = dist
+                            }
                         }
                     }
                 }
+
+            }
+            else {
+
             }
 
-        } else {
-            //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
-        }
-
-        if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
-            XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby dd found")
-            startDay(finalNearByShop, finalNearByDD, location, false)
-        } else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
-            XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby shop found")
-            startDay(finalNearByShop, finalNearByDD, location, true)
-        } else {
-            XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "no nearby shop/dd " + "user lat: " + location.latitude.toString() + " long :" + location.longitude)
-
-            progress_wheel.stopSpinning()
-            // 27-08-21 For ITC
-            val simpleDialog = Dialog(mContext)
-            simpleDialog.setCancelable(false)
-            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            simpleDialog.setContentView(R.layout.dialog_message)
-            val dialogHeader =
-                simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
-            val dialog_yes_no_headerTV =
-                simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
-            dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText() + "!"
-            if (nearestDist == 5000) {
-                dialogHeader.text =
-                    "No nearby Shop/Point found..." + ". Current location has been detected " + nearestDist.toString() + " mtr or more distance from the Distributor or Retail point from your handset GPS."
-            } else {
-                dialogHeader.text =
-                    "No nearby Shop/Point found..." + ". Current location has been detected " + nearestDist.toString() + " mtr distance from the Distributor or Retail point from your handset GPS."
+            if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
+                XLog.d("DAYSTART" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby dd found")
+                startDay(finalNearByShop, finalNearByDD, location, false)
             }
+            else if (finalNearByShop.shop_id != null && finalNearByShop.shop_id!!.length > 1) {
+                XLog.d("DAYSTARTT" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "nearby shop found")
+                startDay(finalNearByShop, finalNearByDD, location, true)
+            }
+            else {
+                XLog.d("DAYSTARTTTT" + " , " + " Time :" + AppUtils.getCurrentDateTime() + "no nearby shop/dd " + "user lat: " + location.latitude.toString() + " long :" + location.longitude)
 
-            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
-            dialogYes.setOnClickListener({ view ->
-                simpleDialog.cancel()
-            })
-            simpleDialog.show()
+                progress_wheel.stopSpinning()
+                // 27-08-21 For ITC
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_message)
+                val dialogHeader =
+                    simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                val dialog_yes_no_headerTV =
+                    simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                dialog_yes_no_headerTV.text = AppUtils.hiFirstNameText() + "!"
+                if (nearestDist == 5000) {
+                    dialogHeader.text =
+                        "No nearby Shop/Point found..." + ". Current location has been detected " + nearestDist.toString() + " mtr or more distance from the Distributor or Retail point from your handset GPS."
+                } else {
+                    dialogHeader.text =
+                        "No nearby Shop/Point found..." + ". Current location has been detected " + nearestDist.toString() + " mtr distance from the Distributor or Retail point from your handset GPS."
+                }
+
+                val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                dialogYes.setOnClickListener({ view ->
+                    simpleDialog.cancel()
+                })
+                simpleDialog.show()
 //            (mContext as DashboardActivity).showSnackMessage("No nearby Shop/Distributor found")
+            }
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            XLog.d("getNearyShopList ex ${ex.message}" + " , " + " Time :" + AppUtils.getCurrentDateTime())
         }
 
     }
@@ -8645,6 +8671,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun getPicUrl() {
         //31-08-2021
+        XLog.d("getPicUrl ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
         BaseActivity.isApiInitiated = false
         val repository = GetUserListPhotoRegProvider.provideUserListPhotoReg()
         BaseActivity.compositeDisposable.add(
@@ -8664,9 +8691,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         //var bitmap :Bitmap? = null
                         //registerFace(bitmap);
                         println("reg_face - GetImageFromUrl called" + AppUtils.getCurrentDateTime());
+                        XLog.d("DashFragment : FaceRegistration/FaceMatch " + response.status.toString() + ", ${Pref.isCalledFromStart} : " + ", Success: ")
                         GetImageFromUrl().execute(CustomStatic.FaceUrl)
-
-                        XLog.d(" AddAttendanceFragment : FaceRegistration/FaceMatch" + response.status.toString() + ", : " + ", Success: ")
                     } else {
                         BaseActivity.isApiInitiated = false
                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_reg_face))
@@ -8704,12 +8730,14 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         override fun onPostExecute(result: Bitmap?) {
             super.onPostExecute(result)
             println("reg_face - registerFace called" + AppUtils.getCurrentDateTime());
+            XLog.d("GetImageFromUrl : face pic processed ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " + AppUtils.getCurrentDateTime())
             registerFace(result)
         }
 
     }
 
     private fun registerFace(mBitmap: Bitmap?) {
+        XLog.d("registerFace " + AppUtils.getCurrentDateTime())
         progress_wheel.stopSpinning()
         progress_wheel.spin()
         //BaseActivity.isApiInitiated=false
@@ -8742,6 +8770,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             override fun run() {
                                 //action
                                 println("reg_face - dashboard_frag face detected" + AppUtils.getCurrentDateTime());
+                                XLog.d("onFacesDetected ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " + AppUtils.getCurrentDateTime())
                                 onFacesDetected(1, faces, true) //no need to add currtime
                             }
                         }.start()
@@ -8871,6 +8900,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         val rec = mappedRecognitions[0]
         FaceStartActivity.detector.register("", rec)
         val intent = Intent(mContext, DetectorActivity::class.java)
+        XLog.d("171 hit ")
         startActivityForResult(intent, 171)
 //        startActivity(new Intent(this,DetectorActivity.class));
 //        finish();
@@ -8936,11 +8966,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun startTvClick() {
+        XLog.d("startTvClick ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
         if (!AppUtils.isOnline(mContext)) {
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-
-        } else if (isStartCall == false && Pref.DayStartMarked == false && Pref.isAddAttendence) {
-
+        }
+        else if (Pref.isStartCall == false && Pref.DayStartMarked == false && Pref.isAddAttendence) {
+            XLog.d("startTvClick elside ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
             val simpleDialog = Dialog(mContext)
             simpleDialog.setCancelable(false)
             simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -8962,7 +8993,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 //initPermissionCheck()
                 //}else{
                 progress_wheel.spin()
-                isCalledFromStart = true
+                Pref.isCalledFromStart = true
+                XLog.d("isCalledFromStart startTvClick check ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart} " +" "+ AppUtils.getCurrentDateTime())
                 getPicUrl()
                 //}
             })
@@ -8970,12 +9002,16 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 simpleDialog.cancel()
             })
             simpleDialog.show()
-        } else {
+        }
+        else {
             println("reg_face - start_tv" + AppUtils.getCurrentDateTime());
+            XLog.d("startTvClick else ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart}" +" "+ AppUtils.getCurrentDateTime())
             if (!AppUtils.isOnline(mContext)) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             } else {
+                XLog.d("startTvClick check ${Pref.isAddAttendence}" +" "+ AppUtils.getCurrentDateTime())
                 if (!Pref.isAddAttendence) {
+                    XLog.d("isAddAttendence if ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart}" +" "+ AppUtils.getCurrentDateTime())
                     // 27-08-21 For ITC
                     val simpleDialog = Dialog(mContext)
                     simpleDialog.setCancelable(false)
@@ -8996,9 +9032,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     })
                     simpleDialog.show()
 //                    (mContext as DashboardActivity).showSnackMessage("Please mark your attendance")
-                } else {
+                }
+                else {
+                    XLog.d("startTvClick check1 ${Pref.DayStartMarked}" +" "+ AppUtils.getCurrentDateTime())
                     if (!Pref.DayStartMarked) {
-
+                        XLog.d("startTvClick DayStartMarked checkk calling getLocforStart ${Pref.isAddAttendence} ${Pref.DayStartMarked}" +" "+ AppUtils.getCurrentDateTime())
+                        XLog.d("isAddAttendence else ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart}" +" "+ AppUtils.getCurrentDateTime())
                         getLocforStart()
 
                         /*val simpleDialog = Dialog(mContext)
@@ -9022,6 +9061,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                     } else {
                         // 27-08-21 For ITC
+                        XLog.d("startTvClick DayStartMarked check ${Pref.isAddAttendence} ${Pref.DayStartMarked}" +" "+ AppUtils.getCurrentDateTime())
                         val simpleDialog = Dialog(mContext)
                         simpleDialog.setCancelable(false)
                         simpleDialog.getWindow()!!
@@ -9048,9 +9088,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun endTvClick() {
+        XLog.d("endTvClick ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isEndCall} " +" "+ AppUtils.getCurrentDateTime())
         if (!AppUtils.isOnline(mContext)) {
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-        } else if (isEndCall == false && Pref.DayEndMarked == false && Pref.DayStartMarked == true) {
+        } else if (Pref.isEndCall == false && Pref.DayEndMarked == false && Pref.DayStartMarked == true) {
 
             val simpleDialog = Dialog(mContext)
             simpleDialog.setCancelable(false)
@@ -9072,7 +9113,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 //initPermissionCheck()
                 //}else{
                 progress_wheel.spin()
-                isCalledFromStart = false
+                Pref.isCalledFromStart = false
+                XLog.d("isCalledFromStart from endTvClick check ${Pref.isAddAttendence} ${Pref.DayStartMarked} ${Pref.isStartCall} ${Pref.isEndCall} ${Pref.isCalledFromStart}" +" "+ AppUtils.getCurrentDateTime())
                 getPicUrl()
                 //}
             })

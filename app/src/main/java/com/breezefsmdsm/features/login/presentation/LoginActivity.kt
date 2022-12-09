@@ -4309,7 +4309,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
+                                XLog.d("Login DayStart : RESPONSE " + result.status +" "+ AppUtils.getCurrentDateTime())
                                 val response = result as StatusDayStartEnd
                                 if (response.status == NetworkConstant.SUCCESS) {
 
@@ -4337,6 +4337,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     Pref.DayStartMarked = false
                                     Pref.DayEndMarked = false
                                     Pref.IsDDvistedOnceByDay = false
+                                    Pref.isCalledFromStart = false
+                                    Pref.isStartCall = false
+                                    Pref.isEndCall = false
+
                                     getListFromDatabase()
                                 }
                             }, { error ->

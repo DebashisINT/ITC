@@ -396,4 +396,11 @@ object Pref : PreferenceHolder() {
     var GPSNetworkIntervalMins: String by bindToPreferenceField("0", "GPSNetworkIntervalMins")
     var prevGpsNetSyncTimeStamp: Long by bindToPreferenceField(0, "prevGpsNetSyncTimeStamp")
     var prevGpsNetSyncTimeStampService: Long by bindToPreferenceField(0, "prevGpsNetSyncTimeStampService")
+
+
+
+
+    var isCalledFromStart: Boolean by bindToPreferenceField(false, "isCalledFromStart")
+    var isStartCall: Boolean by bindToPreferenceField(false, "isStartCall")
+    var isEndCall: Boolean by bindToPreferenceField(false, "isEndCall")
 }
