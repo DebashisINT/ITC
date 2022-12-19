@@ -12,6 +12,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.location.GnssStatus
 import android.location.GpsStatus
 import android.location.Location
 import android.location.LocationManager
@@ -232,7 +233,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
 
             var pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0,
-                    notificationIntent, 0)
+                    notificationIntent, PendingIntent.FLAG_IMMUTABLE)
 
 
             var icon = BitmapFactory.decodeResource(resources,
@@ -536,7 +537,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     @SuppressLint("MissingPermission")
     override fun onConnected(@Nullable bundle: Bundle?) {
         Log.e(TAG, "onConnected: ")
-        val lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleAPIClient)
+        val lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleAPIClient!!)
         if (lastLocation != null && lastLocation.latitude != null && lastLocation.latitude != 0.0) {
             AppUtils.mLocation = lastLocation
             Pref.current_latitude = lastLocation.latitude.toString()
@@ -553,7 +554,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleAPIClient, mLocationRequest, this) //getting error here..for casting..!
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleAPIClient!!, mLocationRequest!!, this) //getting error here..for casting..!
 
     }
 
@@ -3113,7 +3114,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         val intent = Intent(this, GeofenceBroadcastReceiver::class.java)
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // addGeofences() and removeGeofences().
-        mGeofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        mGeofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         return mGeofencePendingIntent
     }
 
@@ -4338,10 +4339,30 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         return Pair(latNew, lonNew)
     }
 
-    @SuppressLint("MissingPermission")
+    /*@SuppressLint("MissingPermission")
     private fun registerGpsStatusListener() {
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         locationManager.addGpsStatusListener(this)
+    }*/
+
+    lateinit var mGnssStatusCallback: GnssStatus.Callback
+
+    @SuppressLint("MissingPermission")
+    private fun registerGpsStatusListener() {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+            mGnssStatusCallback = object : GnssStatus.Callback() {
+                override fun onSatelliteStatusChanged(status: GnssStatus) {
+                    super.onSatelliteStatusChanged(status)
+                }
+            }
+            XLog.d("LocationFuzedService registerGnssStatusCallback1 : Time :" + AppUtils.getCurrentDateTime())
+            locationManager.registerGnssStatusCallback(mGnssStatusCallback!!)
+        } else {
+            XLog.d("LocationFuzedService registerGnssStatusCallback2 : Time :" + AppUtils.getCurrentDateTime())
+            locationManager.addGpsStatusListener(this)
+        }
+
     }
 
     override fun onGpsStatusChanged(p0: Int) {

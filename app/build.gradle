@@ -19,13 +19,13 @@ apply plugin: 'de.undercouch.download'
 
 android {
 
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
     defaultConfig {
         applicationId "com.breezefsmdsm"
         minSdkVersion 26
-        targetSdkVersion 30
-        versionCode 123
+        targetSdkVersion 32
+        versionCode 125
         versionName "4.3.2"
         //versionName "2.3.0"
         vectorDrawables.useSupportLibrary = true
@@ -34,6 +34,11 @@ android {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
+        }
+    }
+    bundle {
+        language {
+            enableSplit = false
         }
     }
     buildTypes {
@@ -102,9 +107,10 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-reactivestreams:2.0.0'
     implementation 'androidx.room:room-runtime:2.3.0'
     implementation 'androidx.room:room-rxjava2:2.3.0'
-    implementation 'androidx.test.ext:junit-ktx:1.1.3'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation 'androidx.wear:wear:1.1.0'
     implementation 'androidx.room:room-common:2.4.2'
+    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
     kapt 'androidx.room:room-compiler:2.3.0'
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
@@ -135,8 +141,8 @@ dependencies {
     implementation "com.intuit.sdp:sdp-android:$sdp_version"
     //implementation "com.google.android.gms:play-services-maps:$google_play"
     //implementation "com.google.android.gms:play-services-location:$google_play"
-    implementation "com.google.android.gms:play-services-places:16.0.0"
-    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+    implementation "com.google.android.gms:play-services-places:17.0.0"
+    implementation 'com.google.maps.android:android-maps-utils:2.4.0'
 
     //    /*glide*/
 
@@ -147,10 +153,10 @@ dependencies {
 
     //compile "com.borax12.materialdaterangepicker:library:$daterange_version"
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'com.marcinmoskala.PreferenceHolder:preferenceholder:1.51'
-    implementation 'androidx.multidex:multidex:2.0.0'
-    implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.2.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.0'
     implementation 'com.github.clans:fab:1.6.4'
 
     //    dependencies {
@@ -183,8 +189,8 @@ dependencies {
     //compile 'com.google.android.gms:play-services-auth:11.4.2'
 
     //Firebase
-    implementation 'com.google.firebase:firebase-core:19.0.0'
-    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
+    implementation 'com.google.firebase:firebase-messaging:23.1.0'
 
     /*Stetho core*/
     implementation 'com.facebook.stetho:stetho:1.5.0'
@@ -226,7 +232,7 @@ dependencies {
     //implementation 'com.rmtheis:tess-two:9.1.0'
 
     //Google Vision Api
-    implementation "com.google.android.gms:play-services-vision:18.0.0"
+    implementation "com.google.android.gms:play-services-vision:20.1.3"
 
     //Check PhoneNumber
     implementation 'com.googlecode.libphonenumber:libphonenumber:5.5'
@@ -234,7 +240,7 @@ dependencies {
     //Barcode, Qrcode Scanner
 
     //implementation 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
-    implementation 'com.google.zxing:core:3.2.0'
+    implementation 'com.google.zxing:core:3.3.3'
     implementation 'com.budiyev.android:code-scanner:2.1.0'
 
     //Exo Player
@@ -248,10 +254,10 @@ dependencies {
 
 
     implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
-    implementation 'com.google.mlkit:face-detection:16.0.0'
+    implementation 'com.google.mlkit:face-detection:16.1.5'
 
-    implementation 'com.google.android.gms:play-services-location:18.0.0'   //location
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'   //location
+    implementation 'com.google.android.gms:play-services-location:20.0.0'   //location
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'   //location
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -269,11 +275,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:19.0.0'
 
     implementation 'com.github.HBiSoft:HBRecorder:2.0.0'
-    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.android.volley:volley:1.2.1'
 
     implementation("androidx.work:work-runtime-ktx:2.7.1") {
         force = true
     }
+
+    implementation 'com.google.maps:google-maps-services:0.2.7'
 
 }
 apply plugin: 'com.google.gms.google-services'

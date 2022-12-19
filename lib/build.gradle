@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    compile 'androidx.appcompat:appcompat:1.0.0'
-    compile 'com.kailashdabhi:om-recorder:1.1.0'
-    compile 'com.cleveroad:audiovisualization:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.kailashdabhi:om-recorder:1.1.0'
+    implementation 'com.cleveroad:audiovisualization:1.0.0'
 }

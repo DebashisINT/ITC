@@ -80,7 +80,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         yesIntent.putExtra("NAME", bodyText)
         yesIntent.putExtra("ID", shopID)
         yesIntent.putExtra("LOCAL_ID", localShopId)
-        val pendingIntentYes = PendingIntent.getBroadcast(mContext, shopID.hashCode(), yesIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntentYes = PendingIntent.getBroadcast(mContext, shopID.hashCode(), yesIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val noIntent = Intent(mContext, ActionReceiver::class.java)
         noIntent.action = "actionNo"
@@ -88,7 +88,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         noIntent.putExtra("NAME", bodyText)
         noIntent.putExtra("ID", shopID)
         noIntent.putExtra("LOCAL_ID", localShopId)
-        val pendingIntentno = PendingIntent.getBroadcast(mContext, shopID.hashCode(), noIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntentno = PendingIntent.getBroadcast(mContext, shopID.hashCode(), noIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val shopIntent = Intent(mContext, DashboardActivity::class.java)
         shopIntent.putExtra("NAME", bodyText)
@@ -96,7 +96,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.action = Intent.ACTION_MAIN
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(mContext, shopID.hashCode(), shopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(mContext, shopID.hashCode(), shopIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val notificationmanager = mContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
@@ -242,7 +242,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.action = Intent.ACTION_MAIN
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_IMMUTABLE)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -423,7 +423,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.action = Intent.ACTION_MAIN
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        val pending: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pending: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_IMMUTABLE)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -505,7 +505,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
         val pending: PendingIntent = PendingIntent.getActivity(applicationContext, alarmData?.id?.toInt()?.hashCode()!!, shopIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.FLAG_IMMUTABLE)
 
 //        val shopIntent = Intent("android.intent.category.LAUNCHER")
 //        shopIntent.setClassName("com.breezefsmdsm.features.dashboard.presentation", "com.breezefsmdsm.features.dashboard.presentation.DashboardActivity")
@@ -596,7 +596,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.action = Intent.ACTION_MAIN
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_IMMUTABLE)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -679,7 +679,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         }
 
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, notificationIntent, 0)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelId = AppUtils.notificationChannelId
@@ -767,7 +767,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
         val pending: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.FLAG_IMMUTABLE)
 
 //        val shopIntent = Intent("android.intent.category.LAUNCHER")
 //        shopIntent.setClassName("com.breezefsmdsm.features.dashboard.presentation", "com.breezefsmdsm.features.dashboard.presentation.DashboardActivity")
@@ -858,7 +858,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.action = Intent.ACTION_MAIN
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 0, shopIntent, PendingIntent.FLAG_IMMUTABLE)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -936,7 +936,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
         val pending: PendingIntent = PendingIntent.getActivity(applicationContext, (chatUserDataModel?.id + "#" + chatListDataModel.id).hashCode(), shopIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.FLAG_IMMUTABLE)
 
 //        val shopIntent = Intent("android.intent.category.LAUNCHER")
 //        shopIntent.setClassName("com.breezefsmdsm.features.dashboard.presentation", "com.breezefsmdsm.features.dashboard.presentation.DashboardActivity")
@@ -1029,7 +1029,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         shopIntent.action = Intent.ACTION_MAIN
         shopIntent.addCategory(Intent.CATEGORY_LAUNCHER)
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 1, shopIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, 1, shopIntent, PendingIntent.FLAG_IMMUTABLE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelId = AppUtils.notificationChannelId

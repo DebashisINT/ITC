@@ -59,15 +59,6 @@ class LocalShopListMapFragment : BaseFragment(), OnMapReadyCallback {
         return view
     }
 
-    override fun onMapReady(googleMap: GoogleMap?) {
-        mGoogleMap = googleMap
-        mGoogleMap?.uiSettings?.isZoomControlsEnabled = false
-
-        if (!TextUtils.isEmpty(Pref.current_latitude) && !TextUtils.isEmpty(Pref.current_longitude))
-            addMarkerActivity(Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
-        else
-            progress_wheel.stopSpinning()
-    }
 
     private fun addMarkerActivity(cur_lat: Double, cur_lang: Double) {
         if (mGoogleMap == null)
@@ -134,7 +125,7 @@ class LocalShopListMapFragment : BaseFragment(), OnMapReadyCallback {
             title(markerName)
             snippet(shopAddress)
             icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shop_map_pointer))
-        })
+        })!!
         mCurrLocationMarker.add(currentMarker)
     }
 
@@ -145,5 +136,15 @@ class LocalShopListMapFragment : BaseFragment(), OnMapReadyCallback {
         for (i in 0 until mShopCircles.size) {
             mShopCircles[i].remove()
         }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+        mGoogleMap = googleMap
+        mGoogleMap?.uiSettings?.isZoomControlsEnabled = false
+
+        if (!TextUtils.isEmpty(Pref.current_latitude) && !TextUtils.isEmpty(Pref.current_longitude))
+            addMarkerActivity(Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
+        else
+            progress_wheel.stopSpinning()
     }
 }

@@ -94,7 +94,8 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -123,11 +124,13 @@
         <activity
             android:name=".mappackage.MapActivityWithoutPath"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:exported="true"/>
         <activity
             android:name=".features.micro_learning.presentation.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.android.exoplayer.breezefsmdsm.action.VIEW" />
 
@@ -150,7 +153,9 @@
             android:exported="false" />
         <service
             android:name=".features.location.LocationFuzedService"
-            android:enabled="true">
+            android:enabled="true"
+            android:foregroundServiceType="location"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.LOCATIONSERVICE" />
             </intent-filter>
@@ -163,23 +168,29 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" /> <!-- Credential created by xa.developers@gmail.com/ -->
-        <receiver android:name=".features.broadcastreceiver.ShopNearbyReceiver">
+        <receiver android:name=".features.broadcastreceiver.ShopNearbyReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.NEARBYSHOP" />
+                <action android:name="android.intent.action.NEARBYSHOP"
+                    />
             </intent-filter>
         </receiver>
-        <receiver android:name=".app.AlarmReceiver" />
-        <receiver android:name=".app.NewAlarmReceiver" />
+        <receiver android:name=".app.AlarmReceiver"
+            android:exported="true"/>
+        <receiver android:name=".app.NewAlarmReceiver"
+            android:exported="true"/>
         <receiver
             android:name=".features.alarm.presetation.AlarmBootReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
             android:name=".features.dashboard.presentation.SystemEventReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

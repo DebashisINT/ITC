@@ -2774,8 +2774,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         //checkAutoRevisit()
 
                         var loc:Location = Location("")
-                        loc.latitude=Pref.current_latitude.toDouble()
-                        loc.longitude=Pref.current_longitude.toDouble()
+                        try{
+                            loc.latitude=Pref.current_latitude.toDouble()
+                            loc.longitude=Pref.current_longitude.toDouble()
+                        }catch (ex:Exception){
+
+                        }
 
                         //manual single revisit
                         //checkAutoRevisitManual(loc)
@@ -2783,8 +2787,6 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         Handler().postDelayed(Runnable {
                             checkAutoRevisitAll()
                         }, 250)
-
-
 
                         /*Handler().postDelayed(Runnable {
                             revisit_ll.isEnabled=true
