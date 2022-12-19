@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.splash.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.ComponentName
@@ -268,6 +269,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         }).show(supportFragmentManager, "")
     }
 
+    @SuppressLint("NewApi")
     private fun permissionCheck() {
         var strSub:String=""
         permList.clear()
@@ -587,6 +589,18 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
     }
 
     fun goTONextActi(){
+
+        val intent = Intent()
+        val packageName = packageName
+        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+        var t=pm.isIgnoringBatteryOptimizations(packageName)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !pm.isIgnoringBatteryOptimizations(packageName)) {
+            Handler().postDelayed(Runnable {
+                println("battery hit 175")
+                startActivityForResult( Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),175) }, 1000)
+            return
+        }
+
         if (TextUtils.isEmpty(Pref.user_id) || Pref.user_id.isNullOrBlank()) {
             if (!isLoginLoaded) {
                 isLoginLoaded = true
@@ -639,6 +653,12 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == 175){
+            println("battery get 175")
+            checkBatteryOptiSettings()
+            return
+        }
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 100) {
@@ -693,6 +713,33 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
     }
 
     override fun onGpsAlertCanceledByUser() {
+    }
+
+    fun checkBatteryOptiSettings(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val intent = Intent()
+            val packageName = packageName
+            val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+
+                //Toaster.msgLong(this,"Please Don't optimize your battery for this app.")
+                CommonDialog.getInstance(getString(R.string.app_name), "You must select the option 'Don't Optimise' to use this app. " ,
+                    "Cancel", "Ok", false, object : CommonDialogClickListener {
+                        override fun onLeftClick() {
+                            finish()
+                        }
+
+                        override fun onRightClick(editableData: String) {
+                            goTONextActi()
+                        }
+
+                    }).show(supportFragmentManager, "")
+                println("battery dialog scr")
+            } else{
+                println("battery next scr")
+                goTONextActi()
+            }
+        }
     }
 
 
