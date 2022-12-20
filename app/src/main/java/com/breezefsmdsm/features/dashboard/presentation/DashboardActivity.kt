@@ -7676,7 +7676,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                } else if (getCurrentFragType() == FragType.RegisTerFaceFragment) {
+                }
+                else if (getCurrentFragType() == FragType.RegisTerFaceFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7700,7 +7701,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }else if (getCurrentFragType() == FragType.PhotoRegAadhaarFragment) {
+                }
+                else if (getCurrentFragType() == FragType.PhotoRegAadhaarFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {

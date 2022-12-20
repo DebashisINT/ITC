@@ -10616,7 +10616,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             if(actiList!!.size>1){
                                 //actiList.removeAt(actiList!!.size-1)
                                 Handler().postDelayed(Runnable {
-                                    updateActivityGarbage(actiList)
+                                    updateActivityGarbage(actiList.reversed() as ArrayList<ShopActivityResponseDataList>)
                                 }, 150)
 
                             }
@@ -10638,11 +10638,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
             var dateL :ArrayList<String> = listUnsync.map { it.date } as ArrayList<String>
             var todayDatee: LocalDate = LocalDate.now()
-            for(p in 0..43){
+            for(p in 0..15){
                 todayDatee = AppUtils.findPrevDay(todayDatee)!!
                 if(!dateL.contains(todayDatee.toString())){
                     AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,todayDatee.toString())
                 }
+                println("tag_loop outer $p")
             }
 
             XLog.d("updateActivityGarbage DashFrag started " + AppUtils.getCurrentDateTime())
@@ -10659,6 +10660,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZero(false,unsyncedList.get(j),listUnsync.get(i)!!.date!!.toString())
                     }
+                }
+                if(i==15){
+                    println("tag_loop inner $i")
+                    break
                 }
             }
             uiThread {
