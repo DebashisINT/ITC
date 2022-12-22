@@ -1999,7 +1999,7 @@ class AppUtils {
                 //Convert bitmap to byte array
                 val bos = ByteArrayOutputStream()
                 //bitmap.compress(Bitmap.CompressFormat.PNG, 2, bos);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos)
                 val bitmapdata = bos.toByteArray()
 
                 //write the bytes in file

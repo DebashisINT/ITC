@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.photoReg
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
@@ -143,6 +144,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
         super.onResume()
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     private fun initView(view:View){
         nameTV = view.findViewById(R.id.tv_frag_reg_face_name)
         phoneTV = view.findViewById(R.id.tv_frag_reg_face_phone)
@@ -168,6 +170,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
         ll_phone = view.findViewById(R.id.ll_regis_face_phone);
         ll_phone.setOnClickListener(this)
+
 
         if(Pref.IsShowInPortalManualPhotoRegn){
             //if(Pref.IsShowManualPhotoRegnInApp){
@@ -523,6 +526,7 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
 
 
+    @SuppressLint("UseRequireInsteadOfGet")
     private fun saveImageToGallery() {
         iv_frag_reg_face.setRotation(90f)
         iv_frag_reg_face.setDrawingCacheEnabled(true)

@@ -25,8 +25,8 @@ android {
         applicationId "com.breezefsmdsm"
         minSdkVersion 26
         targetSdkVersion 32
-        versionCode 125
-        versionName "4.3.2"
+        versionCode 126
+        versionName "4.3.3"
         //versionName "2.3.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -254,7 +254,7 @@ dependencies {
 
 
     implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
-    implementation 'com.google.mlkit:face-detection:16.1.5'
+    implementation 'com.google.mlkit:face-detection:16.1.0'
 
     implementation 'com.google.android.gms:play-services-location:20.0.0'   //location
     implementation 'com.google.android.gms:play-services-maps:18.1.0'   //location
