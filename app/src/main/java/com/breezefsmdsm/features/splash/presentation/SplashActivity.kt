@@ -591,10 +591,10 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
 
     fun goTONextActi(){
 
-        var dev1= AppUtils.getDeviceName()
+        /*var dev1= AppUtils.getDeviceName()
         val dev2 = Build.MANUFACTURER
         var dev3 = dev1 + " " + dev2
-        if(dev3.contains("OPPO",ignoreCase = true) || dev3.contains("Vivo",ignoreCase = true)){
+        if(dev3.contains("OPPO",ignoreCase = true) || dev3.contains("Vivo",ignoreCase = true) || true){
             val intent = Intent()
             val packageName = packageName
             val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -602,10 +602,10 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !pm.isIgnoringBatteryOptimizations(packageName)) {
                 Handler().postDelayed(Runnable {
                     println("battery hit 175")
-                    startActivityForResult( Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),175) }, 1000)
+                    startActivityForResult(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),175) }, 1000)
                 return
             }
-        }
+        }*/
 
         if (TextUtils.isEmpty(Pref.user_id) || Pref.user_id.isNullOrBlank()) {
             if (!isLoginLoaded) {
@@ -660,11 +660,11 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == 175){
+        /*if(requestCode == 175){
             println("battery get 175")
             checkBatteryOptiSettings()
             return
-        }
+        }*/
 
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 100) {
