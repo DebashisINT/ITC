@@ -77,6 +77,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_splash)
+
         setContentView(R.layout.activity_splash_new)
     AppUtils.changeLanguage(this, "en")
 //        Handler().postDelayed({ goToNextScreen() }, 2000)
@@ -590,15 +591,20 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
 
     fun goTONextActi(){
 
-        val intent = Intent()
-        val packageName = packageName
-        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-        var t=pm.isIgnoringBatteryOptimizations(packageName)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !pm.isIgnoringBatteryOptimizations(packageName)) {
-            Handler().postDelayed(Runnable {
-                println("battery hit 175")
-                startActivityForResult( Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),175) }, 1000)
-            return
+        var dev1= AppUtils.getDeviceName()
+        val dev2 = Build.MANUFACTURER
+        var dev3 = dev1 + " " + dev2
+        if(dev3.contains("OPPO",ignoreCase = true) || dev3.contains("Vivo",ignoreCase = true)){
+            val intent = Intent()
+            val packageName = packageName
+            val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+            var t=pm.isIgnoringBatteryOptimizations(packageName)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !pm.isIgnoringBatteryOptimizations(packageName)) {
+                Handler().postDelayed(Runnable {
+                    println("battery hit 175")
+                    startActivityForResult( Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),175) }, 1000)
+                return
+            }
         }
 
         if (TextUtils.isEmpty(Pref.user_id) || Pref.user_id.isNullOrBlank()) {
