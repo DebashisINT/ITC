@@ -29,6 +29,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.breezefsmdsm.app.Pref
+import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.AutoStartHelper
 import com.breezefsmdsm.app.utils.PermissionUtils
 import com.breezefsmdsm.app.utils.Toaster
@@ -145,17 +146,24 @@ class SettingsFragment : BaseFragment(), View.OnClickListener {
                 initPermissionCheck()
             }
             R.id.cv_open_battery_opti -> {
-                val intent = Intent()
-                val packageName = mContext.packageName
-                val pm = mContext.getSystemService(Context.POWER_SERVICE) as PowerManager
-                var t=pm.isIgnoringBatteryOptimizations(packageName)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !pm.isIgnoringBatteryOptimizations(packageName)) {
-                    Handler().postDelayed(Runnable {
-                        println("battery hit 175")
-                        startActivityForResult(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),175) }, 1000)
-                    return
+                var dev1= AppUtils.getDeviceName()
+                val dev2 = Build.MANUFACTURER
+                var dev3 = dev1 + " " + dev2
+                if(dev3.contains("OPPO",ignoreCase = true) || dev3.contains("Vivo",ignoreCase = true)){
+                    val intent = Intent()
+                    val packageName = mContext.packageName
+                    val pm = mContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+                    var t=pm.isIgnoringBatteryOptimizations(packageName)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !pm.isIgnoringBatteryOptimizations(packageName)) {
+                        Handler().postDelayed(Runnable {
+                            println("battery hit 175")
+                            startActivityForResult(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),175) }, 1000)
+                        return
+                    }else{
+                        Toaster.msgShort(mContext,"Battery already optimized.")
+                    }
                 }else{
-                    Toaster.msgShort(mContext,"Battery already optimized.")
+                    Toaster.msgShort(mContext,"Not Compatible setting for your device.")
                 }
             }
         }

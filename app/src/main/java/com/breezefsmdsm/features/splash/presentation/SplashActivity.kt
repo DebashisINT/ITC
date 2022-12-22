@@ -594,7 +594,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         /*var dev1= AppUtils.getDeviceName()
         val dev2 = Build.MANUFACTURER
         var dev3 = dev1 + " " + dev2
-        if(dev3.contains("OPPO",ignoreCase = true) || dev3.contains("Vivo",ignoreCase = true) || true){
+        if(dev3.contains("OPPO",ignoreCase = true) || dev3.contains("Vivo",ignoreCase = true)){
             val intent = Intent()
             val packageName = packageName
             val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
