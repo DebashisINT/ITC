@@ -86,7 +86,6 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
     private var city = ""
     private var country = ""
 
-    @SuppressLint("UseRequireInsteadOfGet")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val view = inflater.inflate(R.layout.searchlocation, container, false)
@@ -112,7 +111,6 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
         mContext = context
     }
 
-    @SuppressLint("UseRequireInsteadOfGet")
     override fun onStop() {
         if (mGoogleApiClient != null && mGoogleApiClient?.isConnected!!) {
             mGoogleApiClient?.stopAutoManage(activity!!);
@@ -182,7 +180,7 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
                                 googleMap?.animateCamera(CameraUpdateFactory.newLatLng(places.get(0).latLng));
                                 if (currentLocationMarker != null)
                                     currentLocationMarker?.remove()
-                                currentLocationMarker = googleMap?.addMarker(markerOptions!!);
+                                currentLocationMarker = googleMap?.addMarker(markerOptions);
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
@@ -232,7 +230,7 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
                 if (currentLocationMarker != null)
                     currentLocationMarker?.remove()
 
-                currentLocationMarker = googleMap?.addMarker(markerOptions!!);
+                currentLocationMarker = googleMap?.addMarker(markerOptions);
 
                 searchLocation_edt.setText(fullAdd)
             }
@@ -291,7 +289,7 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
                 // Placing a marker on the touched position
                 if (currentLocationMarker != null)
                     currentLocationMarker?.remove()
-                currentLocationMarker = googleMap?.addMarker(markerOptions!!)!!;
+                currentLocationMarker = googleMap?.addMarker(markerOptions)!!;
 
                 search_progress.visibility = View.GONE
                 isLocationPicked = true
@@ -302,10 +300,10 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
 
 
             googleMap?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-                override fun onMarkerDragStart(p0: Marker) {
+                override fun onMarkerDragStart(p0: Marker?) {
                 }
 
-                override fun onMarkerDrag(p0: Marker) {
+                override fun onMarkerDrag(p0: Marker?) {
                     selectedLatitude = p0?.position!!.latitude
                     selectedLongitude = p0.position!!.longitude
 
@@ -316,7 +314,7 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
                     googleMap?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
                 }
 
-                override fun onMarkerDragEnd(p0: Marker) {
+                override fun onMarkerDragEnd(p0: Marker?) {
                 }
             });
 
@@ -443,7 +441,6 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
         mapView.onDestroy()
     }
 
-    @SuppressLint("UseRequireInsteadOfGet")
     override fun onDestroyView() {
         super.onDestroyView()
         if (mGoogleApiClient != null) {
@@ -478,7 +475,7 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
                     if (currentLocationMarker != null)
                         currentLocationMarker?.remove()
 
-                    currentLocationMarker = googleMap?.addMarker(markerOptions!!)!!
+                    currentLocationMarker = googleMap?.addMarker(markerOptions)!!
 
                     fetchCurrentAddress(selectedLatitude, selectedLongitude)
                 } catch (e: Exception) {
@@ -497,7 +494,7 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
         if (ContextCompat.checkSelfPermission(mContext,
                         Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (mGoogleApiClient?.isConnected!!) {
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient!!, mLocationRequest!!, this)!!
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this)
 
                 if (!TextUtils.isEmpty(Pref.latitude) && !TextUtils.isEmpty(Pref.longitude)) {
                     if (Pref.latitude != "0.0" && Pref.longitude != "0.0") {
@@ -516,10 +513,10 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
 
     @SuppressLint("MissingPermission")
     private fun getLastKnownLocation() {
-        val lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient!!)
+        val lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient)
 
         if (lastLocation != null && lastLocation.latitude != null && lastLocation.latitude != 0.0) {
-            LoadSaync(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient!!)!!, true)!!
+            LoadSaync(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient), true)
         }
 
     }
@@ -528,6 +525,11 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
+    }
+
+
+    override fun onLocationChanged(location: Location?) {
+        LoadSaync(location!!, false)
     }
 
     fun LoadSaync(mLocation: Location, isCameraAnimate: Boolean) {
@@ -638,10 +640,6 @@ class SearchLocationFragment : BaseFragment(), View.OnClickListener, LocationAda
             ex.printStackTrace();
         }
         return fullAdd;
-    }
-
-    override fun onLocationChanged(p0: Location) {
-        LoadSaync(location!!, false)
     }
 
 }

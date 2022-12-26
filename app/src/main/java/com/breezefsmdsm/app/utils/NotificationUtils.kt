@@ -513,7 +513,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
 //        shopIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 //
 //        val pending: PendingIntent = PendingIntent.getActivity(applicationContext, alarmData?.id?.toInt()?.hashCode()!!, shopIntent,
-//                /*PendingIntent.FLAG_UPDATE_CURRENT*/ 0)
+//                /*PendingIntent.FLAG_IMMUTABLE*/ 0)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -775,7 +775,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
 //        shopIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 //
 //        val pending: PendingIntent = PendingIntent.getActivity(applicationContext, alarmData?.id?.toInt()?.hashCode()!!, shopIntent,
-//                /*PendingIntent.FLAG_UPDATE_CURRENT*/ 0)
+//                /*PendingIntent.FLAG_IMMUTABLE*/ 0)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -944,7 +944,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
 //        shopIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 //
 //        val pending: PendingIntent = PendingIntent.getActivity(applicationContext, alarmData?.id?.toInt()?.hashCode()!!, shopIntent,
-//                /*PendingIntent.FLAG_UPDATE_CURRENT*/ 0)
+//                /*PendingIntent.FLAG_IMMUTABLE*/ 0)
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

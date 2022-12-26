@@ -537,7 +537,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     @SuppressLint("MissingPermission")
     override fun onConnected(@Nullable bundle: Bundle?) {
         Log.e(TAG, "onConnected: ")
-        val lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleAPIClient!!)
+        val lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleAPIClient)
         if (lastLocation != null && lastLocation.latitude != null && lastLocation.latitude != 0.0) {
             AppUtils.mLocation = lastLocation
             Pref.current_latitude = lastLocation.latitude.toString()
@@ -554,7 +554,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleAPIClient!!, mLocationRequest!!, this) //getting error here..for casting..!
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleAPIClient, mLocationRequest, this) //getting error here..for casting..!
 
     }
 
@@ -4237,7 +4237,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         /*val restartServiceIntent = Intent(applicationContext, LocationFuzedService::class.java)
         restartServiceIntent.setPackage(packageName);
 
-        val service = PendingIntent.getService(applicationContext, 10001, restartServiceIntent, PendingIntent.FLAG_ONE_SHOT)
+        val service = PendingIntent.getService(applicationContext, 10001, restartServiceIntent, PendingIntent.FLAG_IMMUTABLE)
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 500, service)*/
 
@@ -4338,12 +4338,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         return Pair(latNew, lonNew)
     }
-
-    /*@SuppressLint("MissingPermission")
-    private fun registerGpsStatusListener() {
-        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.addGpsStatusListener(this)
-    }*/
 
     lateinit var mGnssStatusCallback: GnssStatus.Callback
 

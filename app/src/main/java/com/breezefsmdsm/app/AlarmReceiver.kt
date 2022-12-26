@@ -140,7 +140,7 @@ class AlarmReceiver : BroadcastReceiver() {
               val intent = Intent(context, AlarmReceiver::class.java)
               intent.action = SEND_ACTION
 
-              val broadcast = PendingIntent.getBroadcast(context, INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+              val broadcast = PendingIntent.getBroadcast(context, INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE)
 
               //Reprogramamos la alarma si ya existía
               //            alarmManager.cancel(broadcast);
@@ -171,7 +171,7 @@ class AlarmReceiver : BroadcastReceiver() {
             val intent = Intent(context, AlarmReceiver::class.java)
             intent.action = SEND_ACTION
 
-            val broadcast = PendingIntent.getBroadcast(context, INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val broadcast = PendingIntent.getBroadcast(context, INTENT_REQUEST_CODE, intent, PendingIntent.FLAG_IMMUTABLE)
 
             alarmManager.cancel(broadcast)
 
@@ -182,7 +182,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
             return PendingIntent.getBroadcast(mContext, 0,
                     Intent(SEND_ACTION),
-                    PendingIntent.FLAG_NO_CREATE) != null
+                    PendingIntent.FLAG_IMMUTABLE) != null
         }*/
 
 
@@ -191,7 +191,7 @@ class AlarmReceiver : BroadcastReceiver() {
 
               val intent = Intent(context, AlarmReceiver::class.java)
 
-              val pendingIntent = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE_MORNING, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+              val pendingIntent = PendingIntent.getBroadcast(context, ALARM_REQUEST_CODE_MORNING, intent, PendingIntent.FLAG_IMMUTABLE)
 
               val calendar = Calendar.getInstance()
 

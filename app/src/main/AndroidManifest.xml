@@ -93,9 +93,9 @@
             android:name=".features.splash.presentation.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -124,13 +124,12 @@
         <activity
             android:name=".mappackage.MapActivityWithoutPath"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:exported="true"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".features.micro_learning.presentation.ExoPlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="com.google.android.exoplayer.breezefsmdsm.action.VIEW" />
 
@@ -146,11 +145,12 @@
 
         <service
             android:name=".features.alarm.presetation.AlarmRingingService"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="true"/>
         <service
             android:name=".features.alarm.presetation.FloatingWidgetService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true" />
         <service
             android:name=".features.location.LocationFuzedService"
             android:enabled="true"
@@ -171,8 +171,7 @@
         <receiver android:name=".features.broadcastreceiver.ShopNearbyReceiver"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.NEARBYSHOP"
-                    />
+                <action android:name="android.intent.action.NEARBYSHOP" />
             </intent-filter>
         </receiver>
         <receiver android:name=".app.AlarmReceiver"
@@ -208,7 +207,8 @@
             android:value="@string/MAP_ProjectAPIKey" /> <!-- <service -->
         <!-- android:name=".app.BackgroundService" -->
         <!-- android:exported="false"/> -->
-        <receiver android:name=".features.broadcastreceiver.ActionReceiver" />
+        <receiver android:name=".features.broadcastreceiver.ActionReceiver"
+            android:exported="true"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -236,7 +236,8 @@
             android:enabled="true"
             android:exported="true" />
 
-        <service android:name=".features.location.GeofenceTransitionsIntentService" />
+        <service android:name=".features.location.GeofenceTransitionsIntentService"
+            android:exported="true"/>
         <service
             android:name=".features.location.GeofenceTransitionsJobIntentService"
             android:exported="true"
@@ -247,10 +248,12 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".features.location.LocationJobService"
+            android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".features.geofence.GeofenceService"
-            android:enabled="true" />
+            android:enabled="true"
+            android:exported="true"/>
 
         <receiver
             android:name=".features.location.GpsLocationReceiver"
@@ -262,7 +265,8 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".features.dashboard.presentation.AlertService" />
+        <service android:name=".features.dashboard.presentation.AlertService"
+            android:exported="true"/>
         <!--
 <service
             android:name=".features.dashboard.presentation.CollectionOrderAlertJobService"
@@ -272,7 +276,7 @@
         <!-- Firebase Notifications -->
         <service
             android:name=".fcm.MyFirebaseMessagingService"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -285,12 +289,14 @@
         </service>
         -->
         <!-- ./Firebase Notifications -->
-        <service android:name=".features.login.presentation.MemberShopListIntentService" />
-        <service android:name=".features.micro_learning.presentation.FileOpeningTimeIntentService" />
+        <service android:name=".features.login.presentation.MemberShopListIntentService"
+            android:exported="true"/>
+        <service android:name=".features.micro_learning.presentation.FileOpeningTimeIntentService"
+            android:exported="true"/>
         <service
             android:name=".MonitorService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true" />
 
         <receiver
             android:name=".MonitorBroadcast"

@@ -2774,12 +2774,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         //checkAutoRevisit()
 
                         var loc:Location = Location("")
-                        try{
-                            loc.latitude=Pref.current_latitude.toDouble()
-                            loc.longitude=Pref.current_longitude.toDouble()
-                        }catch (ex:Exception){
-
-                        }
+                        loc.latitude=Pref.current_latitude.toDouble()
+                        loc.longitude=Pref.current_longitude.toDouble()
 
                         //manual single revisit
                         //checkAutoRevisitManual(loc)
@@ -2787,6 +2783,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         Handler().postDelayed(Runnable {
                             checkAutoRevisitAll()
                         }, 250)
+
+
 
                         /*Handler().postDelayed(Runnable {
                             revisit_ll.isEnabled=true
@@ -7676,8 +7674,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.RegisTerFaceFragment) {
+                } else if (getCurrentFragType() == FragType.RegisTerFaceFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
@@ -7701,8 +7698,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             XLog.e("Error: " + e.localizedMessage)
                         }
                     }
-                }
-                else if (getCurrentFragType() == FragType.PhotoRegAadhaarFragment) {
+                }else if (getCurrentFragType() == FragType.PhotoRegAadhaarFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
