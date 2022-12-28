@@ -603,6 +603,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             //(mContext as DashboardActivity).showSnackMessage("No Shop Found")
         }
 
+        //test code
+        //prepareAddAttendanceInputParams()
+        //return
 
         //finalNearByDD=newDDList[5]
         progress_wheel.stopSpinning()
