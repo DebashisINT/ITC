@@ -2399,7 +2399,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
                                     (mContext as DashboardActivity).finish()
                                 } else {
                                     progress_wheel.stopSpinning()
-
+                                    XLog.d("Edit Shop : else " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
                                     if (isSync)
                                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
                                     else {
@@ -2418,6 +2418,8 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
                                 error.printStackTrace()
                                 BaseActivity.isApiInitiated = false
                                 progress_wheel.stopSpinning()
+
+                                XLog.d("Edit Shop : error " + ", SHOP: " + addShopReqData.shop_name + ", err :" + error.message)
 
                                 if (isSync)
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))

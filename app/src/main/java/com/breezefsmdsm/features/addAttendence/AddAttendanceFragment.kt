@@ -2527,6 +2527,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
 
 
+    @SuppressLint("NewApi")
     fun getPicUrl(){
         //31-08-2021
         BaseActivity.isApiInitiated=false

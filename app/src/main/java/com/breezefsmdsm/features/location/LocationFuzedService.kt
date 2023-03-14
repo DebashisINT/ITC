@@ -594,7 +594,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             Handler().postDelayed(Runnable {
                 showDayEndNotification()
             }, 100)
-
         }
 
         //XLog.d("onLocationChanged : LocationFuzedService " + AppUtils.getCurrentDateTime())
@@ -1739,7 +1738,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     }
 
     private fun showDayEndNotification(){
-
         val currentTimeInLong = AppUtils.convertTimeWithMeredianToLong(AppUtils.getCurrentTimeWithMeredian())
         val approvedOutTimeInLong1 = AppUtils.convertTimeWithMeredianToLong("08:15 PM")
         val approvedOutTimeInLong2 = AppUtils.convertTimeWithMeredianToLong("08:30 PM")

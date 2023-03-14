@@ -1670,7 +1670,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     }
                 })
                 simpleDialogV.show()
-            } else {
+            }
+            else {
                 CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                 CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
                 CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
