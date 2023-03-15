@@ -44,7 +44,7 @@ import com.breezefsmdsm.features.login.UserLoginDataEntity
 import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync

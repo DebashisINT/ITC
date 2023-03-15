@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat
 import android.text.TextUtils
 import android.util.Log
 import android.widget.RemoteViews
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.google.firebase.messaging.RemoteMessage
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppConstant
@@ -250,7 +250,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
 
             val channelName = AppUtils.notificationChannelName
 
-            XLog.e("========Notification Channel enabled (FirebaseMesagingService)=========")
+            Timber.e("========Notification Channel enabled (FirebaseMesagingService)=========")
 
             val importance = NotificationManager.IMPORTANCE_HIGH
             val notificationChannel = NotificationChannel(channelId, channelName, importance)
@@ -569,7 +569,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         }
 
 
-        XLog.e("=================Show alarm notification (Notification)=================")
+        Timber.e("=================Show alarm notification (Notification)=================")
 
     }
 
@@ -831,7 +831,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
         }
 
 
-        XLog.e("=================Show clear data notification (Notification)=================")
+        Timber.e("=================Show clear data notification (Notification)=================")
 
     }
 
@@ -1036,7 +1036,7 @@ class NotificationUtils(headerText: String, bodyText: String, shopId: String, lo
 
             val channelName = AppUtils.notificationChannelName
 
-            XLog.e("========Notification Channel enabled (FirebaseMesagingService)=========")
+            Timber.e("========Notification Channel enabled (FirebaseMesagingService)=========")
 
             val importance = NotificationManager.IMPORTANCE_HIGH
             val notificationChannel = NotificationChannel(channelId, channelName, importance)

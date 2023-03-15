@@ -32,7 +32,7 @@ import com.breezefsmdsm.features.dymanicSection.api.DynamicRepoProvider
 import com.breezefsmdsm.features.dymanicSection.model.*
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -166,7 +166,7 @@ class AddDynamicFragment : BaseFragment() {
 
                             val response = result as DynamicResponseModel
 
-                            XLog.d("DYNAMIC RESPONSE=======> " + response.status)
+                            Timber.d("DYNAMIC RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.view_list != null && response.view_list!!.size > 0) {
@@ -188,7 +188,7 @@ class AddDynamicFragment : BaseFragment() {
                             progress_wheel.stopSpinning()
                             tv_no_data.visibility = View.VISIBLE
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("DYNAMIC ERROR=======> " + error.localizedMessage)
+                            Timber.d("DYNAMIC ERROR=======> " + error.localizedMessage)
                         })
         )
     }
@@ -563,7 +563,7 @@ class AddDynamicFragment : BaseFragment() {
 
                                 val response = result as BaseResponse
 
-                                XLog.d("ADD DYNAMIC RESPONSE=======> " + response.status)
+                                Timber.d("ADD DYNAMIC RESPONSE=======> " + response.status)
 
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
                                 if (response.status == NetworkConstant.SUCCESS) {
@@ -579,7 +579,7 @@ class AddDynamicFragment : BaseFragment() {
                                 error.printStackTrace()
                                 progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                                XLog.d("ADD DYNAMIC ERROR=======> " + error.localizedMessage)
+                                Timber.d("ADD DYNAMIC ERROR=======> " + error.localizedMessage)
                             })
             )
         }
@@ -596,7 +596,7 @@ class AddDynamicFragment : BaseFragment() {
 
                                 val response = result as BaseResponse
 
-                                XLog.d("ADD DYNAMIC RESPONSE=======> " + response.status)
+                                Timber.d("ADD DYNAMIC RESPONSE=======> " + response.status)
 
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
                                 if (response.status == NetworkConstant.SUCCESS) {
@@ -612,7 +612,7 @@ class AddDynamicFragment : BaseFragment() {
                                 error.printStackTrace()
                                 progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                                XLog.d("ADD DYNAMIC ERROR=======> " + error.localizedMessage)
+                                Timber.d("ADD DYNAMIC ERROR=======> " + error.localizedMessage)
                             })
             )
         }

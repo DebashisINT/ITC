@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
@@ -33,7 +33,7 @@ class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsInten
 
     override fun onHandleIntent(intent: Intent?) {
 
-        XLog.d("Geofence: GeofenceTransitionsJobIntentService : ENTRY")
+        Timber.d("Geofence: GeofenceTransitionsJobIntentService : ENTRY")
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
         if (geofencingEvent.hasError()) {
 //            val errorMessage = GeofenceErrorMessages.getErrorString(this,
@@ -57,20 +57,20 @@ class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsInten
             triggeringGeofences.forEach {
                 //                it.requestId
                 // Send notification and log the transition details.
-                XLog.d("=====================Geofence=======================")
+                Timber.d("=====================Geofence=======================")
                 when (geofenceTransition) {
                     Geofence.GEOFENCE_TRANSITION_ENTER -> {
-                        XLog.d("Geofence: GeofenceTransitionsJobIntentService : ENTER")
+                        Timber.d("Geofence: GeofenceTransitionsJobIntentService : ENTER")
                         if (!TextUtils.isEmpty(Pref.user_id) && !Pref.isAutoLogout)
                             sendNotification(it.requestId)
                     }
                     Geofence.GEOFENCE_TRANSITION_EXIT -> {
-                        XLog.d("Geofence: GeofenceTransitionsJobIntentService : EXIT")
+                        Timber.d("Geofence: GeofenceTransitionsJobIntentService : EXIT")
                         cancelNotification(it.requestId)
                         endShopDuration(it.requestId)
                     }
                     Geofence.GEOFENCE_TRANSITION_DWELL -> {
-                        XLog.d("Geofence: GeofenceTransitionsJobIntentService : DWELL")
+                        Timber.d("Geofence: GeofenceTransitionsJobIntentService : DWELL")
                         if (!TextUtils.isEmpty(Pref.user_id) && !Pref.isAutoLogout)
                             sendNotification(it.requestId)
 //                        calculateShopDuration(it.requestId)
@@ -79,12 +79,12 @@ class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsInten
             }
 
 
-            XLog.e(TAG, geofenceTransitionDetails)
+            Timber.e(TAG, geofenceTransitionDetails)
         } else {
             // Log the error.
-            XLog.e(TAG, "Invalid Type $geofenceTransition")
+            Timber.e(TAG, "Invalid Type $geofenceTransition")
         }
-        XLog.d("Geofence: GeofenceTransitionsJobIntentService : EXIT")
+        Timber.d("Geofence: GeofenceTransitionsJobIntentService : EXIT")
 
     }
 
@@ -97,7 +97,7 @@ class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsInten
         var shopActiList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(requestId!!, AppUtils.getCurrentDateForShopActi())
         if (shopActiList.isEmpty())
             return
-        XLog.d("Geofence: FarFromShop : " + "ShopName : " + shopActiList[0].shop_name!!)
+        Timber.d("Geofence: FarFromShop : " + "ShopName : " + shopActiList[0].shop_name!!)
         if (!shopActiList[0].isDurationCalculated && !shopActiList[0].isUploaded) {
             var endTimeStamp = System.currentTimeMillis().toString()
             var startTimestamp = shopActiList[0].startTimeStamp
@@ -130,7 +130,7 @@ class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsInten
                 AppDatabase.getDBInstance()!!.shopActivityDao().updateDurationAvailable(true, shopActiList[i].shopid!!, AppUtils.getCurrentDateForShopActi())
                 return
             }
-            XLog.d("Geofence: ShopDurationIncrement : " + "ShopName : " + shopActiList[i].shop_name + "," + shopActiList[i].duration_spent)
+            Timber.d("Geofence: ShopDurationIncrement : " + "ShopName : " + shopActiList[i].shop_name + "," + shopActiList[i].duration_spent)
             AppDatabase.getDBInstance()!!.shopActivityDao().updateTotalMinuteForDayOfShop(shopActiList[i].shopid!!, totalMinute, AppUtils.getCurrentDateForShopActi())
             var duration = AppUtils.getTimeFromTimeSpan(shopActiList[i].startTimeStamp, System.currentTimeMillis().toString())
             AppDatabase.getDBInstance()!!.shopActivityDao().updateTimeDurationForDayOfShop(shopActiList[i].shopid!!, duration, AppUtils.getCurrentDateForShopActi())
@@ -252,11 +252,11 @@ class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsInten
             isVisited = list[0].isVisited
             shopName = list[0].shop_name!!
         }
-        XLog.d("Geofence: ENTER : " + "ShopName : " + shopName + ",IS_DURATION_CALCULATED : " + isDurationCalculated)
+        Timber.d("Geofence: ENTER : " + "ShopName : " + shopName + ",IS_DURATION_CALCULATED : " + isDurationCalculated)
         if (isDurationCalculated || isVisited)
             return
 
-        XLog.d("Geofence: NearToShop : " + "ShopName : " + shopName)
+        Timber.d("Geofence: NearToShop : " + "ShopName : " + shopName)
         // Get an instance of the Notification manager
         val notification = NotificationUtils(getString(R.string.app_name), shopName, shopId, "")
         notification.CreateNotification(this, shopId)

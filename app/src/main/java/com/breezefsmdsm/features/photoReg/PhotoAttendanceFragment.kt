@@ -64,7 +64,7 @@ import com.breezefsmdsm.features.photoReg.model.UserListResponseModel
 import com.breezefsmdsm.features.photoReg.model.clearAttendanceonRejectReqModelRejectReqModel
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
@@ -363,7 +363,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 progress_wheel.spin()
                 faceDetector=null
                 faceDetectorSetUp()
-                XLog.d("AdapterUserListAttenD onclick")
+                Timber.d("AdapterUserListAttenD onclick")
                 //GetImageFromUrl().execute(obj.face_image_link!!)
                 //GetImageFromUrl().execute("http://fts.indusnettechnologies.com:7007/CommonFolder/FaceImageDetection/EMA0003358.jpg")
                 //GetImageFromUrl().execute("http://3.7.30.86:82/CommonFolder/FaceImageDetection/EMK0000014.jpg")
@@ -498,11 +498,11 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         singleLocationDD()
                     }
                 } else {
-                    XLog.d("=====Inaccurate current location (Local Shop List)=====")
+                    Timber.d("=====Inaccurate current location (Local Shop List)=====")
                     singleLocationDD()
                 }
             } else {
-                XLog.d("=====null location (Local Shop List)======")
+                Timber.d("=====null location (Local Shop List)======")
                 singleLocationDD()
             }
         } else
@@ -531,7 +531,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         if (isGetLocation == -1) {
                             isGetLocation = 0
                             if (location.accuracy > Pref.gpsAccuracy.toInt()) {
-                                XLog.d("PhotoAttendanceFragment : loc.accuracy : "+location.accuracy.toString()+
+                                Timber.d("PhotoAttendanceFragment : loc.accuracy : "+location.accuracy.toString()+
                                         " Pref.gpsAccuracy : "+Pref.gpsAccuracy.toInt().toString())
                                 (mContext as DashboardActivity).showSnackMessage("Unable to fetch accurate GPS data. Please try again.")
                                 progress_wheel.stopSpinning()
@@ -610,7 +610,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         //finalNearByDD=newDDList[5]
         progress_wheel.stopSpinning()
         if (finalNearByDD.dd_id != null && finalNearByDD.dd_id!!.length > 1) {
-            XLog.d("PhotoAtend nearby found onclick")
+            Timber.d("PhotoAtend nearby found onclick")
             if(obj_temp.IsTeamAttenWithoutPhoto!!){
                 prepareAddAttendanceInputParams()
             }else{
@@ -1041,11 +1041,11 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
     }
 
     private fun doAttendance(){
-        XLog.d("PhotoAttendance : doAttendance " +AppUtils.getCurrentDateTime())
-        XLog.d("PhotoAttendance : doAttendance :add_attendence_time " +addAttendenceModel.add_attendence_time)
-        //XLog.d("PhotoAttendance : doAttendance :work_date_time " +addAttendenceModel.work_date_time)
-        XLog.d("PhotoAttendance : doAttendance :work_lat : work_long " +addAttendenceModel.work_lat + " "+addAttendenceModel.work_long)
-        XLog.d("PhotoAttendance : doAttendance :user_id " +addAttendenceModel.user_id)
+        Timber.d("PhotoAttendance : doAttendance " +AppUtils.getCurrentDateTime())
+        Timber.d("PhotoAttendance : doAttendance :add_attendence_time " +addAttendenceModel.add_attendence_time)
+        //Timber.d("PhotoAttendance : doAttendance :work_date_time " +addAttendenceModel.work_date_time)
+        Timber.d("PhotoAttendance : doAttendance :work_lat : work_long " +addAttendenceModel.work_lat + " "+addAttendenceModel.work_long)
+        Timber.d("PhotoAttendance : doAttendance :user_id " +addAttendenceModel.user_id)
 
         BaseActivity.isApiInitiated = true
         val repository = AddAttendenceRepoProvider.addAttendenceRepo()
@@ -1057,8 +1057,8 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
-                            XLog.d("VISIT AddAttendance Response Code========> " + response.status)
-                            XLog.d("VISIT AddAttendance Response Msg=========> " + response.message)
+                            Timber.d("VISIT AddAttendance Response Code========> " + response.status)
+                            Timber.d("VISIT AddAttendance Response Msg=========> " + response.message)
                             enableScreen()
                             if (response.status == NetworkConstant.SUCCESS) {
                                 BaseActivity.isApiInitiated = false
@@ -1086,7 +1086,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             //delete attendance-daystartend
                             apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
 
-                            XLog.d("VISIT AddAttendance team Response Msg=========> " + error.message)
+                            Timber.d("VISIT AddAttendance team Response Msg=========> " + error.message)
                             enableScreen()
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
@@ -1147,11 +1147,11 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         singleLocation(usrID)
                     }
                 } else {
-                    XLog.d("=====Inaccurate current location (Local Shop List)=====")
+                    Timber.d("=====Inaccurate current location (Local Shop List)=====")
                     singleLocation(usrID)
                 }
             } else {
-                XLog.d("=====null location (Local Shop List)======")
+                Timber.d("=====null location (Local Shop List)======")
                 singleLocation(usrID)
             }
         } else
@@ -1180,7 +1180,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         if (isGetLocation == -1) {
                             isGetLocation = 0
                             if (location.accuracy > Pref.gpsAccuracy.toInt()) {
-                                XLog.d("PhotoAttendanceFragment : loc.accuracy : "+location.accuracy.toString()+
+                                Timber.d("PhotoAttendanceFragment : loc.accuracy : "+location.accuracy.toString()+
                                         " Pref.gpsAccuracy : "+Pref.gpsAccuracy.toInt().toString())
                                 (mContext as DashboardActivity).showSnackMessage("Unable to fetch accurate GPS data. Please try again.")
                                 progress_wheel.stopSpinning()
@@ -1208,7 +1208,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
     fun startDay(loc: Location,usrID:String) {
         try{
-            XLog.d("PhotoAtendFrag : startDay  ========> " +AppUtils.getCurrentDateTime())
+            Timber.d("PhotoAtendFrag : startDay  ========> " +AppUtils.getCurrentDateTime())
         }catch (ex:Exception){ex.printStackTrace()}
 
         disableScreen()
@@ -1257,13 +1257,13 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 addr=""
             }
             try{
-                XLog.d("PhotoAtendFrag : startDay : getCurrentDateTime() " +AppUtils.getCurrentDateTime())
-                XLog.d("PhotoAtendFrag : startDay : getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
-                XLog.d("PhotoAtendFrag : startDay : user_id ${dayst.user_id}")
-                XLog.d("PhotoAtendFrag : startDay : date ${dayst.date}")
-                XLog.d("PhotoAtendFrag : startDay : locationName ${dayst.location_name}")
-                XLog.d("PhotoAtendFrag : startDay : address $addr")
-                XLog.d("PhotoAtendFrag : startDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
+                Timber.d("PhotoAtendFrag : startDay : getCurrentDateTime() " +AppUtils.getCurrentDateTime())
+                Timber.d("PhotoAtendFrag : startDay : getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
+                Timber.d("PhotoAtendFrag : startDay : user_id ${dayst.user_id}")
+                Timber.d("PhotoAtendFrag : startDay : date ${dayst.date}")
+                Timber.d("PhotoAtendFrag : startDay : locationName ${dayst.location_name}")
+                Timber.d("PhotoAtendFrag : startDay : address $addr")
+                Timber.d("PhotoAtendFrag : startDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
             }catch (ex:Exception){
                 ex.printStackTrace()
             }
@@ -1274,7 +1274,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("DayStart (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
+                                Timber.d("DayStart (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
                                         loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime() )
                                 progress_wheel.stopSpinning()
                                 enableScreen()
@@ -1292,9 +1292,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
 
                                 if (error == null) {
-                                    XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+                                    Timber.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                                 } else {
-                                    XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
+                                    Timber.d("DayStart (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
                                     error.printStackTrace()
                                 }
                                 progress_wheel.stopSpinning()
@@ -1306,7 +1306,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             //delete attendance-daystartend
             apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
 
-            XLog.d("DayStart (PhotoAttendanceFragment) : exception " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+            Timber.d("DayStart (PhotoAttendanceFragment) : exception " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
             enableScreen()
             ex.printStackTrace()
             progress_wheel.stopSpinning()
@@ -1346,14 +1346,14 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                 addr=""
             }
             try{
-                XLog.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTime() " +AppUtils.getCurrentDateTime())
-                XLog.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
+                Timber.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTime() " +AppUtils.getCurrentDateTime())
+                Timber.d("PhotoAtendFrag : endDay :  AppUtils.getCurrentDateTimeNew() " +AppUtils.getCurrentDateTimeNew())
 
-                XLog.d("PhotoAtendFrag : endDay : user_id ${dayst.user_id}")
-                XLog.d("PhotoAtendFrag : endDay : date ${dayst.date}")
-                XLog.d("PhotoAtendFrag : endDay : locationName ${dayst.location_name}")
-                XLog.d("PhotoAtendFrag : endDay : address $addr")
-                XLog.d("PhotoAtendFrag : endDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
+                Timber.d("PhotoAtendFrag : endDay : user_id ${dayst.user_id}")
+                Timber.d("PhotoAtendFrag : endDay : date ${dayst.date}")
+                Timber.d("PhotoAtendFrag : endDay : locationName ${dayst.location_name}")
+                Timber.d("PhotoAtendFrag : endDay : address $addr")
+                Timber.d("PhotoAtendFrag : endDay :  lat : " +dayst.latitude.toString() + " long : "+dayst.longitude)
             }catch (ex:Exception){
                 ex.printStackTrace()
             }
@@ -1364,7 +1364,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("DayEnd (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
+                                Timber.d("DayEnd (PhotoAttendanceFragment): DayStarted Success status " + result.status + " usr_id : "+usrID+" lat "+
                                         loc.latitude.toString()+ " long "+ loc.longitude.toString()+" addr "+addr+" "+AppUtils.getCurrentDateTime())
                                 progress_wheel.stopSpinning()
                                 enableScreen()
@@ -1381,9 +1381,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                                 apiCallOnClearAttenReject(obj_temp!!.user_id.toString())
 
                                 if (error == null) {
-                                    XLog.d("DayEnd (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+                                    Timber.d("DayEnd (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                                 } else {
-                                    XLog.d("DayEnd (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
+                                    Timber.d("DayEnd (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
                                     error.printStackTrace()
                                 }
                                 progress_wheel.stopSpinning()
@@ -1392,7 +1392,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             )
 
         } catch (ex: Exception) {
-            XLog.d("DayEnd (PhotoAttendanceFragment) : ERRORRR " + " usr_id : "+usrID+" err $ex "+AppUtils.getCurrentDateTime())
+            Timber.d("DayEnd (PhotoAttendanceFragment) : ERRORRR " + " usr_id : "+usrID+" err $ex "+AppUtils.getCurrentDateTime())
             enableScreen()
 
             //delete attendance-daystartend
@@ -1425,7 +1425,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val logoutResponse = result as BaseResponse
-                            XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + logoutResponse.message)
+                            Timber.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + logoutResponse.message)
                             enableScreen()
                             simpleDialogProcess.dismiss()
                             if (logoutResponse.status == NetworkConstant.SUCCESS) {
@@ -1457,7 +1457,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             simpleDialogProcess.dismiss()
                             error.printStackTrace()
-                            XLog.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("PhotoAttendanceFragment LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + usrID + ",MESSAGE : " + error.localizedMessage)
                             //(mContext as DashboardActivity).showSnackMessage(error.localizedMessage)
 
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.try_again_later))
@@ -1569,9 +1569,9 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
                     }, { error ->
                         enableScreen()
                         if (error == null) {
-                            XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+                            Timber.d("DayStart (PhotoAttendanceFragment) : ERROR " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
                         } else {
-                            XLog.d("DayStart (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
+                            Timber.d("DayStart (PhotoAttendanceFragment) : ERROR " +" usr_id : "+usrID+ " "+error.localizedMessage+" "+AppUtils.getCurrentDateTime())
                             error.printStackTrace()
                         }
                         progress_wheel.stopSpinning()
@@ -1580,7 +1580,7 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
             )
 
         } catch (ex: Exception) {
-            XLog.d("DayStart (PhotoAttendanceFragment) : exception " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
+            Timber.d("DayStart (PhotoAttendanceFragment) : exception " + " usr_id : "+usrID+" UNEXPECTED ERROR IN DayStart API "+AppUtils.getCurrentDateTime())
             enableScreen()
             ex.printStackTrace()
             progress_wheel.stopSpinning()

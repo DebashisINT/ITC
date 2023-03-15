@@ -9,7 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.app.Pref
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -20,7 +20,7 @@ class CollectionOrderAlertJobService: JobService() {
 
     override fun onStartJob(p0: JobParameters?): Boolean {
 
-        XLog.d("============Start Job (CollectionOrderAlertService)==============")
+        Timber.d("============Start Job (CollectionOrderAlertService)==============")
 
         startService(Intent(this, CollectionOrderAlertService::class.java))
 
@@ -29,7 +29,7 @@ class CollectionOrderAlertJobService: JobService() {
 
     override fun onStopJob(p0: JobParameters?): Boolean {
 
-        XLog.d("===========Stop Job (CollectionOrderAlertService)================")
+        Timber.d("===========Stop Job (CollectionOrderAlertService)================")
 
         try {
             if (Pref.user_id != null && Pref.user_id!!.isNotEmpty()) {
@@ -45,9 +45,9 @@ class CollectionOrderAlertJobService: JobService() {
                 val resultCode = jobScheduler.schedule(jobInfo)
 
                 if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                    XLog.d("===========Job rescheduled (CollectionOrderAlertService)================")
+                    Timber.d("===========Job rescheduled (CollectionOrderAlertService)================")
                 } else {
-                    XLog.d("==========Job not rescheduled (CollectionOrderAlertService)==============")
+                    Timber.d("==========Job not rescheduled (CollectionOrderAlertService)==============")
                 }
             }
         }

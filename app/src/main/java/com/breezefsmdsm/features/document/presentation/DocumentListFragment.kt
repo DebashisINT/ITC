@@ -49,7 +49,7 @@ import com.breezefsmdsm.widgets.AppCustomTextView
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.themechangeapp.pickimage.PermissionHelper
@@ -251,7 +251,7 @@ class DocumentListFragment : BaseFragment() {
 
             uiThread {
                 if (newFile != null) {
-                    XLog.e("=========Image from new technique==========")
+                    Timber.e("=========Image from new technique==========")
                     documentPic(newFile!!.length(), newFile?.absolutePath!!)
                 } else {
                     // Image compression
@@ -350,7 +350,7 @@ class DocumentListFragment : BaseFragment() {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
-                            XLog.d("ADD/EDIT DOCUMENT RESPONSE=======> " + response.status)
+                            Timber.d("ADD/EDIT DOCUMENT RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()?.documentListDao()?.updateIsUploaded(true, docListEntity.list_id!!)
@@ -381,7 +381,7 @@ class DocumentListFragment : BaseFragment() {
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("ADD/EDIT DOCUMENT ERROR=======> " + error.localizedMessage)
+                            Timber.d("ADD/EDIT DOCUMENT ERROR=======> " + error.localizedMessage)
                             if (isAdd)
                                 (mContext as DashboardActivity).showSnackMessage("Document added successfully")
                             else
@@ -407,7 +407,7 @@ class DocumentListFragment : BaseFragment() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as DocumentListResponseModel
-                            XLog.d("DOCUMENT LIST RESPONSE=======> " + response.status)
+                            Timber.d("DOCUMENT LIST RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.doc_list != null && response.doc_list!!.size > 0) {
@@ -447,7 +447,7 @@ class DocumentListFragment : BaseFragment() {
                             progress_wheel.stopSpinning()
                             tv_no_data.visibility = View.VISIBLE
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("DOCUMENT LIST ERROR=======> " + error.localizedMessage)
+                            Timber.d("DOCUMENT LIST ERROR=======> " + error.localizedMessage)
                         })
         )
     }
@@ -555,7 +555,7 @@ class DocumentListFragment : BaseFragment() {
 
                             val response = result as BaseResponse
 
-                            XLog.d("DELETE DOCUMENT RESPONSE=======> " + response.status)
+                            Timber.d("DELETE DOCUMENT RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()?.documentListDao()?.delete(id)
@@ -574,7 +574,7 @@ class DocumentListFragment : BaseFragment() {
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("DELETE DOCUMENT ERROR=======> " + error.localizedMessage)
+                            Timber.d("DELETE DOCUMENT ERROR=======> " + error.localizedMessage)
 
                             docList = AppDatabase.getDBInstance()?.documentListDao()?.getDataTypeWise(typeId) as ArrayList<DocumentListEntity>?
                             if (docList != null && docList!!.isNotEmpty())
@@ -604,7 +604,7 @@ class DocumentListFragment : BaseFragment() {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
-                            XLog.d("SYNC DOCUMENT RESPONSE=======> " + response.status)
+                            Timber.d("SYNC DOCUMENT RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()?.documentListDao()?.updateIsUploaded(true, docListEntity.list_id!!)
@@ -617,7 +617,7 @@ class DocumentListFragment : BaseFragment() {
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("SYNC DOCUMENT ERROR=======> " + error.localizedMessage)
+                            Timber.d("SYNC DOCUMENT ERROR=======> " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )

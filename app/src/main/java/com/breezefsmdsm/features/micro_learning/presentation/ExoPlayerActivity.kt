@@ -22,7 +22,7 @@ import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.features.micro_learning.api.MicroLearningRepoProvider
 import com.breezefsmdsm.features.micro_learning.model.MicroLearningDataModel
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
@@ -225,7 +225,7 @@ class ExoPlayerActivity : AppCompatActivity() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("UPDATE VIDEO POSITION: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("UPDATE VIDEO POSITION: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             progress_wheel.stopSpinning()
                             //Toaster.msgShort(this, response.message!!)
 
@@ -243,7 +243,7 @@ class ExoPlayerActivity : AppCompatActivity() {
                         }, { error ->
                             progress_wheel.stopSpinning()
                             isOnBackPressed = false
-                            XLog.d("UPDATE VIDEO POSITION: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("UPDATE VIDEO POSITION: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             Toaster.msgShort(this, getString(R.string.something_went_wrong))
                         })

@@ -126,7 +126,6 @@ import com.breezefsmdsm.features.viewPPDDStock.model.stocklist.StockListResponse
 import com.breezefsmdsm.mappackage.SendBrod
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.common.util.concurrent.ListenableFuture
 import com.theartofdev.edmodo.cropper.CropImage
@@ -136,6 +135,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_new.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import timber.log.Timber
 import java.io.*
 import java.nio.channels.FileChannel
 import java.util.*
@@ -291,7 +291,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribe({ result ->
 
                             val configResponse = result as ConfigFetchResponseModel
-                            XLog.d("ConfigFetchApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
+                            Timber.d("ConfigFetchApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
 
                             progress_wheel.stopSpinning()
                             if (configResponse.status == NetworkConstant.SUCCESS) {
@@ -480,7 +480,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             isStartOrEndDay()
 
                             progress_wheel.stopSpinning()
-                            XLog.d("ConfigFetchApiResponse ERROR: " + error.localizedMessage)
+                            Timber.d("ConfigFetchApiResponse ERROR: " + error.localizedMessage)
                         })
         )
     }
@@ -504,7 +504,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribe({ result ->
 
                             val configResponse = result as AlarmConfigResponseModel
-                            XLog.d("AlarmConfigApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
+                            Timber.d("AlarmConfigApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
 
                             progress_wheel.stopSpinning()
                             if (configResponse.status == NetworkConstant.SUCCESS) {
@@ -540,7 +540,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             //gotoHomeActivity()
                             checkToCallBillListApi()
                             progress_wheel.stopSpinning()
-                            XLog.d("AlarmConfigApiResponse ERROR: " + error.localizedMessage)
+                            Timber.d("AlarmConfigApiResponse ERROR: " + error.localizedMessage)
                         })
         )
     }
@@ -555,7 +555,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getBillListApi() {
         if (Pref.canAddBillingFromBillingList) {
-            XLog.d("API_Optimization GET getBillListApi Login : enable " + "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            Timber.d("API_Optimization GET getBillListApi Login : enable " + "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
 
         val repository = BillingListRepoProvider.provideBillListRepository()
         progress_wheel.spin()
@@ -634,7 +634,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         )
         }
         else{
-            XLog.d("API_Optimization GET getBillListApi Login : disable " + "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            Timber.d("API_Optimization GET getBillListApi Login : disable " + "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
             checkToCallRateList()
         }
     }
@@ -711,7 +711,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getMeetingList() {
         if (Pref.isMeetingAvailable) {
-            XLog.d("API_Optimization GET getMeetingList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getMeetingList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         progress_wheel.spin()
         val repository = MeetingRepoProvider.meetingRepoProvider()
@@ -766,7 +766,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         )
         }
         else{
-            XLog.d("API_Optimization GET getMeetingList Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getMeetingList Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallProductRateList()
         }
     }
@@ -781,7 +781,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getProductRateListApi() {
         if(Pref.isOrderShow){
-            XLog.d("API_Optimization getProductRateListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization getProductRateListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         val repository = ProductListRepoProvider.productListProvider()
         progress_wheel.spin()
@@ -843,7 +843,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         })
         )
         }else{
-            XLog.d("API_Optimization getProductRateListApi Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization getProductRateListApi Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallAreaListApi()
         }
     }
@@ -958,7 +958,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getPjpListApi() {
         if(Pref.isActivatePJPFeature){
-            XLog.d("API_Optimization GET getPjpListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getPjpListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         progress_wheel.spin()
         val repository = TeamRepoProvider.teamRepoProvider()
@@ -968,7 +968,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as UserPjpResponseModel
-                            XLog.d("GET USER PJP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET USER PJP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.pjp_list != null && response.pjp_list.isNotEmpty()) {
@@ -1009,13 +1009,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET USER PJP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET USER PJP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkModelList()
                         })
         )
         }else{
-            XLog.d("API_Optimization GET getPjpListApi Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getPjpListApi Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkModelList()
         }
     }
@@ -1041,7 +1041,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribe({ result ->
                             //val response = result as ModelListResponseModelNew
                             val response = result as ModelListResponse
-                            XLog.d("GET MODEL DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET MODEL DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.model_list != null && response.model_list!!.isNotEmpty()) {
@@ -1079,7 +1079,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET MODEL DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET MODEL DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkPrimaryAppList()
                         })
@@ -1103,7 +1103,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as PrimaryAppListResponseModel
-                            XLog.d("GET PRIMARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET PRIMARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.primary_application_list != null && response.primary_application_list!!.isNotEmpty()) {
@@ -1138,7 +1138,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET PRIMARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET PRIMARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkSecondaryAppList()
                         })
@@ -1162,7 +1162,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as SecondaryAppListResponseModel
-                            XLog.d("GET SECONDARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET SECONDARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.secondary_application_list != null && response.secondary_application_list!!.isNotEmpty()) {
@@ -1197,7 +1197,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET SECONDARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET SECONDARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkLeadList()
                         })
@@ -1221,7 +1221,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as LeadListResponseModel
-                            XLog.d("GET LEAD TYPE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET LEAD TYPE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.lead_type_list != null && response.lead_type_list!!.isNotEmpty()) {
@@ -1256,7 +1256,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET LEAD TYPE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET LEAD TYPE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkStageList()
                         })
@@ -1280,7 +1280,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as StageListResponseModel
-                            XLog.d("GET STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.stage_list != null && response.stage_list!!.isNotEmpty()) {
@@ -1315,7 +1315,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkFunnelStageList()
                         })
@@ -1339,7 +1339,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as FunnelStageListResponseModel
-                            XLog.d("GET FUNNEL STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET FUNNEL STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.funnel_stage_list != null && response.funnel_stage_list!!.isNotEmpty()) {
@@ -1374,7 +1374,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET FUNNEL STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET FUNNEL STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkBSList()
                         })
@@ -1398,7 +1398,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BSListResponseModel
-                            XLog.d("GET BS DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET BS DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.bs_list != null && response.bs_list!!.isNotEmpty()) {
@@ -1431,7 +1431,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET BS DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET BS DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkQuotSList()
                         })
@@ -1455,7 +1455,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as QuotationListResponseModel
-                            XLog.d("GET QUOT DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET QUOT DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.quot_list != null && response.quot_list!!.isNotEmpty()) {
@@ -1590,7 +1590,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET QUOT DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET QUOT DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkToCallTypeApi()
                         })
@@ -1653,7 +1653,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getTeamAreaListApi() {
         if(Pref.isOfflineTeam){
-            XLog.d("API_call_optimization Login->isOfflineTeam Enable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_call_optimization Login->isOfflineTeam Enable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         val repository = TeamRepoProvider.teamRepoProvider()
         progress_wheel.spin()
@@ -1703,14 +1703,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         )
         }
         else{
-            XLog.d("API_call_optimization Login->isOfflineTeam Disable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_call_optimization Login->isOfflineTeam Disable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             getTimesheetDropdownApi()
         }
     }
 
     private fun getTimesheetDropdownApi() {
         if(Pref.willTimesheetShow) {
-            XLog.d("API_Optimization->  TIMESHEET Enable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization->  TIMESHEET Enable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
         progress_wheel.spin()
         val repository = TimeSheetRepoProvider.timeSheetRepoProvider()
         BaseActivity.compositeDisposable.add(
@@ -1719,7 +1719,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as TimeSheetDropDownResponseModel
-                            XLog.d("TIMESHEET DROPDOWN: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("TIMESHEET DROPDOWN: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                             if (response.status == NetworkConstant.SUCCESS) {
 
@@ -1775,13 +1775,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("TIMESHEET DROPDOWN: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("TIMESHEET DROPDOWN: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             getTimesheetConfig()
                         })
         )
         }else{
-            XLog.d("API_Optimization-> TIMESHEET Disable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization-> TIMESHEET Disable: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallActivityTypeApi()
         }
     }
@@ -1795,7 +1795,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as TimeSheetConfigResponseModel
-                            XLog.d("TIMESHEET CONFIG: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("TIMESHEET CONFIG: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                             progress_wheel.stopSpinning()
 
@@ -1819,7 +1819,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("TIMESHEET CONFIG: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("TIMESHEET CONFIG: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             checkToCallActivityTypeApi()
                         })
@@ -2294,7 +2294,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getStockList() {
         if (Pref.willStockShow) {
-            XLog.d("API_Optimization GET getStockList Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            Timber.d("API_Optimization GET getStockList Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
 
         val repository = StockRepositoryProvider.provideStockRepository()
         progress_wheel.spin()
@@ -2389,7 +2389,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         )
         }
         else{
-            XLog.d("API_Optimization GET getStockList  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getStockList  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallDocumentTypeList()
         }
     }
@@ -2404,7 +2404,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getDocumentTypeApi() {
         if (Pref.isDocumentRepoShow) {
-            XLog.d("API_Optimization GET getDocumentListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getDocumentListApi Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         val repository = DocumentRepoProvider.documentRepoProvider()
         progress_wheel.spin()
@@ -2414,7 +2414,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as DocumentTypeResponseModel
-                            XLog.d("DOCUMENT TYPE LIST RESPONSE=======> " + response.status)
+                            Timber.d("DOCUMENT TYPE LIST RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.type_list != null && response.type_list!!.size > 0) {
@@ -2448,13 +2448,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("DOCUMENT TYPE LIST ERROR=======> " + error.localizedMessage)
+                            Timber.d("DOCUMENT TYPE LIST ERROR=======> " + error.localizedMessage)
                             checkToCallDocumentListApi()
                         })
         )
         }
         else{
-            XLog.d("API_Optimization GET getDocumentListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getDocumentListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallPaymentApi()
         }
     }
@@ -2469,7 +2469,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getDocumentListApi() {
         if (Pref.isDocumentRepoShow) {
-            XLog.d("API_Optimization GET getDocumentListApi  Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getDocumentListApi  Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
         val repository = DocumentRepoProvider.documentRepoProvider()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -2478,7 +2478,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as DocumentListResponseModel
-                            XLog.d("DOCUMENT LIST RESPONSE=======> " + response.status)
+                            Timber.d("DOCUMENT LIST RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.doc_list != null && response.doc_list!!.size > 0) {
@@ -2515,12 +2515,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             checkToCallPaymentApi()
-                            XLog.d("DOCUMENT LIST ERROR=======> " + error.localizedMessage)
+                            Timber.d("DOCUMENT LIST ERROR=======> " + error.localizedMessage)
                         })
         )
         }
         else{
-            XLog.d("API_Optimization GET getDocumentListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET getDocumentListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallPaymentApi()
         }
     }
@@ -2542,7 +2542,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as PaymentModeResponseModel
-                            XLog.d("PAYMENT RESPONSE=======> " + response.status)
+                            Timber.d("PAYMENT RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.paymemt_mode_list != null && response.paymemt_mode_list!!.size > 0) {
@@ -2575,7 +2575,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             checkEntityList()
-                            XLog.d("PAYMENT ERROR=======> " + error.localizedMessage)
+                            Timber.d("PAYMENT ERROR=======> " + error.localizedMessage)
                         })
         )
     }
@@ -2902,7 +2902,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as AppInfoResponseModel
-                            XLog.e("Get App Info : RESPONSE : " + response.status + ":" + response.message)
+                            Timber.e("Get App Info : RESPONSE : " + response.status + ":" + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
                                 doAsync {
                                     response.app_info_list?.forEach {
@@ -2933,7 +2933,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             error.printStackTrace()
-                            XLog.e("Get App Info : ERROR : " + error.localizedMessage)
+                            Timber.e("Get App Info : ERROR : " + error.localizedMessage)
                             progress_wheel.stopSpinning()
                             getRemarksList()
                         })
@@ -2949,7 +2949,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as VisitRemarksResponseModel
-                            XLog.d("Visit Remarks List : RESPONSE " + response.status)
+                            Timber.d("Visit Remarks List : RESPONSE " + response.status)
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()?.visitRemarksDao()?.delete()
 
@@ -2978,7 +2978,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         }, { error ->
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
-                            XLog.d("Visit Remarks List : ERROR " + error.localizedMessage)
+                            Timber.d("Visit Remarks List : ERROR " + error.localizedMessage)
                             //gotoHomeActivity()
                             //sam
                             getCurrentStockApi()
@@ -3005,7 +3005,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as TaskListResponseModel
-                            XLog.d("TASK LIST: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("TASK LIST: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                             if (response.status == NetworkConstant.SUCCESS) {
 
@@ -3047,7 +3047,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("TASK LIST: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("TASK LIST: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             //gotoHomeActivity()
                             //sam
@@ -3344,7 +3344,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                 Pref.DayStartMarked = false
                 Pref.DayEndMarked = false
-                XLog.d("R.id.login_TV : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
+                Timber.d("R.id.login_TV : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
 
                 var andrV = Build.VERSION.SDK_INT.toInt()
 
@@ -3527,7 +3527,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }
         val megAvailable = bytesAvailable / (1024 * 1024)
         val megTotal = bytesTotal / (1024 * 1024)
-        XLog.d("phone storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime())
+        Timber.d("phone storage : FREE SPACE : " + megAvailable.toString() + " TOTAL SPACE : " + megTotal.toString() + " Time :" + AppUtils.getCurrentDateTime())
 
         if (megAvailable < 1024) {
             val simpleDialog = Dialog(this)
@@ -3618,7 +3618,10 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
 //        val phototUri = Uri.parse(localAbsoluteFilePath)
             //val fileUrl = Uri.parse(File(Environment.getExternalStorageDirectory(), "xbreezefsmdsmlogsample/log").path);
-            val fileUrl = Uri.parse(File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
+            //val fileUrl = Uri.parse(File(getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
+
+            var currentDBPath="/data/user/0/com.breezefsmdsm/files/Fsmlog.html"
+            val fileUrl = Uri.parse(File(currentDBPath, "").path);
 
             val file = File(fileUrl.path)
             if (!file.exists()) {
@@ -3741,7 +3744,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             isApiInitiated = false
 
                         }, { error ->
-                            XLog.d(" Login callNewSettingsApi : error : " +error.message.toString() + "${AppUtils.getCurrentDateTime()}")
+                            Timber.d(" Login callNewSettingsApi : error : " +error.message.toString() + "${AppUtils.getCurrentDateTime()}")
                             isApiInitiated = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
@@ -3812,7 +3815,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             return
         }
         isApiInitiated = true
-        XLog.d("LoginLocationRequest : " + "\n, IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
+        Timber.d("LoginLocationRequest : " + "\n, IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
 //        progress_wheel.spin()
         if (Pref.latitude != null && Pref.latitude!!.trim() != "") {
             println("xyz - callApi started" + AppUtils.getCurrentDateTime());
@@ -3841,7 +3844,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 //                        }
 //
 //                        override fun onNewLocationAvailable(location: Location) {
-//                            XLog.d("LoginLocationAvailable : "+"\n , IMEI :" +Pref.imei+ ", Time :" + AppUtils.getCurrentDateTime()+ ", Version :" +AppUtils.getVersionName(this@LoginActivity))
+//                            Timber.d("LoginLocationAvailable : "+"\n , IMEI :" +Pref.imei+ ", Time :" + AppUtils.getCurrentDateTime()+ ", Version :" +AppUtils.getVersionName(this@LoginActivity))
 //                            progress_wheel.stopSpinning()
 //                            Pref.latitude = location.latitude.toString()
 //                            Pref.longitude = location.longitude.toString()
@@ -3970,7 +3973,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         login_TV.isEnabled = true
                         progress_wheel.stopSpinning()
                         error.printStackTrace()
-                        XLog.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        Timber.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
                         doLogin(username, password, location)
                     })
             )
@@ -3978,7 +3981,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             login_TV.isEnabled = true
             progress_wheel.stopSpinning()
             ex.printStackTrace()
-            XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            Timber.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
             doLogin(username, password, location)
         }*/
 
@@ -3988,7 +3991,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun doLogin(username: String, password: String, location: String) {
         println("xyz - doLogin started" + AppUtils.getCurrentDateTime());
 
-        XLog.d("LoginApiRequest : " + "\n, IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this) +
+        Timber.d("LoginApiRequest : " + "\n, IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this) +
                 ", username : " + username + ", password : " + password + ", lat : " + Pref.latitude + ", long : " + Pref.longitude + ", location : " + location +
                 ", device token : " + Pref.deviceToken)
 
@@ -4003,7 +4006,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                             val loginResponse = result as LoginResponse
                             println("xyz - doLogin status " + loginResponse.status);
-                            XLog.d("LoginApiResponse : " + "\n" + "Status====> " + loginResponse.status + ", Message===> " + loginResponse.message)
+                            Timber.d("LoginApiResponse : " + "\n" + "Status====> " + loginResponse.status + ", Message===> " + loginResponse.message)
                             if (loginResponse.status == NetworkConstant.SUCCESS) {
 
                                 /*if (Pref.isAddAttendence && (TextUtils.isEmpty(Pref.temp_login_date) || Pref.temp_login_date != AppUtils.getCurrentDateChanged())) {
@@ -4103,7 +4106,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     }
                                 }
 
-                                XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
+                                Timber.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
 */
                             }
                             else if (loginResponse.status == "220") {
@@ -4144,7 +4147,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             isApiInitiated = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("LoginApiResponse ERROR: " + error.localizedMessage + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
+                            Timber.d("LoginApiResponse ERROR: " + error.localizedMessage + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
                             showSnackMessage(resources.getString(R.string.alert_login_failed))
                         })
         )
@@ -4227,7 +4230,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
 
 
-        XLog.d("LoginApiResponse : GPS SETTINGS=====> " + Pref.gpsAccuracy)
+        Timber.d("LoginApiResponse : GPS SETTINGS=====> " + Pref.gpsAccuracy)
 
         if (!TextUtils.isEmpty(loginResponse.user_details!!.add_attendence_time))
             Pref.add_attendence_time = loginResponse.user_details!!.add_attendence_time
@@ -4309,7 +4312,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("Login DayStart : RESPONSE " + result.status +" "+ AppUtils.getCurrentDateTime())
+                                Timber.d("Login DayStart : RESPONSE " + result.status +" "+ AppUtils.getCurrentDateTime())
                                 val response = result as StatusDayStartEnd
                                 if (response.status == NetworkConstant.SUCCESS) {
 
@@ -4345,9 +4348,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 }
                             }, { error ->
                                 if (error == null) {
-                                    XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+                                    Timber.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
                                 } else {
-                                    XLog.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
+                                    Timber.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
                                     error.printStackTrace()
                                 }
                                 Pref.IsDDvistedOnceByDay = false
@@ -4357,7 +4360,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             })
             )
         } catch (ex: java.lang.Exception) {
-            XLog.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+            Timber.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
             ex.printStackTrace()
             Pref.DayStartMarked = false
             Pref.DayEndMarked = false
@@ -4468,7 +4471,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getProductList(date: String?) {
         if(Pref.isOrderShow){
-            XLog.d("API_Optimization getProductList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization getProductList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         println("xyzzz - getProductList started" + AppUtils.getCurrentDateTime());
         val repository = ProductListRepoProvider.productListProvider()
@@ -4557,7 +4560,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             checkToCallOrderList()
                         })
         ) }else{
-            XLog.d("API_Optimization getProductList Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization getProductList Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallOrderList()
         }
     }
@@ -4572,7 +4575,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getOrderList() {
         if(Pref.isOrderShow){
-            XLog.d("API_Optimization getOrderList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization getOrderList Login : enable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         println("xyz - getOrderList started" + AppUtils.getCurrentDateTime());
         val repository = NewOrderListRepoProvider.provideOrderListRepository()
@@ -4682,7 +4685,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         })
         )
         }else{
-            XLog.d("API_Optimization getOrderList Login : disdable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization getOrderList Login : disdable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallSelectedRouteListApi()
         }
     }
@@ -4716,7 +4719,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun callCollectionListApi() {
         if (Pref.isCollectioninMenuShow) {
-            XLog.d("API_Optimization GET callCollectionListApi Login : enable " +  "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET callCollectionListApi Login : enable " +  "Time: " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
 
         val repository = NewCollectionListRepoProvider.newCollectionListRepository()
         progress_wheel.spin()
@@ -4747,7 +4750,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         })
         )  }
         else{
-            XLog.d("API_Optimization GET callCollectionListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
+            Timber.d("API_Optimization GET callCollectionListApi  Login : disable " +  "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name )
             checkToCallAlarmConfigApi()
         }
     }
@@ -4805,7 +4808,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             val response = result as UserConfigResponseModel
                             if (response.status == NetworkConstant.SUCCESS) {
                                 try {
-                                    XLog.d("callUserConfigApi response : "+response.status+" "+ AppUtils.getCurrentDateTimeNew())
+                                    Timber.d("callUserConfigApi response : "+response.status+" "+ AppUtils.getCurrentDateTimeNew())
                                     Log.e("Login", "willLeaveApprovalEnable================> " + Pref.willLeaveApprovalEnable)
 
                                     if (response.getconfigure != null && response.getconfigure!!.size > 0) {
@@ -5434,11 +5437,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     if (Pref.DistributorGPSAccuracy.length == 0 || Pref.DistributorGPSAccuracy.equals("")) {
                                                         Pref.DistributorGPSAccuracy = "500"
                                                     }
-                                                    XLog.d("LoginActivity DistributorGPSAccuracy (try): " + Pref.DistributorGPSAccuracy)
+                                                    Timber.d("LoginActivity DistributorGPSAccuracy (try): " + Pref.DistributorGPSAccuracy)
                                                 } catch (e: Exception) {
                                                     e.printStackTrace()
                                                     Pref.DistributorGPSAccuracy = "500"
-                                                    XLog.d("LoginActivity DistributorGPSAccuracy (catch): " + Pref.DistributorGPSAccuracy)
+                                                    Timber.d("LoginActivity DistributorGPSAccuracy (catch): " + Pref.DistributorGPSAccuracy)
                                                 }
 
                                             } else if (response.getconfigure?.get(i)?.Key.equals("BatterySetting", ignoreCase = true)) {
@@ -5667,7 +5670,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             //gotoHomeActivity()
 
                         }, { error ->
-                            XLog.d("callUserConfigApi Error response : "+error.message+" "+ AppUtils.getCurrentDateTimeNew())
+                            Timber.d("callUserConfigApi Error response : "+error.message+" "+ AppUtils.getCurrentDateTimeNew())
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             getConfigFetchApi()
@@ -6190,7 +6193,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     fun getCurrentStockApi() {
         if (Pref.isCurrentStockEnable) {
-            XLog.d("API_Optimization GET getCurrentStockApi Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            Timber.d("API_Optimization GET getCurrentStockApi Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
         progress_wheel.spin()
         var shopAll = AppDatabase.getDBInstance()!!.shopCurrentStockEntryDao().getShopStockAll()
         if (shopAll != null && shopAll?.isNotEmpty()) {
@@ -6204,7 +6207,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe({ result ->
-                                    XLog.d("Login Stock/CurrentStockList " + result.status)
+                                    Timber.d("Login Stock/CurrentStockList " + result.status)
                                     val response = result as CurrentStockGetData
                                     if (response.status == NetworkConstant.SUCCESS) {
                                         if (response.stock_list!! != null && response.stock_list!!.isNotEmpty()) {
@@ -6248,9 +6251,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     }
                                 }, { error ->
                                     if (error == null) {
-                                        XLog.d("Login Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                                        Timber.d("Login Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                                     } else {
-                                        XLog.d("Login Stock/CurrentStockList : ERROR " + error.localizedMessage)
+                                        Timber.d("Login Stock/CurrentStockList : ERROR " + error.localizedMessage)
                                         error.printStackTrace()
                                     }
                                     progress_wheel.stopSpinning()
@@ -6259,20 +6262,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 )
             } catch (ex: Exception) {
                 progress_wheel.stopSpinning()
-                XLog.d("Login Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                Timber.d("Login Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                 getCompStockApi()
             }
         }
         }
         else{
-            XLog.d("API_Optimization GET getCurrentStockApi Login : disable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            Timber.d("API_Optimization GET getCurrentStockApi Login : disable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
             getCompStockApi()
         }
     }
 
     fun getCompStockApi() {
         if (Pref.IscompetitorStockRequired) {
-            XLog.d("API_Optimization GET getCompStockApi Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            Timber.d("API_Optimization GET getCompStockApi Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
 
         progress_wheel.spin()
         var comListAll = AppDatabase.getDBInstance()!!.competetorStockEntryDao().getCompetetorStockAll()
@@ -6287,7 +6290,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe({ result ->
-                                    XLog.d("Login CompetitorStock/CompetitorStockList : RESPONSE " + result.status)
+                                    Timber.d("Login CompetitorStock/CompetitorStockList : RESPONSE " + result.status)
                                     val response = result as CompetetorStockGetData
                                     if (response.status == NetworkConstant.SUCCESS) {
                                         if (response.competitor_stock_list!! != null && response.competitor_stock_list!!.isNotEmpty()) {
@@ -6336,9 +6339,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     }
                                 }, { error ->
                                     if (error == null) {
-                                        XLog.d("Login CompetitorStock/CompetitorStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                                        Timber.d("Login CompetitorStock/CompetitorStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                                     } else {
-                                        XLog.d("Login CompetitorStock/CompetitorStockList : ERROR " + error.localizedMessage)
+                                        Timber.d("Login CompetitorStock/CompetitorStockList : ERROR " + error.localizedMessage)
                                         error.printStackTrace()
                                     }
                                     progress_wheel.stopSpinning()
@@ -6347,13 +6350,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 )
             } catch (ex: Exception) {
                 progress_wheel.stopSpinning()
-                XLog.d("Login CompetitorStock/CompetitorStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                Timber.d("Login CompetitorStock/CompetitorStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                 getShopTypeStockVisibility()
             }
         }
         }
         else{
-            XLog.d("API_Optimization GET getCompStockApi Login : disable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+            Timber.d("API_Optimization GET getCompStockApi Login : disable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
             getShopTypeStockVisibility()
         }
     }
@@ -6429,7 +6432,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 .subscribeOn(Schedulers.io())
                                 .subscribe({ result ->
                                     val response = result as ProsListResponseModel
-                                    XLog.d("GET PROS DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                    Timber.d("GET PROS DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                                     if (response.status == NetworkConstant.SUCCESS) {
                                         if (response.Prospect_list != null && response.Prospect_list!!.isNotEmpty()) {
                                             doAsync {
@@ -6463,7 +6466,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun deleteImei(){
         if(Pref.IsIMEICheck){
-            XLog.d("deleteImei IsIMEICheck : " + Pref.IsIMEICheck.toString() + "Time : " + AppUtils.getCurrentDateTime())
+            Timber.d("deleteImei IsIMEICheck : " + Pref.IsIMEICheck.toString() + "Time : " + AppUtils.getCurrentDateTime())
             gotoHomeActivity()
             //deleteConcurrentUserDtls()
         }else{
@@ -6475,7 +6478,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 .subscribeOn(Schedulers.io())
                                 .subscribe({ result ->
                                     val response = result as BaseResponse
-                                    XLog.d("deleteImei " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                    Timber.d("deleteImei " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                                     if (response.status == NetworkConstant.SUCCESS) {
                                         gotoHomeActivity()
                                         //deleteConcurrentUserDtls()
@@ -6517,7 +6520,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     }, { error ->
                         progress_wheel.stopSpinning()
                         error.printStackTrace()
-                        XLog.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        Timber.d("getConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
                         insertConcurrentUserDtls()
 
                     })
@@ -6525,7 +6528,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }catch (ex:Exception){
             progress_wheel.stopSpinning()
             ex.printStackTrace()
-            XLog.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            Timber.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
             insertConcurrentUserDtls()
         }
     }
@@ -6550,14 +6553,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     }, { error ->
                         progress_wheel.stopSpinning()
                         error.printStackTrace()
-                        XLog.d("insertConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        Timber.d("insertConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
                         gotoHomeActivity()
                     })
             )
         }catch (ex:Exception){
             progress_wheel.stopSpinning()
             ex.printStackTrace()
-            XLog.d("insertConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            Timber.d("insertConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
             gotoHomeActivity()
         }
     }
@@ -6633,12 +6636,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 /*getCameraImage(data)
 
                 if (!TextUtils.isEmpty(filePath)) {
-                    XLog.e("===========Add Shop Image (DashboardActivity)===========")
-                    XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                    Timber.e("===========Add Shop Image (DashboardActivity)===========")
+                    Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                     val contentURI = FTStorageUtils.getImageContentUri(this, File(Uri.parse(filePath).path).absolutePath)
 
-                    XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                    Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                     try {
                         CropImage.activity(contentURI)
@@ -6646,7 +6649,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 .start(this)
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        XLog.e("Error: " + e.localizedMessage)
+                        Timber.e("Error: " + e.localizedMessage)
                     }
                 }*/
 
@@ -6715,7 +6718,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                         }, { error ->
                             error.printStackTrace()
-                            XLog.d(" Login uploadSelfie : error : " +error.message.toString() + "${AppUtils.getCurrentDateTime()}")
+                            Timber.d(" Login uploadSelfie : error : " +error.message.toString() + "${AppUtils.getCurrentDateTime()}")
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
                             showSnackMessage(getString(R.string.something_went_wrong))
@@ -6757,7 +6760,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             filemanagerstring != null -> filePath = filemanagerstring
             else -> {
                 //Toaster.msgShort(baseActivity, "Unknown Path")
-                XLog.e("Bitmap", "Unknown Path")
+                Timber.e("Bitmap", "Unknown Path")
             }
         }
     }
@@ -6871,20 +6874,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 //                            response.status = "200"
                             if (response.status == NetworkConstant.SUCCESS) {
 
-                                XLog.d(" LoginActivity : FaceRegistration/FaceMatch" + response.status.toString() + ", : " + ", Success: ")
+                                Timber.d(" LoginActivity : FaceRegistration/FaceMatch" + response.status.toString() + ", : " + ", Success: ")
                                 proceedLoginProcess(loginResponse)
                             } else {
                                 BaseActivity.isApiInitiated = false
                                 //showSnackMessage(getString(R.string.face_not_msg))
                                 openDialogPopup(getString(R.string.face_not_msg))
                                 progress_wheel.stopSpinning()
-                                XLog.d("LoginActivity : FaceRegistration/FaceMatch : " + response.status.toString() + ", : " + ", Failed: ")
+                                Timber.d("LoginActivity : FaceRegistration/FaceMatch : " + response.status.toString() + ", : " + ", Failed: ")
                                 login_TV.isEnabled = true
                             }
                         }, { error ->
                             if (error != null) {
                                 progress_wheel.stopSpinning()
-                                XLog.d("AddAttendanceFragment : FaceRegistration/FaceMatch : " + " : " + ", ERROR: " + error.localizedMessage)
+                                Timber.d("AddAttendanceFragment : FaceRegistration/FaceMatch : " + " : " + ", ERROR: " + error.localizedMessage)
                                 login_TV.isEnabled = true
                             }
                             BaseActivity.isApiInitiated = false
@@ -7065,7 +7068,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 }
             }
         }
-        XLog.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
+        Timber.d("LoginApiResponse : " + "\n" + "Username :" + Pref.user_name + ", IMEI :" + Pref.imei + ", Time :" + AppUtils.getCurrentDateTime() + ", Version :" + AppUtils.getVersionName(this))
     }
 
 

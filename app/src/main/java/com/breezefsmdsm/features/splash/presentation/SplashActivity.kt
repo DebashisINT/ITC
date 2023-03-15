@@ -30,6 +30,7 @@ import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.uiaction.DisplayAlert
 import com.breezefsmdsm.app.utils.AppUtils
+import com.breezefsmdsm.app.utils.FileLoggingTree
 import com.breezefsmdsm.app.utils.PermissionUtils
 import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.presentation.BaseActivity
@@ -43,7 +44,7 @@ import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.splash.presentation.api.VersionCheckingRepoProvider
 import com.breezefsmdsm.features.splash.presentation.model.VersionCheckingReponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.messaging.FirebaseMessaging
@@ -78,6 +79,10 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         //setContentView(R.layout.activity_splash)
         setContentView(R.layout.activity_splash_new)
     AppUtils.changeLanguage(this, "en")
+
+    Timber.plant(Timber.DebugTree())
+    Timber.plant(FileLoggingTree())
+
 //        Handler().postDelayed({ goToNextScreen() }, 2000)
 
         //Code by wasim
@@ -169,7 +174,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         }
         val megAvailable = bytesAvailable / (1024 * 1024)
         println("storage "+megAvailable.toString());
-        XLog.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
+        Timber.d("phone storage : FREE SPACE AVAILABLE : " +megAvailable.toString()+ " Time :" + AppUtils.getCurrentDateTime())
 
         if(megAvailable<1000){
             val simpleDialog = Dialog(this)
@@ -307,10 +312,10 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
         permList = (permList + permListDenied).toMutableList()
 
         for(i in 0..permList.size-1){
-            XLog.d("Permission Name"+permList.get(i).permissionName + " Status : Granted")
+            Timber.d("Permission Name"+permList.get(i).permissionName + " Status : Granted")
         }
         for(i in 0..permListDenied.size-1){
-            XLog.d("Permission Name"+permListDenied.get(i).permissionName + " Status : Denied")
+            Timber.d("Permission Name"+permListDenied.get(i).permissionName + " Status : Denied")
         }
     }
 
@@ -435,17 +440,17 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
                             progress_wheel.stopSpinning()
                             val response = result as VersionCheckingReponseModel
 
-                            XLog.d("VERSION CHECKING RESPONSE: " + "STATUS: " + response.status + ", MESSAGE:" + result.message)
+                            Timber.d("VERSION CHECKING RESPONSE: " + "STATUS: " + response.status + ", MESSAGE:" + result.message)
 
                             if (response.status == NetworkConstant.SUCCESS) {
 
-                                XLog.d("===========VERSION CHECKING SUCCESS RESPONSE===========")
-                                XLog.d("min version=====> " + response.min_req_version)
-                                XLog.d("store version=====> " + response.play_store_version)
-                                XLog.d("mandatory msg======> " + response.mandatory_msg)
-                                XLog.d("optional msg=====> " + response.optional_msg)
-                                XLog.d("apk url======> " + response.apk_url)
-                                XLog.d("=======================================================")
+                                Timber.d("===========VERSION CHECKING SUCCESS RESPONSE===========")
+                                Timber.d("min version=====> " + response.min_req_version)
+                                Timber.d("store version=====> " + response.play_store_version)
+                                Timber.d("mandatory msg======> " + response.mandatory_msg)
+                                Timber.d("optional msg=====> " + response.optional_msg)
+                                Timber.d("apk url======> " + response.apk_url)
+                                Timber.d("=======================================================")
 
                                 versionChecking(response)
                                 //goToNextScreen()
@@ -456,7 +461,7 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
 
                         }, { error ->
                             isApiInitiated = false
-                            XLog.d("VERSION CHECKING ERROR: " + "MESSAGE:" + error.message)
+                            Timber.d("VERSION CHECKING ERROR: " + "MESSAGE:" + error.message)
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             goToNextScreen()

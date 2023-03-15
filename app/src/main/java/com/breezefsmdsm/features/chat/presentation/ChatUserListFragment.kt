@@ -21,7 +21,7 @@ import com.breezefsmdsm.features.chat.model.ChatUserDataModel
 import com.breezefsmdsm.features.chat.model.ChatUserResponseModel
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.github.clans.fab.FloatingActionButton
 import com.github.clans.fab.FloatingActionMenu
 import com.pnikosis.materialishprogress.ProgressWheel
@@ -149,7 +149,7 @@ class ChatUserListFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as ChatUserResponseModel
-                            XLog.d("Get Chat User List STATUS: " + response.status)
+                            Timber.d("Get Chat User List STATUS: " + response.status)
                             if (response.status == NetworkConstant.SUCCESS) {
                                 progress_wheel.stopSpinning()
                                 tv_no_data.visibility = View.GONE
@@ -165,7 +165,7 @@ class ChatUserListFragment : BaseFragment(), View.OnClickListener {
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             if (error != null)
-                                XLog.d("Get Chat User List ERROR: " + error.localizedMessage)
+                                Timber.d("Get Chat User List ERROR: " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )

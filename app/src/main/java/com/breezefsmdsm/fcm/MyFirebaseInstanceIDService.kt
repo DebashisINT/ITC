@@ -8,7 +8,7 @@ import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.fcm.api.UpdateDeviceTokenRepoProvider
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
@@ -66,7 +66,7 @@ class MyFirebaseInstanceIDService{ //: FirebaseInstanceIdService() {
             }
 
             //Log.e(TAG, "Device Token====> $refreshedToken")
-            XLog.e("MyFirebaseInstanceIDService : \nDevice Token=====> $refreshedToken")
+            Timber.e("MyFirebaseInstanceIDService : \nDevice Token=====> $refreshedToken")
 
             uiThread {
 
@@ -104,11 +104,11 @@ class MyFirebaseInstanceIDService{ //: FirebaseInstanceIdService() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("UpdateDeviceTokenResponse : " + "\n" + "Status====> " + response.status + ", Message===> " + response.message)
+                            Timber.d("UpdateDeviceTokenResponse : " + "\n" + "Status====> " + response.status + ", Message===> " + response.message)
 
                         }, { error ->
                             error.printStackTrace()
-                            XLog.d("UpdateDeviceTokenResponse ERROR: " + error.localizedMessage + "\n" + "Username :" + Pref.user_name + ", Time :" + AppUtils.getCurrentDateTime())
+                            Timber.d("UpdateDeviceTokenResponse ERROR: " + error.localizedMessage + "\n" + "Username :" + Pref.user_name + ", Time :" + AppUtils.getCurrentDateTime())
                         })
         )
     }

@@ -33,7 +33,7 @@ import com.breezefsmdsm.features.location.LocationFuzedService
 import com.breezefsmdsm.features.location.LocationJobService
 import com.breezefsmdsm.features.logoutsync.presentation.LogoutSyncFragment
 import com.breezefsmdsm.mappackage.SendBrod
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import java.util.*
 
 class MonitorService:Service() {
@@ -84,7 +84,7 @@ class MonitorService:Service() {
 
 
 
-        //XLog.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
+        //Timber.d("MonitorService  serviceStatusActionable " + " Time :" + AppUtils.getCurrentDateTime() + " user_id ${Pref.user_id}")
         Log.e("MonitorService_abc", "startabc" )
         monitorBroadcast=MonitorBroadcast()
 
@@ -152,8 +152,8 @@ class MonitorService:Service() {
             newNetStatusObj.date_time = AppUtils.getCurrentDateTime()
             newNetStatusObj.network_status = if(AppUtils.isOnline(this)) "Online" else "Offline"
             if (FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, this)) {
-                //XLog.d("MonitorService LocationFuzedService : " + "true" + "," + " Time :" + AppUtils.getCurrentDateTime())
-                //XLog.d("MonitorService Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
+                //Timber.d("MonitorService LocationFuzedService : " + "true" + "," + " Time :" + AppUtils.getCurrentDateTime())
+                //Timber.d("MonitorService Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
                 /*if(powerSaver){
                     sendGPSOffBroadcast()
                 }else{
@@ -165,9 +165,9 @@ class MonitorService:Service() {
                 if (!FTStorageUtils.isMyServiceRunning(LocationFuzedService::class.java, this)) {
                     restartLocationService()
                 }
-                XLog.d("MonitorService LocationFuzedService : " + "false" + "," + " Time :" + AppUtils.getCurrentDateTime())
-                XLog.d("MonitorService  Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
-                XLog.d("Monitor Service Stopped" + "" + "," + " Time :" + AppUtils.getCurrentDateTime())
+                Timber.d("MonitorService LocationFuzedService : " + "false" + "," + " Time :" + AppUtils.getCurrentDateTime())
+                Timber.d("MonitorService  Power Save Mode Status : " + powerMode + "," + " Time :" + AppUtils.getCurrentDateTime())
+                Timber.d("Monitor Service Stopped" + "" + "," + " Time :" + AppUtils.getCurrentDateTime())
                 if(!isFirst){
                     Log.e("abc", "abc stoptimer" )
                     timer!!.cancel()
@@ -208,7 +208,7 @@ class MonitorService:Service() {
 
     fun sendGPSOffBroadcast(){
         if(Pref.user_id.toString().length > 0){
-            XLog.d("MonitorService Called for Battery Broadcast :  Time :" + AppUtils.getCurrentDateTime())
+            Timber.d("MonitorService Called for Battery Broadcast :  Time :" + AppUtils.getCurrentDateTime())
             //var notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             //notificationManager.cancel(monitorNotiID)
             MonitorBroadcast.isSound=Pref.GPSAlertwithSound
@@ -313,9 +313,9 @@ class MonitorService:Service() {
                     val resultCode = jobScheduler.schedule(jobInfo)
 
                     if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                        XLog.d("===============================From MonitorS LocationFuzedService   Job scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "============================")
+                        Timber.d("===============================From MonitorS LocationFuzedService   Job scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "============================")
                     } else {
-                        XLog.d("=====================From MonitorS LocationFuzedService Job not scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "====================================")
+                        Timber.d("=====================From MonitorS LocationFuzedService Job not scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "====================================")
                     }
                 } else
                     startService(serviceLauncher)
@@ -325,11 +325,11 @@ class MonitorService:Service() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
                     jobScheduler.cancelAll()
-                    XLog.d("===============================From MonitorS LocationFuzedService Job scheduler cancel (Base Activity)" + AppUtils.getCurrentDateTime() + "============================")
+                    Timber.d("===============================From MonitorS LocationFuzedService Job scheduler cancel (Base Activity)" + AppUtils.getCurrentDateTime() + "============================")
                 }
 
                 AlarmReceiver.stopServiceAlarm(this, 123)
-                XLog.d("===========From MonitorS LocationFuzedService Service alarm is stopped (Base Activity)================")*/
+                Timber.d("===========From MonitorS LocationFuzedService Service alarm is stopped (Base Activity)================")*/
             }
         } catch (e: Exception) {
             e.printStackTrace()

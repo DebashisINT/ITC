@@ -38,7 +38,7 @@ import com.breezefsmdsm.features.stockAddCurrentStock.adapter.AdapterProductList
 import com.breezefsmdsm.features.stockAddCurrentStock.api.ShopAddStockProvider
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -388,7 +388,7 @@ class AddShopStockFragment: BaseFragment(), View.OnClickListener {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("Stock/AddCurrentStock : RESPONSE " + result.status)
+                                Timber.d("Stock/AddCurrentStock : RESPONSE " + result.status)
                                 if (result.status == NetworkConstant.SUCCESS){
                                     AppDatabase.getDBInstance()?.shopCurrentStockEntryDao()!!.syncShopStocktable(currentStock.stock_id.toString())
                                     AppDatabase.getDBInstance()?.shopCurrentStockProductsEntryDao()!!.syncShopProductsStock(currentStock.stock_id.toString())
@@ -396,9 +396,9 @@ class AddShopStockFragment: BaseFragment(), View.OnClickListener {
                                 }
                             },{error ->
                                 if (error == null) {
-                                    XLog.d("Stock/AddCurrentStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                                    Timber.d("Stock/AddCurrentStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                                 } else {
-                                    XLog.d("Stock/AddCurrentStock : ERROR " + error.localizedMessage)
+                                    Timber.d("Stock/AddCurrentStock : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                             })

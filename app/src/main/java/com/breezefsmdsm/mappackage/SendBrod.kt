@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import com.breezefsmdsm.MonitorBroadcast
 import com.breezefsmdsm.app.Pref
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 
 
 class SendBrod {
@@ -35,7 +35,7 @@ class SendBrod {
                 }
                 var notificationManager = context.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.cancel(monitorNotiID)
-                XLog.d("==============SendBrod====================" + " MonitorBrodcastStop")
+                Timber.d("==============SendBrod====================" + " MonitorBrodcastStop")
             }
         }
     }

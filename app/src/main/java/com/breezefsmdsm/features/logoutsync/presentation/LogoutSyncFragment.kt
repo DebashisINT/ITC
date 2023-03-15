@@ -91,7 +91,7 @@ import com.breezefsmdsm.features.viewAllOrder.model.AddOrderInputParamsModel
 import com.breezefsmdsm.features.viewAllOrder.model.AddOrderInputProductList
 import com.breezefsmdsm.mappackage.SendBrod
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login_new.*
@@ -384,7 +384,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io())
                                     .subscribe({ result ->
-                                        XLog.d("Stock/AddCurrentStock : RESPONSE " + result.status)
+                                        Timber.d("Stock/AddCurrentStock : RESPONSE " + result.status)
                                         if (result.status == NetworkConstant.SUCCESS){
                                             AppDatabase.getDBInstance()?.shopCurrentStockEntryDao()!!.syncShopStocktable(currentStock.stock_id.toString())
                                             AppDatabase.getDBInstance()?.shopCurrentStockProductsEntryDao()!!.syncShopProductsStock(currentStock?.stock_id.toString())
@@ -395,9 +395,9 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                         }
                                     },{error ->
                                         if (error == null) {
-                                            XLog.d("Stock/AddCurrentStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                                            Timber.d("Stock/AddCurrentStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                                         } else {
-                                            XLog.d("Stock/AddCurrentStock : ERROR " + error.localizedMessage)
+                                            Timber.d("Stock/AddCurrentStock : ERROR " + error.localizedMessage)
                                             error.printStackTrace()
                                         }
                                         callShopCompetetorProductStockApi()
@@ -411,7 +411,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             }
         }catch (ex:Exception){
-            XLog.d("LogoutSync : Stock/AddCurrentStock : ERROR " )
+            Timber.d("LogoutSync : Stock/AddCurrentStock : ERROR " )
         callShopCompetetorProductStockApi()
         }
 
@@ -451,7 +451,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     .observeOn(AndroidSchedulers.mainThread())
                                     .subscribeOn(Schedulers.io())
                                     .subscribe({ result ->
-                                        XLog.d("CompetitorStock/AddCompetitorStock : RESPONSE " + result.status)
+                                        Timber.d("CompetitorStock/AddCompetitorStock : RESPONSE " + result.status)
                                         if (result.status == NetworkConstant.SUCCESS){
                                             AppDatabase.getDBInstance()?.competetorStockEntryDao()?.syncShopCompStocktable(currentStock?.competitor_stock_id.toString())
                                             AppDatabase.getDBInstance()?.competetorStockEntryProductDao()?.syncShopCompProductable(currentStock?.competitor_stock_id.toString())
@@ -462,9 +462,9 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                         }
                                     },{error ->
                                         if (error == null) {
-                                            XLog.d("CompetitorStock/AddCompetitorStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                                            Timber.d("CompetitorStock/AddCompetitorStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                                         } else {
-                                            XLog.d("CompetitorStock/AddCompetitorStock : ERROR " + error.localizedMessage)
+                                            Timber.d("CompetitorStock/AddCompetitorStock : ERROR " + error.localizedMessage)
                                             error.printStackTrace()
                                         }
                                         checkToCallActivity()
@@ -867,73 +867,73 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         progress_wheel.spin()
 
-        XLog.d("=======SyncShop Input Params (Logout sync)======")
-        XLog.d("shop id====> " + addShop.shop_id)
+        Timber.d("=======SyncShop Input Params (Logout sync)======")
+        Timber.d("shop id====> " + addShop.shop_id)
         val index = addShop.shop_id!!.indexOf("_")
-        XLog.d("decoded shop id====> " + addShop.user_id + "_" + AppUtils.getDate(addShop.shop_id!!.substring(index + 1, addShop.shop_id!!.length).toLong()))
-        XLog.d("shop added date====> " + addShop.added_date)
-        XLog.d("shop address====> " + addShop.address)
-        XLog.d("assigned to dd id=====> " + addShop.assigned_to_dd_id)
-        XLog.d("assigned to pp id=====> " + addShop.assigned_to_pp_id)
-        XLog.d("date aniversery====> " + addShop.date_aniversary)
-        XLog.d("dob====> " + addShop.dob)
-        XLog.d("shop owner phn no====> " + addShop.owner_contact_no)
-        XLog.d("shop owner email====> " + addShop.owner_email)
-        XLog.d("shop owner name====> " + addShop.owner_name)
-        XLog.d("shop pincode====> " + addShop.pin_code)
-        XLog.d("session token====> " + addShop.session_token)
-        XLog.d("shop lat====> " + addShop.shop_lat)
-        XLog.d("shop long====> " + addShop.shop_long)
-        XLog.d("shop name====> " + addShop.shop_name)
-        XLog.d("shop type====> " + addShop.type)
-        XLog.d("user id====> " + addShop.user_id)
-        XLog.d("amount=====> " + addShop.amount)
-        XLog.d("area id=======> " + addShop.area_id)
-        XLog.d("model id=======> " + addShop.model_id)
-        XLog.d("primary app id=======> " + addShop.primary_app_id)
-        XLog.d("secondary app id=======> " + addShop.secondary_app_id)
-        XLog.d("lead id=======> " + addShop.lead_id)
-        XLog.d("stage id=======> " + addShop.stage_id)
-        XLog.d("funnel stage id=======> " + addShop.funnel_stage_id)
-        XLog.d("booking amount=======> " + addShop.booking_amount)
-        XLog.d("type id=======> " + addShop.type_id)
+        Timber.d("decoded shop id====> " + addShop.user_id + "_" + AppUtils.getDate(addShop.shop_id!!.substring(index + 1, addShop.shop_id!!.length).toLong()))
+        Timber.d("shop added date====> " + addShop.added_date)
+        Timber.d("shop address====> " + addShop.address)
+        Timber.d("assigned to dd id=====> " + addShop.assigned_to_dd_id)
+        Timber.d("assigned to pp id=====> " + addShop.assigned_to_pp_id)
+        Timber.d("date aniversery====> " + addShop.date_aniversary)
+        Timber.d("dob====> " + addShop.dob)
+        Timber.d("shop owner phn no====> " + addShop.owner_contact_no)
+        Timber.d("shop owner email====> " + addShop.owner_email)
+        Timber.d("shop owner name====> " + addShop.owner_name)
+        Timber.d("shop pincode====> " + addShop.pin_code)
+        Timber.d("session token====> " + addShop.session_token)
+        Timber.d("shop lat====> " + addShop.shop_lat)
+        Timber.d("shop long====> " + addShop.shop_long)
+        Timber.d("shop name====> " + addShop.shop_name)
+        Timber.d("shop type====> " + addShop.type)
+        Timber.d("user id====> " + addShop.user_id)
+        Timber.d("amount=====> " + addShop.amount)
+        Timber.d("area id=======> " + addShop.area_id)
+        Timber.d("model id=======> " + addShop.model_id)
+        Timber.d("primary app id=======> " + addShop.primary_app_id)
+        Timber.d("secondary app id=======> " + addShop.secondary_app_id)
+        Timber.d("lead id=======> " + addShop.lead_id)
+        Timber.d("stage id=======> " + addShop.stage_id)
+        Timber.d("funnel stage id=======> " + addShop.funnel_stage_id)
+        Timber.d("booking amount=======> " + addShop.booking_amount)
+        Timber.d("type id=======> " + addShop.type_id)
 
         if (shop_imgPath != null)
-            XLog.d("shop image path====> $shop_imgPath")
+            Timber.d("shop image path====> $shop_imgPath")
 
-        XLog.d("director name=======> " + addShop.director_name)
-        XLog.d("family member dob=======> " + addShop.family_member_dob)
-        XLog.d("key person's name=======> " + addShop.key_person_name)
-        XLog.d("phone no=======> " + addShop.phone_no)
-        XLog.d("additional dob=======> " + addShop.addtional_dob)
-        XLog.d("additional doa=======> " + addShop.addtional_doa)
-        XLog.d("doctor family member dob=======> " + addShop.doc_family_member_dob)
-        XLog.d("specialization=======> " + addShop.specialization)
-        XLog.d("average patient count per day=======> " + addShop.average_patient_per_day)
-        XLog.d("category=======> " + addShop.category)
-        XLog.d("doctor address=======> " + addShop.doc_address)
-        XLog.d("doctor pincode=======> " + addShop.doc_pincode)
-        XLog.d("chambers or hospital under same headquarter=======> " + addShop.is_chamber_same_headquarter)
-        XLog.d("chamber related remarks=======> " + addShop.is_chamber_same_headquarter_remarks)
-        XLog.d("chemist name=======> " + addShop.chemist_name)
-        XLog.d("chemist name=======> " + addShop.chemist_address)
-        XLog.d("chemist pincode=======> " + addShop.chemist_pincode)
-        XLog.d("assistant name=======> " + addShop.assistant_name)
-        XLog.d("assistant contact no=======> " + addShop.assistant_contact_no)
-        XLog.d("assistant dob=======> " + addShop.assistant_dob)
-        XLog.d("assistant date of anniversary=======> " + addShop.assistant_doa)
-        XLog.d("assistant family dob=======> " + addShop.assistant_family_dob)
-        XLog.d("entity id=======> " + addShop.entity_id)
-        XLog.d("party status id=======> " + addShop.party_status_id)
-        XLog.d("retailer id=======> " + addShop.retailer_id)
-        XLog.d("dealer id=======> " + addShop.dealer_id)
-        XLog.d("beat id=======> " + addShop.beat_id)
-        XLog.d("assigned to shop id=======> " + addShop.assigned_to_shop_id)
-        XLog.d("actual address=======> " + addShop.actual_address)
+        Timber.d("director name=======> " + addShop.director_name)
+        Timber.d("family member dob=======> " + addShop.family_member_dob)
+        Timber.d("key person's name=======> " + addShop.key_person_name)
+        Timber.d("phone no=======> " + addShop.phone_no)
+        Timber.d("additional dob=======> " + addShop.addtional_dob)
+        Timber.d("additional doa=======> " + addShop.addtional_doa)
+        Timber.d("doctor family member dob=======> " + addShop.doc_family_member_dob)
+        Timber.d("specialization=======> " + addShop.specialization)
+        Timber.d("average patient count per day=======> " + addShop.average_patient_per_day)
+        Timber.d("category=======> " + addShop.category)
+        Timber.d("doctor address=======> " + addShop.doc_address)
+        Timber.d("doctor pincode=======> " + addShop.doc_pincode)
+        Timber.d("chambers or hospital under same headquarter=======> " + addShop.is_chamber_same_headquarter)
+        Timber.d("chamber related remarks=======> " + addShop.is_chamber_same_headquarter_remarks)
+        Timber.d("chemist name=======> " + addShop.chemist_name)
+        Timber.d("chemist name=======> " + addShop.chemist_address)
+        Timber.d("chemist pincode=======> " + addShop.chemist_pincode)
+        Timber.d("assistant name=======> " + addShop.assistant_name)
+        Timber.d("assistant contact no=======> " + addShop.assistant_contact_no)
+        Timber.d("assistant dob=======> " + addShop.assistant_dob)
+        Timber.d("assistant date of anniversary=======> " + addShop.assistant_doa)
+        Timber.d("assistant family dob=======> " + addShop.assistant_family_dob)
+        Timber.d("entity id=======> " + addShop.entity_id)
+        Timber.d("party status id=======> " + addShop.party_status_id)
+        Timber.d("retailer id=======> " + addShop.retailer_id)
+        Timber.d("dealer id=======> " + addShop.dealer_id)
+        Timber.d("beat id=======> " + addShop.beat_id)
+        Timber.d("assigned to shop id=======> " + addShop.assigned_to_shop_id)
+        Timber.d("actual address=======> " + addShop.actual_address)
 
         if (degree_imgPath != null)
-            XLog.d("doctor degree image path=======> $degree_imgPath")
-        XLog.d("=================================================")
+            Timber.d("doctor degree image path=======> $degree_imgPath")
+        Timber.d("=================================================")
 
 
 
@@ -945,7 +945,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                 if (addShopResult.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
 
@@ -970,7 +970,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     }
 
                                 } else if (addShopResult.status == NetworkConstant.DUPLICATE_SHOP_ID) {
-                                    XLog.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
+                                    Timber.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
                                     progress_wheel.stopSpinning()
 
@@ -1030,7 +1030,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 }
 
                                 if (error != null)
-                                    XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + "ERROR: " + error.localizedMessage)
+                                    Timber.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + "ERROR: " + error.localizedMessage)
                             })
             )
         }
@@ -1042,7 +1042,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                 if (addShopResult.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
 
@@ -1067,7 +1067,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     }
 
                                 } else if (addShopResult.status == NetworkConstant.DUPLICATE_SHOP_ID) {
-                                    XLog.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
+                                    Timber.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
                                     progress_wheel.stopSpinning()
 
@@ -1127,7 +1127,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 }
 
                                 if (error != null)
-                                    XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + "ERROR: " + error.localizedMessage)
+                                    Timber.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + "ERROR: " + error.localizedMessage)
                             })
             )
         }
@@ -1303,7 +1303,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
-                            XLog.d("syncShopActivityFromShopList : " + ", SHOP: " + list[0].shop_name + ", RESPONSE:" + result.message)
+                            Timber.d("syncShopActivityFromShopList : " + ", SHOP: " + list[0].shop_name + ", RESPONSE:" + result.message)
                             if (result.status == NetworkConstant.SUCCESS) {
                                 if (!Pref.isMultipleVisitEnable) {
                                     if (list[0].isVisited && list[0].isDurationCalculated) {
@@ -1321,7 +1321,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         }, { error ->
                             error.printStackTrace()
                             if (error != null)
-                                XLog.d("syncShopActivityFromShopList : " + ", SHOP: " + list[0].shop_name + "ERROR:" + error.localizedMessage)
+                                Timber.d("syncShopActivityFromShopList : " + ", SHOP: " + list[0].shop_name + "ERROR:" + error.localizedMessage)
 //                                (mContext as DashboardActivity).showSnackMessage("ERROR")
                         })
         )
@@ -1439,76 +1439,76 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         addShopData.assigned_to_shop_id = mAddShopDBModelEntity.assigned_to_shop_id
         addShopData.actual_address = mAddShopDBModelEntity.actual_address
 
-        XLog.d("=====SyncEditShop Input Params (Logout sync)======")
-        XLog.d("shop id====> " + addShopData.shop_id)
+        Timber.d("=====SyncEditShop Input Params (Logout sync)======")
+        Timber.d("shop id====> " + addShopData.shop_id)
         val index = addShopData.shop_id!!.indexOf("_")
-        XLog.d("decoded shop id====> " + addShopData.user_id + "_" + AppUtils.getDate(addShopData.shop_id!!.substring(index + 1, addShopData.shop_id!!.length).toLong()))
-        XLog.d("shop added date====> " + addShopData.added_date)
-        XLog.d("shop address====> " + addShopData.address)
-        XLog.d("assigned to dd id====> " + addShopData.assigned_to_dd_id)
-        XLog.d("assigned to pp id=====> " + addShopData.assigned_to_pp_id)
-        XLog.d("date aniversery=====> " + addShopData.date_aniversary)
-        XLog.d("dob====> " + addShopData.dob)
-        XLog.d("shop owner phn no===> " + addShopData.owner_contact_no)
-        XLog.d("shop owner email====> " + addShopData.owner_email)
-        XLog.d("shop owner name====> " + addShopData.owner_name)
-        XLog.d("shop pincode====> " + addShopData.pin_code)
-        XLog.d("session token====> " + addShopData.session_token)
-        XLog.d("shop lat====> " + addShopData.shop_lat)
-        XLog.d("shop long===> " + addShopData.shop_long)
-        XLog.d("shop name====> " + addShopData.shop_name)
-        XLog.d("shop type===> " + addShopData.type)
-        XLog.d("user id====> " + addShopData.user_id)
-        XLog.d("amount=======> " + addShopData.amount)
-        XLog.d("area id=======> " + addShopData.area_id)
-        XLog.d("model id=======> " + addShopData.model_id)
-        XLog.d("primary app id=======> " + addShopData.primary_app_id)
-        XLog.d("secondary app id=======> " + addShopData.secondary_app_id)
-        XLog.d("lead id=======> " + addShopData.lead_id)
-        XLog.d("stage id=======> " + addShopData.stage_id)
-        XLog.d("funnel stage id=======> " + addShopData.funnel_stage_id)
-        XLog.d("booking amount=======> " + addShopData.booking_amount)
-        XLog.d("type id=======> " + addShopData.type_id)
+        Timber.d("decoded shop id====> " + addShopData.user_id + "_" + AppUtils.getDate(addShopData.shop_id!!.substring(index + 1, addShopData.shop_id!!.length).toLong()))
+        Timber.d("shop added date====> " + addShopData.added_date)
+        Timber.d("shop address====> " + addShopData.address)
+        Timber.d("assigned to dd id====> " + addShopData.assigned_to_dd_id)
+        Timber.d("assigned to pp id=====> " + addShopData.assigned_to_pp_id)
+        Timber.d("date aniversery=====> " + addShopData.date_aniversary)
+        Timber.d("dob====> " + addShopData.dob)
+        Timber.d("shop owner phn no===> " + addShopData.owner_contact_no)
+        Timber.d("shop owner email====> " + addShopData.owner_email)
+        Timber.d("shop owner name====> " + addShopData.owner_name)
+        Timber.d("shop pincode====> " + addShopData.pin_code)
+        Timber.d("session token====> " + addShopData.session_token)
+        Timber.d("shop lat====> " + addShopData.shop_lat)
+        Timber.d("shop long===> " + addShopData.shop_long)
+        Timber.d("shop name====> " + addShopData.shop_name)
+        Timber.d("shop type===> " + addShopData.type)
+        Timber.d("user id====> " + addShopData.user_id)
+        Timber.d("amount=======> " + addShopData.amount)
+        Timber.d("area id=======> " + addShopData.area_id)
+        Timber.d("model id=======> " + addShopData.model_id)
+        Timber.d("primary app id=======> " + addShopData.primary_app_id)
+        Timber.d("secondary app id=======> " + addShopData.secondary_app_id)
+        Timber.d("lead id=======> " + addShopData.lead_id)
+        Timber.d("stage id=======> " + addShopData.stage_id)
+        Timber.d("funnel stage id=======> " + addShopData.funnel_stage_id)
+        Timber.d("booking amount=======> " + addShopData.booking_amount)
+        Timber.d("type id=======> " + addShopData.type_id)
         if (mAddShopDBModelEntity.shopImageLocalPath != null)
-            XLog.d("shop image path====> " + mAddShopDBModelEntity.shopImageLocalPath)
-        XLog.d("family member dob=======> " + addShopData.family_member_dob)
-        XLog.d("director name=======> " + addShopData.director_name)
-        XLog.d("key person's name=======> " + addShopData.key_person_name)
-        XLog.d("phone no=======> " + addShopData.phone_no)
-        XLog.d("additional dob=======> " + addShopData.addtional_dob)
-        XLog.d("additional doa=======> " + addShopData.addtional_doa)
-        XLog.d("doctor family member dob=======> " + addShopData.doc_family_member_dob)
-        XLog.d("specialization=======> " + addShopData.specialization)
-        XLog.d("average patient count per day=======> " + addShopData.average_patient_per_day)
-        XLog.d("category=======> " + addShopData.category)
-        XLog.d("doctor address=======> " + addShopData.doc_address)
-        XLog.d("doctor pincode=======> " + addShopData.doc_pincode)
-        XLog.d("chambers or hospital under same headquarter=======> " + addShopData.is_chamber_same_headquarter)
-        XLog.d("chamber related remarks=======> " + addShopData.is_chamber_same_headquarter_remarks)
-        XLog.d("chemist name=======> " + addShopData.chemist_name)
-        XLog.d("chemist name=======> " + addShopData.chemist_address)
-        XLog.d("chemist pincode=======> " + addShopData.chemist_pincode)
-        XLog.d("assistant name=======> " + addShopData.assistant_name)
-        XLog.d("assistant contact no=======> " + addShopData.assistant_contact_no)
-        XLog.d("assistant dob=======> " + addShopData.assistant_dob)
-        XLog.d("assistant date of anniversary=======> " + addShopData.assistant_doa)
-        XLog.d("assistant family dob=======> " + addShopData.assistant_family_dob)
-        XLog.d("entity id=======> " + addShopData.entity_id)
-        XLog.d("party status id=======> " + addShopData.party_status_id)
-        XLog.d("retailer id=======> " + addShopData.retailer_id)
-        XLog.d("dealer id=======> " + addShopData.dealer_id)
-        XLog.d("beat id=======> " + addShopData.beat_id)
+            Timber.d("shop image path====> " + mAddShopDBModelEntity.shopImageLocalPath)
+        Timber.d("family member dob=======> " + addShopData.family_member_dob)
+        Timber.d("director name=======> " + addShopData.director_name)
+        Timber.d("key person's name=======> " + addShopData.key_person_name)
+        Timber.d("phone no=======> " + addShopData.phone_no)
+        Timber.d("additional dob=======> " + addShopData.addtional_dob)
+        Timber.d("additional doa=======> " + addShopData.addtional_doa)
+        Timber.d("doctor family member dob=======> " + addShopData.doc_family_member_dob)
+        Timber.d("specialization=======> " + addShopData.specialization)
+        Timber.d("average patient count per day=======> " + addShopData.average_patient_per_day)
+        Timber.d("category=======> " + addShopData.category)
+        Timber.d("doctor address=======> " + addShopData.doc_address)
+        Timber.d("doctor pincode=======> " + addShopData.doc_pincode)
+        Timber.d("chambers or hospital under same headquarter=======> " + addShopData.is_chamber_same_headquarter)
+        Timber.d("chamber related remarks=======> " + addShopData.is_chamber_same_headquarter_remarks)
+        Timber.d("chemist name=======> " + addShopData.chemist_name)
+        Timber.d("chemist name=======> " + addShopData.chemist_address)
+        Timber.d("chemist pincode=======> " + addShopData.chemist_pincode)
+        Timber.d("assistant name=======> " + addShopData.assistant_name)
+        Timber.d("assistant contact no=======> " + addShopData.assistant_contact_no)
+        Timber.d("assistant dob=======> " + addShopData.assistant_dob)
+        Timber.d("assistant date of anniversary=======> " + addShopData.assistant_doa)
+        Timber.d("assistant family dob=======> " + addShopData.assistant_family_dob)
+        Timber.d("entity id=======> " + addShopData.entity_id)
+        Timber.d("party status id=======> " + addShopData.party_status_id)
+        Timber.d("retailer id=======> " + addShopData.retailer_id)
+        Timber.d("dealer id=======> " + addShopData.dealer_id)
+        Timber.d("beat id=======> " + addShopData.beat_id)
         if (mAddShopDBModelEntity.doc_degree != null)
-            XLog.d("doctor degree image path=======> " + mAddShopDBModelEntity.doc_degree)
-        XLog.d("assigned to shop id=======> " + addShopData.assigned_to_shop_id)
-        XLog.d("actual_address=======> " + addShopData.actual_address)
-        XLog.d("================================================")
+            Timber.d("doctor degree image path=======> " + mAddShopDBModelEntity.doc_degree)
+        Timber.d("assigned to shop id=======> " + addShopData.assigned_to_shop_id)
+        Timber.d("actual_address=======> " + addShopData.actual_address)
+        Timber.d("================================================")
 
         progress_wheel.spin()
 
         if(addShopData.actual_address==null){
             var address = LocationWizard.getAdressFromLatlng(mContext, addShopData.shop_lat!!.toDouble(), addShopData.shop_long!!.toDouble())
-            XLog.e("Actual Shop address (Add Shop)======> $address")
+            Timber.e("Actual Shop address (Add Shop)======> $address")
             if (address.contains("http"))
                 address = "Unknown"
             addShopData.actual_address = address
@@ -1530,7 +1530,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", STATUS: " + addShopResult.status + ",RESPONSE:" + result.message)
+                                Timber.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", STATUS: " + addShopResult.status + ",RESPONSE:" + result.message)
                                 if (addShopResult.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopData.shop_id)
                                     progress_wheel.stopSpinning()
@@ -1595,7 +1595,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 progress_wheel.stopSpinning()
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
                                 try {
-                                    XLog.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", ERROR: " + error.message)
+                                    Timber.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", ERROR: " + error.message)
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -1625,7 +1625,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", STATUS: " + addShopResult.status + ",RESPONSE:" + result.message)
+                                Timber.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", STATUS: " + addShopResult.status + ",RESPONSE:" + result.message)
                                 if (addShopResult.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopData.shop_id)
                                     progress_wheel.stopSpinning()
@@ -1690,7 +1690,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 progress_wheel.stopSpinning()
                                 //(mContext as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
                                 try {
-                                    XLog.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", ERROR: " + error.message)
+                                    Timber.d("Edit Shop : " + ", SHOP: " + addShopData.shop_name + ", ERROR: " + error.message)
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -1846,7 +1846,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val orderListResponse = result as BaseResponse
-                                XLog.e("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", STATUS====> " + orderListResponse.status + ",RESPONSE MESSAGE:" + orderListResponse.message)
+                                Timber.e("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", STATUS====> " + orderListResponse.status + ",RESPONSE MESSAGE:" + orderListResponse.message)
                                 if (orderListResponse.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.orderDetailsListDao().updateIsUploaded(true, order.order_id!!)
 
@@ -1917,7 +1917,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 //(mContext as DashboardActivity).showSnackMessage(mContext.getString(R.string.unable_to_sync))
 
                                 try {
-                                    XLog.d("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", ERROR====> " + error.message)
+                                    Timber.d("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", ERROR====> " + error.message)
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -1949,7 +1949,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val orderListResponse = result as BaseResponse
-                                XLog.e("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", STATUS====> " + orderListResponse.status + ",RESPONSE MESSAGE:" + orderListResponse.message)
+                                Timber.e("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", STATUS====> " + orderListResponse.status + ",RESPONSE MESSAGE:" + orderListResponse.message)
                                 if (orderListResponse.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.orderDetailsListDao().updateIsUploaded(true, order.order_id!!)
 
@@ -2020,7 +2020,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 //(mContext as DashboardActivity).showSnackMessage(mContext.getString(R.string.unable_to_sync))
 
                                 try {
-                                    XLog.d("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", ERROR====> " + error.message)
+                                    Timber.d("Add Order : \n" + ", SHOP ID===> " + orderList[i].shop_id + ", ERROR====> " + error.message)
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -2082,15 +2082,15 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         updateGps.session_token = Pref.session_token
         updateGps.duration = AppUtils.getTimeInHourMinuteFormat(list[i].duration?.toLong()!!)
 
-        XLog.d("========SYNC GPS INPUT PARAMS========")
-        XLog.d("date====> " + updateGps.date)
-        XLog.d("gps_id====> " + updateGps.gps_id)
-        XLog.d("gps_off_time====> " + updateGps.gps_off_time)
-        XLog.d("gps_on_time====> " + updateGps.gps_on_time)
-        XLog.d("user_id====> " + updateGps.user_id)
-        XLog.d("session_token====> " + updateGps.session_token)
-        XLog.d("duration====> " + updateGps.duration)
-        XLog.d("=====================================")
+        Timber.d("========SYNC GPS INPUT PARAMS========")
+        Timber.d("date====> " + updateGps.date)
+        Timber.d("gps_id====> " + updateGps.gps_id)
+        Timber.d("gps_off_time====> " + updateGps.gps_off_time)
+        Timber.d("gps_on_time====> " + updateGps.gps_on_time)
+        Timber.d("user_id====> " + updateGps.user_id)
+        Timber.d("session_token====> " + updateGps.session_token)
+        Timber.d("duration====> " + updateGps.duration)
+        Timber.d("=====================================")
 
         progress_wheel.spin()
 
@@ -2101,7 +2101,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val gpsStatusResponse = result as BaseResponse
-                            XLog.d("SYNC GPS : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name
+                            Timber.d("SYNC GPS : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name
                                     + ",MESSAGE : " + gpsStatusResponse.message)
                             if (gpsStatusResponse.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.gpsStatusDao().updateIsUploadedAccordingToId(true, list[i].id)
@@ -2157,7 +2157,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             //
-                            XLog.d("SYNC GPS : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("SYNC GPS : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             i++
                             if (i < list.size) {
@@ -2254,28 +2254,28 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         addCollection.patient_address = if (TextUtils.isEmpty(patientAddress)) "" else patientAddress!!
         addCollection.patient_no = if (TextUtils.isEmpty(patientNo)) "" else patientNo!!
 
-        XLog.d("===SYNC COLLECTION INPUT PARAMS (Logout Sync)====")
-        XLog.d("Collection Amount===> " + addCollection.collection)
-        XLog.d("Collection Date==> " + addCollection.collection_date)
-        XLog.d("ColLection ID===> " + addCollection.collection_id)
-        XLog.d("Shop ID===> " + addCollection.shop_id)
-        XLog.d("user_id==> " + addCollection.user_id)
-        XLog.d("session_token===> " + addCollection.session_token)
-        XLog.d("billId===> " + addCollection.bill_id)
-        XLog.d("order_id===> " + addCollection.order_id)
-        XLog.d("payment_id===> " + addCollection.payment_id)
-        XLog.d("instrument_no===> " + addCollection.instrument_no)
-        XLog.d("bank===> " + addCollection.bank)
-        XLog.d("remarks===> " + addCollection.remarks)
-        XLog.d("patient_name===> " + addCollection.patient_name)
-        XLog.d("patient_address===> " + addCollection.patient_address)
-        XLog.d("patient_no===> " + addCollection.patient_no)
+        Timber.d("===SYNC COLLECTION INPUT PARAMS (Logout Sync)====")
+        Timber.d("Collection Amount===> " + addCollection.collection)
+        Timber.d("Collection Date==> " + addCollection.collection_date)
+        Timber.d("ColLection ID===> " + addCollection.collection_id)
+        Timber.d("Shop ID===> " + addCollection.shop_id)
+        Timber.d("user_id==> " + addCollection.user_id)
+        Timber.d("session_token===> " + addCollection.session_token)
+        Timber.d("billId===> " + addCollection.bill_id)
+        Timber.d("order_id===> " + addCollection.order_id)
+        Timber.d("payment_id===> " + addCollection.payment_id)
+        Timber.d("instrument_no===> " + addCollection.instrument_no)
+        Timber.d("bank===> " + addCollection.bank)
+        Timber.d("remarks===> " + addCollection.remarks)
+        Timber.d("patient_name===> " + addCollection.patient_name)
+        Timber.d("patient_address===> " + addCollection.patient_address)
+        Timber.d("patient_no===> " + addCollection.patient_no)
 
         if (filePath != null)
-            XLog.d("filePath===> $filePath")
+            Timber.d("filePath===> $filePath")
         else
-            XLog.d("filePath===> ")
-        XLog.d("=====================================================")
+            Timber.d("filePath===> ")
+        Timber.d("=====================================================")
 
         progress_wheel.spin()
 
@@ -2288,7 +2288,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribe({ result ->
                                 val orderList = result as BaseResponse
 
-                                XLog.d("SYNC COLLECTION : " + "RESPONSE : " + "\n" + "STATUS : " + orderList.status + ",MESSAGE : " + orderList.message
+                                Timber.d("SYNC COLLECTION : " + "RESPONSE : " + "\n" + "STATUS : " + orderList.status + ",MESSAGE : " + orderList.message
                                         + ", COLLECTION ID : " + addCollection.collection_id)
                                 progress_wheel.stopSpinning()
                                 if (orderList.status == NetworkConstant.SUCCESS) {
@@ -2356,7 +2356,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             }, { error ->
 
                                 try {
-                                    XLog.d("SYNC COLLECTION : ERROR : " + error.message + ", COLLECTION ID : " + addCollection.collection_id)
+                                    Timber.d("SYNC COLLECTION : ERROR : " + error.message + ", COLLECTION ID : " + addCollection.collection_id)
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -2392,7 +2392,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribe({ result ->
                                 val orderList = result as BaseResponse
 
-                                XLog.d("SYNC COLLECTION : " + "RESPONSE : " + "\n" + "STATUS : " + orderList.status + ",MESSAGE : " + orderList.message
+                                Timber.d("SYNC COLLECTION : " + "RESPONSE : " + "\n" + "STATUS : " + orderList.status + ",MESSAGE : " + orderList.message
                                         + ", COLLECTION ID : " + addCollection.collection_id)
                                 progress_wheel.stopSpinning()
                                 if (orderList.status == NetworkConstant.SUCCESS) {
@@ -2461,7 +2461,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             }, { error ->
 
                                 try {
-                                    XLog.d("SYNC COLLECTION : ERROR : " + error.message + ", COLLECTION ID : " + addCollection.collection_id)
+                                    Timber.d("SYNC COLLECTION : ERROR : " + error.message + ", COLLECTION ID : " + addCollection.collection_id)
                                 } catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -2749,8 +2749,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     }
                     else {
 
-                        XLog.e("====SYNC VISITED SHOP (LOGOUT SYNC)====")
-                        XLog.e("ShopData List size===> " + shopDataList.size)
+                        Timber.e("====SYNC VISITED SHOP (LOGOUT SYNC)====")
+                        Timber.e("ShopData List size===> " + shopDataList.size)
 
                         //val newShopList = FTStorageUtils.removeDuplicateData(shopDataList)
 
@@ -2768,14 +2768,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         shopDurationApiReq.user_id = Pref.user_id
                         shopDurationApiReq.session_token = Pref.session_token
                         if (newShopList.size > 0) {
-                            XLog.e("Unique ShopData List size===> " + newShopList.size)
+                            Timber.e("Unique ShopData List size===> " + newShopList.size)
                             shopDurationApiReq.shop_list = newShopList
                         } else
                             shopDurationApiReq.shop_list = shopDataList
 
                         val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
 
-                        XLog.d("callShopDurationApi (Logout Sync): REQUEST")
+                        Timber.d("callShopDurationApi (Logout Sync): REQUEST")
 
 
                         try{
@@ -2800,7 +2800,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 .subscribeOn(Schedulers.io())
 //                        .timeout(60 * 1, TimeUnit.SECONDS)
                                 .subscribe({ result ->
-                                    XLog.d("callShopDurationApi : RESPONSE " + result.status)
+                                    Timber.d("callShopDurationApi : RESPONSE " + result.status)
                                     if (result.status == NetworkConstant.SUCCESS) {
 
                                         if(!revisitStatusList.isEmpty()){
@@ -2849,9 +2849,9 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     BaseActivity.isShopActivityUpdating = false
                                     //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                                     if (error == null) {
-                                        XLog.d("callShopDurationApi : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
+                                        Timber.d("callShopDurationApi : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
                                     } else {
-                                        XLog.d("callShopDurationApi : ERROR " + error.localizedMessage)
+                                        Timber.d("callShopDurationApi : ERROR " + error.localizedMessage)
                                         error.printStackTrace()
                                     }
                                     checkToRetryVisitButton()
@@ -2883,7 +2883,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
-                            XLog.d("callRevisitStatusUploadApi : RESPONSE " + result.status)
+                            Timber.d("callRevisitStatusUploadApi : RESPONSE " + result.status)
                             if (result.status == NetworkConstant.SUCCESS){
                                 for(i in revisitStatusList.indices){
                                     AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.updateOrderStatus(revisitStatusList[i]!!.shop_revisit_uniqKey!!)
@@ -2891,9 +2891,9 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             }
                         },{error ->
                             if (error == null) {
-                                XLog.d("callRevisitStatusUploadApi : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
+                                Timber.d("callRevisitStatusUploadApi : ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
                             } else {
-                                XLog.d("callRevisitStatusUploadApi : ERROR " + error.localizedMessage)
+                                Timber.d("callRevisitStatusUploadApi : ERROR " + error.localizedMessage)
                                 error.printStackTrace()
                             }
                         })
@@ -2926,14 +2926,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 if(response.status==NetworkConstant.SUCCESS){
                                     AppDatabase.getDBInstance()!!.shopVisitCompetetorImageDao().updateisUploaded(true,shop_id)
                                     callCompetetorImgUploadApi()
-                                    XLog.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shopId + ", Success: ")
+                                    Timber.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shopId + ", Success: ")
                                 }else{
-                                    XLog.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shopId + ", Failed: ")
+                                    Timber.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shopId + ", Failed: ")
                                 }
                             },{
                                 error ->
                                 if (error != null) {
-                                    XLog.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shopId + ", ERROR: " + error.localizedMessage)
+                                    Timber.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shopId + ", ERROR: " + error.localizedMessage)
                                 }
                             })
             )
@@ -3157,13 +3157,13 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             visitImageShop.shop_id = unSyncedList[i].shop_id
             visitImageShop.visit_datetime = unSyncedList[i].visit_datetime
 
-            XLog.d("====UPLOAD REVISIT ALL IMAGE INPUT PARAMS (Logout Sync)======")
-            XLog.d("USER ID====> " + visitImageShop.user_id)
-            XLog.d("SESSION ID====> " + visitImageShop.session_token)
-            XLog.d("SHOP ID====> " + visitImageShop.shop_id)
-            XLog.d("VISIT DATE TIME=====> " + visitImageShop.visit_datetime)
-            XLog.d("IMAGE=====> " + unSyncedList[i].shop_image)
-            XLog.d("===============================================================")
+            Timber.d("====UPLOAD REVISIT ALL IMAGE INPUT PARAMS (Logout Sync)======")
+            Timber.d("USER ID====> " + visitImageShop.user_id)
+            Timber.d("SESSION ID====> " + visitImageShop.session_token)
+            Timber.d("SHOP ID====> " + visitImageShop.shop_id)
+            Timber.d("VISIT DATE TIME=====> " + visitImageShop.visit_datetime)
+            Timber.d("IMAGE=====> " + unSyncedList[i].shop_image)
+            Timber.d("===============================================================")
 
             val repository = ShopVisitImageUploadRepoProvider.provideAddShopRepository()
 
@@ -3173,7 +3173,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val logoutResponse = result as BaseResponse
-                                XLog.d("UPLOAD REVISIT ALL IMAGE : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
+                                Timber.d("UPLOAD REVISIT ALL IMAGE : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                                 if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.shopVisitImageDao().updateisUploaded(true, unSyncedList.get(i).shop_id!!)
                                     BaseActivity.isShopActivityUpdating = false
@@ -3193,7 +3193,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("UPLOAD REVISIT ALL IMAGE : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("UPLOAD REVISIT ALL IMAGE : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 BaseActivity.isShopActivityUpdating = false
                                 //checkToCallSyncOrder()
@@ -3241,13 +3241,13 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             visitImageShop.shop_id = unSyncedList[i].shop_id
             visitImageShop.visit_datetime = unSyncedList[i].visit_datetime
 
-            XLog.d("====UPLOAD REVISIT ALL AUDIO INPUT PARAMS (Logout Sync)======")
-            XLog.d("USER ID====> " + visitImageShop.user_id)
-            XLog.d("SESSION ID====> " + visitImageShop.session_token)
-            XLog.d("SHOP ID====> " + visitImageShop.shop_id)
-            XLog.d("VISIT DATE TIME=====> " + visitImageShop.visit_datetime)
-            XLog.d("AUDIO=====> " + unSyncedList[i].audio)
-            XLog.d("===============================================================")
+            Timber.d("====UPLOAD REVISIT ALL AUDIO INPUT PARAMS (Logout Sync)======")
+            Timber.d("USER ID====> " + visitImageShop.user_id)
+            Timber.d("SESSION ID====> " + visitImageShop.session_token)
+            Timber.d("SHOP ID====> " + visitImageShop.shop_id)
+            Timber.d("VISIT DATE TIME=====> " + visitImageShop.visit_datetime)
+            Timber.d("AUDIO=====> " + unSyncedList[i].audio)
+            Timber.d("===============================================================")
 
             val repository = ShopVisitImageUploadRepoProvider.provideAddShopRepository()
 
@@ -3257,7 +3257,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val logoutResponse = result as BaseResponse
-                                XLog.d("UPLOAD REVISIT ALL AUDIO : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
+                                Timber.d("UPLOAD REVISIT ALL AUDIO : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                                 if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.shopVisitAudioDao().updateisUploaded(true, unSyncedList.get(i).shop_id!!)
                                     BaseActivity.isShopActivityUpdating = false
@@ -3282,7 +3282,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("UPLOAD REVISIT ALL AUDIO : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("UPLOAD REVISIT ALL AUDIO : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 BaseActivity.isShopActivityUpdating = false
                                 //checkToCallSyncOrder()
@@ -3354,30 +3354,30 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         addBill.product_list = productList
 
-        XLog.d("======SYNC BILLING DETAILS INPUT PARAMS (SYNC ALL)======")
-        XLog.d("USER ID===> " + addBill.user_id)
-        XLog.d("SESSION ID====> " + addBill.session_token)
-        XLog.d("BILL ID====> " + addBill.bill_id)
-        XLog.d("INVOICE NO.====> " + addBill.invoice_no)
-        XLog.d("INVOICE DATE====> " + addBill.invoice_date)
-        XLog.d("INVOICE AMOUNT====> " + addBill.invoice_amount)
-        XLog.d("REMARKS====> " + addBill.remarks)
-        XLog.d("ORDER ID====> " + addBill.order_id)
+        Timber.d("======SYNC BILLING DETAILS INPUT PARAMS (SYNC ALL)======")
+        Timber.d("USER ID===> " + addBill.user_id)
+        Timber.d("SESSION ID====> " + addBill.session_token)
+        Timber.d("BILL ID====> " + addBill.bill_id)
+        Timber.d("INVOICE NO.====> " + addBill.invoice_no)
+        Timber.d("INVOICE DATE====> " + addBill.invoice_date)
+        Timber.d("INVOICE AMOUNT====> " + addBill.invoice_amount)
+        Timber.d("REMARKS====> " + addBill.remarks)
+        Timber.d("ORDER ID====> " + addBill.order_id)
 
         try {
-            XLog.d("PATIENT NO====> " + addBill.patient_no)
-            XLog.d("PATIENT NAME====> " + addBill.patient_name)
-            XLog.d("PATIENT ADDRESS====> " + addBill.patient_address)
+            Timber.d("PATIENT NO====> " + addBill.patient_no)
+            Timber.d("PATIENT NAME====> " + addBill.patient_name)
+            Timber.d("PATIENT ADDRESS====> " + addBill.patient_address)
         }
         catch (e: Exception) {
             e.printStackTrace()
         }
 
         if (!TextUtils.isEmpty(billing.attachment))
-            XLog.d("ATTACHMENT=======> " + billing.attachment)
+            Timber.d("ATTACHMENT=======> " + billing.attachment)
 
-        XLog.d("PRODUCT LIST SIZE====> " + addBill.product_list?.size)
-        XLog.d("=========================================================")
+        Timber.d("PRODUCT LIST SIZE====> " + addBill.product_list?.size)
+        Timber.d("=========================================================")
 
         if (!TextUtils.isEmpty(billing.attachment)) {
             val repository = AddBillingRepoProvider.addBillImageRepository()
@@ -3388,7 +3388,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val baseResponse = result as BaseResponse
-                                XLog.d("SYNC BILLING DETAILS : " + "RESPONSE : " + baseResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + baseResponse.message)
+                                Timber.d("SYNC BILLING DETAILS : " + "RESPONSE : " + baseResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + baseResponse.message)
                                 BaseActivity.isApiInitiated = false
 
                                 if (baseResponse.status == NetworkConstant.SUCCESS) {
@@ -3435,7 +3435,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 progress_wheel.stopSpinning()
 
                             }, { error ->
-                                XLog.d("SYNC BILLING DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
+                                Timber.d("SYNC BILLING DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 BaseActivity.isApiInitiated = false
 
@@ -3465,7 +3465,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val baseResponse = result as BaseResponse
-                                XLog.d("SYNC BILLING DETAILS : " + "RESPONSE : " + baseResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + baseResponse.message)
+                                Timber.d("SYNC BILLING DETAILS : " + "RESPONSE : " + baseResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + baseResponse.message)
                                 BaseActivity.isApiInitiated = false
 
                                 if (baseResponse.status == NetworkConstant.SUCCESS) {
@@ -3512,7 +3512,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 progress_wheel.stopSpinning()
 
                             }, { error ->
-                                XLog.d("SYNC BILLING DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
+                                Timber.d("SYNC BILLING DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 BaseActivity.isApiInitiated = false
 
@@ -3622,7 +3622,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             val orderList = result as BaseResponse
                             progress_wheel.stopSpinning()
 
-                            XLog.e("Add STOCK : \n" + ", SHOP ID===> " + stockList[i].shop_id + ", STOCK ID===> " + stockList[i].stock_id + ", STATUS====> " + orderList.status + ",RESPONSE MESSAGE:" + orderList.message)
+                            Timber.e("Add STOCK : \n" + ", SHOP ID===> " + stockList[i].shop_id + ", STOCK ID===> " + stockList[i].stock_id + ", STATUS====> " + orderList.status + ",RESPONSE MESSAGE:" + orderList.message)
 
                             if (orderList.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.stockDetailsListDao().updateIsUploaded(true, stockDetailsListEntity.stock_id!!)
@@ -3655,7 +3655,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         }, { error ->
                             error.printStackTrace()
 
-                            XLog.d("Add STOCK : \n" + ", SHOP ID===> " + stockList[i].shop_id + ", STOCK ID===> " + stockList[i].stock_id + ", ERROR====> " + error.message)
+                            Timber.d("Add STOCK : \n" + ", SHOP ID===> " + stockList[i].shop_id + ", STOCK ID===> " + stockList[i].stock_id + ", ERROR====> " + error.message)
 
                             i++
                             if (i < list.size) {
@@ -3717,7 +3717,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     //==========================================================Upload Meeting====================================================//
     private fun callMeetingUploadApi(list: List<MeetingEntity>) {
 
-        XLog.e("IS MEETING UPDATING (LOGOUT SYNC)===========> ${BaseActivity.isMeetingUpdating}")
+        Timber.e("IS MEETING UPDATING (LOGOUT SYNC)===========> ${BaseActivity.isMeetingUpdating}")
 
         if (BaseActivity.isMeetingUpdating) {
 
@@ -3763,11 +3763,11 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         meeting.meeting_list = meetingDataList
 
-        XLog.d("========UPLOAD MEETING DATA INPUT PARAMS (LOGOUT SYNC)======")
-        XLog.d("USER ID======> " + meeting.user_id)
-        XLog.d("SESSION ID======> " + meeting.session_token)
-        XLog.d("MEETING LIST SIZE=========> " + meeting.meeting_list.size)
-        XLog.d("=============================================================")
+        Timber.d("========UPLOAD MEETING DATA INPUT PARAMS (LOGOUT SYNC)======")
+        Timber.d("USER ID======> " + meeting.user_id)
+        Timber.d("SESSION ID======> " + meeting.session_token)
+        Timber.d("MEETING LIST SIZE=========> " + meeting.meeting_list.size)
+        Timber.d("=============================================================")
 
         val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
         BaseActivity.compositeDisposable.add(
@@ -3776,7 +3776,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("UPLOAD MEETING DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("UPLOAD MEETING DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 doAsync {
@@ -3810,7 +3810,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             }
 
                         }, { error ->
-                            XLog.d("UPLOAD MEETING DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("UPLOAD MEETING DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             BaseActivity.isMeetingUpdating = false
 
@@ -3860,35 +3860,35 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     //=====================================================ADD QUOTATION===========================================================
     private fun callAddQuotApi(quotEntity: QuotationEntity, quotList: ArrayList<QuotationEntity>) {
-        XLog.d("==============Sync Add Quot. Input Params (Logout Sync)====================")
-        XLog.d("shop id=======> " + quotEntity.shop_id)
-        XLog.d("quot. date=======> " + quotEntity.date)
-        XLog.d("quot. id=======> " + quotEntity.quo_id)
-        XLog.d("quot. no=======> " + quotEntity.quo_no)
-        XLog.d("hypothecation=======> " + quotEntity.hypothecation)
-        XLog.d("account_no=======> " + quotEntity.account_no)
-        XLog.d("model_id=======> " + quotEntity.model_id)
-        XLog.d("bs_id=======> " + quotEntity.bs_id)
-        XLog.d("gearbox=======> " + quotEntity.gearbox)
-        XLog.d("number1=======> " + quotEntity.number1)
-        XLog.d("value1=======> " + quotEntity.value1)
-        XLog.d("value2=======> " + quotEntity.value2)
-        XLog.d("tyres1=======> " + quotEntity.tyres1)
-        XLog.d("number2=======> " + quotEntity.number2)
-        XLog.d("value3=======> " + quotEntity.value3)
-        XLog.d("value4=======> " + quotEntity.value4)
-        XLog.d("tyres2=======> " + quotEntity.tyres2)
-        XLog.d("amount=======> " + quotEntity.amount)
-        XLog.d("discount=======> " + quotEntity.discount)
-        XLog.d("cgst=======> " + quotEntity.cgst)
-        XLog.d("sgst=======> " + quotEntity.sgst)
-        XLog.d("tcs=======> " + quotEntity.tcs)
-        XLog.d("insurance=======> " + quotEntity.insurance)
-        XLog.d("net_amount=======> " + quotEntity.net_amount)
-        XLog.d("remarks=======> " + quotEntity.remarks)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("=====================================================================")
+        Timber.d("==============Sync Add Quot. Input Params (Logout Sync)====================")
+        Timber.d("shop id=======> " + quotEntity.shop_id)
+        Timber.d("quot. date=======> " + quotEntity.date)
+        Timber.d("quot. id=======> " + quotEntity.quo_id)
+        Timber.d("quot. no=======> " + quotEntity.quo_no)
+        Timber.d("hypothecation=======> " + quotEntity.hypothecation)
+        Timber.d("account_no=======> " + quotEntity.account_no)
+        Timber.d("model_id=======> " + quotEntity.model_id)
+        Timber.d("bs_id=======> " + quotEntity.bs_id)
+        Timber.d("gearbox=======> " + quotEntity.gearbox)
+        Timber.d("number1=======> " + quotEntity.number1)
+        Timber.d("value1=======> " + quotEntity.value1)
+        Timber.d("value2=======> " + quotEntity.value2)
+        Timber.d("tyres1=======> " + quotEntity.tyres1)
+        Timber.d("number2=======> " + quotEntity.number2)
+        Timber.d("value3=======> " + quotEntity.value3)
+        Timber.d("value4=======> " + quotEntity.value4)
+        Timber.d("tyres2=======> " + quotEntity.tyres2)
+        Timber.d("amount=======> " + quotEntity.amount)
+        Timber.d("discount=======> " + quotEntity.discount)
+        Timber.d("cgst=======> " + quotEntity.cgst)
+        Timber.d("sgst=======> " + quotEntity.sgst)
+        Timber.d("tcs=======> " + quotEntity.tcs)
+        Timber.d("insurance=======> " + quotEntity.insurance)
+        Timber.d("net_amount=======> " + quotEntity.net_amount)
+        Timber.d("remarks=======> " + quotEntity.remarks)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("=====================================================================")
 
         progress_wheel.spin()
         val repository = QuotationRepoProvider.provideBSListRepository()
@@ -3906,7 +3906,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("ADD QUOT. DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("ADD QUOT. DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()?.quotDao()?.updateIsUploaded(true, quotEntity.quo_id!!)
                             }
@@ -3934,7 +3934,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("ADD QUOT. DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("ADD QUOT. DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
 
                             i++
@@ -4003,35 +4003,35 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     //=====================================================EDIT QUOTATION===========================================================
     private fun callEditQuotApi(quotEntity: QuotationEntity, quotList: ArrayList<QuotationEntity>) {
-        XLog.d("==============Sync Edit Quot. Input Params (Logout Sync)====================")
-        XLog.d("shop id=======> " + quotEntity.shop_id)
-        XLog.d("quot. date=======> " + quotEntity.date)
-        XLog.d("quot. id=======> " + quotEntity.quo_id)
-        XLog.d("quot. no=======> " + quotEntity.quo_no)
-        XLog.d("hypothecation=======> " + quotEntity.hypothecation)
-        XLog.d("account_no=======> " + quotEntity.account_no)
-        XLog.d("model_id=======> " + quotEntity.model_id)
-        XLog.d("bs_id=======> " + quotEntity.bs_id)
-        XLog.d("gearbox=======> " + quotEntity.gearbox)
-        XLog.d("number1=======> " + quotEntity.number1)
-        XLog.d("value1=======> " + quotEntity.value1)
-        XLog.d("value2=======> " + quotEntity.value2)
-        XLog.d("tyres1=======> " + quotEntity.tyres1)
-        XLog.d("number2=======> " + quotEntity.number2)
-        XLog.d("value3=======> " + quotEntity.value3)
-        XLog.d("value4=======> " + quotEntity.value4)
-        XLog.d("tyres2=======> " + quotEntity.tyres2)
-        XLog.d("amount=======> " + quotEntity.amount)
-        XLog.d("discount=======> " + quotEntity.discount)
-        XLog.d("cgst=======> " + quotEntity.cgst)
-        XLog.d("sgst=======> " + quotEntity.sgst)
-        XLog.d("tcs=======> " + quotEntity.tcs)
-        XLog.d("insurance=======> " + quotEntity.insurance)
-        XLog.d("net_amount=======> " + quotEntity.net_amount)
-        XLog.d("remarks=======> " + quotEntity.remarks)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("=====================================================================")
+        Timber.d("==============Sync Edit Quot. Input Params (Logout Sync)====================")
+        Timber.d("shop id=======> " + quotEntity.shop_id)
+        Timber.d("quot. date=======> " + quotEntity.date)
+        Timber.d("quot. id=======> " + quotEntity.quo_id)
+        Timber.d("quot. no=======> " + quotEntity.quo_no)
+        Timber.d("hypothecation=======> " + quotEntity.hypothecation)
+        Timber.d("account_no=======> " + quotEntity.account_no)
+        Timber.d("model_id=======> " + quotEntity.model_id)
+        Timber.d("bs_id=======> " + quotEntity.bs_id)
+        Timber.d("gearbox=======> " + quotEntity.gearbox)
+        Timber.d("number1=======> " + quotEntity.number1)
+        Timber.d("value1=======> " + quotEntity.value1)
+        Timber.d("value2=======> " + quotEntity.value2)
+        Timber.d("tyres1=======> " + quotEntity.tyres1)
+        Timber.d("number2=======> " + quotEntity.number2)
+        Timber.d("value3=======> " + quotEntity.value3)
+        Timber.d("value4=======> " + quotEntity.value4)
+        Timber.d("tyres2=======> " + quotEntity.tyres2)
+        Timber.d("amount=======> " + quotEntity.amount)
+        Timber.d("discount=======> " + quotEntity.discount)
+        Timber.d("cgst=======> " + quotEntity.cgst)
+        Timber.d("sgst=======> " + quotEntity.sgst)
+        Timber.d("tcs=======> " + quotEntity.tcs)
+        Timber.d("insurance=======> " + quotEntity.insurance)
+        Timber.d("net_amount=======> " + quotEntity.net_amount)
+        Timber.d("remarks=======> " + quotEntity.remarks)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("=====================================================================")
 
         progress_wheel.spin()
         val repository = QuotationRepoProvider.provideBSListRepository()
@@ -4049,7 +4049,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("EDIT QUOT. DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("EDIT QUOT. DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()?.quotDao()?.updateIsEdit(1, quotEntity.quo_id!!)
                             }
@@ -4080,7 +4080,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("EDIT QUOT. DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("EDIT QUOT. DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
 
                             i++
@@ -4143,15 +4143,15 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     //=====================================================UPDATE TEAM SHOP ADDRESS===========================================================
     private fun callUpdateAddressApi(team: MemberShopEntity, teamList: ArrayList<MemberShopEntity>) {
-        XLog.d("==============Sync Team Shop Input Params (Logout Sync)====================")
-        XLog.d("shop id=======> " + team.shop_id)
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("shop_lat=======> " + team.shop_lat)
-        XLog.d("shop_long=======> " + team.shop_long)
-        XLog.d("shop_address=======> " + team.shop_address)
-        XLog.d("shop_pincode=======> " + team.shop_pincode)
-        XLog.d("isAddressUpdated=======> 1")
-        XLog.d("===========================================================================")
+        Timber.d("==============Sync Team Shop Input Params (Logout Sync)====================")
+        Timber.d("shop id=======> " + team.shop_id)
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("shop_lat=======> " + team.shop_lat)
+        Timber.d("shop_long=======> " + team.shop_long)
+        Timber.d("shop_address=======> " + team.shop_address)
+        Timber.d("shop_pincode=======> " + team.shop_pincode)
+        Timber.d("isAddressUpdated=======> 1")
+        Timber.d("===========================================================================")
 
         progress_wheel.spin()
         val repository = ShopAddressUpdateRepoProvider.provideShopAddressUpdateRepo()
@@ -4173,7 +4173,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("UPDATE ADDRESS DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("UPDATE ADDRESS DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()?.memberShopDao()?.updateIsUploaded(true, team.shop_id!!)
                             }
@@ -4204,7 +4204,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("UPDATE ADDRESS DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("UPDATE ADDRESS DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
 
                             i++
@@ -4268,19 +4268,19 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     //=====================================================ADD TIMESHEET===========================================================
     private fun callAddTimesheetApi(timeSheet: TimesheetListEntity, list: List<TimesheetListEntity>) {
-        XLog.d("==============Sync Timesheet Input Params (Logout Sync)====================")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("date=======> " + timeSheet.date)
-        XLog.d("client_id=======> " + timeSheet.client_id)
-        XLog.d("project_id=======> " + timeSheet.project_id)
-        XLog.d("activity_id=======> " + timeSheet.activity_id)
-        XLog.d("product_id=======> " + timeSheet.product_id)
-        XLog.d("time=======> " + timeSheet.time)
-        XLog.d("comments=======> " + timeSheet.comments)
-        XLog.d("timesheet_id=======> " + timeSheet.timesheet_id)
-        XLog.d("image=======> " + timeSheet.image)
-        XLog.d("===========================================================================")
+        Timber.d("==============Sync Timesheet Input Params (Logout Sync)====================")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("date=======> " + timeSheet.date)
+        Timber.d("client_id=======> " + timeSheet.client_id)
+        Timber.d("project_id=======> " + timeSheet.project_id)
+        Timber.d("activity_id=======> " + timeSheet.activity_id)
+        Timber.d("product_id=======> " + timeSheet.product_id)
+        Timber.d("time=======> " + timeSheet.time)
+        Timber.d("comments=======> " + timeSheet.comments)
+        Timber.d("timesheet_id=======> " + timeSheet.timesheet_id)
+        Timber.d("image=======> " + timeSheet.image)
+        Timber.d("===========================================================================")
 
         progress_wheel.spin()
 
@@ -4296,7 +4296,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as BaseResponse
-                                XLog.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()?.timesheetDao()?.updateIsUploaded(true, timeSheet.timesheet_id!!)
@@ -4328,7 +4328,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
 
                                 i++
@@ -4364,7 +4364,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as BaseResponse
-                                XLog.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()?.timesheetDao()?.updateIsUploaded(true, timeSheet.timesheet_id!!)
@@ -4396,7 +4396,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
 
                                 i++
@@ -4468,16 +4468,16 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     //========================================================Task================================================================//
 
     private fun callAddTaskApi(task: TaskEntity, taskList: ArrayList<TaskEntity>) {
-        XLog.d("==============Sync Add Task Input Params (Logout Sync)====================")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("date=======> " + task.date)
-        XLog.d("task_id=======> " + task.task_id)
-        XLog.d("task_name=======> " + task.task_name)
-        XLog.d("details=======> " + task.details)
-        XLog.d("isCompleted=======> " + task.isCompleted)
-        XLog.d("eventId=======> " + task.eventId)
-        XLog.d("===================================================================")
+        Timber.d("==============Sync Add Task Input Params (Logout Sync)====================")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("date=======> " + task.date)
+        Timber.d("task_id=======> " + task.task_id)
+        Timber.d("task_name=======> " + task.task_name)
+        Timber.d("details=======> " + task.details)
+        Timber.d("isCompleted=======> " + task.isCompleted)
+        Timber.d("eventId=======> " + task.eventId)
+        Timber.d("===================================================================")
 
         val taskInput = AddTaskInputModel(Pref.session_token!!, Pref.user_id!!, task.task_id!!, task.date!!, task.task_name!!,
                 task.details!!, task.isCompleted, task.eventId)
@@ -4490,7 +4490,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("ADD TASK: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("ADD TASK: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                             progress_wheel.stopSpinning()
 
@@ -4555,7 +4555,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("ADD TASK: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("ADD TASK: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
 
                             i++
@@ -4615,12 +4615,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun callStatusUpdateApi(task: TaskEntity, statusList: ArrayList<TaskEntity>) {
-        XLog.d("============Update Task Status Input Params (Task List)===========")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("task_id=======> " + task.task_id)
-        XLog.d("isCompleted=======> " + task.isCompleted)
-        XLog.d("===================================================================")
+        Timber.d("============Update Task Status Input Params (Task List)===========")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("task_id=======> " + task.task_id)
+        Timber.d("isCompleted=======> " + task.isCompleted)
+        Timber.d("===================================================================")
 
         progress_wheel.spin()
         val repository = TaskRepoProvider.taskRepoProvider()
@@ -4630,7 +4630,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("UPDATE TASK STATUS: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("UPDATE TASK STATUS: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                             progress_wheel.stopSpinning()
 
@@ -4664,7 +4664,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("UPDATE TASK STATUS: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("UPDATE TASK STATUS: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
 
                             i++
@@ -4747,7 +4747,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
-                            XLog.d("SYNC DOCUMENT RESPONSE=======> " + response.status)
+                            Timber.d("SYNC DOCUMENT RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 list.forEach {
@@ -4769,7 +4769,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("SYNC DOCUMENT ERROR=======> " + error.localizedMessage)
+                            Timber.d("SYNC DOCUMENT ERROR=======> " + error.localizedMessage)
 
                             stopAnimation(doc_sync_img)
                             doc_tick_img.visibility = View.VISIBLE
@@ -4797,10 +4797,10 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         mContext.stopService(intent)
 
         SendBrod.stopBrod(mContext)
-        XLog.d("==============checkToCallActivity (Logout Sync)====================" + "   MonitorService Stop , MonitorBrodcastStop")
+        Timber.d("==============checkToCallActivity (Logout Sync)====================" + "   MonitorService Stop , MonitorBrodcastStop")
 
         try{
-            XLog.d("==Logout Sync " + "   WorkManager stop")
+            Timber.d("==Logout Sync " + "   WorkManager stop")
             WorkManager.getInstance(mContext).cancelAllWork()
             WorkManager.getInstance(mContext).cancelAllWorkByTag("workerTag")
         }catch (ex:Exception){
@@ -4859,27 +4859,27 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     //=====================================================ADD ACTIVITY===========================================================
     private fun callAddActivityApi(activity: ActivityEntity, list: ArrayList<ActivityEntity>) {
-        XLog.d("==============Sync Activity Input Params (Logout Sync)====================")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("id=======> " + activity.activity_id)
-        XLog.d("party_id=======> " + activity.party_id)
-        XLog.d("details=======> " + activity.details)
-        XLog.d("date=======> " + activity.date)
-        XLog.d("time=======> " + activity.time)
-        XLog.d("name=======> " + activity.name)
-        XLog.d("time=======> " + activity.time)
-        XLog.d("activity_id=======> " + activity.activity_dropdown_id)
-        XLog.d("type_id=======> " + activity.type_id)
-        XLog.d("product_id=======> " + activity.product_id)
-        XLog.d("subject=======> " + activity.subject)
-        XLog.d("details=======> " + activity.details)
-        XLog.d("duration=======> " + activity.duration)
-        XLog.d("priority_id=======> " + activity.priority_id)
-        XLog.d("due_date=======> " + activity.due_date)
-        XLog.d("due_time=======> " + activity.due_time)
-        XLog.d("attachments=======> " + activity.attachments)
-        XLog.d("========================================================================")
+        Timber.d("==============Sync Activity Input Params (Logout Sync)====================")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("id=======> " + activity.activity_id)
+        Timber.d("party_id=======> " + activity.party_id)
+        Timber.d("details=======> " + activity.details)
+        Timber.d("date=======> " + activity.date)
+        Timber.d("time=======> " + activity.time)
+        Timber.d("name=======> " + activity.name)
+        Timber.d("time=======> " + activity.time)
+        Timber.d("activity_id=======> " + activity.activity_dropdown_id)
+        Timber.d("type_id=======> " + activity.type_id)
+        Timber.d("product_id=======> " + activity.product_id)
+        Timber.d("subject=======> " + activity.subject)
+        Timber.d("details=======> " + activity.details)
+        Timber.d("duration=======> " + activity.duration)
+        Timber.d("priority_id=======> " + activity.priority_id)
+        Timber.d("due_date=======> " + activity.due_date)
+        Timber.d("due_time=======> " + activity.due_time)
+        Timber.d("attachments=======> " + activity.attachments)
+        Timber.d("========================================================================")
 
         val activityInput = AddActivityInputModel(Pref.session_token!!, Pref.user_id!!, activity.activity_id!!, activity.party_id!!,
                 activity.date!!, activity.time!!, activity.name!!, activity.activity_dropdown_id!!, activity.type_id!!,
@@ -4895,7 +4895,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as BaseResponse
-                                XLog.d("ADD ACTIVITY: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("ADD ACTIVITY: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()?.activDao()?.updateIsUploaded(true, activity.activity_id!!)
                                 }
@@ -4912,7 +4912,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 }
 
                             }, { error ->
-                                XLog.d("ADD ACTIVITY: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("ADD ACTIVITY: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 //progress_wheel.stopSpinning()
                                 error.printStackTrace()
 
@@ -4947,7 +4947,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as BaseResponse
-                                XLog.d("ADD ACTIVITY: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("ADD ACTIVITY: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()?.activDao()?.updateIsUploaded(true, activity.activity_id!!)
                                 }
@@ -4964,7 +4964,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 }
 
                             }, { error ->
-                                XLog.d("ADD ACTIVITY: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("ADD ACTIVITY: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 //progress_wheel.stopSpinning()
                                 error.printStackTrace()
 
@@ -5044,19 +5044,19 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         chemistVisit.pob_product_list = podProductList
 
 
-        XLog.d("======SYNC CHEMIST VISIT INPUT PARAMS (LOGOUT SYNC)======")
-        XLog.d("USER ID===> " + chemistVisit.user_id)
-        XLog.d("SESSION ID====> " + chemistVisit.session_token)
-        XLog.d("CHEMIST VISIT ID====> " + chemistVisit.chemist_visit_id)
-        XLog.d("SHOP_ID====> " + chemistVisit.shop_id)
-        XLog.d("IS POB====> " + chemistVisit.isPob)
-        XLog.d("NEXT VISIT DATE====> " + chemistVisit.next_visit_date)
-        XLog.d("VOLUME====> " + chemistVisit.volume)
-        XLog.d("REMARKS====> " + chemistVisit.remarks)
-        XLog.d("REMARKS MR====> " + chemistVisit.remarks_mr)
-        XLog.d("PRODUCT LIST SIZE====> " + chemistVisit.product_list.size)
-        XLog.d("POB PRODUCT LIST SIZE====> " + chemistVisit.pob_product_list.size)
-        XLog.d("=========================================================")
+        Timber.d("======SYNC CHEMIST VISIT INPUT PARAMS (LOGOUT SYNC)======")
+        Timber.d("USER ID===> " + chemistVisit.user_id)
+        Timber.d("SESSION ID====> " + chemistVisit.session_token)
+        Timber.d("CHEMIST VISIT ID====> " + chemistVisit.chemist_visit_id)
+        Timber.d("SHOP_ID====> " + chemistVisit.shop_id)
+        Timber.d("IS POB====> " + chemistVisit.isPob)
+        Timber.d("NEXT VISIT DATE====> " + chemistVisit.next_visit_date)
+        Timber.d("VOLUME====> " + chemistVisit.volume)
+        Timber.d("REMARKS====> " + chemistVisit.remarks)
+        Timber.d("REMARKS MR====> " + chemistVisit.remarks_mr)
+        Timber.d("PRODUCT LIST SIZE====> " + chemistVisit.product_list.size)
+        Timber.d("POB PRODUCT LIST SIZE====> " + chemistVisit.pob_product_list.size)
+        Timber.d("=========================================================")
 
         val repository = ActivityRepoProvider.activityRepoProvider()
         progress_wheel.spin()
@@ -5068,7 +5068,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
 
-                            XLog.d("SYNC CHEMIST VISIT DETAILS : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + response.message)
+                            Timber.d("SYNC CHEMIST VISIT DETAILS : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + response.message)
                             BaseActivity.isApiInitiated = false
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.addChemistDao().updateIsUploaded(true, chemistVisit.chemist_visit_id)
@@ -5096,7 +5096,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
                             BaseActivity.isApiInitiated = false
-                            XLog.d("SYNC CHEMIST VISIT DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
+                            Timber.d("SYNC CHEMIST VISIT DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
 
                             i++
                             if (i < list.size) {
@@ -5241,31 +5241,31 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         }
         docVisit.sample_product_list = sampleProductList
 
-        XLog.d("======SYNC DOCTOR VISIT INPUT PARAMS (SYNC ALL)======")
-        XLog.d("USER ID===> " + docVisit.user_id)
-        XLog.d("SESSION ID====> " + docVisit.session_token)
-        XLog.d("DOCTOR VISIT ID====> " + docVisit.doc_visit_id)
-        XLog.d("SHOP_ID====> " + docVisit.shop_id)
-        XLog.d("AMOUNT====> " + docVisit.amount)
-        XLog.d("NEXT VISIT DATE====> " + docVisit.next_visit_date)
-        XLog.d("VOLUME====> " + docVisit.crm_volume)
-        XLog.d("DOCTOR REMARKS====> " + docVisit.doc_remarks)
-        XLog.d("REMARKS MR====> " + docVisit.remarks_mr)
-        XLog.d("FROM DATE====> " + docVisit.from_cme_date)
-        XLog.d("TO DATE====> " + docVisit.to_crm_date)
-        XLog.d("IS GIFT====> " + docVisit.is_gift)
-        XLog.d("IS CRM====> " + docVisit.is_crm)
-        XLog.d("IS MONEY====> " + docVisit.is_money)
-        XLog.d("IS PRESCRIBER====> " + docVisit.is_prescriber)
-        XLog.d("IS QTY====> " + docVisit.is_qty)
-        XLog.d("IS SAMPLE====> " + docVisit.is_sample)
-        XLog.d("QTY VOL TEXT====> " + docVisit.qty_vol_text)
-        XLog.d("WHAT====> " + docVisit.what)
-        XLog.d("WHICH====> " + docVisit.which_kind)
-        XLog.d("PRODUCT LIST SIZE====> " + docVisit.product_list.size)
-        XLog.d("QTY PRODUCT LIST SIZE====> " + docVisit.qty_product_list.size)
-        XLog.d("SAMPLE PRODUCT LIST SIZE====> " + docVisit.sample_product_list.size)
-        XLog.d("=========================================================")
+        Timber.d("======SYNC DOCTOR VISIT INPUT PARAMS (SYNC ALL)======")
+        Timber.d("USER ID===> " + docVisit.user_id)
+        Timber.d("SESSION ID====> " + docVisit.session_token)
+        Timber.d("DOCTOR VISIT ID====> " + docVisit.doc_visit_id)
+        Timber.d("SHOP_ID====> " + docVisit.shop_id)
+        Timber.d("AMOUNT====> " + docVisit.amount)
+        Timber.d("NEXT VISIT DATE====> " + docVisit.next_visit_date)
+        Timber.d("VOLUME====> " + docVisit.crm_volume)
+        Timber.d("DOCTOR REMARKS====> " + docVisit.doc_remarks)
+        Timber.d("REMARKS MR====> " + docVisit.remarks_mr)
+        Timber.d("FROM DATE====> " + docVisit.from_cme_date)
+        Timber.d("TO DATE====> " + docVisit.to_crm_date)
+        Timber.d("IS GIFT====> " + docVisit.is_gift)
+        Timber.d("IS CRM====> " + docVisit.is_crm)
+        Timber.d("IS MONEY====> " + docVisit.is_money)
+        Timber.d("IS PRESCRIBER====> " + docVisit.is_prescriber)
+        Timber.d("IS QTY====> " + docVisit.is_qty)
+        Timber.d("IS SAMPLE====> " + docVisit.is_sample)
+        Timber.d("QTY VOL TEXT====> " + docVisit.qty_vol_text)
+        Timber.d("WHAT====> " + docVisit.what)
+        Timber.d("WHICH====> " + docVisit.which_kind)
+        Timber.d("PRODUCT LIST SIZE====> " + docVisit.product_list.size)
+        Timber.d("QTY PRODUCT LIST SIZE====> " + docVisit.qty_product_list.size)
+        Timber.d("SAMPLE PRODUCT LIST SIZE====> " + docVisit.sample_product_list.size)
+        Timber.d("=========================================================")
 
         val repository = ActivityRepoProvider.activityRepoProvider()
         progress_wheel.spin()
@@ -5276,7 +5276,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
-                            XLog.d("SYNC DOCTOR VISIT DETAILS : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + response.message)
+                            Timber.d("SYNC DOCTOR VISIT DETAILS : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + response.message)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.addDocDao().updateIsUploaded(true, docVisit.doc_visit_id)
@@ -5408,7 +5408,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
                             BaseActivity.isApiInitiated = false
-                            XLog.d("SYNC DOCTOR VISIT DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
+                            Timber.d("SYNC DOCTOR VISIT DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
 
                             i++
                             if (i < list.size) {
@@ -5485,7 +5485,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     .subscribe({ result ->
                         progress_wheel.stopSpinning()
                         var response = result as GetConcurrentUserResponse
-                        XLog.d("deleteConcurrentUserDtls : " + "response : " + response.status + "Time : " + AppUtils.getCurrentDateTime())
+                        Timber.d("deleteConcurrentUserDtls : " + "response : " + response.status + "Time : " + AppUtils.getCurrentDateTime())
                         if (response.status == NetworkConstant.SUCCESS) {
 //                            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                             callLogshareApi()
@@ -5497,7 +5497,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     }, { error ->
                         progress_wheel.stopSpinning()
                         error.printStackTrace()
-                        XLog.d("deleteConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+                        Timber.d("deleteConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
 //                        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                         callLogshareApi()
 
@@ -5506,7 +5506,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         }catch (ex:Exception){
             progress_wheel.stopSpinning()
             ex.printStackTrace()
-            XLog.d("deleteConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
+            Timber.d("deleteConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
 //            calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             callLogshareApi()
 
@@ -5516,6 +5516,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
     //----------------------------------share Log File----------------------------------//
     @SuppressLint("NewApi")
     private fun callLogshareApi(){
+        Pref.LogoutWithLogFile = false
         if(Pref.LogoutWithLogFile){
             try{
                 val filesForZip: Array<String> = arrayOf(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path)
@@ -5547,16 +5548,16 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribeOn(Schedulers.io())
                                 .subscribe({ result ->
-                                    XLog.d("Logshare : RESPONSE " + result.status)
+                                    Timber.d("Logshare : RESPONSE " + result.status)
                                     if (result.status == NetworkConstant.SUCCESS){
-                                        //XLog.d("Return : RESPONSE URL " + result.file_url +  " " +Pref.user_name)
+                                        //Timber.d("Return : RESPONSE URL " + result.file_url +  " " +Pref.user_name)
                                     }
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
                                 },{error ->
                                     if (error == null) {
-                                        XLog.d("Logshare : ERROR " + "UNEXPECTED ERROR IN Log share API")
+                                        Timber.d("Logshare : ERROR " + "UNEXPECTED ERROR IN Log share API")
                                     } else {
-                                        XLog.d("Logshare : ERROR " + error.localizedMessage)
+                                        Timber.d("Logshare : ERROR " + error.localizedMessage)
                                         error.printStackTrace()
                                     }
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
@@ -5568,11 +5569,11 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     }
                 }
             }catch (ex:Exception){
-                XLog.d("Logshare : log.zip error " + ex.message)
+                Timber.d("Logshare : log.zip error " + ex.message)
                 calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             }
         }else{
-            XLog.d("Logshare : false ")
+            Timber.d("Logshare : false ")
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
         }
     }
@@ -5602,7 +5603,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 //                    val distance = LocationWizard.getDistance(latestLat.toDouble(), latestLong.toDouble(),
 //                            Pref.latitude!!.toDouble(), Pref.longitude!!.toDouble())
 //
-//                    XLog.d("LOGOUT : DISTANCE=====> $distance")
+//                    Timber.d("LOGOUT : DISTANCE=====> $distance")
 //                }*/
 //
 //                /*val distance = LocationWizard.getDistance(previousLat.toDouble(), previousLong.toDouble(),
@@ -5635,17 +5636,17 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 location = "Unknown"
         }
 
-        XLog.d("LOGOUT : " + "REQUEST : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
-        XLog.d("=========LOGOUT INPUT PARAMS========")
-        XLog.d("LOGOUT : USER ID===> $user_id")
-        XLog.d("LOGOUT : SESSION ID==> $session_id")
-        XLog.d("LOGOUT : LAT====> " + Pref.logout_latitude)
-        XLog.d("LOGOUT : LONG=====> " + Pref.logout_longitude)
-        XLog.d("LOGOUT : DISTANCE=====> $distance")
-        XLog.d("LOGOUT : LOGOUT TIME====> " + AppUtils.getCurrentDateTime())
-        XLog.d("LOGOUT : IS AUTO LOGOUT===> 0")
-        XLog.d("LOGOUT : LOCATION====> $location")
-        XLog.d("=====================================")
+        Timber.d("LOGOUT : " + "REQUEST : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+        Timber.d("=========LOGOUT INPUT PARAMS========")
+        Timber.d("LOGOUT : USER ID===> $user_id")
+        Timber.d("LOGOUT : SESSION ID==> $session_id")
+        Timber.d("LOGOUT : LAT====> " + Pref.logout_latitude)
+        Timber.d("LOGOUT : LONG=====> " + Pref.logout_longitude)
+        Timber.d("LOGOUT : DISTANCE=====> $distance")
+        Timber.d("LOGOUT : LOGOUT TIME====> " + AppUtils.getCurrentDateTime())
+        Timber.d("LOGOUT : IS AUTO LOGOUT===> 0")
+        Timber.d("LOGOUT : LOCATION====> $location")
+        Timber.d("=====================================")
 
 
         var apiHitDateTime = AppUtils.getCurrentDateTime()
@@ -5670,7 +5671,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val logoutResponse = result as BaseResponse
-                            XLog.d("LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
+                            Timber.d("LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                             if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                 (mContext as DashboardActivity).isChangedPassword = false
                                 Pref.tempDistance = "0.0"
@@ -5711,7 +5712,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
-                            XLog.d("LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(error.localizedMessage)
 
                             if ((mContext as DashboardActivity).isChangedPassword) {
@@ -5968,7 +5969,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         mContext.stopService(intent)
 
         SendBrod.stopBrod(mContext)
-        XLog.d("==============logoutYesClick (Logout Sync)====================" + "   MonitorService Stop , MonitorBrodcastStop")
+        Timber.d("==============logoutYesClick (Logout Sync)====================" + "   MonitorService Stop , MonitorBrodcastStop")
 
         val list = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationNotUploaded(false)
 
@@ -5989,7 +5990,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private fun syncLocationActivity(list: List<UserLocationDataEntity>) {
 
-        XLog.d("syncLocationActivity Logout : ENTER")
+        Timber.d("syncLocationActivity Logout : ENTER")
 
 
         if (Pref.user_id.isNullOrEmpty())
@@ -6188,8 +6189,8 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         for (i in apiLocationList.indices) {
             if (!apiLocationList[i].isUploaded) {
 
-                XLog.e("Final Home Duration (Location Fuzed Service)=================> ${apiLocationList[i].home_duration}")
-                XLog.e("Time (Location Fuzed Service)=================> ${apiLocationList[i].time} ${apiLocationList[i].meridiem}")
+                Timber.e("Final Home Duration (Location Fuzed Service)=================> ${apiLocationList[i].home_duration}")
+                Timber.e("Time (Location Fuzed Service)=================> ${apiLocationList[i].time} ${apiLocationList[i].meridiem}")
 
 
                 val locationData = LocationData()
@@ -6221,7 +6222,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             locationUpdateReq.location_details = locationList
             val repository = LocationUpdateRepositoryProviders.provideLocationUpdareRepository()
 
-            XLog.d("syncLocationActivity Logout : REQUEST")
+            Timber.d("syncLocationActivity Logout : REQUEST")
             progress_wheel.spin()
 
             BaseActivity.compositeDisposable.add(
@@ -6232,7 +6233,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             .subscribe({ result ->
                                 val updateShopActivityResponse = result as BaseResponse
 
-                                XLog.d("syncLocationActivity Logout : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
+                                Timber.d("syncLocationActivity Logout : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
 
                                 if (updateShopActivityResponse.status == NetworkConstant.SUCCESS) {
 
@@ -6278,15 +6279,15 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 getUnknownList()
 
                                 if (error == null) {
-                                    XLog.d("syncLocationActivity Logout : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
+                                    Timber.d("syncLocationActivity Logout : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
                                 } else {
-                                    XLog.d("syncLocationActivity Logout : ERROR : " + error.localizedMessage)
+                                    Timber.d("syncLocationActivity Logout : ERROR : " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                             })
             )
         } else {
-            XLog.e("=======locationList is empty (Logout)=========")
+            Timber.e("=======locationList is empty (Logout)=========")
             AppUtils.isLocationActivityUpdating = false
             //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             getUnknownList()
@@ -6362,7 +6363,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         val unSyncData = AppDatabase.getDBInstance()?.batteryNetDao()?.getDataSyncStateWise(false)
 
         if (unSyncData == null || unSyncData.isEmpty()) {
-            XLog.e("=======Appinfo list is empty (Logout Sync)=========")
+            Timber.e("=======Appinfo list is empty (Logout Sync)=========")
             //calllogoutApi(Pref.user_id!!, Pref.session_token!!)
             deleteConcurrentUserDtls()
             return
@@ -6387,12 +6388,12 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         val appInfoInput = AppInfoInputModel(Pref.session_token!!, Pref.user_id!!, appInfoList,totalVisitRevisitCount.toString(),totalVisitRevisitCountSynced.toString(),totalVisitRevisitCountUnSynced.toString())
 
-        XLog.d("============App Info Input(Logout Sync)===========")
-        XLog.d("session_token==========> " + appInfoInput.session_token)
-        XLog.d("user_id==========> " + appInfoInput.user_id)
-        XLog.d("app_info_list.size==========> " + appInfoInput.app_info_list?.size)
-        XLog.d("powerSaverStatus==========> " + Pref.PowerSaverStatus)
-        XLog.d("==================================================")
+        Timber.d("============App Info Input(Logout Sync)===========")
+        Timber.d("session_token==========> " + appInfoInput.session_token)
+        Timber.d("user_id==========> " + appInfoInput.user_id)
+        Timber.d("app_info_list.size==========> " + appInfoInput.app_info_list?.size)
+        Timber.d("powerSaverStatus==========> " + Pref.PowerSaverStatus)
+        Timber.d("==================================================")
 
         progress_wheel.spin()
         val repository = LocationRepoProvider.provideLocationRepository()
@@ -6404,7 +6405,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             val response = result as BaseResponse
 
-                            XLog.d("App Info : RESPONSE : " + response.status + ":" + response.message)
+                            Timber.d("App Info : RESPONSE : " + response.status + ":" + response.message)
                             AppUtils.isAppInfoUpdating = false
 
                             if (response.status == NetworkConstant.SUCCESS) {
@@ -6428,7 +6429,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             AppUtils.isAppInfoUpdating = false
-                            XLog.d("App Info : ERROR : " + error.localizedMessage)
+                            Timber.d("App Info : ERROR : " + error.localizedMessage)
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             //calllogoutApi(Pref.user_id!!, Pref.session_token!!)

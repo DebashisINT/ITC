@@ -67,7 +67,7 @@ import com.breezefsmdsm.widgets.AppCustomTextView
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.squareup.picasso.*
 import com.squareup.picasso.Picasso.RequestTransformer
 import com.themechangeapp.pickimage.PermissionHelper
@@ -1285,7 +1285,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
             newFile = processImage.ProcessImageSelfie()
             uiThread {
                 if (newFile != null) {
-                    XLog.e("=========Image from new technique==========")
+                    Timber.e("=========Image from new technique==========")
                     val fileSize = AppUtils.getCompressImage(filePath)
                     var tyy = filePath
 
@@ -1344,7 +1344,7 @@ class ProtoRegistrationFragment : BaseFragment(), View.OnClickListener {
 
              uiThread {
                  if (newFile != null) {
-                     XLog.e("=========Image from new technique==========")
+                     Timber.e("=========Image from new technique==========")
                      //reimbursementEditPic(newFile!!.length(), newFile?.absolutePath!!)
                  } else {
                      // Image compression

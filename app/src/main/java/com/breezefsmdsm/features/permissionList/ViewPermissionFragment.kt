@@ -26,7 +26,7 @@ import com.breezefsmdsm.app.utils.FTStorageUtils
 import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.test.viewPermission.AdapterViewPermission
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import kotlinx.android.synthetic.main.fragment_view_permission.*
 import java.io.File
 import java.util.*
@@ -247,10 +247,10 @@ class ViewPermissionFragment: BaseFragment(), View.OnClickListener {
         permList = (permList + permListDenied).toMutableList()
 
         for(i in 0..permList.size-1){
-            XLog.d("Permission Name"+permList.get(i).permissionName + " Status : ")
+            Timber.d("Permission Name"+permList.get(i).permissionName + " Status : ")
         }
         for(i in 0..permListDenied.size-1){
-            XLog.d("Permission Name"+permListDenied.get(i).permissionName + " Status : ")
+            Timber.d("Permission Name"+permListDenied.get(i).permissionName + " Status : ")
         }
 
 

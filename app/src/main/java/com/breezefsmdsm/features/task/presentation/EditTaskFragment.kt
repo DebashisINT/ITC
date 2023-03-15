@@ -31,7 +31,7 @@ import com.breezefsmdsm.features.task.api.TaskRepoProvider
 import com.breezefsmdsm.features.task.model.AddTaskInputModel
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -231,16 +231,16 @@ class EditTaskFragment : BaseFragment(), View.OnClickListener {
             return
         }
 
-        XLog.d("==============Add Task Input Params (Edit Task)====================")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("date=======> " + task?.date)
-        XLog.d("task_id=======> " + task?.task_id)
-        XLog.d("task_name=======> " + task?.task_name)
-        XLog.d("details=======> " + task?.details)
-        XLog.d("isCompleted=======> " + task?.isCompleted)
-        XLog.d("eventId=======> " + task?.eventId)
-        XLog.d("===================================================================")
+        Timber.d("==============Add Task Input Params (Edit Task)====================")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("date=======> " + task?.date)
+        Timber.d("task_id=======> " + task?.task_id)
+        Timber.d("task_name=======> " + task?.task_name)
+        Timber.d("details=======> " + task?.details)
+        Timber.d("isCompleted=======> " + task?.isCompleted)
+        Timber.d("eventId=======> " + task?.eventId)
+        Timber.d("===================================================================")
 
         val taskInput = AddTaskInputModel(Pref.session_token!!, Pref.user_id!!, task?.task_id!!, task?.date!!, task?.task_name!!,
                 task?.details!!, task?.isCompleted!!, task?.eventId!!)
@@ -253,7 +253,7 @@ class EditTaskFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("ADD TASK: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("ADD TASK: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                             progress_wheel.stopSpinning()
 
@@ -268,7 +268,7 @@ class EditTaskFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("ADD TASK: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("ADD TASK: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage("Task edited successfully")
                             (mContext as DashboardActivity).onBackPressed()
@@ -283,16 +283,16 @@ class EditTaskFragment : BaseFragment(), View.OnClickListener {
             return
         }
 
-        XLog.d("==============Edit Task Input Params (Edit Task)====================")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("date=======> " + task?.date)
-        XLog.d("task_id=======> " + task?.task_id)
-        XLog.d("task_name=======> " + task?.task_name)
-        XLog.d("details=======> " + task?.details)
-        XLog.d("isCompleted=======> " + task?.isCompleted)
-        XLog.d("eventId=======> " + task?.eventId)
-        XLog.d("===================================================================")
+        Timber.d("==============Edit Task Input Params (Edit Task)====================")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("date=======> " + task?.date)
+        Timber.d("task_id=======> " + task?.task_id)
+        Timber.d("task_name=======> " + task?.task_name)
+        Timber.d("details=======> " + task?.details)
+        Timber.d("isCompleted=======> " + task?.isCompleted)
+        Timber.d("eventId=======> " + task?.eventId)
+        Timber.d("===================================================================")
 
         val taskInput = AddTaskInputModel(Pref.session_token!!, Pref.user_id!!, task?.task_id!!, task?.date!!, task?.task_name!!,
                 task?.details!!, task?.isCompleted!!, task?.eventId!!)
@@ -305,7 +305,7 @@ class EditTaskFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("EDIT TASK: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("EDIT TASK: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                             progress_wheel.stopSpinning()
 
@@ -325,7 +325,7 @@ class EditTaskFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("EDIT TASK: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("EDIT TASK: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })

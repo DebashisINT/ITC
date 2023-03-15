@@ -40,7 +40,7 @@ import com.breezefsmdsm.features.timesheet.api.TimeSheetRepoProvider
 import com.breezefsmdsm.features.timesheet.model.*
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -449,7 +449,7 @@ class AddTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener, 
 
             uiThread {
                 if (newFile != null) {
-                    XLog.e("=========Image from new technique==========")
+                    Timber.e("=========Image from new technique==========")
                     timesheetPic(newFile!!.length(), newFile?.absolutePath!!)
                 } else {
                     // Image compression
@@ -562,19 +562,19 @@ class AddTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener, 
             return
         }
 
-        XLog.d("==============Add Timesheet Input Params (Add Timesheet)====================")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("date=======> " + timeSheetEntity.date)
-        XLog.d("client_id=======> " + timeSheetEntity.client_id)
-        XLog.d("project_id=======> " + timeSheetEntity.project_id)
-        XLog.d("activity_id=======> " + timeSheetEntity.activity_id)
-        XLog.d("product_id=======> " + timeSheetEntity.product_id)
-        XLog.d("time=======> " + timeSheetEntity.time)
-        XLog.d("comments=======> " + timeSheetEntity.comments)
-        XLog.d("timesheet_id=======> " + timeSheetEntity.timesheet_id)
-        XLog.d("image=======> " + timeSheetEntity.image)
-        XLog.d("===========================================================================")
+        Timber.d("==============Add Timesheet Input Params (Add Timesheet)====================")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("date=======> " + timeSheetEntity.date)
+        Timber.d("client_id=======> " + timeSheetEntity.client_id)
+        Timber.d("project_id=======> " + timeSheetEntity.project_id)
+        Timber.d("activity_id=======> " + timeSheetEntity.activity_id)
+        Timber.d("product_id=======> " + timeSheetEntity.product_id)
+        Timber.d("time=======> " + timeSheetEntity.time)
+        Timber.d("comments=======> " + timeSheetEntity.comments)
+        Timber.d("timesheet_id=======> " + timeSheetEntity.timesheet_id)
+        Timber.d("image=======> " + timeSheetEntity.image)
+        Timber.d("===========================================================================")
 
         var comment = ""
 
@@ -594,7 +594,7 @@ class AddTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener, 
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as BaseResponse
-                                XLog.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                                 progress_wheel.stopSpinning()
 
@@ -614,7 +614,7 @@ class AddTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener, 
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 (mContext as DashboardActivity).showSnackMessage("Timesheet added successfully")
                                 (mContext as DashboardActivity).onBackPressed()
@@ -629,7 +629,7 @@ class AddTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener, 
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as BaseResponse
-                                XLog.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("ADD TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                                 progress_wheel.stopSpinning()
 
@@ -649,7 +649,7 @@ class AddTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener, 
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("ADD TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 (mContext as DashboardActivity).showSnackMessage("Timesheet added successfully")
                                 (mContext as DashboardActivity).onBackPressed()

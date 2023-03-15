@@ -30,7 +30,7 @@ import com.breezefsmdsm.features.addAttendence.model.WorkTypeResponseModel
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -294,14 +294,14 @@ class UpdateWorkTypeFragment : Fragment(), View.OnClickListener {
 
             BaseActivity.isApiInitiated = true
 
-            XLog.d("=========Update Work Type Input Params==========")
-            XLog.d("session_token======> " + Pref.session_token)
-            XLog.d("user_id========> " + Pref.user_id)
-            XLog.d("workTypeId=======> $workTypeId")
-            XLog.d("work_desc=======> " + et_work_type_text.text.toString().trim())
-            XLog.d("distributor_name=======> " + et_dd_name.text.toString().trim())
-            XLog.d("market_worked=======> " + et_market_worked.text.toString().trim())
-            XLog.d("=================================================")
+            Timber.d("=========Update Work Type Input Params==========")
+            Timber.d("session_token======> " + Pref.session_token)
+            Timber.d("user_id========> " + Pref.user_id)
+            Timber.d("workTypeId=======> $workTypeId")
+            Timber.d("work_desc=======> " + et_work_type_text.text.toString().trim())
+            Timber.d("distributor_name=======> " + et_dd_name.text.toString().trim())
+            Timber.d("market_worked=======> " + et_market_worked.text.toString().trim())
+            Timber.d("=================================================")
 
             val repository = AddAttendenceRepoProvider.addAttendenceRepo()
             progress_wheel.spin()
@@ -315,8 +315,8 @@ class UpdateWorkTypeFragment : Fragment(), View.OnClickListener {
                                 val response = result as BaseResponse
                                 BaseActivity.isApiInitiated = false
 
-                                XLog.d("Update work type Response Code========> " + response.status)
-                                XLog.d("Update work type Response Msg=========> " + response.message)
+                                Timber.d("Update work type Response Code========> " + response.status)
+                                Timber.d("Update work type Response Msg=========> " + response.message)
 
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
 
@@ -357,7 +357,7 @@ class UpdateWorkTypeFragment : Fragment(), View.OnClickListener {
                                 }
 
                             }, { error ->
-                                XLog.d("Update work type Response Msg=========> " + error.message)
+                                Timber.d("Update work type Response Msg=========> " + error.message)
                                 BaseActivity.isApiInitiated = false
                                 progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))

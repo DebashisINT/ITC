@@ -28,7 +28,7 @@ import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.stockCompetetorStock.api.AddCompStockProvider
 import com.breezefsmdsm.features.stockCompetetorStock.model.CompetetorStockData
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
@@ -397,7 +397,7 @@ class AddCompetetorStockFragment: BaseFragment(), View.OnClickListener {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("CompetitorStock/AddCompetitorStock : RESPONSE " + result.status)
+                                Timber.d("CompetitorStock/AddCompetitorStock : RESPONSE " + result.status)
                                 if (result.status == NetworkConstant.SUCCESS){
                                     AppDatabase.getDBInstance()?.competetorStockEntryDao()?.syncShopCompStocktable(currentStock.competitor_stock_id.toString())
                                     AppDatabase.getDBInstance()?.competetorStockEntryProductDao()?.syncShopCompProductable(currentStock.competitor_stock_id.toString())
@@ -405,9 +405,9 @@ class AddCompetetorStockFragment: BaseFragment(), View.OnClickListener {
                                 }
                             },{error ->
                                 if (error == null) {
-                                    XLog.d("CompetitorStock/AddCompetitorStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                                    Timber.d("CompetitorStock/AddCompetitorStock : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                                 } else {
-                                    XLog.d("CompetitorStock/AddCompetitorStock : ERROR " + error.localizedMessage)
+                                    Timber.d("CompetitorStock/AddCompetitorStock : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                             })

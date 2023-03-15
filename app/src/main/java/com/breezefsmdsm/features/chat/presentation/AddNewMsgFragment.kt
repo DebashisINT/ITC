@@ -23,7 +23,7 @@ import com.breezefsmdsm.features.chat.model.GroupUserDataModel
 import com.breezefsmdsm.features.chat.model.GroupUserResponseModel
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -92,7 +92,7 @@ class AddNewMsgFragment : BaseFragment() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as GroupUserResponseModel
-                            XLog.d("Get Group User List STATUS: " + response.status)
+                            Timber.d("Get Group User List STATUS: " + response.status)
                             if (response.status == NetworkConstant.SUCCESS) {
                                 progress_wheel.stopSpinning()
                                 tv_no_data.visibility = View.GONE
@@ -108,7 +108,7 @@ class AddNewMsgFragment : BaseFragment() {
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             if (error != null)
-                                XLog.d("Get Group User List ERROR: " + error.localizedMessage)
+                                Timber.d("Get Group User List ERROR: " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )

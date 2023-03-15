@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
@@ -549,7 +549,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
         if (!TextUtils.isEmpty(Pref.profile_state))
             state_id = Pref.profile_state
 
-        XLog.d("ReimbursementConfigApi Request: \n State id====> " + state_id + ", user id====> " + Pref.user_id!!)
+        Timber.d("ReimbursementConfigApi Request: \n State id====> " + state_id + ", user id====> " + Pref.user_id!!)
 
         val repository = ReimbursementConfigRepoProvider.provideReimbursementConfigRepository()
         progress_wheel.spin()
@@ -560,7 +560,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                         .subscribe({ result ->
 
                             val configResponse = result as ReimbursementConfigResponseModel
-                            XLog.d("ReimbursementConfigApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
+                            Timber.d("ReimbursementConfigApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
 
                             progress_wheel.stopSpinning()
                             if (configResponse.status == NetworkConstant.SUCCESS) {
@@ -583,7 +583,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                             BaseActivity.isApiInitiated = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("ReimbursementConfigApiResponse ERROR: " + error.localizedMessage)
+                            Timber.d("ReimbursementConfigApiResponse ERROR: " + error.localizedMessage)
                         })
         )
     }
@@ -1049,14 +1049,14 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
         inputModel.travel_id = travelId
         inputModel.visittype_id = visitTypeId
 
-        XLog.d("=====Fetch ReimbursementConfigApi Request=====")
-        XLog.d("user_id===> " + inputModel.user_id)
-        XLog.d("state_id===> " + inputModel.state_id)
-        XLog.d("expense_id===> " + inputModel.expense_id)
-        XLog.d("fuel_id===> " + inputModel.fuel_id)
-        XLog.d("travel_id===> " + inputModel.travel_id)
-        XLog.d("visittype_id===> " + inputModel.visittype_id)
-        XLog.d("===============================================")
+        Timber.d("=====Fetch ReimbursementConfigApi Request=====")
+        Timber.d("user_id===> " + inputModel.user_id)
+        Timber.d("state_id===> " + inputModel.state_id)
+        Timber.d("expense_id===> " + inputModel.expense_id)
+        Timber.d("fuel_id===> " + inputModel.fuel_id)
+        Timber.d("travel_id===> " + inputModel.travel_id)
+        Timber.d("visittype_id===> " + inputModel.visittype_id)
+        Timber.d("===============================================")
 
         val repository = ReimbursementConfigFetchRepoProvider.provideFetchReimbursementConfigRepository()
         progress_wheel.spin()
@@ -1067,7 +1067,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                         .subscribe({ result ->
 
                             val configResponse = result as ReimbursementConfigFetchResponseModel
-                            XLog.d("Fetch ReimbursementConfigApiResponse : " + "\n" + "Status===> " + configResponse.status + ", Message===> " + configResponse.message)
+                            Timber.d("Fetch ReimbursementConfigApiResponse : " + "\n" + "Status===> " + configResponse.status + ", Message===> " + configResponse.message)
 
                             progress_wheel.stopSpinning()
                             if (configResponse.status == NetworkConstant.SUCCESS) {
@@ -1099,7 +1099,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                             BaseActivity.isApiInitiated = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("Fetch ReimbursementConfigApiResponse ERROR: " + error.localizedMessage)
+                            Timber.d("Fetch ReimbursementConfigApiResponse ERROR: " + error.localizedMessage)
                         })
         )
     }
@@ -1225,7 +1225,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                         .subscribe({ result ->
 
                             val configResponse = result as BaseResponse
-                            XLog.d("Apply Reimbursement Api Response : " + "\n" + "Status====> " + configResponse.status + ", Message===> " + configResponse.message)
+                            Timber.d("Apply Reimbursement Api Response : " + "\n" + "Status====> " + configResponse.status + ", Message===> " + configResponse.message)
 
                             progress_wheel.stopSpinning()
                             if (configResponse.status == NetworkConstant.SUCCESS) {
@@ -1245,7 +1245,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                             apiIsRunning = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("Apply Reimbursement Api ERROR: " + error.localizedMessage)
+                            Timber.d("Apply Reimbursement Api ERROR: " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )
@@ -1259,7 +1259,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val configResponse = result as BaseResponse
-                            XLog.d("Apply Reimbursement Api Response : " + "\n" + "Status====> " + configResponse.status + ", Message===> " + configResponse.message)
+                            Timber.d("Apply Reimbursement Api Response : " + "\n" + "Status====> " + configResponse.status + ", Message===> " + configResponse.message)
 
                             progress_wheel.stopSpinning()
                             if (configResponse.status == NetworkConstant.SUCCESS) {
@@ -1275,7 +1275,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                             apiIsRunning = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("Apply Reimbursement Api ERROR: " + error.localizedMessage)
+                            Timber.d("Apply Reimbursement Api ERROR: " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )
@@ -1300,7 +1300,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val configResponse = result as BaseResponse
-                            XLog.d("Delete Reimbursement Api Response : " + "\n" + "Status====> " + configResponse.status + ", Message===> " + configResponse.message)
+                            Timber.d("Delete Reimbursement Api Response : " + "\n" + "Status====> " + configResponse.status + ", Message===> " + configResponse.message)
 
                             progress_wheel.stopSpinning()
                             if (configResponse.status == NetworkConstant.SUCCESS) {
@@ -1332,7 +1332,7 @@ class ReimbursementDetailsFragment : BaseFragment(), DateAdapter.onPetSelectedLi
                             apiIsRunning = false
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            XLog.d("Delete Reimbursement Api ERROR: " + error.localizedMessage)
+                            Timber.d("Delete Reimbursement Api ERROR: " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
         )

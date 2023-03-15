@@ -23,7 +23,7 @@ import com.breezefsmdsm.features.document.model.DocumentTypeResponseModel
 import com.breezefsmdsm.features.dymanicSection.api.DynamicRepoProvider
 import com.breezefsmdsm.features.dymanicSection.model.DynamicListResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -83,7 +83,7 @@ class DocumentTypeListFragment : BaseFragment() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as DocumentTypeResponseModel
-                            XLog.d("DOCUMENT TYPE LIST RESPONSE=======> " + response.status)
+                            Timber.d("DOCUMENT TYPE LIST RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.type_list != null && response.type_list!!.size > 0) {
@@ -122,7 +122,7 @@ class DocumentTypeListFragment : BaseFragment() {
                             progress_wheel.stopSpinning()
                             tv_no_data_available.visibility = View.VISIBLE
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("DOCUMENT TYPE LIST ERROR=======> " + error.localizedMessage)
+                            Timber.d("DOCUMENT TYPE LIST ERROR=======> " + error.localizedMessage)
                         })
         )
     }

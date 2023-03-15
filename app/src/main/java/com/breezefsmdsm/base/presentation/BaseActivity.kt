@@ -26,7 +26,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.breezefsmdsm.CustomConstants
 import com.breezefsmdsm.CustomStatic
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.utils.AppUtils
@@ -157,8 +157,8 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
         if (Pref.user_id.isNullOrEmpty())
             return
 
-        XLog.e("BaseActivity: Login Date====> " + Pref.login_date)
-        XLog.e("BaseActivity: Current Date====> " + AppUtils.getCurrentDateChanged())
+        Timber.e("BaseActivity: Login Date====> " + Pref.login_date)
+        Timber.e("BaseActivity: Current Date====> " + AppUtils.getCurrentDateChanged())
 
         if (Pref.user_id!!.isNotEmpty() && AppUtils.getLongTimeStampFromDate2(Pref.login_date!!) != AppUtils.getLongTimeStampFromDate2(AppUtils.getCurrentDateChanged())) {
             Pref.isAutoLogout = true
@@ -287,7 +287,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun syncLocationActivity(list: List<UserLocationDataEntity>) {
 
-        XLog.d("syncLocationActivity Logout : ENTER")
+        Timber.d("syncLocationActivity Logout : ENTER")
 
 
         if (Pref.user_id.isNullOrEmpty())
@@ -387,8 +387,8 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
             distanceCovered += allLocationList[i].distance.toDouble()
 
             if (!TextUtils.isEmpty(allLocationList[i].home_duration)) {
-                XLog.e("Home Duration (Location Fuzed Service)=================> ${allLocationList[i].home_duration}")
-                XLog.e("Time (Location Fuzed Service)=================> ${allLocationList[i].time}")
+                Timber.e("Home Duration (Location Fuzed Service)=================> ${allLocationList[i].home_duration}")
+                Timber.e("Time (Location Fuzed Service)=================> ${allLocationList[i].time}")
                 val arr = allLocationList[i].home_duration?.split(":".toRegex())?.toTypedArray()
                 timeStamp += arr?.get(2)?.toInt()?.toLong()!!
                 timeStamp += 60 * arr[1].toInt().toLong()
@@ -438,8 +438,8 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
         for (i in apiLocationList.indices) {
             if (!apiLocationList[i].isUploaded) {
 
-                XLog.e("Final Home Duration (Location Fuzed Service)=================> ${apiLocationList[i].home_duration}")
-                XLog.e("Time (Location Fuzed Service)=================> ${apiLocationList[i].time} ${apiLocationList[i].meridiem}")
+                Timber.e("Final Home Duration (Location Fuzed Service)=================> ${apiLocationList[i].home_duration}")
+                Timber.e("Time (Location Fuzed Service)=================> ${apiLocationList[i].time} ${apiLocationList[i].meridiem}")
 
 
                 val locationData = LocationData()
@@ -470,7 +470,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
             locationUpdateReq.location_details = locationList
             val repository = LocationUpdateRepositoryProviders.provideLocationUpdareRepository()
 
-            XLog.d("syncLocationActivity Logout : REQUEST")
+            Timber.d("syncLocationActivity Logout : REQUEST")
             getProgressInstance().showDialogForLoading(this)
 
             BaseActivity.compositeDisposable.add(
@@ -481,7 +481,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                             .subscribe({ result ->
                                 val updateShopActivityResponse = result as BaseResponse
 
-                                XLog.d("syncLocationActivity Logout : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
+                                Timber.d("syncLocationActivity Logout : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
 
                                 if (updateShopActivityResponse.status == NetworkConstant.SUCCESS) {
 
@@ -524,15 +524,15 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                                 initiateLogoutApi()
 
                                 if (error == null) {
-                                    XLog.d("syncLocationActivity Logout : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
+                                    Timber.d("syncLocationActivity Logout : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
                                 } else {
-                                    XLog.d("syncLocationActivity Logout : ERROR : " + error.localizedMessage)
+                                    Timber.d("syncLocationActivity Logout : ERROR : " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                             })
             )
         } else {
-            XLog.e("=======locationList is empty (Auto Logout)=========")
+            Timber.e("=======locationList is empty (Auto Logout)=========")
             AppUtils.isLocationActivityUpdating = false
             initiateLogoutApi()
         }
@@ -563,7 +563,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ result ->
-                        XLog.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
+                        Timber.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
                         val response = result as StatusDayStartEnd
                         if (response.status == NetworkConstant.SUCCESS) {
                             Pref.DayStartMarked = response.DayStartMarked!!
@@ -599,9 +599,9 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                         }
                     }, { error ->
                         if (error == null) {
-                            XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+                            Timber.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
                         } else {
-                            XLog.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
+                            Timber.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
                             error.printStackTrace()
                         }
                         Pref.IsDDvistedOnceByDay = false
@@ -618,7 +618,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                     })
             )
         } catch (ex: java.lang.Exception) {
-            XLog.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+            Timber.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
             ex.printStackTrace()
             Pref.DayStartMarked = false
             Pref.DayEndMarked = false
@@ -695,7 +695,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("BaseActivity DayEnd : RESPONSE " + result.status)
+                                Timber.d("BaseActivity DayEnd : RESPONSE " + result.status)
                                 val response = result as BaseResponse
                                 if (response.status == NetworkConstant.SUCCESS) {
                                     Pref.DayStartMarked = false
@@ -706,10 +706,10 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
                             }, { error ->
                                 if (error == null) {
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                                    XLog.d("BaseActivity DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                                    Timber.d("BaseActivity DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
                                 } else {
                                     calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                                    XLog.d("BaseActivity DayEnd : ERROR " + error.localizedMessage)
+                                    Timber.d("BaseActivity DayEnd : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                             })
@@ -746,7 +746,7 @@ private fun callUpdateGpsStatusApi(list: List<GpsStatusEntity>) {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ result ->
                         val gpsStatusResponse = result as BaseResponse
-                        XLog.d("GPS_STATUS : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name
+                        Timber.d("GPS_STATUS : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name
                                 + ",MESSAGE : " + gpsStatusResponse.message)
                         if (gpsStatusResponse.status == NetworkConstant.SUCCESS) {
                             AppDatabase.getDBInstance()!!.gpsStatusDao().updateIsUploadedAccordingToId(true, list[i].id)
@@ -763,7 +763,7 @@ private fun callUpdateGpsStatusApi(list: List<GpsStatusEntity>) {
 
                     }, { error ->
                         //
-                        XLog.d("GPS_STATUS : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                        Timber.d("GPS_STATUS : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                         error.printStackTrace()
                         i++
                         if (i < list.size) {
@@ -809,7 +809,7 @@ private fun calllogoutApi(user_id: String, session_id: String) {
 //                    val distance = LocationWizard.getDistance(latestLat.toDouble(), latestLong.toDouble(),
 //                            Pref.latitude!!.toDouble(), Pref.longitude!!.toDouble())
 //
-//                    XLog.d("LOGOUT : DISTANCE=====> $distance")
+//                    Timber.d("LOGOUT : DISTANCE=====> $distance")
 //                }*/
 //
 //                /*val distance = LocationWizard.getDistance(previousLat.toDouble(), previousLong.toDouble(),
@@ -841,18 +841,18 @@ private fun calllogoutApi(user_id: String, session_id: String) {
             location = "Unknown"
     }
 
-    XLog.d("AUTO_LOGOUT : " + "REQUEST : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+    Timber.d("AUTO_LOGOUT : " + "REQUEST : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
 
-    XLog.d("=======AUTO_LOGOUT INPUT PARAMS======")
-    XLog.d("AUTO_LOGOUT : USER ID======> $user_id")
-    XLog.d("AUTO_LOGOUT : SESSION ID======> $session_id")
-    XLog.d("AUTO_LOGOUT : LAT====> " + Pref.logout_latitude)
-    XLog.d("AUTO_LOGOUT : LONG=====> " + Pref.logout_longitude)
-    XLog.d("AUTO_LOGOUT : DISTANCE=====> $distance")
-    XLog.d("AUTO_LOGOUT : LOGOUT TIME========> " + AppUtils.getCurrentDateTime12(Pref.login_date!!))
-    XLog.d("AUTO_LOGOUT : IS AUTO LOGOUT=======> 1")
-    XLog.d("AUTO_LOGOUT : LOCATION=======> $location")
-    XLog.d("=======================================")
+    Timber.d("=======AUTO_LOGOUT INPUT PARAMS======")
+    Timber.d("AUTO_LOGOUT : USER ID======> $user_id")
+    Timber.d("AUTO_LOGOUT : SESSION ID======> $session_id")
+    Timber.d("AUTO_LOGOUT : LAT====> " + Pref.logout_latitude)
+    Timber.d("AUTO_LOGOUT : LONG=====> " + Pref.logout_longitude)
+    Timber.d("AUTO_LOGOUT : DISTANCE=====> $distance")
+    Timber.d("AUTO_LOGOUT : LOGOUT TIME========> " + AppUtils.getCurrentDateTime12(Pref.login_date!!))
+    Timber.d("AUTO_LOGOUT : IS AUTO LOGOUT=======> 1")
+    Timber.d("AUTO_LOGOUT : LOCATION=======> $location")
+    Timber.d("=======================================")
 
     var logOutD = AppUtils.getCurrentDateTime12(Pref.login_date!!)
     var onlyTime = logOutD.split(" ").get(1)
@@ -869,7 +869,7 @@ private fun calllogoutApi(user_id: String, session_id: String) {
                     .subscribeOn(Schedulers.io())
                     .subscribe({ result ->
                         val logoutResponse = result as BaseResponse
-                        XLog.d("AUTO_LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + finalD +"  "+AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
+                        Timber.d("AUTO_LOGOUT : " + "RESPONSE : " + "\n" + "Time : " + finalD +"  "+AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                         if (logoutResponse.status == NetworkConstant.SUCCESS) {
 
                             Pref.tempDistance = "0.0"
@@ -899,7 +899,7 @@ private fun calllogoutApi(user_id: String, session_id: String) {
                     }, { error ->
                         //
                         Toaster.msgShort(this@BaseActivity, getString(R.string.something_went_wrong))
-                        XLog.d("AUTO_LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                        Timber.d("AUTO_LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                         error.printStackTrace()
                         getProgressInstance().dismissDialog()
                         performLogout()
@@ -942,7 +942,7 @@ fun clearData() {
                 /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
                     jobScheduler.cancelAll()
-                    XLog.d("============Alert Job scheduler cancel (Base Activity)==============")
+                    Timber.d("============Alert Job scheduler cancel (Base Activity)==============")
                 }
                 else {
                     val serviceLauncher = Intent(this@BaseActivity, CollectionOrderAlertService::class.java)
@@ -1100,9 +1100,9 @@ fun serviceStatusActionable() {
                 val resultCode = jobScheduler.schedule(jobInfo)
 
                 if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                    XLog.d("=============================== BaseActivity Job scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "============================")
+                    Timber.d("=============================== BaseActivity Job scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "============================")
                 } else {
-                    XLog.d("===================== BaseActivity Job not scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "====================================")
+                    Timber.d("===================== BaseActivity Job not scheduled (Base Activity) " + AppUtils.getCurrentDateTime() + "====================================")
                 }
             } else {
                 startService(serviceLauncher)
@@ -1114,7 +1114,7 @@ fun serviceStatusActionable() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
                 jobScheduler.cancelAll()
-                XLog.d("===============================Job scheduler cancel (Base Activity)" + AppUtils.getCurrentDateTime() + "============================")
+                Timber.d("===============================Job scheduler cancel (Base Activity)" + AppUtils.getCurrentDateTime() + "============================")
 
                 /*if (AppUtils.mGoogleAPIClient != null) {
                     AppUtils.mGoogleAPIClient?.disconnect()
@@ -1126,7 +1126,7 @@ fun serviceStatusActionable() {
         notificationManager.cancelAll()*/
 
             AlarmReceiver.stopServiceAlarm(this, 123)
-            XLog.d("===========Service alarm is stopped (Base Activity)================")
+            Timber.d("===========Service alarm is stopped (Base Activity)================")
         }
     } catch (e: Exception) {
         e.printStackTrace()
@@ -1260,7 +1260,7 @@ fun startMonitorService() {
         //if(Pref.GPSAlertGlobal){
         //if(Pref.GPSAlert){
         if (!isMonitorServiceRunning()) {
-            XLog.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
+            Timber.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
             val intent = Intent(applicationContext, MonitorService::class.java)
             intent.action = CustomConstants.START_MONITOR_SERVICE
             startService(intent)
@@ -1305,7 +1305,7 @@ fun isMonitorServiceRunning(): Boolean {
     private fun uploadShopRevisitData(){
         var logout_date=AppUtils.convertLoginTimeToAutoLogoutTimeFormatyymmdd(Pref.login_date!!)
 
-        XLog.d("AUTO_LOGOUT New: logout_date_prev" + logout_date)
+        Timber.d("AUTO_LOGOUT New: logout_date_prev" + logout_date)
 
         ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(logout_date)
         Collections.reverse(ShopActivityEntityListNew)
@@ -1359,7 +1359,7 @@ fun isMonitorServiceRunning(): Boolean {
         ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(logout_date)
         Collections.reverse(ShopActivityEntityListNew)
 
-        XLog.d("AUTO_LOGOUT New: uploadShopRevisitData" + AppUtils.getCurrentDateTime())
+        Timber.d("AUTO_LOGOUT New: uploadShopRevisitData" + AppUtils.getCurrentDateTime())
 
         if (!Pref.isMultipleVisitEnable) {
             if (ShopActivityEntityListNew != null && ShopActivityEntityListNew.isNotEmpty()) {
@@ -1498,29 +1498,29 @@ fun isMonitorServiceRunning(): Boolean {
 
             shopDataList.add(shopDurationData)
 
-            XLog.d("========SYNC ALL VISITED SHOP DATA (AVERAGE SHOP)=====")
-            XLog.d("SHOP ID======> " + shopDurationData.shop_id)
-            XLog.d("SPENT DURATION======> " + shopDurationData.spent_duration)
-            XLog.d("VISIT DATE=========> " + shopDurationData.visited_date)
-            XLog.d("VISIT DATE TIME==========> " + shopDurationData.visited_date)
-            XLog.d("TOTAL VISIT COUNT========> " + shopDurationData.total_visit_count)
-            XLog.d("DISTANCE TRAVELLED========> " + shopDurationData.distance_travelled)
-            XLog.d("FEEDBACK========> " + shopDurationData.feedback)
-            XLog.d("isFirstShopVisited========> " + shopDurationData.isFirstShopVisited)
-            XLog.d("distanceFromHomeLoc========> " + shopDurationData.distanceFromHomeLoc)
-            XLog.d("next_visit_date========> " + shopDurationData.next_visit_date)
-            XLog.d("early_revisit_reason========> " + shopDurationData.early_revisit_reason)
-            XLog.d("device_model========> " + shopDurationData.device_model)
-            XLog.d("android_version========> " + shopDurationData.android_version)
-            XLog.d("battery========> " + shopDurationData.battery)
-            XLog.d("net_status========> " + shopDurationData.net_status)
-            XLog.d("net_type========> " + shopDurationData.net_type)
-            XLog.d("in_time========> " + shopDurationData.in_time)
-            XLog.d("out_time========> " + shopDurationData.out_time)
-            XLog.d("start_timestamp========> " + shopDurationData.start_timestamp)
-            XLog.d("in_location========> " + shopDurationData.in_location)
-            XLog.d("out_location========> " + shopDurationData.out_location)
-            XLog.d("=======================================================")
+            Timber.d("========SYNC ALL VISITED SHOP DATA (AVERAGE SHOP)=====")
+            Timber.d("SHOP ID======> " + shopDurationData.shop_id)
+            Timber.d("SPENT DURATION======> " + shopDurationData.spent_duration)
+            Timber.d("VISIT DATE=========> " + shopDurationData.visited_date)
+            Timber.d("VISIT DATE TIME==========> " + shopDurationData.visited_date)
+            Timber.d("TOTAL VISIT COUNT========> " + shopDurationData.total_visit_count)
+            Timber.d("DISTANCE TRAVELLED========> " + shopDurationData.distance_travelled)
+            Timber.d("FEEDBACK========> " + shopDurationData.feedback)
+            Timber.d("isFirstShopVisited========> " + shopDurationData.isFirstShopVisited)
+            Timber.d("distanceFromHomeLoc========> " + shopDurationData.distanceFromHomeLoc)
+            Timber.d("next_visit_date========> " + shopDurationData.next_visit_date)
+            Timber.d("early_revisit_reason========> " + shopDurationData.early_revisit_reason)
+            Timber.d("device_model========> " + shopDurationData.device_model)
+            Timber.d("android_version========> " + shopDurationData.android_version)
+            Timber.d("battery========> " + shopDurationData.battery)
+            Timber.d("net_status========> " + shopDurationData.net_status)
+            Timber.d("net_type========> " + shopDurationData.net_type)
+            Timber.d("in_time========> " + shopDurationData.in_time)
+            Timber.d("out_time========> " + shopDurationData.out_time)
+            Timber.d("start_timestamp========> " + shopDurationData.start_timestamp)
+            Timber.d("in_location========> " + shopDurationData.in_location)
+            Timber.d("out_location========> " + shopDurationData.out_location)
+            Timber.d("=======================================================")
         }
 
         if (shopDataList.isEmpty()) {
@@ -1556,7 +1556,7 @@ fun isMonitorServiceRunning(): Boolean {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
-                            XLog.d("ShopActivityFromAverageShop : RESPONSE STATUS:= " + result.status + ", RESPONSE MESSAGE:= " + result.message +
+                            Timber.d("ShopActivityFromAverageShop : RESPONSE STATUS:= " + result.status + ", RESPONSE MESSAGE:= " + result.message +
                                     "\nUser Id" + Pref.user_id + ", Session Token" + Pref.session_token)
                             if (result.status == NetworkConstant.SUCCESS) {
                                 shopDataList.forEach {
@@ -1573,8 +1573,8 @@ fun isMonitorServiceRunning(): Boolean {
 
                                 val dateWiseList = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(selectedDate)
 
-                                XLog.d("=======UPDATE ADAPTER FOR SYNC ALL VISIT SHOP DATA (AVERAGE SHOP)=======")
-                                XLog.d("shop list size====> " + dateWiseList.size)
+                                Timber.d("=======UPDATE ADAPTER FOR SYNC ALL VISIT SHOP DATA (AVERAGE SHOP)=======")
+                                Timber.d("shop list size====> " + dateWiseList.size)
 
 
 
@@ -1597,7 +1597,7 @@ fun isMonitorServiceRunning(): Boolean {
                             error.printStackTrace()
                             BaseActivity.isShopActivityUpdating = false
                             if (error != null) {
-                                XLog.d("ShopActivityFromAverageShop : ERROR:= " + error.localizedMessage + "\nUser Id" + Pref.user_id +
+                                Timber.d("ShopActivityFromAverageShop : ERROR:= " + error.localizedMessage + "\nUser Id" + Pref.user_id +
                                         ", Session Token" + Pref.session_token)
                                 (this as DashboardActivity).showSnackMessage(this.getString(R.string.unable_to_sync))
 
@@ -1729,7 +1729,7 @@ fun isMonitorServiceRunning(): Boolean {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
-                            XLog.d("ShopActivityFromAverageShop BaseActivity AUTO_LOGOUT New: RESPONSE STATUS:= " + result.status + ", RESPONSE MESSAGE:= " + result.message +
+                            Timber.d("ShopActivityFromAverageShop BaseActivity AUTO_LOGOUT New: RESPONSE STATUS:= " + result.status + ", RESPONSE MESSAGE:= " + result.message +
                                     "\nUser Id" + Pref.user_id + ", Session Token" + Pref.session_token + ", SHOP_ID: " + mList[0].shopid +
                                     ", SHOP: " + mList[0].shop_name+" date-time : "+AppUtils.getCurrentDateTime())
                             if (result.status == NetworkConstant.SUCCESS) {
@@ -1825,7 +1825,7 @@ fun isMonitorServiceRunning(): Boolean {
                             error.printStackTrace()
                             BaseActivity.isShopActivityUpdating = false
                             if (error != null) {
-                                XLog.d("Base Activity ShopActivityFromAverageShop BaseActivity : ERROR:= " + error.localizedMessage + "\nUser Id" + Pref.user_id +
+                                Timber.d("Base Activity ShopActivityFromAverageShop BaseActivity : ERROR:= " + error.localizedMessage + "\nUser Id" + Pref.user_id +
                                         ", Session Token" + Pref.session_token + ", SHOP_ID: " + mList[0].shopid + ", SHOP: " + mList[0].shop_name)
                                 (this as DashboardActivity).showSnackMessage(this.getString(R.string.unable_to_sync))
                                 ShopActivityEntityListNew = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(selectedDate)
@@ -1848,7 +1848,7 @@ fun isMonitorServiceRunning(): Boolean {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
-                            XLog.d("callRevisitStatusUploadApi BaseActivity: RESPONSE " + result.status)
+                            Timber.d("callRevisitStatusUploadApi BaseActivity: RESPONSE " + result.status)
                             if (result.status == NetworkConstant.SUCCESS){
                                 for(i in revisitStatusList.indices){
                                     AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.updateOrderStatus(revisitStatusList[i]!!.shop_revisit_uniqKey!!)
@@ -1857,9 +1857,9 @@ fun isMonitorServiceRunning(): Boolean {
                             }
                         },{error ->
                             if (error == null) {
-                                XLog.d("callRevisitStatusUploadApi BaseActivity: ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
+                                Timber.d("callRevisitStatusUploadApi BaseActivity: ERROR " + "UNEXPECTED ERROR IN SHOP ACTIVITY API")
                             } else {
-                                XLog.d("callRevisitStatusUploadApi BaseActivity: ERROR " + error.localizedMessage)
+                                Timber.d("callRevisitStatusUploadApi BaseActivity: ERROR " + error.localizedMessage)
                                 error.printStackTrace()
                             }
                         })
@@ -1891,14 +1891,14 @@ fun isMonitorServiceRunning(): Boolean {
                             val response = result as BaseResponse
                             if(response.status==NetworkConstant.SUCCESS){
                                 AppDatabase.getDBInstance()!!.shopVisitCompetetorImageDao().updateisUploaded(true,shop_id)
-                                XLog.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shop_id + ", Success: ")
+                                Timber.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shop_id + ", Success: ")
                             }else{
-                                XLog.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shop_id + ", Failed: ")
+                                Timber.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shop_id + ", Failed: ")
                             }
                         },{
                             error ->
                             if (error != null) {
-                                XLog.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shop_id + ", ERROR: " + error.localizedMessage)
+                                Timber.d("FUSED LOCATION : CompetetorImg" + ", SHOP: " + shop_id + ", ERROR: " + error.localizedMessage)
                             }
                         })
         )
@@ -1926,13 +1926,13 @@ fun isMonitorServiceRunning(): Boolean {
 
         BaseActivity.isShopActivityUpdating = true
 
-        XLog.d("========UPLOAD REVISIT ALL IMAGE INPUT PARAMS (AVERAGE SHOP)======")
-        XLog.d("USER ID======> " + visitImageShop.user_id)
-        XLog.d("SESSION ID======> " + visitImageShop.session_token)
-        XLog.d("SHOP ID=========> " + visitImageShop.shop_id)
-        XLog.d("VISIT DATE TIME==========> " + visitImageShop.visit_datetime)
-        XLog.d("IMAGE========> " + unSyncedList[j].shop_image)
-        XLog.d("=====================================================================")
+        Timber.d("========UPLOAD REVISIT ALL IMAGE INPUT PARAMS (AVERAGE SHOP)======")
+        Timber.d("USER ID======> " + visitImageShop.user_id)
+        Timber.d("SESSION ID======> " + visitImageShop.session_token)
+        Timber.d("SHOP ID=========> " + visitImageShop.shop_id)
+        Timber.d("VISIT DATE TIME==========> " + visitImageShop.visit_datetime)
+        Timber.d("IMAGE========> " + unSyncedList[j].shop_image)
+        Timber.d("=====================================================================")
 
         val repository = ShopVisitImageUploadRepoProvider.provideAddShopRepository()
         BaseActivity.compositeDisposable.add(
@@ -1941,7 +1941,7 @@ fun isMonitorServiceRunning(): Boolean {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val logoutResponse = result as BaseResponse
-                            XLog.d("UPLOAD REVISIT ALL IMAGE : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
+                            Timber.d("UPLOAD REVISIT ALL IMAGE : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                             if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.shopVisitImageDao().updateisUploaded(true, unSyncedList.get(j).shop_id!!)
 
@@ -1986,7 +1986,7 @@ fun isMonitorServiceRunning(): Boolean {
                                 (this as DashboardActivity).showSnackMessage(logoutResponse.message!!)
                             }
                         }, { error ->
-                            XLog.d("UPLOAD REVISIT ALL IMAGE : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("UPLOAD REVISIT ALL IMAGE : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             BaseActivity.isShopActivityUpdating = false
                             (this as DashboardActivity).showSnackMessage(this.getString(R.string.unable_to_sync))
@@ -2068,13 +2068,13 @@ fun isMonitorServiceRunning(): Boolean {
 
         BaseActivity.isShopActivityUpdating = true
 
-        XLog.d("========UPLOAD REVISIT ALL AUDIO INPUT PARAMS (AVERAGE SHOP)======")
-        XLog.d("USER ID======> " + visitImageShop.user_id)
-        XLog.d("SESSION ID======> " + visitImageShop.session_token)
-        XLog.d("SHOP ID=========> " + visitImageShop.shop_id)
-        XLog.d("VISIT DATE TIME==========> " + visitImageShop.visit_datetime)
-        XLog.d("AUDIO========> " + unSyncedList[j].audio)
-        XLog.d("=====================================================================")
+        Timber.d("========UPLOAD REVISIT ALL AUDIO INPUT PARAMS (AVERAGE SHOP)======")
+        Timber.d("USER ID======> " + visitImageShop.user_id)
+        Timber.d("SESSION ID======> " + visitImageShop.session_token)
+        Timber.d("SHOP ID=========> " + visitImageShop.shop_id)
+        Timber.d("VISIT DATE TIME==========> " + visitImageShop.visit_datetime)
+        Timber.d("AUDIO========> " + unSyncedList[j].audio)
+        Timber.d("=====================================================================")
 
         val repository = ShopVisitImageUploadRepoProvider.provideAddShopRepository()
 
@@ -2084,7 +2084,7 @@ fun isMonitorServiceRunning(): Boolean {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val logoutResponse = result as BaseResponse
-                            XLog.d("UPLOAD REVISIT ALL AUDIO : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
+                            Timber.d("UPLOAD REVISIT ALL AUDIO : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                             if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.shopVisitAudioDao().updateisUploaded(true, unSyncedList.get(j).shop_id!!)
 
@@ -2105,7 +2105,7 @@ fun isMonitorServiceRunning(): Boolean {
                                 (this as DashboardActivity).showSnackMessage(logoutResponse.message!!)
                             }
                         }, { error ->
-                            XLog.d("UPLOAD REVISIT ALL AUDIO : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("UPLOAD REVISIT ALL AUDIO : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             BaseActivity.isShopActivityUpdating = false
 
@@ -2120,7 +2120,7 @@ fun isMonitorServiceRunning(): Boolean {
 
     private fun syncShopList() {
         val shopList = AppDatabase.getDBInstance()!!.addShopEntryDao().getUnSyncedShops(false)
-        XLog.d("AUTO_LOGOUT New : syncShopList" + AppUtils.getCurrentDateTime())
+        Timber.d("AUTO_LOGOUT New : syncShopList" + AppUtils.getCurrentDateTime())
         if (shopList.isEmpty() || shopList.size==0){
             uploadShopRevisitData()
         }else{
@@ -2218,10 +2218,10 @@ fun isMonitorServiceRunning(): Boolean {
 
         val index = addShop.shop_id!!.indexOf("_")
         if (shop_imgPath != null)
-            XLog.d("shop image path=======> $shop_imgPath")
+            Timber.d("shop image path=======> $shop_imgPath")
 
         if (degree_imgPath != null)
-            XLog.d("doctor degree image path=======> $degree_imgPath")
+            Timber.d("doctor degree image path=======> $degree_imgPath")
 
         if (TextUtils.isEmpty(shop_imgPath) && TextUtils.isEmpty(degree_imgPath)) {
             val repository = AddShopRepositoryProvider.provideAddShopWithoutImageRepository()
@@ -2231,7 +2231,7 @@ fun isMonitorServiceRunning(): Boolean {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
 
                                 when (addShopResult.status) {
                                     NetworkConstant.SUCCESS -> {
@@ -2240,7 +2240,7 @@ fun isMonitorServiceRunning(): Boolean {
                                         syncShopList()
                                     }
                                     NetworkConstant.DUPLICATE_SHOP_ID -> {
-                                        XLog.d("DuplicateShop : BaseActivity " + ", SHOP: " + addShop.shop_name)
+                                        Timber.d("DuplicateShop : BaseActivity " + ", SHOP: " + addShop.shop_name)
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
 
 
@@ -2263,7 +2263,7 @@ fun isMonitorServiceRunning(): Boolean {
                                 error.printStackTrace()
                                 (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
                                 if (error != null)
-                                    XLog.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
+                                    Timber.d("syncShopFromShopList : BaseActivity " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
                             })
             )
         }
@@ -2275,7 +2275,7 @@ fun isMonitorServiceRunning(): Boolean {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
 
                                 when (addShopResult.status) {
                                     NetworkConstant.SUCCESS -> {
@@ -2289,7 +2289,7 @@ fun isMonitorServiceRunning(): Boolean {
                                         }
                                     }
                                     NetworkConstant.DUPLICATE_SHOP_ID -> {
-                                        XLog.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
+                                        Timber.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
 
                                         if (AppDatabase.getDBInstance()!!.addShopEntryDao().getDuplicateShopData(addShop.owner_contact_no).size > 0) {
@@ -2311,7 +2311,7 @@ fun isMonitorServiceRunning(): Boolean {
                                 error.printStackTrace()
                                 (this as DashboardActivity).showSnackMessage(getString(R.string.unable_to_sync))
                                 if (error != null)
-                                    XLog.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
+                                    Timber.d("syncShopFromShopList : " + ", SHOP: " + addShop.shop_name + error.localizedMessage)
                             })
             )
         }

@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.utils.AppUtils
@@ -142,7 +142,7 @@ class PlanDetailsFragment : BaseFragment() {
                             progress_wheel.stopSpinning()
                             tv_no_data.visibility = View.VISIBLE
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("DailyPlanDetails ERROR: " + error.localizedMessage)
+                            Timber.d("DailyPlanDetails ERROR: " + error.localizedMessage)
                         })
         )
     }

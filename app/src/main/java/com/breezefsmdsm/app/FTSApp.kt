@@ -8,15 +8,9 @@ import android.os.StrictMode
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
-import com.elvishew.xlog.LogConfiguration
-import com.elvishew.xlog.XLog
-import com.elvishew.xlog.interceptor.BlacklistTagsFilterInterceptor
-import com.elvishew.xlog.printer.AndroidPrinter
-import com.elvishew.xlog.printer.Printer
-import com.elvishew.xlog.printer.file.FilePrinter
-import com.elvishew.xlog.printer.file.backup.FileSizeBackupStrategy2
-import com.elvishew.xlog.printer.file.backup.NeverBackupStrategy
-import com.elvishew.xlog.printer.file.clean.FileLastModifiedCleanStrategy
+
+import timber.log.Timber
+
 import com.facebook.stetho.Stetho
 import com.marcinmoskala.kotlinpreferences.PreferenceHolder
 import io.fabric.sdk.android.Fabric
@@ -26,7 +20,7 @@ import java.io.File
 class FTSApp : MultiDexApplication() {
 
     lateinit var appComponent: AppComponent
-    var globalFilePrinter: Printer? = null
+    //var globalFilePrinter: Printer? = null
 
     @Suppress("INTEGER_OVERFLOW")
     private val MAX_TIME: Long = 1000 * 60 * 60 * 24 * 300
@@ -40,7 +34,7 @@ class FTSApp : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 //        appComponent = buildAppComponent()
-        initXlog()
+        //initXlog()
 
         AppDatabase.initAppDatabase(this)
         Stetho.initializeWithDefaults(this)
@@ -62,6 +56,7 @@ class FTSApp : MultiDexApplication() {
     /**
      * Initialize XLog.
      */
+    /*
     private fun initXlog() {
         val config = LogConfiguration.Builder()
 //                .logLevel(if (BuildConfig.DEBUG)
@@ -106,6 +101,6 @@ class FTSApp : MultiDexApplication() {
         // For future usage: partial usage in MainActivity.
         globalFilePrinter = filePrinter
     }
-
+*/
 
 }

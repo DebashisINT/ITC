@@ -19,7 +19,7 @@ class ShopNearbyReceiver : BroadcastReceiver() {
         // assumes WordService is a registered service
         //        Intent intent = new Intent(context, WordService.class);
         //        context.startService(intent);
-//        XLog.d("onReceive : ShopNearbyReceiver")
+//        Timber.d("onReceive : ShopNearbyReceiver")
         val extras = intent.extras
         if (extras != null) {
 
@@ -33,7 +33,7 @@ class ShopNearbyReceiver : BroadcastReceiver() {
 
             if (shopname != null) {
 
-//                XLog.d("onReceive : CreateNotification")
+//                Timber.d("onReceive : CreateNotification")
                 val notification = NotificationUtils(context.getString(R.string.app_name), shopname, shopId!!, localShopId!!)
                 notification.CreateNotification(context)
             }

@@ -208,7 +208,7 @@ import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.tasks.OnCompleteListener
@@ -782,7 +782,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             fl_net_status.background = getDrawable(R.drawable.green_round)
                             netStatus = "Online"
                             if (!isMonitorServiceRunningggg()) {
-                                XLog.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
+                                Timber.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
                                 val intent = Intent(applicationContext, MonitorService::class.java)
                                 intent.action = CustomConstants.START_MONITOR_SERVICE
                                 startService(intent)
@@ -816,7 +816,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 fl_net_status.background = getDrawable(R.drawable.green_round)
                                 netStatus = "Online"
                                 if (!isMonitorServiceRunningggg()) {
-                                    XLog.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
+                                    Timber.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
                                     val intent = Intent(applicationContext, MonitorService::class.java)
                                     intent.action = CustomConstants.START_MONITOR_SERVICE
                                     startService(intent)
@@ -925,7 +925,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             return
         }
 
-        XLog.e("=========Call terms & conditions api (Dashboard)============")
+        Timber.e("=========Call terms & conditions api (Dashboard)============")
 
         val repository = GetContentListRepoProvider.getContentListRepoProvider()
         progress_wheel.spin()
@@ -936,7 +936,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         .subscribe({ result ->
                             val response = result as ContentListResponseModel
 
-                            XLog.e("RESPONSE: " + response.status + ", MESSAGE: " + response.message)
+                            Timber.e("RESPONSE: " + response.status + ", MESSAGE: " + response.message)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (!Pref.isSefieAlarmed)
@@ -976,7 +976,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             }
 
                         }, { error ->
-                            XLog.e("ERROR: " + error.message)
+                            Timber.e("ERROR: " + error.message)
                             error.printStackTrace()
                             if (!Pref.isSefieAlarmed)
                                 progress_wheel.stopSpinning()
@@ -992,7 +992,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             return
         }
 
-        XLog.e("=========Show terms & conditions popup (Dashboard)============")
+        Timber.e("=========Show terms & conditions popup (Dashboard)============")
 
         if (termsConditionsDialog != null) {
             termsConditionsDialog?.dismissAllowingStateLoss()
@@ -1375,7 +1375,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     val distance = LocationWizard.getDistance(Pref.home_latitude.toDouble(), Pref.home_longitude.toDouble(), Pref.current_latitude.toDouble(),
                                             Pref.current_longitude.toDouble())
 
-                                    XLog.e("Distance from home====> $distance")
+                                    Timber.e("Distance from home====> $distance")
 
                                     if (distance * 1000 > 50) {
                                         isAddAttendaceAlert = true
@@ -1383,18 +1383,18 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     } else
                                         (mContext as DashboardActivity).showSnackMessage("Attendance can not be added from home")
                                 } else {
-                                    XLog.e("========Home location is not available========")
+                                    Timber.e("========Home location is not available========")
                                     isAddAttendaceAlert = true
                                     loadFragment(FragType.AddAttendanceFragment, true, "")
                                 }
 
                             } else {
-                                XLog.e("========isHomeLocAvailable is false========")
+                                Timber.e("========isHomeLocAvailable is false========")
                                 isAddAttendaceAlert = true
                                 loadFragment(FragType.AddAttendanceFragment, true, "")
                             }
                         } else {
-                            XLog.e("========Current location is not available========")*/
+                            Timber.e("========Current location is not available========")*/
                         isAddAttendaceAlert = true
 
 
@@ -2401,7 +2401,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             })//.show(supportFragmentManager, "CommonDialogSingleBtn")
 
 
-            XLog.e("Order Alert Dialog show time====> " + AppUtils.getCurrentTime())
+            Timber.e("Order Alert Dialog show time====> " + AppUtils.getCurrentTime())
 
             orderCollectionAlertDialog?.show(supportFragmentManager, "CommonDialogSingleBtn")
 
@@ -2525,23 +2525,23 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 val distance = LocationWizard.getDistance(Pref.home_latitude.toDouble(), Pref.home_longitude.toDouble(), Pref.current_latitude.toDouble(),
                                         Pref.current_longitude.toDouble())
 
-                                XLog.e("Distance from home====> $distance")
+                                Timber.e("Distance from home====> $distance")
 
                                 if (distance * 1000 > 50)
                                     loadFragment(FragType.AddAttendanceFragment, false, "")
                                 else
                                     (mContext as DashboardActivity).showSnackMessage("Attendance can not be added from home")
                             } else {
-                                XLog.e("========Home location is not available========")
+                                Timber.e("========Home location is not available========")
                                 loadFragment(FragType.AddAttendanceFragment, false, "")
                             }
 
                         } else {
-                            XLog.e("========isHomeLocAvailable is false========")
+                            Timber.e("========isHomeLocAvailable is false========")
                             loadFragment(FragType.AddAttendanceFragment, false, "")
                         }
                     } else {
-                        XLog.e("========Current location is not available========")*/
+                        Timber.e("========Current location is not available========")*/
 
                     val attendanceReq = AttendanceRequest()
                     attendanceReq.user_id = Pref.user_id!!
@@ -3396,7 +3396,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         .subscribe({ result ->
                             val response = result as BaseResponse
 
-                            XLog.e("RESPONSE: " + response.status + ", MESSAGE: " + response.message)
+                            Timber.e("RESPONSE: " + response.status + ", MESSAGE: " + response.message)
 
                             progress_wheel.stopSpinning()
                             showSnackMessage(response.message!!)
@@ -3411,7 +3411,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
 
                         }, { error ->
-                            XLog.e("ERROR: " + error.message)
+                            Timber.e("ERROR: " + error.message)
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             showSnackMessage(getString(R.string.something_went_wrong))
@@ -3421,13 +3421,16 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
 
     fun openShareIntents() {
-        openShare()
-        return
+        //openShare()
+        //return
         try {
             val shareIntent = Intent(Intent.ACTION_SEND)
 //        val phototUri = Uri.parse(localAbsoluteFilePath)
             //val fileUrl = Uri.parse(File(Environment.getExternalStorageDirectory(), "xbreezefsmdsmlogsample/log").path);
-            val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
+            //val fileUrl = Uri.parse(File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "xbreezefsmdsmlogsample/log").path);
+
+            var currentDBPath="/data/user/0/com.breezefsmdsm/files/Fsmlog.html"
+            val fileUrl = Uri.parse(File(currentDBPath, "").path);
 
             val file = File(fileUrl.path)
             if (!file.exists()) {
@@ -6303,7 +6306,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         //TODO Hide Soft Keyboard
         AppUtils.hideSoftKeyboard(this)
 
-        XLog.e("Current Fragment========> " + getFragment())
+        Timber.e("Current Fragment========> " + getFragment())
 
         if (fm.backStackEntryCount == 0 && getFragment() != null && (getFragment() is PerformanceReportFragment || getFragment() is AttendanceReportFragment
                         || getFragment() is VisitReportFragment || getFragment() is DailyPlanListFragment)) {
@@ -6429,7 +6432,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             AppUtils.isFromAttendance = false
             super.onBackPressed()
 
-            XLog.e("isAddAttendence========> " + Pref.isAddAttendence)
+            Timber.e("isAddAttendence========> " + Pref.isAddAttendence)
 
             Handler().postDelayed(Runnable {
 
@@ -6954,7 +6957,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val gpsStatusResponse = result as BaseResponse
-                            XLog.d("GPS SYNC : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name
+                            Timber.d("GPS SYNC : " + "RESPONSE : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name
                                     + ",MESSAGE : " + gpsStatusResponse.message)
                             if (gpsStatusResponse.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.gpsStatusDao().updateIsUploadedAccordingToId(true, list[i].id)
@@ -6971,7 +6974,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                         }, { error ->
                             //
-                            XLog.d("GPS SYNC : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GPS SYNC : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             i++
                             if (i < list.size) {
@@ -7060,7 +7063,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         if (resultCode == Activity.RESULT_OK) {
 
             if (requestCode == PermissionHelper.REQUEST_CODE_CAMERA) {
-                //XLog.d("DashboardActivity : " + " , " + " Camera Image FilePath :" + FTStorageUtils.IMG_URI)
+                //Timber.d("DashboardActivity : " + " , " + " Camera Image FilePath :" + FTStorageUtils.IMG_URI)
                 if (AppUtils.isRevisit!!) {
 
                     /*CropImage.activity(FTStorageUtils.IMG_URI)
@@ -7071,12 +7074,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     if (!TextUtils.isEmpty(filePath)) {
 
-                        XLog.e("===========RevisitShop Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========RevisitShop Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7084,7 +7087,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
 
 
@@ -7102,7 +7105,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             uiThread {
                                 progress_wheel.stopSpinning()
                                 if (newFile != null) {
-                                    XLog.e("=========Image Capture from new technique==========")
+                                    Timber.e("=========Image Capture from new technique==========")
                                     filePath = newFile?.absolutePath!!
                                     addShopVisitPic(newFile!!.length(), imageUpDateTime)
                                 }
@@ -7150,12 +7153,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     if (!TextUtils.isEmpty(filePath)) {
 
-                        XLog.e("===========Visiting Card Scan Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Visiting Card Scan Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7163,7 +7166,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.AddShopFragment /*&& FTStorageUtils.IMG_URI != null*/) {
@@ -7175,12 +7178,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Add Shop Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Add Shop Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             /*CropImage.activity(contentURI)
@@ -7194,7 +7197,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
 
@@ -7203,7 +7206,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
                     if (!TextUtils.isEmpty(filePath)) {
                         //val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, filePath)
-                        //XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        //Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
                         //val fileSize = AppUtils.getCompressBillingImage(contentURI.toString(), this)
                         //updatePhotoRegAadhaarCroppedImg(fileSize, contentURI)
 
@@ -7220,12 +7223,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     editProfilePic(fileSize)*/
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Profile Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Profile Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             /*CropImage.activity(contentURI)
@@ -7241,7 +7244,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
 
@@ -7264,7 +7267,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                          uiThread {
                              //progress_wheel.stopSpinning()
                              if (newFile != null) {
-                                 XLog.e("=========Image Capture from new technique==========")
+                                 Timber.e("=========Image Capture from new technique==========")
                                  filePath = newFile?.absolutePath!!
                                  reimbursementPic(newFile!!.length())
                              } else {
@@ -7295,7 +7298,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         uiThread {
                             //progress_wheel.stopSpinning()
                             if (newFile != null) {
-                                XLog.e("=========Image Capture from new technique==========")
+                                Timber.e("=========Image Capture from new technique==========")
                                 filePath = newFile?.absolutePath!!
                                 reimbursementEditPic(newFile!!.length())
                             } else {
@@ -7332,7 +7335,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         uiThread {
                             progress_wheel.stopSpinning()
                             if (newFile != null) {
-                                XLog.e("=========Image Capture from new technique==========")
+                                Timber.e("=========Image Capture from new technique==========")
                                 filePath = newFile?.absolutePath!!
                                 addBillingPic(newFile!!.length())
                             } else {
@@ -7344,12 +7347,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }*/
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Add Billing Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Add Billing Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7357,7 +7360,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
 
@@ -7369,12 +7372,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Add Collection Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Add Collection Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7382,7 +7385,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
 
@@ -7392,12 +7395,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Add Dynamic form Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Add Dynamic form Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7405,7 +7408,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.EditDynamicFragment) {
@@ -7413,12 +7416,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Edit Dynamic form Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Edit Dynamic form Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7426,7 +7429,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.AddActivityFragment) {
@@ -7434,12 +7437,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Add Activity form Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Add Activity form Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7447,7 +7450,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.EditActivityFragment) {
@@ -7455,12 +7458,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Edit Activity form Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Edit Activity form Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7468,7 +7471,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.ShopDetailFragment /*&& FTStorageUtils.IMG_URI != null*/) {
@@ -7485,12 +7488,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Edit Shop Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Edit Shop Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7498,7 +7501,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
 
@@ -7512,12 +7515,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     /*getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Add Attendance Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Add Attendance Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7525,7 +7528,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }*/
 
@@ -7542,12 +7545,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     /*getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Add Attendance Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Add Attendance Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7555,7 +7558,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }*/
 
@@ -7578,12 +7581,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Work in Progress Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Work in Progress Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7591,19 +7594,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.WorkOnHoldFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Work in Hold Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Work in Hold Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7611,19 +7614,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.WorkCompletedFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Work Completed Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Work Completed Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7631,19 +7634,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.WorkCancelledFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Work Cancelled Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Work Cancelled Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7651,19 +7654,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.UpdateReviewFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Update Review Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Update Review Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7671,19 +7674,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 } else if (getCurrentFragType() == FragType.RegisTerFaceFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Update Review Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Update Review Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7695,19 +7698,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 }else if (getCurrentFragType() == FragType.PhotoRegAadhaarFragment) {
                     getCameraImage(data)
 
                     if (!TextUtils.isEmpty(filePath)) {
-                        XLog.e("===========Update Review Image (DashboardActivity)===========")
-                        XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        Timber.e("===========Update Review Image (DashboardActivity)===========")
+                        Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                         val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                        XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                         try {
                             CropImage.activity(contentURI)
@@ -7719,7 +7722,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                     .start(this)
                         } catch (e: Exception) {
                             e.printStackTrace()
-                            XLog.e("Error: " + e.localizedMessage)
+                            Timber.e("Error: " + e.localizedMessage)
                         }
                     }
                 }
@@ -7733,12 +7736,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         (getFragment() as DashboardFragment).setImage(filePath)
 
 
-                        /*   XLog.e("===========Update Review Image (DashboardActivity)===========")
-                           XLog.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
+                        /*   Timber.e("===========Update Review Image (DashboardActivity)===========")
+                           Timber.e("DashboardActivity :  ,  Camera Image FilePath : $filePath")
 
                            val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
 
-                           XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                           Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
 
                            try {
                                CropImage.activity(contentURI)
@@ -7746,7 +7749,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                        .start(this)
                            } catch (e: Exception) {
                                e.printStackTrace()
-                               XLog.e("Error: " + e.localizedMessage)
+                               Timber.e("Error: " + e.localizedMessage)
                            }*/
                     }
                 }
@@ -7881,7 +7884,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     val fileSize = AppUtils.getCompressImage(filePath)
                     editProfilePic(fileSize)*/
 
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
@@ -7891,44 +7894,44 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     AppUtils.getCompressImage(data!!.data.toString())
                     (getFragment() as MarketingPagerFragment).setImage(data.data!!)
                 } else if (getCurrentFragType() == FragType.AddShopFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.ShopDetailFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.AddBillingFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.AddDynamicFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.EditDynamicFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.AddActivityFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.EditActivityFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.NearByShopsListFragment || getCurrentFragType() == FragType.NewDateWiseOrderListFragment ||
                         getCurrentFragType() == FragType.NewOrderListFragment || getCurrentFragType() == FragType.ShopBillingListFragment ||
                         getCurrentFragType() == FragType.ViewAllOrderListFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
@@ -7951,7 +7954,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         uiThread {
                             //progress_wheel.stopSpinning()
                             if (newFile != null) {
-                                XLog.e("=========Gallery Image from new technique==========")
+                                Timber.e("=========Gallery Image from new technique==========")
                                 filePath = newFile?.absolutePath!!
                                 reimbursementPic(newFile!!.length())
                             } else {
@@ -7983,7 +7986,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                         uiThread {
                             if (newFile != null) {
-                                XLog.e("=========Image Capture from new technique==========")
+                                Timber.e("=========Image Capture from new technique==========")
                                 filePath = newFile?.absolutePath!!
                                 reimbursementEditPic(newFile!!.length())
                             } else {
@@ -8001,27 +8004,27 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getGalleryImage(this, data)
                     (getFragment() as DocumentListFragment).setImage(filePath)
                 } else if (getCurrentFragType() == FragType.WorkInProgressFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.WorkOnHoldFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.WorkCompletedFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.WorkCancelledFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
                 } else if (getCurrentFragType() == FragType.UpdateReviewFragment) {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
@@ -8039,7 +8042,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     getGalleryImage(this, data)
                     if (!TextUtils.isEmpty(filePath)) {
                         //val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, filePath)
-                        //XLog.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
+                        //Timber.e("DashboardActivity :  ,  contentURI FilePath : $contentURI")
                         //val fileSize = AppUtils.getCompressBillingImage(contentURI.toString(), this)
                         //updatePhotoRegAadhaarCroppedImg(fileSize, contentURI)
 
@@ -8047,7 +8050,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     }
                 } else {
-                    XLog.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
+                    Timber.d("DashboardActivity : " + " , " + " Gallery Image FilePath :" + data!!.data)
                     CropImage.activity(data.data)
                             .setAspectRatio(40, 21)
                             .start(this)
@@ -8373,7 +8376,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
 
             var distance = 0.0
-            XLog.e("======New Distance (At revisit time)=========")
+            Timber.e("======New Distance (At revisit time)=========")
 
             val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(mShopId)
             if (!TextUtils.isEmpty(shop.actual_address))
@@ -8383,19 +8386,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
             if (Pref.isOnLeave.equals("false", ignoreCase = true)) {
 
-                XLog.e("=====User is at work (At revisit time)=======")
+                Timber.e("=====User is at work (At revisit time)=======")
 
                 /*if (!TextUtils.isEmpty(Pref.current_latitude) && !TextUtils.isEmpty(Pref.current_longitude)) {
                 if (!TextUtils.isEmpty(Pref.source_latitude) && !TextUtils.isEmpty(Pref.source_longitude)) {
                     distance = LocationWizard.getDistance(Pref.source_latitude.toDouble(), Pref.source_longitude.toDouble(),
                             Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
 
-                    XLog.e("=====Both location available=======")
+                    Timber.e("=====Both location available=======")
                 } else {
                     //distance = LocationWizard.getDistance(Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble(), 0.0, 0.0)
                     distance = 0.0 //LocationWizard.getDistance(0.0, 0.0, Pref.current_latitude.toDouble(), Pref.current_longitude.toDouble())
 
-                    XLog.e("=====Only new location available=======")
+                    Timber.e("=====Only new location available=======")
                 }
                 Pref.source_latitude = Pref.current_latitude
                 Pref.source_longitude = Pref.current_longitude
@@ -8404,11 +8407,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     //distance = LocationWizard.getDistance(Pref.source_latitude.toDouble(), Pref.source_longitude.toDouble(), 0.0, 0.0)
                     distance = 0.0 //LocationWizard.getDistance(0.0, 0.0, Pref.source_latitude.toDouble(), Pref.source_longitude.toDouble())
 
-                    XLog.e("=====Only old location available=======")
+                    Timber.e("=====Only old location available=======")
                 } else {
                     distance = 0.0
 
-                    XLog.e("=====No location available=======")
+                    Timber.e("=====No location available=======")
                 }
             }*/
 
@@ -8431,11 +8434,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 }
                 val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
 
-                XLog.e("===Distance (At shop revisit time)===")
-                XLog.e("Temp Distance====> " + Pref.tempDistance)
-                XLog.e("Normal Distance====> $loc_distance")
-                XLog.e("Total Distance====> $finalDistance")
-                XLog.e("=====================================")
+                Timber.e("===Distance (At shop revisit time)===")
+                Timber.e("Temp Distance====> " + Pref.tempDistance)
+                Timber.e("Normal Distance====> $loc_distance")
+                Timber.e("Total Distance====> $finalDistance")
+                Timber.e("=====================================")
 
                 userlocation.distance = finalDistance
                 userlocation.locationName = LocationWizard.getNewLocationName(this, userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
@@ -8453,7 +8456,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
                 AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
-                XLog.e("=====Shop revisit data added=======")
+                Timber.e("=====Shop revisit data added=======")
 
                 Pref.totalS2SDistance = (Pref.totalS2SDistance.toDouble() + userlocation.distance.toDouble()).toString()
 
@@ -8461,11 +8464,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 Pref.totalS2SDistance = "0.0"
                 Pref.tempDistance = "0.0"
             } else {
-                XLog.e("=====User is on leave (At revisit time)=======")
+                Timber.e("=====User is on leave (At revisit time)=======")
                 distance = 0.0
             }
 
-            XLog.e("shop to shop distance (At revisit time)=====> $distance")
+            Timber.e("shop to shop distance (At revisit time)=====> $distance")
 
             mShopActivityEntity.distance_travelled = distance.toString()
 
@@ -8805,7 +8808,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
                                 when (addShopResult.status) {
                                     NetworkConstant.SUCCESS -> {
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
@@ -8842,7 +8845,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
                                 when (addShopResult.status) {
                                     NetworkConstant.SUCCESS -> {
                                         AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
@@ -9367,11 +9370,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     private fun addShopVisitPic(fileSize: Long, imageUpDateTime: String, shop: String, image: String) {
         val fileSizeInKB = fileSize / 1024
-        XLog.e("Dashboard: $shop image file size after compression==========> $fileSizeInKB KB")
+        Timber.e("Dashboard: $shop image file size after compression==========> $fileSizeInKB KB")
         if (fileSizeInKB > 200) {
             val newFileSize = AppUtils.getCompressImage(image)
             val newFileSizeInKB = newFileSize / 1024
-            XLog.e("Dashboard: $shop new image file size after compression==========> $newFileSizeInKB KB")
+            Timber.e("Dashboard: $shop new image file size after compression==========> $newFileSizeInKB KB")
         }
         val shopVisit = ShopVisitImageModelEntity()
         shopVisit.shop_id = mShopId
@@ -9459,7 +9462,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             filemanagerstring != null -> filePath = filemanagerstring
             else -> {
                 //Toaster.msgShort(baseActivity, "Unknown Path")
-                XLog.e("Bitmap", "Unknown Path")
+                Timber.e("Bitmap", "Unknown Path")
             }
         }
     }
@@ -9625,10 +9628,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             if (addShopEntity != null && getFragment() != null && getFragment() !is GpsDisableFragment && forceLogoutDialog == null) {
                 val userId = shopId.substring(0, shopId.indexOf("_"))
                 if (/*userId == Pref.user_id &&*/ !Pref.isAutoLogout) {
-                    XLog.e("=====User's shop (Dashboard Activity)========")
+                    Timber.e("=====User's shop (Dashboard Activity)========")
                     callDialog(addShopEntity, storeName, shopId)
                 } else
-                    XLog.e("=====Another user's shop (Dashboard Activity)========")
+                    Timber.e("=====Another user's shop (Dashboard Activity)========")
             }
         }, 350)
 
@@ -10151,16 +10154,16 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 location = "Unknown"
         }
 
-        XLog.d("LOGOUT : " + "REQUEST : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
-        XLog.d("==============================LOGOUT INPUT PARAMS==============================")
-        XLog.d("LOGOUT : USER ID======> $user_id")
-        XLog.d("LOGOUT : SESSION ID======> $session_id")
-        XLog.d("LOGOUT : LAT=========> " + Pref.latitude)
-        XLog.d("LOGOUT : LONG==========> " + Pref.longitude)
-        XLog.d("LOGOUT : LOGOUT TIME========> " + AppUtils.getCurrentDateTime())
-        XLog.d("LOGOUT : IS AUTO LOGOUT=======> 0")
-        XLog.d("LOGOUT : LOCATION=========> $location")
-        XLog.d("===============================================================================")
+        Timber.d("LOGOUT : " + "REQUEST : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
+        Timber.d("==============================LOGOUT INPUT PARAMS==============================")
+        Timber.d("LOGOUT : USER ID======> $user_id")
+        Timber.d("LOGOUT : SESSION ID======> $session_id")
+        Timber.d("LOGOUT : LAT=========> " + Pref.latitude)
+        Timber.d("LOGOUT : LONG==========> " + Pref.longitude)
+        Timber.d("LOGOUT : LOGOUT TIME========> " + AppUtils.getCurrentDateTime())
+        Timber.d("LOGOUT : IS AUTO LOGOUT=======> 0")
+        Timber.d("LOGOUT : LOCATION=========> $location")
+        Timber.d("===============================================================================")
 
         val repository = LogoutRepositoryProvider.provideLogoutRepository()
         progress_wheel.spin()
@@ -10172,7 +10175,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             var logoutResponse = result as BaseResponse
-                            XLog.d("LOGOUT : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() +
+                            Timber.d("LOGOUT : " + "RESPONSE : " + logoutResponse.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() +
                                     ", USER :" + Pref.user_name + ",MESSAGE : " + logoutResponse.message)
                             if (logoutResponse.status == NetworkConstant.SUCCESS) {
                                 syncShopList()
@@ -10192,7 +10195,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             BaseActivity.isApiInitiated = false
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
-                            XLog.d("LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name +
+                            Timber.d("LOGOUT : " + "RESPONSE ERROR: " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name +
                                     ",MESSAGE : " + error.localizedMessage)
                             (mContext as DashboardActivity).showSnackMessage(error.localizedMessage)
                         })
@@ -10403,20 +10406,20 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 else
                     localData.battery_percentage = location_details[i].battery_percentage
 
-                XLog.d("====================Current location (Dashboard)=====================")
-                XLog.d("distance=====> " + localData.distance)
-                XLog.d("lat====> " + localData.latitude)
-                XLog.d("long=====> " + localData.longitude)
-                XLog.d("location=====> " + localData.locationName)
-                XLog.d("date time=====> " + localData.updateDateTime)
-                XLog.d("meeting_attended=====> " + localData.meeting)
-                XLog.d("visit_distance=====> " + localData.visit_distance)
-                XLog.d("network_status=====> " + localData.network_status)
-                XLog.d("battery_percentage=====> " + localData.battery_percentage)
+                Timber.d("====================Current location (Dashboard)=====================")
+                Timber.d("distance=====> " + localData.distance)
+                Timber.d("lat====> " + localData.latitude)
+                Timber.d("long=====> " + localData.longitude)
+                Timber.d("location=====> " + localData.locationName)
+                Timber.d("date time=====> " + localData.updateDateTime)
+                Timber.d("meeting_attended=====> " + localData.meeting)
+                Timber.d("visit_distance=====> " + localData.visit_distance)
+                Timber.d("network_status=====> " + localData.network_status)
+                Timber.d("battery_percentage=====> " + localData.battery_percentage)
 
                 AppDatabase.getDBInstance()!!.userLocationDataDao().insert(localData)
 
-                XLog.d("=====================location added to db (Dashboard)======================")
+                Timber.d("=====================location added to db (Dashboard)======================")
             }
 
             uiThread {
@@ -10458,9 +10461,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             val resultCode = jobScheduler.schedule(jobInfo)
 
             if (resultCode == JobScheduler.RESULT_SUCCESS) {
-                XLog.d("==============================Job scheduled (Dashboard Activity)===============================")
+                Timber.d("==============================Job scheduled (Dashboard Activity)===============================")
             } else {
-                XLog.d("===========================Job not scheduled (Dashboard Activity)==============================")
+                Timber.d("===========================Job not scheduled (Dashboard Activity)==============================")
             }
         } else {
             val myIntent = Intent(this, LocationFuzedService::class.java)
@@ -10602,7 +10605,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 }, 450)
             }
             6 -> {
-                XLog.e("=================Show selfie dialog (DashboardActivity)=================")
+                Timber.e("=================Show selfie dialog (DashboardActivity)=================")
 
                 if (isFromAlarm) {
                     val currentFragment = supportFragmentManager.findFragmentById(R.id.frame_layout_container)
@@ -11019,7 +11022,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ result ->
-                        XLog.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
+                        Timber.d("Login DayStart : RESPONSE " + result.status + AppUtils.getCurrentDateTime())
                         val response = result as StatusDayStartEnd
                         if (response.status == NetworkConstant.SUCCESS) {
                             Pref.DayStartMarked = response.DayStartMarked!!
@@ -11057,9 +11060,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         }
                     }, { error ->
                         if (error == null) {
-                            XLog.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+                            Timber.d("Login DayStart : ERROR " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
                         } else {
-                            XLog.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
+                            Timber.d("Login DayStart : ERROR " + error.localizedMessage + " "+ AppUtils.getCurrentDateTime())
                             error.printStackTrace()
                         }
                         Pref.IsDDvistedOnceByDay = false
@@ -11079,7 +11082,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     })
             )
         } catch (ex: java.lang.Exception) {
-            XLog.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
+            Timber.d("Login ex DayStart : ERROR  ${ex.message} " + "UNEXPECTED ERROR IN DayStart API "+ AppUtils.getCurrentDateTime())
             ex.printStackTrace()
             Pref.DayStartMarked = false
             Pref.DayEndMarked = false
@@ -11128,7 +11131,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ result ->
-                        XLog.d("BaseActivity DayEnd : RESPONSE " + result.status)
+                        Timber.d("BaseActivity DayEnd : RESPONSE " + result.status)
                         val response = result as BaseResponse
                         if (response.status == NetworkConstant.SUCCESS) {
                             isForceLogout = true
@@ -11137,10 +11140,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }, { error ->
                         if (error == null) {
                             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                            XLog.d("BaseActivity DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
+                            Timber.d("BaseActivity DayEnd : ERROR " + "UNEXPECTED ERROR IN DayStart API")
                         } else {
                             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-                            XLog.d("BaseActivity DayEnd : ERROR " + error.localizedMessage)
+                            Timber.d("BaseActivity DayEnd : ERROR " + error.localizedMessage)
                             error.printStackTrace()
                         }
                     })
@@ -11247,7 +11250,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             shopLocation,
                             Pref.autoRevisitDistance.toInt()
                         )
-                        XLog.e(
+                        Timber.e(
                             "Distance 1 from shop " + allShopList[i].shopName + " location to current location============> " + AppUtils.mLocation?.distanceTo(
                                 shopLocation
                             ) + " Meter"
@@ -11258,10 +11261,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             Pref.current_latitude.toDouble(),
                             Pref.current_longitude.toDouble()
                         )
-                        XLog.e("Distance 2 from shop " + allShopList[i].shopName + " location to current location============> $distance KM")
+                        Timber.e("Distance 2 from shop " + allShopList[i].shopName + " location to current location============> $distance KM")
 
                         if (isShopNearby) {
-                            XLog.e("================Nearby shop " + allShopList[i].shopName + "(Location Fuzed Service)===================")
+                            Timber.e("================Nearby shop " + allShopList[i].shopName + "(Location Fuzed Service)===================")
                             val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao()
                                 .getShopForDay(
                                     allShopList[i].shop_id,
@@ -11273,15 +11276,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 //val currentTimeStamp = System.currentTimeMillis()
                                 shop_id = allShopList[i].shop_id
                                 AppUtils.isAutoRevisit = true
-                                XLog.e("revisitShop called")
+                                Timber.e("revisitShop called")
                                 revisitShop()
-                                XLog.e("revisitShop returned")
+                                Timber.e("revisitShop returned")
                                 revCount++
                                 shop_id = ""
-                                XLog.e("revisitShop stopSpinning")
+                                Timber.e("revisitShop stopSpinning")
                                 break
                             } else
-                                XLog.e("================" + allShopList[i].shopName + " is visiting now normally (Location Fuzed Service)===================")
+                                Timber.e("================" + allShopList[i].shopName + " is visiting now normally (Location Fuzed Service)===================")
                         }
                     }
                 }
@@ -11411,7 +11414,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 shopCodeListNearby.add(shop_id)
 
                             } else
-                                XLog.e("==" + allShopList[i].shopName + " is visiting now normally (Loc Fuzed Service)==")
+                                Timber.e("==" + allShopList[i].shopName + " is visiting now normally (Loc Fuzed Service)==")
                         }
                     }
                 }
@@ -11492,7 +11495,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                 var distance = 0.0
                 var address = ""
-                XLog.e("======New Distance (At auto revisit time)=========")
+                Timber.e("======New Distance (At auto revisit time)=========")
 
                 val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shop_id)
                 address = if (!TextUtils.isEmpty(shop.actual_address))
@@ -11501,7 +11504,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     LocationWizard.getNewLocationName(this, shop.shopLat.toDouble(), shop.shopLong.toDouble())
 
                 if (Pref.isOnLeave.equals("false", ignoreCase = true)) {
-                    XLog.e("=====User is at work (At auto revisit time)=======")
+                    Timber.e("=====User is at work (At auto revisit time)=======")
 
                     val locationList = AppDatabase.getDBInstance()!!.userLocationDataDao().getLocationUpdateForADay(AppUtils.getCurrentDateForShopActi())
 
@@ -11517,11 +11520,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                     val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
 
-                    XLog.e("===Distance (At auto shop revisit time)===")
-                    XLog.e("Temp Distance====> " + Pref.tempDistance)
-                    XLog.e("Normal Distance====> $loc_distance")
-                    XLog.e("Total Distance====> $finalDistance")
-                    XLog.e("===========================================")
+                    Timber.e("===Distance (At auto shop revisit time)===")
+                    Timber.e("Temp Distance====> " + Pref.tempDistance)
+                    Timber.e("Normal Distance====> $loc_distance")
+                    Timber.e("Total Distance====> $finalDistance")
+                    Timber.e("===========================================")
 
                     userlocation.distance = finalDistance
                     userlocation.locationName = LocationWizard.getNewLocationName(this, userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
@@ -11538,7 +11541,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
                     AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
-                    XLog.e("=====Shop auto revisit data added=======")
+                    Timber.e("=====Shop auto revisit data added=======")
 
                     Pref.totalS2SDistance = (Pref.totalS2SDistance.toDouble() + userlocation.distance.toDouble()).toString()
 
@@ -11546,11 +11549,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     Pref.totalS2SDistance = "0.0"
                     Pref.tempDistance = "0.0"
                 } else {
-                    XLog.e("=====User is on leave (At auto revisit time)=======")
+                    Timber.e("=====User is on leave (At auto revisit time)=======")
                     distance = 0.0
                 }
 
-                XLog.e("shop to shop distance (At auto revisit time)=====> $distance")
+                Timber.e("shop to shop distance (At auto revisit time)=====> $distance")
 
                 mShopActivityEntity.distance_travelled = distance.toString()
                 mShopActivityEntity.in_time = AppUtils.getCurrentTimeWithMeredian()
@@ -11573,7 +11576,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         var duration = AppUtils.getTimeFromTimeSpan(shopList[i].startTimeStamp, endTimeStamp)
                         val totalMinute = AppUtils.getMinuteFromTimeStamp(shopList[i].startTimeStamp, endTimeStamp)
 
-                        XLog.d("revisitShop LocFuzedS=> startT: ${shopList[i].startTimeStamp} endTime: $endTimeStamp   duration: $duration totalMinute:$totalMinute")
+                        Timber.d("revisitShop LocFuzedS=> startT: ${shopList[i].startTimeStamp} endTime: $endTimeStamp   duration: $duration totalMinute:$totalMinute")
                         if(duration.contains("-")){
                             duration="00:00:00"
                         }
@@ -11631,7 +11634,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
 
             AppUtils.isAutoRevisit = false
-            XLog.e("Fuzed Location: auto revisit endes ${AppUtils.getCurrentDateTime()}")
+            Timber.e("Fuzed Location: auto revisit endes ${AppUtils.getCurrentDateTime()}")
             val intent = Intent()
             intent.action = "AUTO_REVISIT_BROADCAST"
             LocalBroadcastManager.getInstance(this).sendBroadcast(intent)
@@ -11657,7 +11660,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     private fun revisitShop() {
 
-        XLog.e("revisitShop started")
+        Timber.e("revisitShop started")
         try {
             val shopActivityEntity = AppDatabase.getDBInstance()!!.shopActivityDao()
                 .getShopForDay(shop_id, AppUtils.getCurrentDateForShopActi())
@@ -11691,7 +11694,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                 var distance = 0.0
                 var address = ""
-                XLog.e("======New Distance (At auto revisit time)=========")
+                Timber.e("======New Distance (At auto revisit time)=========")
 
                 val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shop_id)
                 address = if (!TextUtils.isEmpty(shop.actual_address))
@@ -11705,7 +11708,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                 if (Pref.isOnLeave.equals("false", ignoreCase = true)) {
 
-                    XLog.e("=====User is at work (At auto revisit time)=======")
+                    Timber.e("=====User is at work (At auto revisit time)=======")
 
                     val locationList = AppDatabase.getDBInstance()!!.userLocationDataDao()
                         .getLocationUpdateForADay(AppUtils.getCurrentDateForShopActi())
@@ -11728,11 +11731,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                     val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()
 
-                    XLog.e("===Distance (At auto shop revisit time)===")
-                    XLog.e("Temp Distance====> " + Pref.tempDistance)
-                    XLog.e("Normal Distance====> $loc_distance")
-                    XLog.e("Total Distance====> $finalDistance")
-                    XLog.e("===========================================")
+                    Timber.e("===Distance (At auto shop revisit time)===")
+                    Timber.e("Temp Distance====> " + Pref.tempDistance)
+                    Timber.e("Normal Distance====> $loc_distance")
+                    Timber.e("Total Distance====> $finalDistance")
+                    Timber.e("===========================================")
 
                     userlocation.distance = finalDistance
                     userlocation.locationName = LocationWizard.getNewLocationName(
@@ -11756,7 +11759,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         AppUtils.getBatteryPercentage(mContext).toString()
                     AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
-                    XLog.e("=====Shop auto revisit data added=======")
+                    Timber.e("=====Shop auto revisit data added=======")
 
                     Pref.totalS2SDistance =
                         (Pref.totalS2SDistance.toDouble() + userlocation.distance.toDouble()).toString()
@@ -11765,11 +11768,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     Pref.totalS2SDistance = "0.0"
                     Pref.tempDistance = "0.0"
                 } else {
-                    XLog.e("=====User is on leave (At auto revisit time)=======")
+                    Timber.e("=====User is on leave (At auto revisit time)=======")
                     distance = 0.0
                 }
 
-                XLog.e("shop to shop distance (At auto revisit time)=====> $distance")
+                Timber.e("shop to shop distance (At auto revisit time)=====> $distance")
 
                 mShopActivityEntity.distance_travelled = distance.toString()
                 mShopActivityEntity.in_time = AppUtils.getCurrentTimeWithMeredian()
@@ -11916,7 +11919,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             val intent = Intent()
             intent.action = "AUTO_REVISIT_BROADCAST"
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent)
-            XLog.e("revisitShop ended")
+            Timber.e("revisitShop ended")
         } catch (e: Exception) {
             e.printStackTrace()
             progress_wheel.stopSpinning()
@@ -12046,65 +12049,65 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         BaseActivity.isApiInitiated = true
 
-        XLog.d("=====Sync EditShop Input Params (Shop List)======")
-        XLog.d("shop id====> " + addShopReqData.shop_id)
+        Timber.d("=====Sync EditShop Input Params (Shop List)======")
+        Timber.d("shop id====> " + addShopReqData.shop_id)
         val index = addShopReqData.shop_id!!.indexOf("_")
-        XLog.d("decoded shop id====> " + addShopReqData.user_id + "_" + AppUtils.getDate(addShopReqData.shop_id!!.substring(index + 1, addShopReqData.shop_id!!.length).toLong()))
-        XLog.d("shop added date====> " + addShopReqData.added_date)
-        XLog.d("shop address====> " + addShopReqData.address)
-        XLog.d("assigned to dd id====> " + addShopReqData.assigned_to_dd_id)
-        XLog.d("assigned to pp id=====> " + addShopReqData.assigned_to_pp_id)
-        XLog.d("date aniversery=====> " + addShopReqData.date_aniversary)
-        XLog.d("dob====> " + addShopReqData.dob)
-        XLog.d("shop owner phn no===> " + addShopReqData.owner_contact_no)
-        XLog.d("shop owner email====> " + addShopReqData.owner_email)
-        XLog.d("shop owner name====> " + addShopReqData.owner_name)
-        XLog.d("shop pincode====> " + addShopReqData.pin_code)
-        XLog.d("session token====> " + addShopReqData.session_token)
-        XLog.d("shop lat====> " + addShopReqData.shop_lat)
-        XLog.d("shop long===> " + addShopReqData.shop_long)
-        XLog.d("shop name====> " + addShopReqData.shop_name)
-        XLog.d("shop type===> " + addShopReqData.type)
-        XLog.d("user id====> " + addShopReqData.user_id)
-        XLog.d("amount=======> " + addShopReqData.amount)
-        XLog.d("area id=======> " + addShopReqData.area_id)
-        XLog.d("model id=======> " + addShopReqData.model_id)
-        XLog.d("primary app id=======> " + addShopReqData.primary_app_id)
-        XLog.d("secondary app id=======> " + addShopReqData.secondary_app_id)
-        XLog.d("lead id=======> " + addShopReqData.lead_id)
-        XLog.d("stage id=======> " + addShopReqData.stage_id)
-        XLog.d("funnel stage id=======> " + addShopReqData.funnel_stage_id)
-        XLog.d("booking amount=======> " + addShopReqData.booking_amount)
-        XLog.d("type id=======> " + addShopReqData.type_id)
+        Timber.d("decoded shop id====> " + addShopReqData.user_id + "_" + AppUtils.getDate(addShopReqData.shop_id!!.substring(index + 1, addShopReqData.shop_id!!.length).toLong()))
+        Timber.d("shop added date====> " + addShopReqData.added_date)
+        Timber.d("shop address====> " + addShopReqData.address)
+        Timber.d("assigned to dd id====> " + addShopReqData.assigned_to_dd_id)
+        Timber.d("assigned to pp id=====> " + addShopReqData.assigned_to_pp_id)
+        Timber.d("date aniversery=====> " + addShopReqData.date_aniversary)
+        Timber.d("dob====> " + addShopReqData.dob)
+        Timber.d("shop owner phn no===> " + addShopReqData.owner_contact_no)
+        Timber.d("shop owner email====> " + addShopReqData.owner_email)
+        Timber.d("shop owner name====> " + addShopReqData.owner_name)
+        Timber.d("shop pincode====> " + addShopReqData.pin_code)
+        Timber.d("session token====> " + addShopReqData.session_token)
+        Timber.d("shop lat====> " + addShopReqData.shop_lat)
+        Timber.d("shop long===> " + addShopReqData.shop_long)
+        Timber.d("shop name====> " + addShopReqData.shop_name)
+        Timber.d("shop type===> " + addShopReqData.type)
+        Timber.d("user id====> " + addShopReqData.user_id)
+        Timber.d("amount=======> " + addShopReqData.amount)
+        Timber.d("area id=======> " + addShopReqData.area_id)
+        Timber.d("model id=======> " + addShopReqData.model_id)
+        Timber.d("primary app id=======> " + addShopReqData.primary_app_id)
+        Timber.d("secondary app id=======> " + addShopReqData.secondary_app_id)
+        Timber.d("lead id=======> " + addShopReqData.lead_id)
+        Timber.d("stage id=======> " + addShopReqData.stage_id)
+        Timber.d("funnel stage id=======> " + addShopReqData.funnel_stage_id)
+        Timber.d("booking amount=======> " + addShopReqData.booking_amount)
+        Timber.d("type id=======> " + addShopReqData.type_id)
 
-        XLog.d("family member dob=======> " + addShopReqData.family_member_dob)
-        XLog.d("director name=======> " + addShopReqData.director_name)
-        XLog.d("key person's name=======> " + addShopReqData.key_person_name)
-        XLog.d("phone no=======> " + addShopReqData.phone_no)
-        XLog.d("additional dob=======> " + addShopReqData.addtional_dob)
-        XLog.d("additional doa=======> " + addShopReqData.addtional_doa)
-        XLog.d("doctor family member dob=======> " + addShopReqData.doc_family_member_dob)
-        XLog.d("specialization=======> " + addShopReqData.specialization)
-        XLog.d("average patient count per day=======> " + addShopReqData.average_patient_per_day)
-        XLog.d("category=======> " + addShopReqData.category)
-        XLog.d("doctor address=======> " + addShopReqData.doc_address)
-        XLog.d("doctor pincode=======> " + addShopReqData.doc_pincode)
-        XLog.d("chambers or hospital under same headquarter=======> " + addShopReqData.is_chamber_same_headquarter)
-        XLog.d("chamber related remarks=======> " + addShopReqData.is_chamber_same_headquarter_remarks)
-        XLog.d("chemist name=======> " + addShopReqData.chemist_name)
-        XLog.d("chemist name=======> " + addShopReqData.chemist_address)
-        XLog.d("chemist pincode=======> " + addShopReqData.chemist_pincode)
-        XLog.d("assistant name=======> " + addShopReqData.assistant_name)
-        XLog.d("assistant contact no=======> " + addShopReqData.assistant_contact_no)
-        XLog.d("assistant dob=======> " + addShopReqData.assistant_dob)
-        XLog.d("assistant date of anniversary=======> " + addShopReqData.assistant_doa)
-        XLog.d("assistant family dob=======> " + addShopReqData.assistant_family_dob)
-        XLog.d("entity id=======> " + addShopReqData.entity_id)
-        XLog.d("party status id=======> " + addShopReqData.party_status_id)
-        XLog.d("retailer id=======> " + addShopReqData.retailer_id)
-        XLog.d("dealer id=======> " + addShopReqData.dealer_id)
-        XLog.d("beat id=======> " + addShopReqData.beat_id)
-        XLog.d("actual_address=======> " + addShopReqData.actual_address)
+        Timber.d("family member dob=======> " + addShopReqData.family_member_dob)
+        Timber.d("director name=======> " + addShopReqData.director_name)
+        Timber.d("key person's name=======> " + addShopReqData.key_person_name)
+        Timber.d("phone no=======> " + addShopReqData.phone_no)
+        Timber.d("additional dob=======> " + addShopReqData.addtional_dob)
+        Timber.d("additional doa=======> " + addShopReqData.addtional_doa)
+        Timber.d("doctor family member dob=======> " + addShopReqData.doc_family_member_dob)
+        Timber.d("specialization=======> " + addShopReqData.specialization)
+        Timber.d("average patient count per day=======> " + addShopReqData.average_patient_per_day)
+        Timber.d("category=======> " + addShopReqData.category)
+        Timber.d("doctor address=======> " + addShopReqData.doc_address)
+        Timber.d("doctor pincode=======> " + addShopReqData.doc_pincode)
+        Timber.d("chambers or hospital under same headquarter=======> " + addShopReqData.is_chamber_same_headquarter)
+        Timber.d("chamber related remarks=======> " + addShopReqData.is_chamber_same_headquarter_remarks)
+        Timber.d("chemist name=======> " + addShopReqData.chemist_name)
+        Timber.d("chemist name=======> " + addShopReqData.chemist_address)
+        Timber.d("chemist pincode=======> " + addShopReqData.chemist_pincode)
+        Timber.d("assistant name=======> " + addShopReqData.assistant_name)
+        Timber.d("assistant contact no=======> " + addShopReqData.assistant_contact_no)
+        Timber.d("assistant dob=======> " + addShopReqData.assistant_dob)
+        Timber.d("assistant date of anniversary=======> " + addShopReqData.assistant_doa)
+        Timber.d("assistant family dob=======> " + addShopReqData.assistant_family_dob)
+        Timber.d("entity id=======> " + addShopReqData.entity_id)
+        Timber.d("party status id=======> " + addShopReqData.party_status_id)
+        Timber.d("retailer id=======> " + addShopReqData.retailer_id)
+        Timber.d("dealer id=======> " + addShopReqData.dealer_id)
+        Timber.d("beat id=======> " + addShopReqData.beat_id)
+        Timber.d("actual_address=======> " + addShopReqData.actual_address)
 
         progress_wheel.spin()
 
@@ -12116,7 +12119,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     .subscribeOn(Schedulers.io())
                     .subscribe({ result ->
                         val addShopResult = result as AddShopResponse
-                        XLog.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
+                        Timber.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
                         if (addShopResult.status == NetworkConstant.SUCCESS) {
                             AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
                             AppDatabase.getDBInstance()?.shopDeactivateDao()!!.deleteByShopID(addShopReqData.shop_id!!)

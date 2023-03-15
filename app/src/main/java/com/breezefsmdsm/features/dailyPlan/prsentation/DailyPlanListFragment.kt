@@ -15,7 +15,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
@@ -284,11 +284,11 @@ class DailyPlanListFragment : BaseFragment() {
         updatePlanListModel.user_id = Pref.user_id!!
         updatePlanListModel.update_plan_list = updatePlanFinalList
 
-        XLog.d("=====UpdatePlan Input Params========")
-        XLog.d("session_token=======> " + updatePlanListModel.session_token)
-        XLog.d("user_id======> " + updatePlanListModel.user_id)
-        XLog.d("update_plan_list size======> " + updatePlanListModel.update_plan_list?.size)
-        XLog.d("====================================")
+        Timber.d("=====UpdatePlan Input Params========")
+        Timber.d("session_token=======> " + updatePlanListModel.session_token)
+        Timber.d("user_id======> " + updatePlanListModel.user_id)
+        Timber.d("update_plan_list size======> " + updatePlanListModel.update_plan_list?.size)
+        Timber.d("====================================")
 
         val repository = PlanRepoProvider.planListRepoProvider()
         progress_wheel.spin()
@@ -298,7 +298,7 @@ class DailyPlanListFragment : BaseFragment() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val baseResponse = result as BaseResponse
-                            XLog.d("Update Plan Response Code========> " + baseResponse.status)
+                            Timber.d("Update Plan Response Code========> " + baseResponse.status)
 
                             progress_wheel.stopSpinning()
 
@@ -321,7 +321,7 @@ class DailyPlanListFragment : BaseFragment() {
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("Update Plan ERROR=======> " + error.localizedMessage)
+                            Timber.d("Update Plan ERROR=======> " + error.localizedMessage)
                         })
         )
     }
@@ -335,34 +335,34 @@ class DailyPlanListFragment : BaseFragment() {
 
         addAttendenceModel?.update_plan_list = updatePlanFinalList!!
 
-        XLog.e("==========AddAttendance (From plan list)=============")
-        XLog.d("=====AddAttendance Input Params========")
-        XLog.d("session_token-----> " + addAttendenceModel?.session_token)
-        XLog.d("user_id----------> " + addAttendenceModel?.user_id)
-        XLog.d("is_on_leave----------> " + addAttendenceModel?.is_on_leave)
-        XLog.d("work_lat----------> " + addAttendenceModel?.work_lat)
-        XLog.d("work_long----------> " + addAttendenceModel?.work_long)
-        XLog.d("work_address----------> " + addAttendenceModel?.work_address)
-        XLog.d("work_type----------> " + addAttendenceModel?.work_type)
-        XLog.d("route----------> " + addAttendenceModel?.route)
-        XLog.d("leave_from_date----------> " + addAttendenceModel?.leave_from_date)
-        XLog.d("leave_to_date----------> " + addAttendenceModel?.leave_to_date)
-        XLog.d("leave_type----------> " + addAttendenceModel?.leave_type)
-        XLog.d("leave_reason----------> " + addAttendenceModel?.leave_reason)
-        XLog.d("work_date_time----------> " + addAttendenceModel?.work_date_time)
-        XLog.d("add_attendence_time----------> " + addAttendenceModel?.add_attendence_time)
-        XLog.d("order taken----------> " + addAttendenceModel?.order_taken)
-        XLog.d("collection taken----------> " + addAttendenceModel?.collection_taken)
-        XLog.d("visit new shop----------> " + addAttendenceModel?.new_shop_visit)
-        XLog.d("revisit shop----------> " + addAttendenceModel?.revisit_shop)
-        XLog.d("state id----------> " + addAttendenceModel?.state_id)
-        XLog.d("shop_list size----------> " + addAttendenceModel?.shop_list?.size)
-        XLog.d("primary_value_list size----------> " + addAttendenceModel?.primary_value_list?.size)
-        XLog.d("update_plan_list size----------> " + addAttendenceModel?.update_plan_list?.size)
-        XLog.d("from_id----------> " + addAttendenceModel?.from_id)
-        XLog.d("to_id----------> " + addAttendenceModel?.to_id)
-        XLog.d("distance----------> " + addAttendenceModel?.distance)
-        XLog.d("======End AddAttendance Input Params======")
+        Timber.e("==========AddAttendance (From plan list)=============")
+        Timber.d("=====AddAttendance Input Params========")
+        Timber.d("session_token-----> " + addAttendenceModel?.session_token)
+        Timber.d("user_id----------> " + addAttendenceModel?.user_id)
+        Timber.d("is_on_leave----------> " + addAttendenceModel?.is_on_leave)
+        Timber.d("work_lat----------> " + addAttendenceModel?.work_lat)
+        Timber.d("work_long----------> " + addAttendenceModel?.work_long)
+        Timber.d("work_address----------> " + addAttendenceModel?.work_address)
+        Timber.d("work_type----------> " + addAttendenceModel?.work_type)
+        Timber.d("route----------> " + addAttendenceModel?.route)
+        Timber.d("leave_from_date----------> " + addAttendenceModel?.leave_from_date)
+        Timber.d("leave_to_date----------> " + addAttendenceModel?.leave_to_date)
+        Timber.d("leave_type----------> " + addAttendenceModel?.leave_type)
+        Timber.d("leave_reason----------> " + addAttendenceModel?.leave_reason)
+        Timber.d("work_date_time----------> " + addAttendenceModel?.work_date_time)
+        Timber.d("add_attendence_time----------> " + addAttendenceModel?.add_attendence_time)
+        Timber.d("order taken----------> " + addAttendenceModel?.order_taken)
+        Timber.d("collection taken----------> " + addAttendenceModel?.collection_taken)
+        Timber.d("visit new shop----------> " + addAttendenceModel?.new_shop_visit)
+        Timber.d("revisit shop----------> " + addAttendenceModel?.revisit_shop)
+        Timber.d("state id----------> " + addAttendenceModel?.state_id)
+        Timber.d("shop_list size----------> " + addAttendenceModel?.shop_list?.size)
+        Timber.d("primary_value_list size----------> " + addAttendenceModel?.primary_value_list?.size)
+        Timber.d("update_plan_list size----------> " + addAttendenceModel?.update_plan_list?.size)
+        Timber.d("from_id----------> " + addAttendenceModel?.from_id)
+        Timber.d("to_id----------> " + addAttendenceModel?.to_id)
+        Timber.d("distance----------> " + addAttendenceModel?.distance)
+        Timber.d("======End AddAttendance Input Params======")
 
         val repository = AddAttendenceRepoProvider.addAttendenceRepo()
         progress_wheel.spin()
@@ -373,8 +373,8 @@ class DailyPlanListFragment : BaseFragment() {
                         .subscribe({ result ->
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
-                            XLog.d("AddAttendance Response Code========> " + response.status)
-                            XLog.d("AddAttendance Response Msg=========> " + response.message)
+                            Timber.d("AddAttendance Response Code========> " + response.status)
+                            Timber.d("AddAttendance Response Msg=========> " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 Pref.visitDistance = (mContext as DashboardActivity).visitDistance
@@ -496,7 +496,7 @@ class DailyPlanListFragment : BaseFragment() {
                             Log.e("add attendance", "api work type")
 
                         }, { error ->
-                            XLog.d("AddAttendance Response Msg=========> " + error.message)
+                            Timber.d("AddAttendance Response Msg=========> " + error.message)
                             BaseActivity.isApiInitiated = false
                             //AppUtils.isFromAttendance = false
                             progress_wheel.stopSpinning()
@@ -577,7 +577,7 @@ class DailyPlanListFragment : BaseFragment() {
                             progress_wheel.stopSpinning()
                             tv_no_attendance.visibility = View.VISIBLE
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("DailyPlanList ERROR: " + error.localizedMessage)
+                            Timber.d("DailyPlanList ERROR: " + error.localizedMessage)
                         })
         )
     }

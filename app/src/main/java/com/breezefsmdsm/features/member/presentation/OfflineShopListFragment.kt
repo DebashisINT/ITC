@@ -28,7 +28,7 @@ import com.breezefsmdsm.features.member.api.TeamRepoProvider
 import com.breezefsmdsm.features.member.model.TeamShopListDataModel
 import com.breezefsmdsm.features.member.model.TeamShopListResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.github.clans.fab.FloatingActionMenu
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -173,11 +173,11 @@ class OfflineShopListFragment : BaseFragment() {
             if (AppUtils.mLocation!!.accuracy <= Pref.gpsAccuracy.toInt())
                 getNearbyShopList(AppUtils.mLocation!!, shop_list)
             else {
-                XLog.d("=====Inaccurate current location (Team Shop List)=====")
+                Timber.d("=====Inaccurate current location (Team Shop List)=====")
                 singleLocation(shop_list)
             }
         } else {
-            XLog.d("=====null location (Team Shop List)======")
+            Timber.d("=====null location (Team Shop List)======")
             singleLocation(shop_list)
         }
     }
@@ -188,8 +188,8 @@ class OfflineShopListFragment : BaseFragment() {
 
         allShopList?.takeIf { it.isNotEmpty() }?.let {
 
-            XLog.d("Local Shop List: all shop list size======> " + allShopList.size)
-            XLog.d("======Local Shop List======")
+            Timber.d("Local Shop List: all shop list size======> " + allShopList.size)
+            Timber.d("======Local Shop List======")
 
             it/*.filter { teamShopListDataModel ->
                 teamShopListDataModel.shop_lat.toDouble() != null && teamShopListDataModel.shop_long.toDouble() != null
@@ -205,35 +205,35 @@ class OfflineShopListFragment : BaseFragment() {
                         it.longitude = shopLong
                         FTStorageUtils.checkShopPositionWithinRadious(location, it, LocationWizard.NEARBY_RADIUS)
                     }.takeIf { it }?.apply {
-                        XLog.d("shop_id====> " + teamShop.shop_id)
-                        XLog.d("shopName====> " + teamShop.shop_name)
-                        XLog.d("shopLat====> $shopLat")
-                        XLog.d("shopLong====> $shopLong")
-                        XLog.d("lat=====> " + location.latitude)
-                        XLog.d("long=====> " + location.longitude)
-                        XLog.d("NEARBY_RADIUS====> ${LocationWizard.NEARBY_RADIUS}")
-                        XLog.d("=====" + teamShop.shop_name + " is nearby=====")
+                        Timber.d("shop_id====> " + teamShop.shop_id)
+                        Timber.d("shopName====> " + teamShop.shop_name)
+                        Timber.d("shopLat====> $shopLat")
+                        Timber.d("shopLong====> $shopLong")
+                        Timber.d("lat=====> " + location.latitude)
+                        Timber.d("long=====> " + location.longitude)
+                        Timber.d("NEARBY_RADIUS====> ${LocationWizard.NEARBY_RADIUS}")
+                        Timber.d("=====" + teamShop.shop_name + " is nearby=====")
                         newShopList.add(teamShop)
                     }
                 } else {
-                    XLog.d("shop_id====> " + teamShop.shop_id)
-                    XLog.d("shopName===> " + teamShop.shop_name)
+                    Timber.d("shop_id====> " + teamShop.shop_id)
+                    Timber.d("shopName===> " + teamShop.shop_name)
 
                     if (shopLat != null)
-                        XLog.d("shopLat===> $shopLat")
+                        Timber.d("shopLat===> $shopLat")
                     else
-                        XLog.d("shopLat===> null")
+                        Timber.d("shopLat===> null")
 
                     if (shopLong != null)
-                        XLog.d("shopLong====> $shopLong")
+                        Timber.d("shopLong====> $shopLong")
                     else
-                        XLog.d("shopLong====> null")
+                        Timber.d("shopLong====> null")
                 }
             }
-            XLog.d("=============================================")
+            Timber.d("=============================================")
 
         } ?: let {
-            XLog.d("====empty shop list (Local Shop List)======")
+            Timber.d("====empty shop list (Local Shop List)======")
         }
 
         shopList = newShopList

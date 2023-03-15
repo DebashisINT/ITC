@@ -27,7 +27,7 @@ import com.breezefsmdsm.features.stockAddCurrentStock.api.ShopAddStockProvider
 import com.breezefsmdsm.features.stockAddCurrentStock.model.CurrentStockGetData
 import com.breezefsmdsm.features.stockCompetetorStock.model.CompetetorStockGetData
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
@@ -140,7 +140,7 @@ class UpdateShopStockFragment : BaseFragment(), View.OnClickListener{
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
-                                XLog.d("Stock/CurrentStockList " + result.status)
+                                Timber.d("Stock/CurrentStockList " + result.status)
                                 val response = result as CurrentStockGetData
                                 if (response.status == NetworkConstant.SUCCESS){
                                     if (response.stock_list!! != null && response.stock_list!!.isNotEmpty()){
@@ -184,15 +184,15 @@ class UpdateShopStockFragment : BaseFragment(), View.OnClickListener{
                                 }
                             },{error ->
                                 if (error == null) {
-                                    XLog.d("Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+                                    Timber.d("Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
                                 } else {
-                                    XLog.d("Stock/CurrentStockList : ERROR " + error.localizedMessage)
+                                    Timber.d("Stock/CurrentStockList : ERROR " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
                             })
             )
         }catch (ex:Exception){
-            XLog.d("Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
+            Timber.d("Stock/CurrentStockList : ERROR " + "UNEXPECTED ERROR IN Add Stock ACTIVITY API")
         }
     }
 

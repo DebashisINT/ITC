@@ -39,7 +39,7 @@ import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.utils.RotateImage.calculateInSampleSize
 import com.breezefsmdsm.features.login.model.LoginStateListDataModel
 import com.breezefsmdsm.features.login.model.productlistmodel.ProductRateDataModel
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.gson.Gson
@@ -659,11 +659,11 @@ class AppUtils {
                 sHours = "5"
             }
 
-            XLog.e("====CALCULATE DURATION (AppUtils)=====")
-            XLog.e("Hours Spent====> $sHours")
+            Timber.e("====CALCULATE DURATION (AppUtils)=====")
+            Timber.e("Hours Spent====> $sHours")
 
             val duration = "$sHours:$sMinute:$sSecond"
-            XLog.e("Duration Spent====> $duration")
+            Timber.e("Duration Spent====> $duration")
 
             return duration*/
 
@@ -728,11 +728,11 @@ class AppUtils {
                 sHours = "5"
             }
 
-            XLog.e("====CALCULATE DURATION (AppUtils)=====")
-            XLog.e("Hours Spent====> $sHours")
+            Timber.e("====CALCULATE DURATION (AppUtils)=====")
+            Timber.e("Hours Spent====> $sHours")
 
             /*try {
-                XLog.e("Minutes Spent====> $sMinute")
+                Timber.e("Minutes Spent====> $sMinute")
                 sMinute.toInt()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -740,7 +740,7 @@ class AppUtils {
             }*/
 
             val duration = "$sHours:$sMinute:$sSecond"
-            XLog.e("Duration Spent====> $duration")
+            Timber.e("Duration Spent====> $duration")
 
             return duration
         }
@@ -1899,9 +1899,9 @@ class AppUtils {
         fun getCompressImage(filePath: String): Long {
             val file = File(filePath)
 
-            //XLog.e("Dashboard", "image file size before compression=======> " + file.length())
+            //Timber.e("Dashboard", "image file size before compression=======> " + file.length())
 
-            XLog.e("Dashboard: image file size before compression=======> " + file.length())
+            Timber.e("Dashboard: image file size before compression=======> " + file.length())
 
             try {
                 val bitmapImage = BitmapFactory.decodeFile(filePath)
@@ -1921,20 +1921,20 @@ class AppUtils {
                 fos.flush()
                 fos.close()
 
-                XLog.e("Dashboard: image file path======> $filePath")
-                XLog.e("Dashboard: image file size after compression=======> " + file.length())
+                Timber.e("Dashboard: image file path======> $filePath")
+                Timber.e("Dashboard: image file size after compression=======> " + file.length())
                 return file.length()
             } catch (e: FileNotFoundException) {
                 // TODO Auto-generated catch block
                 e.printStackTrace()
-                XLog.e("Dashboard: " + e.localizedMessage)
+                Timber.e("Dashboard: " + e.localizedMessage)
             } catch (e: IOException) {
                 // TODO Auto-generated catch block
                 e.printStackTrace()
-                XLog.e("Dashboard: " + e.localizedMessage)
+                Timber.e("Dashboard: " + e.localizedMessage)
             } catch (e: Exception) {
                 e.printStackTrace()
-                XLog.e("Dashboard: " + e.localizedMessage)
+                Timber.e("Dashboard: " + e.localizedMessage)
             }
             return 0
         }

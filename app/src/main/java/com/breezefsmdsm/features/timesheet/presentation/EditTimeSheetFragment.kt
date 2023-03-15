@@ -40,7 +40,7 @@ import com.breezefsmdsm.features.timesheet.api.TimeSheetRepoProvider
 import com.breezefsmdsm.features.timesheet.model.*
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -491,7 +491,7 @@ class EditTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener,
 
             uiThread {
                 if (newFile != null) {
-                    XLog.e("=========Image from new technique==========")
+                    Timber.e("=========Image from new technique==========")
                     timesheetPic(newFile!!.length(), newFile?.absolutePath!!)
                 } else {
                     // Image compression
@@ -609,19 +609,19 @@ class EditTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener,
         }
 
 
-        XLog.d("==============Edit Timesheet Input Params (Edit Timesheet)===============")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("date=======> $date")
-        XLog.d("client_id=======> $clientId")
-        XLog.d("project_id=======> $projectId")
-        XLog.d("activity_id=======> $activityId")
-        XLog.d("product_id=======> $productId")
-        XLog.d("time=======> " + et_hrs.text.toString().trim() + ":" + et_mins.text.toString().trim())
-        XLog.d("comments=======> " + et_comment.text.toString().trim())
-        XLog.d("timesheet_id=======> " + timeSheet?.timesheet_id)
-        XLog.d("image=======> $imagePath")
-        XLog.d("===========================================================================")
+        Timber.d("==============Edit Timesheet Input Params (Edit Timesheet)===============")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("date=======> $date")
+        Timber.d("client_id=======> $clientId")
+        Timber.d("project_id=======> $projectId")
+        Timber.d("activity_id=======> $activityId")
+        Timber.d("product_id=======> $productId")
+        Timber.d("time=======> " + et_hrs.text.toString().trim() + ":" + et_mins.text.toString().trim())
+        Timber.d("comments=======> " + et_comment.text.toString().trim())
+        Timber.d("timesheet_id=======> " + timeSheet?.timesheet_id)
+        Timber.d("image=======> $imagePath")
+        Timber.d("===========================================================================")
 
         var comment = ""
 
@@ -645,7 +645,7 @@ class EditTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener,
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as EditDeleteTimesheetResposneModel
-                                XLog.d("EDIT TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("EDIT TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                                 progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
@@ -666,7 +666,7 @@ class EditTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener,
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("EDIT TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("EDIT TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             })
@@ -680,7 +680,7 @@ class EditTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener,
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val response = result as EditDeleteTimesheetResposneModel
-                                XLog.d("EDIT TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                                Timber.d("EDIT TIMESHEET: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
                                 progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
@@ -701,7 +701,7 @@ class EditTimeSheetFragment : BaseFragment(), DateAdapter.onPetSelectedListener,
 
                             }, { error ->
                                 progress_wheel.stopSpinning()
-                                XLog.d("EDIT TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                                Timber.d("EDIT TIMESHEET: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                                 error.printStackTrace()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             })

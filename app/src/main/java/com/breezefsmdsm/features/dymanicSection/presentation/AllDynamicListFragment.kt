@@ -18,7 +18,7 @@ import com.breezefsmdsm.features.dymanicSection.api.DynamicRepoProvider
 import com.breezefsmdsm.features.dymanicSection.model.AllDynamicDataModel
 import com.breezefsmdsm.features.dymanicSection.model.AllDynamicListResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -75,7 +75,7 @@ class AllDynamicListFragment : BaseFragment() {
 
                             val response = result as AllDynamicListResponseModel
 
-                            XLog.d("DYNAMIC ALL LIST RESPONSE=======> " + response.status)
+                            Timber.d("DYNAMIC ALL LIST RESPONSE=======> " + response.status)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 if (response.form_list != null && response.form_list!!.size > 0) {
@@ -97,7 +97,7 @@ class AllDynamicListFragment : BaseFragment() {
                             progress_wheel.stopSpinning()
                             tv_no_data.visibility = View.VISIBLE
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("DYNAMIC ALL LIST ERROR=======> " + error.localizedMessage)
+                            Timber.d("DYNAMIC ALL LIST ERROR=======> " + error.localizedMessage)
                         })
         )
     }

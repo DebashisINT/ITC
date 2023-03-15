@@ -36,7 +36,7 @@ import com.breezefsmdsm.features.nearbyshops.model.ShopData
 import com.breezefsmdsm.features.nearbyshops.model.ShopListResponse
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.Observable
@@ -947,27 +947,27 @@ class AddActivityFragment : BaseFragment(), View.OnClickListener {
                 activity.due_date!!, activity.due_time!!)
 
 
-        XLog.d("==============Add Activity Input Params (Add Activity)====================")
-        XLog.d("user_id=======> " + Pref.user_id)
-        XLog.d("session_token=======> " + Pref.session_token)
-        XLog.d("id=======> " + activity.activity_id)
-        XLog.d("party_id=======> " + activity.party_id)
-        XLog.d("details=======> " + activity.details)
-        XLog.d("date=======> " + activity.date)
-        XLog.d("time=======> " + activity.time)
-        XLog.d("name=======> " + activity.name)
-        XLog.d("activity_id=======> " + activity.activity_dropdown_id)
-        XLog.d("type_id=======> " + activity.type_id)
-        XLog.d("product_id=======> " + activity.product_id)
-        XLog.d("subject=======> " + activity.subject)
-        XLog.d("details=======> " + activity.details)
-        XLog.d("duration=======> " + activity.duration)
-        XLog.d("priority_id=======> " + activity.priority_id)
-        XLog.d("due_date=======> " + activity.due_date)
-        XLog.d("due_time=======> " + activity.due_time)
-        XLog.d("attachments=======> " + activity.attachments)
-        XLog.d("image=======> " + activity.image)
-        XLog.d("========================================================================")
+        Timber.d("==============Add Activity Input Params (Add Activity)====================")
+        Timber.d("user_id=======> " + Pref.user_id)
+        Timber.d("session_token=======> " + Pref.session_token)
+        Timber.d("id=======> " + activity.activity_id)
+        Timber.d("party_id=======> " + activity.party_id)
+        Timber.d("details=======> " + activity.details)
+        Timber.d("date=======> " + activity.date)
+        Timber.d("time=======> " + activity.time)
+        Timber.d("name=======> " + activity.name)
+        Timber.d("activity_id=======> " + activity.activity_dropdown_id)
+        Timber.d("type_id=======> " + activity.type_id)
+        Timber.d("product_id=======> " + activity.product_id)
+        Timber.d("subject=======> " + activity.subject)
+        Timber.d("details=======> " + activity.details)
+        Timber.d("duration=======> " + activity.duration)
+        Timber.d("priority_id=======> " + activity.priority_id)
+        Timber.d("due_date=======> " + activity.due_date)
+        Timber.d("due_time=======> " + activity.due_time)
+        Timber.d("attachments=======> " + activity.attachments)
+        Timber.d("image=======> " + activity.image)
+        Timber.d("========================================================================")
 
         if (TextUtils.isEmpty(activity.attachments) && TextUtils.isEmpty(activity.image)) {
             val repository = ActivityRepoProvider.activityRepoProvider()

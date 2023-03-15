@@ -75,7 +75,7 @@ import com.breezefsmdsm.features.nearbyshops.model.*
 import com.breezefsmdsm.features.shopdetail.presentation.api.EditShopRepoProvider
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.squareup.picasso.Picasso
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -333,11 +333,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             if (AppUtils.mLocation!!.accuracy <= 100) {
                 getAddressFromLatLng(AppUtils.mLocation!!)
             } else {
-                XLog.d("======Saved current location is inaccurate (Add Shop)========")
+                Timber.d("======Saved current location is inaccurate (Add Shop)========")
                 normalGetLocFlow()
             }
         } else {
-            XLog.d("=====Saved current location is null (Add Shop)======")
+            Timber.d("=====Saved current location is null (Add Shop)======")
             normalGetLocFlow()
         }*/
 
@@ -388,17 +388,17 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                 if (AppUtils.mLocation!!.accuracy <= 100) {
                     getAddressFromLatLng(AppUtils.mLocation!!)
                 } else {
-                    XLog.d("======Saved current location is inaccurate (Add Shop)========")
+                    Timber.d("======Saved current location is inaccurate (Add Shop)========")
                     getShopLatLong()
                 }
             } else {
-                XLog.d("=====Saved current location is null (Add Shop)======")
+                Timber.d("=====Saved current location is null (Add Shop)======")
                 getShopLatLong()
             }
 
 
         } else {
-            XLog.d("=====Get location from map (Add Shop)======")
+            Timber.d("=====Get location from map (Add Shop)======")
             actualAddress = fullAdd
             shopAddress.setText(fullAdd)
             shopPin.setText(pinCode)
@@ -472,7 +472,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         //22.6068776, 88.4898951
         mLocation = location
         var address = LocationWizard.getAdressFromLatlng(mContext, location.latitude, location.longitude)
-        XLog.e("Shop address (Add Shop)======> $address")
+        Timber.e("Shop address (Add Shop)======> $address")
 
         if (address.contains("http"))
             address = "Unknown"
@@ -1072,10 +1072,10 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         try {
             if (mLongitude != "" && mLatitude != "") {
                 //Toaster.msgShort(mContext, "Lat: $mLatitude, Lng: $mLongitude")
-                XLog.e("AddShop : Lat=> $mLatitude, Long==> $mLongitude")
+                Timber.e("AddShop : Lat=> $mLatitude, Long==> $mLongitude")
             } else {
                 //Toaster.msgShort(mContext, "Lat: ${mLocation?.latitude}, Lng: ${mLocation?.longitude}")
-                XLog.e("AddShop : Lat=> " + mLocation?.latitude + ", Long==> " + mLocation?.longitude)
+                Timber.e("AddShop : Lat=> " + mLocation?.latitude + ", Long==> " + mLocation?.longitude)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -1254,73 +1254,73 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 //        }
         AppUtils.isShopAdded = true
 
-        XLog.d("================AddShop Input Params==================")
-        XLog.d("shop id=======> " + addShop.shop_id)
+        Timber.d("================AddShop Input Params==================")
+        Timber.d("shop id=======> " + addShop.shop_id)
         val index = addShop.shop_id!!.indexOf("_")
-        XLog.d("decoded shop id=======> " + addShop.user_id + "_" + AppUtils.getDate(addShop.shop_id!!.substring(index + 1, addShop.shop_id!!.length).toLong()))
-        XLog.d("shop added date=======> " + addShop.added_date)
-        XLog.d("shop address=======> " + addShop.address)
-        XLog.d("assigned to dd id=======> " + addShop.assigned_to_dd_id)
-        XLog.d("assigned to pp id=======> " + addShop.assigned_to_pp_id)
-        XLog.d("date aniversery=======> " + addShop.date_aniversary)
-        XLog.d("dob=======> " + addShop.dob)
-        XLog.d("shop owner phn no=======> " + addShop.owner_contact_no)
-        XLog.d("shop owner email=======> " + addShop.owner_email)
-        XLog.d("shop owner name=======> " + addShop.owner_name)
-        XLog.d("shop pincode=======> " + addShop.pin_code)
-        XLog.d("session token=======> " + addShop.session_token)
-        XLog.d("shop lat=======> " + addShop.shop_lat)
-        XLog.d("shop long=======> " + addShop.shop_long)
-        XLog.d("shop name=======> " + addShop.shop_name)
-        XLog.d("shop type=======> " + addShop.type)
-        XLog.d("user id=======> " + addShop.user_id)
-        XLog.d("amount=======> " + addShop.amount)
-        XLog.d("area id=======> " + addShop.area_id)
-        XLog.d("model id=======> " + addShop.model_id)
-        XLog.d("primary app id=======> " + addShop.primary_app_id)
-        XLog.d("secondary app id=======> " + addShop.secondary_app_id)
-        XLog.d("lead id=======> " + addShop.lead_id)
-        XLog.d("stage id=======> " + addShop.stage_id)
-        XLog.d("funnel stage id=======> " + addShop.funnel_stage_id)
-        XLog.d("booking amount=======> " + addShop.booking_amount)
-        XLog.d("type id=======> " + addShop.type_id)
-        XLog.d("director name=======> " + addShop.director_name)
-        XLog.d("family member dob=======> " + addShop.family_member_dob)
-        XLog.d("key person's name=======> " + addShop.key_person_name)
-        XLog.d("phone no=======> " + addShop.phone_no)
-        XLog.d("additional dob=======> " + addShop.addtional_dob)
-        XLog.d("additional doa=======> " + addShop.addtional_doa)
-        XLog.d("doctor family member dob=======> " + addShop.doc_family_member_dob)
-        XLog.d("specialization=======> " + addShop.specialization)
-        XLog.d("average patient count per day=======> " + addShop.average_patient_per_day)
-        XLog.d("category=======> " + addShop.category)
-        XLog.d("doctor address=======> " + addShop.doc_address)
-        XLog.d("doctor pincode=======> " + addShop.doc_pincode)
-        XLog.d("chambers or hospital under same headquarter=======> " + addShop.is_chamber_same_headquarter)
-        XLog.d("chamber related remarks=======> " + addShop.is_chamber_same_headquarter_remarks)
-        XLog.d("chemist name=======> " + addShop.chemist_name)
-        XLog.d("chemist name=======> " + addShop.chemist_address)
-        XLog.d("chemist pincode=======> " + addShop.chemist_pincode)
-        XLog.d("assistant name=======> " + addShop.assistant_name)
-        XLog.d("assistant contact no=======> " + addShop.assistant_contact_no)
-        XLog.d("assistant dob=======> " + addShop.assistant_dob)
-        XLog.d("assistant date of anniversary=======> " + addShop.assistant_doa)
-        XLog.d("assistant family dob=======> " + addShop.assistant_family_dob)
-        XLog.d("entity id=======> " + addShop.entity_id)
-        XLog.d("party status id=======> " + addShop.party_status_id)
-        XLog.d("retailer id=======> " + addShop.retailer_id)
-        XLog.d("dealer id=======> " + addShop.dealer_id)
-        XLog.d("beat id=======> " + addShop.beat_id)
-        XLog.d("assigned to shop id=======> " + addShop.assigned_to_shop_id)
-        XLog.d("actual address=======> " + addShop.actual_address)
-        XLog.d("shopDuplicate=======> " + addShop.isShopDuplicate)
+        Timber.d("decoded shop id=======> " + addShop.user_id + "_" + AppUtils.getDate(addShop.shop_id!!.substring(index + 1, addShop.shop_id!!.length).toLong()))
+        Timber.d("shop added date=======> " + addShop.added_date)
+        Timber.d("shop address=======> " + addShop.address)
+        Timber.d("assigned to dd id=======> " + addShop.assigned_to_dd_id)
+        Timber.d("assigned to pp id=======> " + addShop.assigned_to_pp_id)
+        Timber.d("date aniversery=======> " + addShop.date_aniversary)
+        Timber.d("dob=======> " + addShop.dob)
+        Timber.d("shop owner phn no=======> " + addShop.owner_contact_no)
+        Timber.d("shop owner email=======> " + addShop.owner_email)
+        Timber.d("shop owner name=======> " + addShop.owner_name)
+        Timber.d("shop pincode=======> " + addShop.pin_code)
+        Timber.d("session token=======> " + addShop.session_token)
+        Timber.d("shop lat=======> " + addShop.shop_lat)
+        Timber.d("shop long=======> " + addShop.shop_long)
+        Timber.d("shop name=======> " + addShop.shop_name)
+        Timber.d("shop type=======> " + addShop.type)
+        Timber.d("user id=======> " + addShop.user_id)
+        Timber.d("amount=======> " + addShop.amount)
+        Timber.d("area id=======> " + addShop.area_id)
+        Timber.d("model id=======> " + addShop.model_id)
+        Timber.d("primary app id=======> " + addShop.primary_app_id)
+        Timber.d("secondary app id=======> " + addShop.secondary_app_id)
+        Timber.d("lead id=======> " + addShop.lead_id)
+        Timber.d("stage id=======> " + addShop.stage_id)
+        Timber.d("funnel stage id=======> " + addShop.funnel_stage_id)
+        Timber.d("booking amount=======> " + addShop.booking_amount)
+        Timber.d("type id=======> " + addShop.type_id)
+        Timber.d("director name=======> " + addShop.director_name)
+        Timber.d("family member dob=======> " + addShop.family_member_dob)
+        Timber.d("key person's name=======> " + addShop.key_person_name)
+        Timber.d("phone no=======> " + addShop.phone_no)
+        Timber.d("additional dob=======> " + addShop.addtional_dob)
+        Timber.d("additional doa=======> " + addShop.addtional_doa)
+        Timber.d("doctor family member dob=======> " + addShop.doc_family_member_dob)
+        Timber.d("specialization=======> " + addShop.specialization)
+        Timber.d("average patient count per day=======> " + addShop.average_patient_per_day)
+        Timber.d("category=======> " + addShop.category)
+        Timber.d("doctor address=======> " + addShop.doc_address)
+        Timber.d("doctor pincode=======> " + addShop.doc_pincode)
+        Timber.d("chambers or hospital under same headquarter=======> " + addShop.is_chamber_same_headquarter)
+        Timber.d("chamber related remarks=======> " + addShop.is_chamber_same_headquarter_remarks)
+        Timber.d("chemist name=======> " + addShop.chemist_name)
+        Timber.d("chemist name=======> " + addShop.chemist_address)
+        Timber.d("chemist pincode=======> " + addShop.chemist_pincode)
+        Timber.d("assistant name=======> " + addShop.assistant_name)
+        Timber.d("assistant contact no=======> " + addShop.assistant_contact_no)
+        Timber.d("assistant dob=======> " + addShop.assistant_dob)
+        Timber.d("assistant date of anniversary=======> " + addShop.assistant_doa)
+        Timber.d("assistant family dob=======> " + addShop.assistant_family_dob)
+        Timber.d("entity id=======> " + addShop.entity_id)
+        Timber.d("party status id=======> " + addShop.party_status_id)
+        Timber.d("retailer id=======> " + addShop.retailer_id)
+        Timber.d("dealer id=======> " + addShop.dealer_id)
+        Timber.d("beat id=======> " + addShop.beat_id)
+        Timber.d("assigned to shop id=======> " + addShop.assigned_to_shop_id)
+        Timber.d("actual address=======> " + addShop.actual_address)
+        Timber.d("shopDuplicate=======> " + addShop.isShopDuplicate)
 
         if (shop_imgPath != null)
-            XLog.d("shop image path=======> $shop_imgPath")
+            Timber.d("shop image path=======> $shop_imgPath")
 
         if (doc_degree != null)
-            XLog.d("doctor degree image path=======> $doc_degree")
-        XLog.d("====================================================")
+            Timber.d("doctor degree image path=======> $doc_degree")
+        Timber.d("====================================================")
 
         progress_wheel.spin()
 
@@ -1334,7 +1334,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                 if (addShopResult.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
                                     //callShopActivitySubmit(addShop.shop_id!!)
@@ -1355,14 +1355,14 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                     //showShopVerificationDialog(addShop.shop_id!!)
 
                                 } else if (addShopResult.status == NetworkConstant.SESSION_MISMATCH) {
-                                    XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                    Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                     progress_wheel.stopSpinning()
                                     (mContext as DashboardActivity).clearData()
                                     startActivity(Intent(mContext as DashboardActivity, LoginActivity::class.java))
                                     (mContext as DashboardActivity).overridePendingTransition(0, 0)
                                     (mContext as DashboardActivity).finish()
                                 } else if (addShopResult.status == NetworkConstant.DUPLICATE_SHOP_ID) {
-                                    XLog.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
+                                    Timber.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
                                     progress_wheel.stopSpinning()
                                     (mContext as DashboardActivity).showSnackMessage(addShopResult.message!!)
                                     if (AppDatabase.getDBInstance()!!.addShopEntryDao().getDuplicateShopData(addShop.owner_contact_no).size > 0) {
@@ -1375,7 +1375,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                     //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 } else {
                                     progress_wheel.stopSpinning()
-                                    XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                    Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
 //                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
                                     (mContext as DashboardActivity).onBackPressed()
@@ -1407,7 +1407,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                 (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
                                 //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 if (error != null) {
-                                    XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", ERROR: " + error.localizedMessage)
+                                    Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", ERROR: " + error.localizedMessage)
                                 }
                             })
             )
@@ -1420,7 +1420,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
                                 val addShopResult = result as AddShopResponse
-                                XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                 if (addShopResult.status == NetworkConstant.SUCCESS) {
                                     AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsUploaded(true, addShop.shop_id)
                                     //callShopActivitySubmit(addShop.shop_id!!)
@@ -1441,14 +1441,14 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                     //showShopVerificationDialog(addShop.shop_id!!)
 
                                 } else if (addShopResult.status == NetworkConstant.SESSION_MISMATCH) {
-                                    XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                    Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                     progress_wheel.stopSpinning()
                                     (mContext as DashboardActivity).clearData()
                                     startActivity(Intent(mContext as DashboardActivity, LoginActivity::class.java))
                                     (mContext as DashboardActivity).overridePendingTransition(0, 0)
                                     (mContext as DashboardActivity).finish()
                                 } else if (addShopResult.status == NetworkConstant.DUPLICATE_SHOP_ID) {
-                                    XLog.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
+                                    Timber.d("DuplicateShop : " + ", SHOP: " + addShop.shop_name)
                                     progress_wheel.stopSpinning()
                                     (mContext as DashboardActivity).showSnackMessage(addShopResult.message!!)
                                     if (AppDatabase.getDBInstance()!!.addShopEntryDao().getDuplicateShopData(addShop.owner_contact_no).size > 0) {
@@ -1463,7 +1463,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                     //(mContext as DashboardActivity).loadFragment(FragType.ShopDetailFragment, true, addShop.shop_id!!)
                                 } else {
                                     progress_wheel.stopSpinning()
-                                    XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
+                                    Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", RESPONSE:" + result.message)
                                     (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
 //                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.shop_added_successfully))
                                     (mContext as DashboardActivity).onBackPressed()
@@ -1495,7 +1495,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                                 //01-09-2021
                                 (mContext as DashboardActivity).loadFragment(FragType.DashboardFragment, false, "")
                                 if (error != null) {
-                                    XLog.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", ERROR: " + error.localizedMessage)
+                                    Timber.d("AddShop : " + ", SHOP: " + addShop.shop_name + ", ERROR: " + error.localizedMessage)
                                 }
                             })
             )
@@ -1521,14 +1521,14 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                             val response = result as BaseResponse
                             if(response.status==NetworkConstant.SUCCESS){
                                 AppDatabase.getDBInstance()!!.shopVisitCompetetorImageDao().updateisUploaded(true,shopId)
-                                XLog.d("AddShop : CompetetorImg" + ", SHOP: " + shopId + ", Success: ")
+                                Timber.d("AddShop : CompetetorImg" + ", SHOP: " + shopId + ", Success: ")
                             }else{
-                                XLog.d("AddShop : CompetetorImg" + ", SHOP: " + shopId + ", Failed: ")
+                                Timber.d("AddShop : CompetetorImg" + ", SHOP: " + shopId + ", Failed: ")
                             }
                         },{
                             error ->
                             if (error != null) {
-                                XLog.d("AddShop : CompetetorImg" + ", SHOP: " + shopId + ", ERROR: " + error.localizedMessage)
+                                Timber.d("AddShop : CompetetorImg" + ", SHOP: " + shopId + ", ERROR: " + error.localizedMessage)
                             }
                         })
         )
@@ -1696,7 +1696,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val addShopResult = result as AddShopResponse
-                            XLog.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
+                            Timber.d("Edit Shop : " + ", SHOP: " + addShopReqData.shop_name + ", RESPONSE:" + result.message)
                             if (addShopResult.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.addShopEntryDao().updateIsEditUploaded(1, addShopReqData.shop_id)
                                 progress_wheel.stopSpinning()
@@ -1879,7 +1879,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
-                            XLog.d("ShopActivityFromAddShop : " + ", SHOP: " + mList[0].shop_name + ", RESPONSE:" + result.message)
+                            Timber.d("ShopActivityFromAddShop : " + ", SHOP: " + mList[0].shop_name + ", RESPONSE:" + result.message)
                             if (result.status == NetworkConstant.SUCCESS) {
 
                             }
@@ -1887,7 +1887,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         }, { error ->
                             error.printStackTrace()
                             if (error != null)
-                                XLog.d("ShopActivityFromAddShop : " + ", SHOP: " + mList[0].shop_name + ", ERROR:" + error.localizedMessage)
+                                Timber.d("ShopActivityFromAddShop : " + ", SHOP: " + mList[0].shop_name + ", ERROR:" + error.localizedMessage)
                         })
         )
 
@@ -1996,34 +1996,34 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         shopActivityEntity.next_visit_date = nextVisitDate
 
         var distance = 0.0
-        XLog.e("======New Distance (At add shop time)=========")
+        Timber.e("======New Distance (At add shop time)=========")
 
         val shop = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(addShop.shop_id)
 
         if (Pref.isOnLeave.equals("false", ignoreCase = true)) {
 
-            XLog.e("=====User is at work (At add shop time)=======")
+            Timber.e("=====User is at work (At add shop time)=======")
 
             /*if (!TextUtils.isEmpty(addShop.shop_lat) && !TextUtils.isEmpty(addShop.shop_long)) {
                 if (!TextUtils.isEmpty(Pref.source_latitude) && !TextUtils.isEmpty(Pref.source_longitude)) {
                     distance = LocationWizard.getDistance(Pref.source_latitude.toDouble(), Pref.source_longitude.toDouble(),
                             addShop.shop_lat?.toDouble()!!, addShop.shop_long?.toDouble()!!)
 
-                    XLog.e("=====Both location available=======")
+                    Timber.e("=====Both location available=======")
                 } else {
                     distance = 0.0 //LocationWizard.getDistance(0.0, 0.0, addShop.shop_lat?.toDouble()!!, addShop.shop_long?.toDouble()!!)
-                    XLog.e("=====Only new location available=======")
+                    Timber.e("=====Only new location available=======")
                 }
                 Pref.source_latitude = addShop.shop_lat!!
                 Pref.source_longitude = addShop.shop_long!!
             } else {
                 if (!TextUtils.isEmpty(Pref.source_latitude) && !TextUtils.isEmpty(Pref.source_longitude)) {
                     distance = 0.0 //LocationWizard.getDistance(0.0, 0.0, Pref.source_latitude.toDouble(), Pref.source_longitude.toDouble())
-                    XLog.e("=====Only old location available=======")
+                    Timber.e("=====Only old location available=======")
                 } else {
                     distance = 0.0
 
-                    XLog.e("=====No location available=======")
+                    Timber.e("=====No location available=======")
                 }
             }*/
 
@@ -2053,11 +2053,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             val finalDistance = (Pref.tempDistance.toDouble() + loc_distance).toString()*/
 
 
-            XLog.e("===Distance (At new shop visit time)===")
-            XLog.e("Temp Distance====> " + Pref.tempDistance)
-            XLog.e("Normal Distance====> $loc_distance")
-            XLog.e("Total Distance====> $finalDistance")
-            XLog.e("=======================================")
+            Timber.e("===Distance (At new shop visit time)===")
+            Timber.e("Temp Distance====> " + Pref.tempDistance)
+            Timber.e("Normal Distance====> $loc_distance")
+            Timber.e("Total Distance====> $finalDistance")
+            Timber.e("=======================================")
 
             userlocation.distance = finalDistance
             userlocation.locationName = LocationWizard.getNewLocationName(mContext, userlocation.latitude.toDouble(), userlocation.longitude.toDouble())
@@ -2075,7 +2075,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             userlocation.battery_percentage = AppUtils.getBatteryPercentage(mContext).toString()
             AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
-            XLog.e("=====New shop visit data added=======")
+            Timber.e("=====New shop visit data added=======")
 
             Pref.totalS2SDistance = (Pref.totalS2SDistance.toDouble() + userlocation.distance.toDouble()).toString()
 
@@ -2083,11 +2083,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             Pref.totalS2SDistance = "0.0"
             Pref.tempDistance = "0.0"
         } else {
-            XLog.e("=====User is on leave =======")
+            Timber.e("=====User is on leave =======")
             distance = 0.0
         }
 
-        XLog.e("shop to shop distance (At new shop visit time)====> $distance")
+        Timber.e("shop to shop distance (At new shop visit time)====> $distance")
 
         shopActivityEntity.distance_travelled = distance.toString()
 
@@ -2731,7 +2731,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .subscribe({ result ->
                             //val response = result as ModelListResponseModel
                             val response = result as ModelListResponse
-                            XLog.d("GET MODEL DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET MODEL DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.model_list != null && response.model_list!!.isNotEmpty()) {
@@ -2766,7 +2766,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET MODEL DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET MODEL DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
@@ -2797,7 +2797,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as PrimaryAppListResponseModel
-                            XLog.d("GET PRIMARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET PRIMARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.primary_application_list != null && response.primary_application_list!!.isNotEmpty()) {
@@ -2830,7 +2830,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET PRIMARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET PRIMARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
@@ -2861,7 +2861,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as SecondaryAppListResponseModel
-                            XLog.d("GET SECONDARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET SECONDARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.secondary_application_list != null && response.secondary_application_list!!.isNotEmpty()) {
@@ -2894,7 +2894,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET SECONDARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET SECONDARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
@@ -2936,7 +2936,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as LeadListResponseModel
-                            XLog.d("GET LEAD TYPE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET LEAD TYPE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.lead_type_list != null && response.lead_type_list!!.isNotEmpty()) {
@@ -2969,7 +2969,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET LEAD TYPE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET LEAD TYPE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
@@ -2999,7 +2999,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as StageListResponseModel
-                            XLog.d("GET STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.stage_list != null && response.stage_list!!.isNotEmpty()) {
@@ -3032,7 +3032,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
@@ -3063,7 +3063,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as FunnelStageListResponseModel
-                            XLog.d("GET FUNNEL STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                            Timber.d("GET FUNNEL STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
                                 if (response.funnel_stage_list != null && response.funnel_stage_list!!.isNotEmpty()) {
@@ -3096,7 +3096,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            XLog.d("GET FUNNEL STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                            Timber.d("GET FUNNEL STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })
@@ -4505,7 +4505,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
 
             if (actualAddress.isEmpty()) {
                 var address = LocationWizard.getAdressFromLatlng(mContext, shopLatitude, shopLongitude)
-                XLog.e("Actual Shop address (Add Shop)======> $address")
+                Timber.e("Actual Shop address (Add Shop)======> $address")
 
                 if (address.contains("http"))
                     address = "Unknown"

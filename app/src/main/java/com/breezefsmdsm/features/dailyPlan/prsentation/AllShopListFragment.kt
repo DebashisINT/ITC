@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.SearchListener
@@ -100,7 +100,7 @@ class AllShopListFragment : BaseFragment() {
 
                             val planListResponse = result as AllPlanListResponseModel
 
-                            XLog.d("AllPlanList RESPONSE=======> " + planListResponse.status)
+                            Timber.d("AllPlanList RESPONSE=======> " + planListResponse.status)
 
                             if (planListResponse.status == NetworkConstant.SUCCESS) {
                                 if (planListResponse.plan_data != null && planListResponse.plan_data!!.size > 0) {
@@ -124,7 +124,7 @@ class AllShopListFragment : BaseFragment() {
                             progress_wheel.stopSpinning()
                             tv_no_data.visibility = View.VISIBLE
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                            XLog.d("AllPlanList ERROR=======> " + error.localizedMessage)
+                            Timber.d("AllPlanList ERROR=======> " + error.localizedMessage)
                         })
         )
     }

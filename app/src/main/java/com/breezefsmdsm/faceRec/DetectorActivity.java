@@ -62,7 +62,7 @@ import com.breezefsmdsm.faceRec.env.ImageUtils;
 import com.breezefsmdsm.faceRec.env.Logger;
 import com.breezefsmdsm.faceRec.tflite.SimilarityClassifier;
 import com.breezefsmdsm.faceRec.tracking.MultiBoxTracker;
-import com.elvishew.xlog.XLog;
+import timber.log.Timber;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.mlkit.vision.common.InputImage;
@@ -654,14 +654,14 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
             }
           }
           catch (Exception e){
-            XLog.d("DetectorActivityyy exception : "+e.getMessage().toString());
+            Timber.d("DetectorActivityyy exception : "+e.getMessage().toString());
             e.printStackTrace();
              lowerLi= 0.10f;
              upperLi=1.0f;
           }
           //println("Face_Value "+lowerLi.toString() + " : "+upperLi.toString());
           //Log.v("Face_Value",lowerLi.toString() + " : "+upperLi.toString());
-          XLog.d("DetectorActivity lowerLi: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
+          Timber.d("DetectorActivity lowerLi: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
           if (conf>lowerLi && conf < 1.0f) {
           //if (conf>lowerLi && conf < upperLi) {
           //if (conf >0.6f && conf < 1.0f) {  //  it will toughen the matching process which will create problem in real life
@@ -677,7 +677,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                 CustomStatic.IsFaceRec=true;
 
 
-                XLog.d("DetectorActivity green: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
+                Timber.d("DetectorActivity green: "+lowerLi.toString() + " upperLi : "+upperLi.toString()+" conf: "+String.valueOf(conf));
                 //Toast.makeText(this,"inner",Toast.LENGTH_SHORT).show();
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("valueD",true);

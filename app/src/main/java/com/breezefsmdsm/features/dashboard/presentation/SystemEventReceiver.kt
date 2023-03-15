@@ -12,7 +12,7 @@ import com.breezefsmdsm.app.AlarmReceiver
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.features.location.LocationWizard
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 
 class SystemEventReceiver : BroadcastReceiver() {
 
@@ -21,7 +21,7 @@ class SystemEventReceiver : BroadcastReceiver() {
                 intent.action == "android.intent.action.ACTION_SHUTDOWN") {
 
             if (intent.action == "android.intent.action.BOOT_COMPLETED")
-                XLog.e("=======================Boot Completed successfully ${AppUtils.getCurrentDateTime()} (SystemEventReceiver)=======================")
+                Timber.e("=======================Boot Completed successfully ${AppUtils.getCurrentDateTime()} (SystemEventReceiver)=======================")
             else if(intent.action == "android.intent.action.AIRPLANE_MODE") {
                 var text = ""
 
@@ -29,10 +29,10 @@ class SystemEventReceiver : BroadcastReceiver() {
                     "Airplane Mode is On "
                 else
                     "Airplane Mode is Off "
-                XLog.e("========================${text + AppUtils.getCurrentDateTime()}=======================")
+                Timber.e("========================${text + AppUtils.getCurrentDateTime()}=======================")
             }else if(intent.action == "android.intent.action.ACTION_SHUTDOWN"){
                 val locationName = LocationWizard.getLocationName(context, Pref.latitude!!.toDouble(), Pref.longitude!!.toDouble())
-                XLog.e("\n======================== \n Phone Shutdown || DateTime : ${AppUtils.getCurrentDateTime()} || Location : last_lat: ${Pref.latitude} || last_long: ${Pref.longitude} || LocationName ${locationName} \n=======================")
+                Timber.e("\n======================== \n Phone Shutdown || DateTime : ${AppUtils.getCurrentDateTime()} || Location : last_lat: ${Pref.latitude} || last_long: ${Pref.longitude} || LocationName ${locationName} \n=======================")
             }
 
         }

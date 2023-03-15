@@ -35,7 +35,7 @@ import com.breezefsmdsm.features.activities.model.ProductListModel
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.widgets.AppCustomEditText
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.pnikosis.materialishprogress.ProgressWheel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -478,19 +478,19 @@ class AddChemistFragment : BaseFragment(), View.OnClickListener {
             return
         }
 
-        XLog.d("======ADD CHEMIST VISIT INPUT PARAMS (ADD CHEMIST)======")
-        XLog.d("USER ID===> " + chemistVisit.user_id)
-        XLog.d("SESSION ID====> " + chemistVisit.session_token)
-        XLog.d("CHEMIST VISIT ID====> " + chemistVisit.chemist_visit_id)
-        XLog.d("SHOP_ID====> " + chemistVisit.shop_id)
-        XLog.d("IS POB====> " + chemistVisit.isPob)
-        XLog.d("NEXT VISIT DATE====> " + chemistVisit.next_visit_date)
-        XLog.d("VOLUME====> " + chemistVisit.volume)
-        XLog.d("REMARKS====> " + chemistVisit.remarks)
-        XLog.d("REMARKS MR====> " + chemistVisit.remarks_mr)
-        XLog.d("PRODUCT LIST SIZE====> " + chemistVisit.product_list.size)
-        XLog.d("POB PRODUCT LIST SIZE====> " + chemistVisit.pob_product_list.size)
-        XLog.d("=========================================================")
+        Timber.d("======ADD CHEMIST VISIT INPUT PARAMS (ADD CHEMIST)======")
+        Timber.d("USER ID===> " + chemistVisit.user_id)
+        Timber.d("SESSION ID====> " + chemistVisit.session_token)
+        Timber.d("CHEMIST VISIT ID====> " + chemistVisit.chemist_visit_id)
+        Timber.d("SHOP_ID====> " + chemistVisit.shop_id)
+        Timber.d("IS POB====> " + chemistVisit.isPob)
+        Timber.d("NEXT VISIT DATE====> " + chemistVisit.next_visit_date)
+        Timber.d("VOLUME====> " + chemistVisit.volume)
+        Timber.d("REMARKS====> " + chemistVisit.remarks)
+        Timber.d("REMARKS MR====> " + chemistVisit.remarks_mr)
+        Timber.d("PRODUCT LIST SIZE====> " + chemistVisit.product_list.size)
+        Timber.d("POB PRODUCT LIST SIZE====> " + chemistVisit.pob_product_list.size)
+        Timber.d("=========================================================")
 
         val repository = ActivityRepoProvider.activityRepoProvider()
         progress_wheel.spin()
@@ -502,7 +502,7 @@ class AddChemistFragment : BaseFragment(), View.OnClickListener {
                             progress_wheel.stopSpinning()
                             val response = result as BaseResponse
 
-                            XLog.d("ADD CHEMIST VISIT DETAILS : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + response.message)
+                            Timber.d("ADD CHEMIST VISIT DETAILS : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + response.message)
 
                             if (response.status == NetworkConstant.SUCCESS) {
                                 AppDatabase.getDBInstance()!!.addChemistDao().updateIsUploaded(true, chemistVisit.chemist_visit_id)
@@ -512,7 +512,7 @@ class AddChemistFragment : BaseFragment(), View.OnClickListener {
 
                             (mContext as DashboardActivity).onBackPressed()
                         }, { error ->
-                            XLog.d("ADD CHEMIST VISIT DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
+                            Timber.d("ADD CHEMIST VISIT DETAILS : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ", MESSAGE : " + error.localizedMessage)
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
                             (mContext as DashboardActivity).showSnackMessage("Chemist added successfully")

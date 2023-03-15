@@ -20,7 +20,7 @@ import androidx.core.app.NotificationCompat;
 import com.breezefsmdsm.app.Pref;
 import com.breezefsmdsm.app.utils.AppUtils;
 import com.breezefsmdsm.features.splash.presentation.SplashActivity;
-import com.elvishew.xlog.XLog;
+import timber.log.Timber;
 
 public class MonitorBroadcast extends BroadcastReceiver {
 
@@ -32,7 +32,7 @@ public class MonitorBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         try{
-            XLog.e("MONITOR BROADCAST onReceive: " + "Time : " + AppUtils.Companion.getCurrentDateTime());
+            Timber.e("MONITOR BROADCAST onReceive: " + "Time : " + AppUtils.Companion.getCurrentDateTime());
 
             int notiID=intent.getIntExtra("notiId",0);
             String subject=intent.getStringExtra("fuzedLoc");

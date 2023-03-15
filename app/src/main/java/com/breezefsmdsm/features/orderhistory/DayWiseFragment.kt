@@ -19,7 +19,7 @@ import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.NetworkConstant
@@ -353,20 +353,20 @@ class DayWiseFragment : BaseFragment(), View.OnClickListener {
             else
                 localData.battery_percentage = location_details[i].battery_percentage
 
-            XLog.d("=====Current location (Activity)=======")
-            XLog.d("distance=====> " + localData.distance)
-            XLog.d("lat====> " + localData.latitude)
-            XLog.d("long=====> " + localData.longitude)
-            XLog.d("location=====> " + localData.locationName)
-            XLog.d("date time=====> " + localData.updateDateTime)
-            XLog.d("meeting_attended=====> " + localData.meeting)
-            XLog.d("visit_distance=====> " + localData.visit_distance)
-            XLog.d("network_status=====> " + localData.network_status)
-            XLog.d("battery_percentage=====> " + localData.battery_percentage)
+            Timber.d("=====Current location (Activity)=======")
+            Timber.d("distance=====> " + localData.distance)
+            Timber.d("lat====> " + localData.latitude)
+            Timber.d("long=====> " + localData.longitude)
+            Timber.d("location=====> " + localData.locationName)
+            Timber.d("date time=====> " + localData.updateDateTime)
+            Timber.d("meeting_attended=====> " + localData.meeting)
+            Timber.d("visit_distance=====> " + localData.visit_distance)
+            Timber.d("network_status=====> " + localData.network_status)
+            Timber.d("battery_percentage=====> " + localData.battery_percentage)
 
             AppDatabase.getDBInstance()!!.userLocationDataDao().insert(localData)
 
-            XLog.d("=======location added to db (Activity)======")
+            Timber.d("=======location added to db (Activity)======")
             list.add(localData)
         }
 
@@ -517,7 +517,7 @@ class DayWiseFragment : BaseFragment(), View.OnClickListener {
 
     private fun syncLocationActivity() {
 
-        XLog.d("syncLocationActivity (Activity Screen) : ENTER")
+        Timber.d("syncLocationActivity (Activity Screen) : ENTER")
 
         if (Pref.user_id.isNullOrEmpty())
             return
@@ -603,8 +603,8 @@ class DayWiseFragment : BaseFragment(), View.OnClickListener {
         for (i in apiLocationList.indices) {
             if (!apiLocationList[i].isUploaded) {
 
-                XLog.e("Final Home Duration (Location Fuzed Service)=================> ${apiLocationList[i].home_duration}")
-                XLog.e("Time (Location Fuzed Service)=================> ${apiLocationList[i].time} ${apiLocationList[i].meridiem}")
+                Timber.e("Final Home Duration (Location Fuzed Service)=================> ${apiLocationList[i].home_duration}")
+                Timber.e("Time (Location Fuzed Service)=================> ${apiLocationList[i].time} ${apiLocationList[i].meridiem}")
 
 
                 val locationData = LocationData()
@@ -634,7 +634,7 @@ class DayWiseFragment : BaseFragment(), View.OnClickListener {
             locationUpdateReq.location_details = locationList
             val repository = LocationUpdateRepositoryProviders.provideLocationUpdareRepository()
 
-            XLog.d("syncLocationActivity (Activity Screen) : REQUEST")
+            Timber.d("syncLocationActivity (Activity Screen) : REQUEST")
 
             progress_wheel.spin()
 
@@ -645,7 +645,7 @@ class DayWiseFragment : BaseFragment(), View.OnClickListener {
                             .subscribe({ result ->
                                 val updateShopActivityResponse = result as BaseResponse
 
-                                XLog.d("syncLocationActivity (Activity Screen) : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
+                                Timber.d("syncLocationActivity (Activity Screen) : RESPONSE : " + updateShopActivityResponse.status + ":" + updateShopActivityResponse.message)
 
                                 if (updateShopActivityResponse.status == NetworkConstant.SUCCESS) {
                                     doAsync {
@@ -687,9 +687,9 @@ class DayWiseFragment : BaseFragment(), View.OnClickListener {
                                 AppUtils.isLocationActivityUpdating = false
                                 progress_wheel.stopSpinning()
                                 if (error == null) {
-                                    XLog.d("syncLocationActivity (Activity Screen) : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
+                                    Timber.d("syncLocationActivity (Activity Screen) : ERROR : " + "UNEXPECTED ERROR IN LOCATION ACTIVITY API")
                                 } else {
-                                    XLog.d("syncLocationActivity (Activity Screen) : ERROR : " + error.localizedMessage)
+                                    Timber.d("syncLocationActivity (Activity Screen) : ERROR : " + error.localizedMessage)
                                     error.printStackTrace()
                                 }
 

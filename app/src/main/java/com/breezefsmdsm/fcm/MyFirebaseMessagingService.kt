@@ -12,7 +12,7 @@ import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.text.TextUtils
-import com.elvishew.xlog.XLog
+import timber.log.Timber
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.utils.AppUtils
@@ -40,7 +40,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private var messageDetails = ""
 
     override fun onNewToken(token: String) {
-        XLog.e("Refreshed token: $token")
+        Timber.e("Refreshed token: $token")
 
 
         doAsync {
@@ -51,7 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 refreshedToken = token
             }
 
-            XLog.e("MyFirebaseInstanceIDService : \nDevice Token=====> $token")
+            Timber.e("MyFirebaseInstanceIDService : \nDevice Token=====> $token")
 
             uiThread {
 
@@ -79,10 +79,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
 
 
-        XLog.e("FirebaseMessageService : ============Push has come============")
+        Timber.e("FirebaseMessageService : ============Push has come============")
 
         if (TextUtils.isEmpty(Pref.user_id)) {
-            XLog.e("FirebaseMessageService : ============Logged out scenario============")
+            Timber.e("FirebaseMessageService : ============Logged out scenario============")
 
             if (!TextUtils.isEmpty(remoteMessage?.data?.get("type")) && remoteMessage?.data?.get("type") == "clearData") {
                 val packageName = applicationContext.packageName
@@ -101,8 +101,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val notification = NotificationUtils(getString(R.string.app_name), "", "", "")
 
         if (!TextUtils.isEmpty(body)) {
-            XLog.e("FirebaseMessageService : \nNotification Message=====> $body")
-            //XLog.e("FirebaseMessageService : \nNotification Title=====> $title")
+            Timber.e("FirebaseMessageService : \nNotification Message=====> $body")
+            //Timber.e("FirebaseMessageService : \nNotification Title=====> $title")
             if (remoteMessage?.data?.get("type") == "clearData") {
                 Pref.isClearData = true
 
@@ -171,11 +171,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         .subscribeOn(Schedulers.io())
                         .subscribe({ result ->
                             val response = result as BaseResponse
-                            XLog.d("UpdateDeviceTokenResponse : " + "\n" + "Status====> " + response.status + ", Message===> " + response.message)
+                            Timber.d("UpdateDeviceTokenResponse : " + "\n" + "Status====> " + response.status + ", Message===> " + response.message)
 
                         }, { error ->
                             error.printStackTrace()
-                            XLog.d("UpdateDeviceTokenResponse ERROR: " + error.localizedMessage + "\n" + "Username :" + Pref.user_name + ", Time :" + AppUtils.getCurrentDateTime())
+                            Timber.d("UpdateDeviceTokenResponse ERROR: " + error.localizedMessage + "\n" + "Username :" + Pref.user_name + ", Time :" + AppUtils.getCurrentDateTime())
                         })
         )
     }
