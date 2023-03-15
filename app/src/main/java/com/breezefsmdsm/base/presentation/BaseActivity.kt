@@ -1256,17 +1256,20 @@ override fun onDestroy() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 fun startMonitorService() {
-    //if(Pref.GPSAlertGlobal){
+    try{
+        //if(Pref.GPSAlertGlobal){
         //if(Pref.GPSAlert){
-            if (!isMonitorServiceRunning()) {
-                XLog.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
-                val intent = Intent(applicationContext, MonitorService::class.java)
-                intent.action = CustomConstants.START_MONITOR_SERVICE
-                startService(intent)
-                //Toast.makeText(this, "Loc service started", Toast.LENGTH_SHORT).show()
-            }
+        if (!isMonitorServiceRunning()) {
+            XLog.d("MonitorService Started : " + " Time :" + AppUtils.getCurrentDateTime())
+            val intent = Intent(applicationContext, MonitorService::class.java)
+            intent.action = CustomConstants.START_MONITOR_SERVICE
+            startService(intent)
+            //Toast.makeText(this, "Loc service started", Toast.LENGTH_SHORT).show()
+        }
         //}
-    //}
+        //}
+    }catch (ex:Exception){ex.printStackTrace()}
+
 }
 
 fun stopLocationService() {
