@@ -6195,6 +6195,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (configResponse.IsShowHomeLocationMap != null)
                             Pref.IsShowHomeLocationMapGlobal = configResponse.IsShowHomeLocationMap!!
 
+                        if (configResponse.ShowApproxDistanceInNearbyShopList != null)
+                            Pref.ShowApproxDistanceInNearbyShopList = configResponse.ShowApproxDistanceInNearbyShopList!!
+
 
 
                     }

@@ -74,6 +74,7 @@ class ConfigFetchResponseModel : BaseResponse() {
     var IsShowInPortalManualPhotoRegn:Boolean? = null
     var IsShowHomeLocationMap:Boolean? = null
 
+    var ShowApproxDistanceInNearbyShopList: Boolean? = null
 
 
 

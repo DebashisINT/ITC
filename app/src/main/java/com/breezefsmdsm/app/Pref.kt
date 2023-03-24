@@ -403,4 +403,6 @@ object Pref : PreferenceHolder() {
     var isCalledFromStart: Boolean by bindToPreferenceField(false, "isCalledFromStart")
     var isStartCall: Boolean by bindToPreferenceField(false, "isStartCall")
     var isEndCall: Boolean by bindToPreferenceField(false, "isEndCall")
+
+    var ShowApproxDistanceInNearbyShopList: Boolean by bindToPreferenceField(false, "ShowApproxDistanceInNearbyShopList")
 }
