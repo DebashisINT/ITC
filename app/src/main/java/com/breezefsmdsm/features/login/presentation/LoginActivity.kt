@@ -1385,11 +1385,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun checkBSList() {
-        val list = AppDatabase.getDBInstance()?.bsListDao()?.getAll()
-        if (list == null || list.isEmpty())
-            geBSApi()
-        else
-            checkQuotSList()
+        if(Pref.isQuotationShow){
+            Timber.d("Qut api_call")
+            val list = AppDatabase.getDBInstance()?.bsListDao()?.getAll()
+            if (list == null || list.isEmpty())
+                geBSApi()
+            else
+                checkQuotSList()
+        }else{
+            Timber.d("Qut api_call NA")
+            getTeamAreaListApi()
+        }
+
     }
 
     private fun geBSApi() {

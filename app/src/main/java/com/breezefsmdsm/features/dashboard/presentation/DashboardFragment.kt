@@ -3093,6 +3093,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun getUserPjpList(workTypeList: ArrayList<SelectedWorkTypeEntity>) {
+        if(!Pref.isActivatePJPFeature){
+            return
+        }
+        Timber.d("PJP api DashF1 PJPDetails/PJPList call")
         if (!AppUtils.isOnline(mContext)) {
 
             if (workTypeList == null || workTypeList.size == 0)
@@ -6283,67 +6287,73 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun getPjpListApi() {
-        var progress_wheel: ProgressWheel? = null
-        if (Pref.isAttendanceFeatureOnly)
-            progress_wheel = progress_wheel_attendance
-        else
-            progress_wheel = this.progress_wheel
+        if(Pref.isActivatePJPFeature){
+            Timber.d("PJP api DashF PJPDetails/PJPList call")
+            var progress_wheel: ProgressWheel? = null
+            if (Pref.isAttendanceFeatureOnly)
+                progress_wheel = progress_wheel_attendance
+            else
+                progress_wheel = this.progress_wheel
 
-        progress_wheel?.spin()
-        val repository = TeamRepoProvider.teamRepoProvider()
-        BaseActivity.compositeDisposable.add(
-            repository.getUserPJPList(AppUtils.getCurrentDateForShopActi())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as UserPjpResponseModel
-                    Timber.d("GET USER PJP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
-                    if (response.status == NetworkConstant.SUCCESS) {
+            progress_wheel?.spin()
+            val repository = TeamRepoProvider.teamRepoProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getUserPJPList(AppUtils.getCurrentDateForShopActi())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as UserPjpResponseModel
+                        Timber.d("GET USER PJP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                        if (response.status == NetworkConstant.SUCCESS) {
 
-                        if (response.pjp_list != null && response.pjp_list.isNotEmpty()) {
+                            if (response.pjp_list != null && response.pjp_list.isNotEmpty()) {
 
-                            doAsync {
+                                doAsync {
 
-                                AppDatabase.getDBInstance()?.pjpListDao()?.deleteAll()
+                                    AppDatabase.getDBInstance()?.pjpListDao()?.deleteAll()
 
-                                response.pjp_list.forEach {
-                                    val pjpEntity = PjpListEntity()
-                                    AppDatabase.getDBInstance()?.pjpListDao()
-                                        ?.insert(pjpEntity.apply {
-                                            pjp_id = it.id
-                                            from_time = it.from_time
-                                            to_time = it.to_time
-                                            customer_name = it.customer_name
-                                            customer_id = it.customer_id
-                                            location = it.location
-                                            date = it.date
-                                            remarks = it.remarks
-                                        })
+                                    response.pjp_list.forEach {
+                                        val pjpEntity = PjpListEntity()
+                                        AppDatabase.getDBInstance()?.pjpListDao()
+                                            ?.insert(pjpEntity.apply {
+                                                pjp_id = it.id
+                                                from_time = it.from_time
+                                                to_time = it.to_time
+                                                customer_name = it.customer_name
+                                                customer_id = it.customer_id
+                                                location = it.location
+                                                date = it.date
+                                                remarks = it.remarks
+                                            })
+                                    }
+
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getTeamAreaListApi()
+                                    }
                                 }
-
-                                uiThread {
-                                    progress_wheel.stopSpinning()
-                                    getTeamAreaListApi()
-                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getTeamAreaListApi()
                             }
+
+
                         } else {
                             progress_wheel.stopSpinning()
                             getTeamAreaListApi()
                         }
 
-
-                    } else {
+                    }, { error ->
                         progress_wheel.stopSpinning()
+                        Timber.d("GET USER PJP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                        error.printStackTrace()
                         getTeamAreaListApi()
-                    }
+                    })
+            )
+        }else{
+            getTeamAreaListApi()
+        }
 
-                }, { error ->
-                    progress_wheel.stopSpinning()
-                    Timber.d("GET USER PJP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
-                    error.printStackTrace()
-                    getTeamAreaListApi()
-                })
-        )
     }
 
     private fun getTeamAreaListApi() {

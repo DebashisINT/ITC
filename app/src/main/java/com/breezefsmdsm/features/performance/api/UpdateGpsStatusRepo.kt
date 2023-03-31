@@ -1,6 +1,7 @@
 package com.breezefsmdsm.features.performance.api
 
 import com.breezefsmdsm.base.BaseResponse
+import com.breezefsmdsm.features.performance.model.UpdateGpsInputListParamsModel
 import com.breezefsmdsm.features.performance.model.UpdateGpsInputParamsModel
 import io.reactivex.Observable
 
@@ -10,5 +11,8 @@ import io.reactivex.Observable
 class UpdateGpsStatusRepo(val apiService: UpdateGpsStatusApi) {
     fun updateGpsStatus(updateGps: UpdateGpsInputParamsModel): Observable<BaseResponse> {
         return apiService.updateGpsStatus(updateGps)
+    }
+    fun updateGpsStatuswithList(updateGpslist: UpdateGpsInputListParamsModel): Observable<BaseResponse> {
+        return apiService.updateGpsStatusWithList(updateGpslist)
     }
 }
