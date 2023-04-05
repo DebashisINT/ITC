@@ -76,6 +76,6 @@ class ConfigFetchResponseModel : BaseResponse() {
 
     var ShowApproxDistanceInNearbyShopList: Boolean? = null
 
-
+    var IsnewleadtypeforRuby: Boolean? = null
 
 }

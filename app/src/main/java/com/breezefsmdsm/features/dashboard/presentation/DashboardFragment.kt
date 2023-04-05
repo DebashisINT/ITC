@@ -4087,68 +4087,74 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
     private fun getProductList(date: String?) {
-        val repository = ProductListRepoProvider.productListProvider()
-        var progress_wheel: ProgressWheel? = null
-        if (Pref.isAttendanceFeatureOnly)
-            progress_wheel = progress_wheel_attendance
-        else
-            progress_wheel = this.progress_wheel
+        if(Pref.isOrderShow){
+            val repository = ProductListRepoProvider.productListProvider()
+            var progress_wheel: ProgressWheel? = null
+            if (Pref.isAttendanceFeatureOnly)
+                progress_wheel = progress_wheel_attendance
+            else
+                progress_wheel = this.progress_wheel
 
-        progress_wheel?.spin()
-        BaseActivity.compositeDisposable.add(
-            //repository.getProductList(Pref.session_token!!, Pref.user_id!!, date!!)
-            repository.getProductList(Pref.session_token!!, Pref.user_id!!, "")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as ProductListResponseModel
-                    if (response.status == NetworkConstant.SUCCESS) {
-                        val list = response.product_list
+            progress_wheel?.spin()
+            Timber.d("api_call_dash  getProductList()")
+            BaseActivity.compositeDisposable.add(
+                //repository.getProductList(Pref.session_token!!, Pref.user_id!!, date!!)
+                repository.getProductList(Pref.session_token!!, Pref.user_id!!, "")
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as ProductListResponseModel
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            val list = response.product_list
 
-                        if (list != null && list.isNotEmpty()) {
+                            if (list != null && list.isNotEmpty()) {
 
-                            doAsync {
+                                doAsync {
 
-                                if (!TextUtils.isEmpty(date))
-                                    AppDatabase.getDBInstance()?.productListDao()
-                                        ?.deleteAllProduct()
+                                    if (!TextUtils.isEmpty(date))
+                                        AppDatabase.getDBInstance()?.productListDao()
+                                            ?.deleteAllProduct()
 
-                                AppDatabase.getDBInstance()?.productListDao()?.insertAll(list!!)
+                                    AppDatabase.getDBInstance()?.productListDao()?.insertAll(list!!)
 
-                                /*for (i in list.indices) {
-                                            val productEntity = ProductListEntity()
-                                            productEntity.id = list[i].id?.toInt()!!
-                                            productEntity.product_name = list[i].product_name
-                                            productEntity.watt = list[i].watt
-                                            productEntity.category = list[i].category
-                                            productEntity.brand = list[i].brand
-                                            productEntity.brand_id = list[i].brand_id
-                                            productEntity.watt_id = list[i].watt_id
-                                            productEntity.category_id = list[i].category_id
-                                            productEntity.date = AppUtils.getCurrentDateForShopActi()
-                                            AppDatabase.getDBInstance()?.productListDao()?.insert(productEntity)
-                                        }*/
+                                    /*for (i in list.indices) {
+                                                val productEntity = ProductListEntity()
+                                                productEntity.id = list[i].id?.toInt()!!
+                                                productEntity.product_name = list[i].product_name
+                                                productEntity.watt = list[i].watt
+                                                productEntity.category = list[i].category
+                                                productEntity.brand = list[i].brand
+                                                productEntity.brand_id = list[i].brand_id
+                                                productEntity.watt_id = list[i].watt_id
+                                                productEntity.category_id = list[i].category_id
+                                                productEntity.date = AppUtils.getCurrentDateForShopActi()
+                                                AppDatabase.getDBInstance()?.productListDao()?.insert(productEntity)
+                                            }*/
 
-                                uiThread {
-                                    progress_wheel.stopSpinning()
-                                    getSelectedRouteListRefresh()
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getSelectedRouteListRefresh()
+                                    }
                                 }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getSelectedRouteListRefresh()
                             }
                         } else {
                             progress_wheel.stopSpinning()
                             getSelectedRouteListRefresh()
                         }
-                    } else {
+
+                    }, { error ->
+                        error.printStackTrace()
                         progress_wheel.stopSpinning()
                         getSelectedRouteListRefresh()
-                    }
+                    })
+            )
+        }else{
+            getSelectedRouteListRefresh()
+        }
 
-                }, { error ->
-                    error.printStackTrace()
-                    progress_wheel.stopSpinning()
-                    getSelectedRouteListRefresh()
-                })
-        )
     }
 
     private fun getSelectedRouteListRefresh() {
@@ -4165,6 +4171,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             progress_wheel = progress_wheel_attendance
         else
             progress_wheel = this.progress_wheel
+
+        Timber.d("api_call_dash  routeList()")
 
         progress_wheel?.spin()
         BaseActivity.compositeDisposable.add(
@@ -4252,6 +4260,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         else
             progress_wheel = this.progress_wheel
 
+        Timber.d("api_call_dash  userConfig()")
         progress_wheel?.spin()
         BaseActivity.compositeDisposable.add(
             repository.userConfig(Pref.user_id!!)
@@ -6011,6 +6020,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             progress_wheel = this.progress_wheel
 
         progress_wheel?.spin()
+        Timber.d("api_call_dash  configFetch()")
         BaseActivity.compositeDisposable.add(
             repository.configFetch()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -6202,6 +6212,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (configResponse.ShowApproxDistanceInNearbyShopList != null)
                             Pref.ShowApproxDistanceInNearbyShopList = configResponse.ShowApproxDistanceInNearbyShopList!!
 
+                        if (configResponse.IsnewleadtypeforRuby != null)
+                            Pref.IsnewleadtypeforRuby = configResponse.IsnewleadtypeforRuby!!
+
 
 
                     }
@@ -6227,63 +6240,65 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun callAlarmConfig() {
-        val repository = AlarmConfigRepoProvider.provideAlarmConfigRepository()
-        var progress_wheel: ProgressWheel? = null
-        if (Pref.isAttendanceFeatureOnly)
-            progress_wheel = progress_wheel_attendance
-        else
-            progress_wheel = this.progress_wheel
+            val repository = AlarmConfigRepoProvider.provideAlarmConfigRepository()
+            var progress_wheel: ProgressWheel? = null
+            if (Pref.isAttendanceFeatureOnly)
+                progress_wheel = progress_wheel_attendance
+            else
+                progress_wheel = this.progress_wheel
+            Timber.d("api_call_dash  alarmConfig()")
+            progress_wheel?.spin()
+            BaseActivity.compositeDisposable.add(
+                repository.alarmConfig()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
 
-        progress_wheel?.spin()
-        BaseActivity.compositeDisposable.add(
-            repository.alarmConfig()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
+                        val configResponse = result as AlarmConfigResponseModel
+                        Timber.d("AlarmConfigApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
 
-                    val configResponse = result as AlarmConfigResponseModel
-                    Timber.d("AlarmConfigApiResponse : " + "\n" + "Status=====> " + configResponse.status + ", Message====> " + configResponse.message)
+                        progress_wheel.stopSpinning()
+                        if (configResponse.status == NetworkConstant.SUCCESS) {
 
-                    progress_wheel.stopSpinning()
-                    if (configResponse.status == NetworkConstant.SUCCESS) {
+                            val alarmArr = java.util.ArrayList<AlarmData>()
+                            for (item in configResponse.alarm_settings_list!!) {
 
-                        val alarmArr = java.util.ArrayList<AlarmData>()
-                        for (item in configResponse.alarm_settings_list!!) {
+                                if (AppUtils.getCurrentTimeInMintes() < ((item.alarm_time_hours!!.toInt() * 60) + item.alarm_time_mins!!.toInt())) {
+                                    val al = AlarmData()
+                                    al.requestCode = 2010 + item.id!!.toInt()
+                                    al.id = item.id
+                                    al.report_id = item.report_id!!
+                                    al.report_title = item.report_title!!
+                                    al.alarm_time_hours = item.alarm_time_hours!!
+                                    al.alarm_time_mins = item.alarm_time_mins!!
 
-                            if (AppUtils.getCurrentTimeInMintes() < ((item.alarm_time_hours!!.toInt() * 60) + item.alarm_time_mins!!.toInt())) {
-                                val al = AlarmData()
-                                al.requestCode = 2010 + item.id!!.toInt()
-                                al.id = item.id
-                                al.report_id = item.report_id!!
-                                al.report_title = item.report_title!!
-                                al.alarm_time_hours = item.alarm_time_hours!!
-                                al.alarm_time_mins = item.alarm_time_mins!!
+                                    alarmArr.add(al)
 
-                                alarmArr.add(al)
+                                    AlarmReceiver.setAlarm(
+                                        mContext,
+                                        item.alarm_time_hours!!.toInt(),
+                                        item.alarm_time_mins!!.toInt(),
+                                        al.requestCode
+                                    )
+                                }
 
-                                AlarmReceiver.setAlarm(
-                                    mContext,
-                                    item.alarm_time_hours!!.toInt(),
-                                    item.alarm_time_mins!!.toInt(),
-                                    al.requestCode
-                                )
                             }
 
+                            AlarmReceiver.saveSharedPreferencesLogList(mContext, alarmArr)
                         }
 
-                        AlarmReceiver.saveSharedPreferencesLogList(mContext, alarmArr)
-                    }
+                        BaseActivity.isApiInitiated = false
+                        getPjpListApi()
+                    }, { error ->
+                        BaseActivity.isApiInitiated = false
+                        error.printStackTrace()
+                        progress_wheel.stopSpinning()
+                        Timber.d("AlarmConfigApiResponse ERROR: " + error.localizedMessage)
+                        getPjpListApi()
+                    })
+            )
 
-                    BaseActivity.isApiInitiated = false
-                    getPjpListApi()
-                }, { error ->
-                    BaseActivity.isApiInitiated = false
-                    error.printStackTrace()
-                    progress_wheel.stopSpinning()
-                    Timber.d("AlarmConfigApiResponse ERROR: " + error.localizedMessage)
-                    getPjpListApi()
-                })
-        )
+
     }
 
     private fun getPjpListApi() {
@@ -6294,7 +6309,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 progress_wheel = progress_wheel_attendance
             else
                 progress_wheel = this.progress_wheel
-
+            Timber.d("api_call_dash  getUserPJPList()")
             progress_wheel?.spin()
             val repository = TeamRepoProvider.teamRepoProvider()
             BaseActivity.compositeDisposable.add(
@@ -6357,238 +6372,262 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun getTeamAreaListApi() {
-        val repository = TeamRepoProvider.teamRepoProvider()
-        var progress_wheel: ProgressWheel? = null
-        if (Pref.isAttendanceFeatureOnly)
-            progress_wheel = progress_wheel_attendance
-        else
-            progress_wheel = this.progress_wheel
+        if(Pref.isOfflineTeam){
+            val repository = TeamRepoProvider.teamRepoProvider()
+            var progress_wheel: ProgressWheel? = null
+            if (Pref.isAttendanceFeatureOnly)
+                progress_wheel = progress_wheel_attendance
+            else
+                progress_wheel = this.progress_wheel
+            Timber.d("api_call_dash  teamAreaList()")
+            progress_wheel?.spin()
+            BaseActivity.compositeDisposable.add(
+                repository.teamAreaList()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as TeamAreaListResponseModel
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            val list = response.area_list
 
-        progress_wheel?.spin()
-        BaseActivity.compositeDisposable.add(
-            repository.teamAreaList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as TeamAreaListResponseModel
-                    if (response.status == NetworkConstant.SUCCESS) {
-                        val list = response.area_list
+                            if (list != null && list.isNotEmpty()) {
 
-                        if (list != null && list.isNotEmpty()) {
+                                AppDatabase.getDBInstance()?.memberAreaDao()?.deleteAll()
 
-                            AppDatabase.getDBInstance()?.memberAreaDao()?.deleteAll()
+                                doAsync {
 
-                            doAsync {
+                                    list.forEach {
+                                        val area = TeamAreaEntity()
+                                        AppDatabase.getDBInstance()?.memberAreaDao()
+                                            ?.insertAll(area.apply {
+                                                area_id = it.area_id
+                                                area_name = it.area_name
+                                                user_id = it.user_id
+                                            })
+                                    }
 
-                                list.forEach {
-                                    val area = TeamAreaEntity()
-                                    AppDatabase.getDBInstance()?.memberAreaDao()
-                                        ?.insertAll(area.apply {
-                                            area_id = it.area_id
-                                            area_name = it.area_name
-                                            user_id = it.user_id
-                                        })
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getTimesheetDropdownApi()
+                                    }
                                 }
-
-                                uiThread {
-                                    progress_wheel.stopSpinning()
-                                    getTimesheetDropdownApi()
-                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getTimesheetDropdownApi()
                             }
                         } else {
                             progress_wheel.stopSpinning()
                             getTimesheetDropdownApi()
                         }
-                    } else {
-                        progress_wheel.stopSpinning()
-                        getTimesheetDropdownApi()
-                    }
 
-                }, { error ->
-                    progress_wheel.stopSpinning()
-                    error.printStackTrace()
-                    getTimesheetDropdownApi()
-                })
-        )
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        error.printStackTrace()
+                        getTimesheetDropdownApi()
+                    })
+            )
+        }else{
+            getTimesheetDropdownApi()
+        }
+
     }
 
     private fun getTimesheetDropdownApi() {
-        var progress_wheel: ProgressWheel? = null
-        if (Pref.isAttendanceFeatureOnly)
-            progress_wheel = progress_wheel_attendance
-        else
-            progress_wheel = this.progress_wheel
+        if(Pref.willTimesheetShow) {
+            var progress_wheel: ProgressWheel? = null
+            if (Pref.isAttendanceFeatureOnly)
+                progress_wheel = progress_wheel_attendance
+            else
+                progress_wheel = this.progress_wheel
 
-        progress_wheel?.spin()
-        val repository = TimeSheetRepoProvider.timeSheetRepoProvider()
-        BaseActivity.compositeDisposable.add(
-            repository.getTimeSheetDropdown()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as TimeSheetDropDownResponseModel
-                    Timber.d("TIMESHEET DROPDOWN: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+            Timber.d("api_call_dash  getTimeSheetDropdown()")
+            progress_wheel?.spin()
+            val repository = TimeSheetRepoProvider.timeSheetRepoProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getTimeSheetDropdown()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as TimeSheetDropDownResponseModel
+                        Timber.d("TIMESHEET DROPDOWN: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
 
-                    if (response.status == NetworkConstant.SUCCESS) {
+                        if (response.status == NetworkConstant.SUCCESS) {
 
-                        AppDatabase.getDBInstance()?.clientDao()?.deleteAll()
-                        AppDatabase.getDBInstance()?.projectDao()?.deleteAll()
-                        AppDatabase.getDBInstance()?.activityDao()?.deleteAll()
-                        AppDatabase.getDBInstance()?.productDao()?.deleteAll()
+                            AppDatabase.getDBInstance()?.clientDao()?.deleteAll()
+                            AppDatabase.getDBInstance()?.projectDao()?.deleteAll()
+                            AppDatabase.getDBInstance()?.activityDao()?.deleteAll()
+                            AppDatabase.getDBInstance()?.productDao()?.deleteAll()
 
-
-                        doAsync {
-
-                            response.client_list?.forEach {
-                                val client = ClientListEntity()
-                                AppDatabase.getDBInstance()?.clientDao()?.insertAll(client.apply {
-                                    client_id = it.client_id
-                                    client_name = it.client_name
-                                })
-                            }
-
-                            response.project_list?.forEach {
-                                val project = ProjectListEntity()
-                                AppDatabase.getDBInstance()?.projectDao()?.insertAll(project.apply {
-                                    project_id = it.project_id
-                                    project_name = it.project_name
-                                })
-                            }
-
-                            response.product_list?.forEach {
-                                val product = TimesheetProductListEntity()
-                                AppDatabase.getDBInstance()?.productDao()?.insertAll(product.apply {
-                                    product_id = it.product_id
-                                    product_name = it.product_name
-                                })
-                            }
-
-                            response.activity_list?.forEach {
-                                val activity = ActivityListEntity()
-                                AppDatabase.getDBInstance()?.activityDao()
-                                    ?.insertAll(activity.apply {
-                                        activity_id = it.activity_id
-                                        activity_name = it.activity_name
-                                    })
-                            }
-
-                            uiThread {
-                                progress_wheel.stopSpinning()
-                                getTimesheetConfig()
-                            }
-                        }
-                    } else {
-                        progress_wheel.stopSpinning()
-                        getTimesheetConfig()
-                    }
-
-                }, { error ->
-                    progress_wheel.stopSpinning()
-                    Timber.d("TIMESHEET DROPDOWN: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
-                    error.printStackTrace()
-                    getTimesheetConfig()
-                })
-        )
-    }
-
-    private fun getTimesheetConfig() {
-        var progress_wheel: ProgressWheel? = null
-        if (Pref.isAttendanceFeatureOnly)
-            progress_wheel = progress_wheel_attendance
-        else
-            progress_wheel = this.progress_wheel
-
-        progress_wheel?.spin()
-        val repository = TimeSheetRepoProvider.timeSheetRepoProvider()
-        BaseActivity.compositeDisposable.add(
-            repository.timeSheetConfig(true)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as TimeSheetConfigResponseModel
-                    Timber.d("TIMESHEET CONFIG: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
-
-                    progress_wheel.stopSpinning()
-
-                    if (response.status == NetworkConstant.SUCCESS) {
-                        response.apply {
-                            Pref.timesheet_past_days = timesheet_past_days
-                            Pref.supervisor_name = supervisor_name
-                            Pref.client_text = client_text
-                            Pref.product_text = product_text
-                            Pref.activity_text = activity_text
-                            Pref.project_text = project_text
-                            Pref.time_text = time_text
-                            Pref.comment_text = comment_text
-                            Pref.submit_text = submit_text
-                        }
-                    }
-
-                    gePrimaryAppListApi()
-
-                }, { error ->
-                    progress_wheel.stopSpinning()
-                    Timber.d("TIMESHEET CONFIG: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
-                    error.printStackTrace()
-                    gePrimaryAppListApi()
-                })
-        )
-    }
-
-    private fun gePrimaryAppListApi() {
-        progress_wheel.spin()
-        val repository = ShopListRepositoryProvider.provideShopListRepository()
-        BaseActivity.compositeDisposable.add(
-            repository.getPrimaryAppList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as PrimaryAppListResponseModel
-                    Timber.d("GET PRIMARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
-                    if (response.status == NetworkConstant.SUCCESS) {
-
-                        if (response.primary_application_list != null && response.primary_application_list!!.isNotEmpty()) {
-
-                            AppDatabase.getDBInstance()?.primaryAppListDao()?.deleteAll()
 
                             doAsync {
 
-                                response.primary_application_list?.forEach {
-                                    val primaryEntity = PrimaryAppEntity()
-                                    AppDatabase.getDBInstance()?.primaryAppListDao()
-                                        ?.insertAll(primaryEntity.apply {
-                                            primary_app_id = it.id
-                                            primary_app_name = it.name
+                                response.client_list?.forEach {
+                                    val client = ClientListEntity()
+                                    AppDatabase.getDBInstance()?.clientDao()?.insertAll(client.apply {
+                                        client_id = it.client_id
+                                        client_name = it.client_name
+                                    })
+                                }
+
+                                response.project_list?.forEach {
+                                    val project = ProjectListEntity()
+                                    AppDatabase.getDBInstance()?.projectDao()?.insertAll(project.apply {
+                                        project_id = it.project_id
+                                        project_name = it.project_name
+                                    })
+                                }
+
+                                response.product_list?.forEach {
+                                    val product = TimesheetProductListEntity()
+                                    AppDatabase.getDBInstance()?.productDao()?.insertAll(product.apply {
+                                        product_id = it.product_id
+                                        product_name = it.product_name
+                                    })
+                                }
+
+                                response.activity_list?.forEach {
+                                    val activity = ActivityListEntity()
+                                    AppDatabase.getDBInstance()?.activityDao()
+                                        ?.insertAll(activity.apply {
+                                            activity_id = it.activity_id
+                                            activity_name = it.activity_name
                                         })
                                 }
 
                                 uiThread {
                                     progress_wheel.stopSpinning()
-                                    geSecondaryAppListApi()
+                                    getTimesheetConfig()
                                 }
                             }
+                        } else {
+                            progress_wheel.stopSpinning()
+                            getTimesheetConfig()
+                        }
+
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        Timber.d("TIMESHEET DROPDOWN: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                        error.printStackTrace()
+                        getTimesheetConfig()
+                    })
+            )
+        }else{
+            getTimesheetConfig()
+        }
+
+    }
+
+    private fun getTimesheetConfig() {
+        if(Pref.willTimesheetShow){
+            var progress_wheel: ProgressWheel? = null
+            if (Pref.isAttendanceFeatureOnly)
+                progress_wheel = progress_wheel_attendance
+            else
+                progress_wheel = this.progress_wheel
+
+            Timber.d("api_call_dash  timeSheetConfig()")
+            progress_wheel?.spin()
+            val repository = TimeSheetRepoProvider.timeSheetRepoProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.timeSheetConfig(true)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as TimeSheetConfigResponseModel
+                        Timber.d("TIMESHEET CONFIG: " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+
+                        progress_wheel.stopSpinning()
+
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            response.apply {
+                                Pref.timesheet_past_days = timesheet_past_days
+                                Pref.supervisor_name = supervisor_name
+                                Pref.client_text = client_text
+                                Pref.product_text = product_text
+                                Pref.activity_text = activity_text
+                                Pref.project_text = project_text
+                                Pref.time_text = time_text
+                                Pref.comment_text = comment_text
+                                Pref.submit_text = submit_text
+                            }
+                        }
+
+                        gePrimaryAppListApi()
+
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        Timber.d("TIMESHEET CONFIG: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                        error.printStackTrace()
+                        gePrimaryAppListApi()
+                    })
+            )
+        }else{
+            gePrimaryAppListApi()
+        }
+
+    }
+
+    private fun gePrimaryAppListApi() {
+        if(Pref.isCustomerFeatureEnable){
+            progress_wheel.spin()
+            Timber.d("api_call_dash  getPrimaryAppList()")
+            val repository = ShopListRepositoryProvider.provideShopListRepository()
+            BaseActivity.compositeDisposable.add(
+                repository.getPrimaryAppList()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as PrimaryAppListResponseModel
+                        Timber.d("GET PRIMARY APP DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                        if (response.status == NetworkConstant.SUCCESS) {
+
+                            if (response.primary_application_list != null && response.primary_application_list!!.isNotEmpty()) {
+
+                                AppDatabase.getDBInstance()?.primaryAppListDao()?.deleteAll()
+
+                                doAsync {
+
+                                    response.primary_application_list?.forEach {
+                                        val primaryEntity = PrimaryAppEntity()
+                                        AppDatabase.getDBInstance()?.primaryAppListDao()
+                                            ?.insertAll(primaryEntity.apply {
+                                                primary_app_id = it.id
+                                                primary_app_name = it.name
+                                            })
+                                    }
+
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        geSecondaryAppListApi()
+                                    }
+                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                geSecondaryAppListApi()
+                            }
+
+
                         } else {
                             progress_wheel.stopSpinning()
                             geSecondaryAppListApi()
                         }
 
-
-                    } else {
+                    }, { error ->
                         progress_wheel.stopSpinning()
+                        Timber.d("GET PRIMARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                        error.printStackTrace()
                         geSecondaryAppListApi()
-                    }
+                    })
+            )
+        }else{
+            getEntityTypeListApi()
+        }
 
-                }, { error ->
-                    progress_wheel.stopSpinning()
-                    Timber.d("GET PRIMARY APP DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
-                    error.printStackTrace()
-                    geSecondaryAppListApi()
-                })
-        )
     }
 
     private fun geSecondaryAppListApi() {
         progress_wheel.spin()
+        Timber.d("api_call_dash  getSecondaryAppList()")
         val repository = ShopListRepositoryProvider.provideShopListRepository()
         BaseActivity.compositeDisposable.add(
             repository.getSecondaryAppList()
@@ -6641,6 +6680,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     private fun geLeadApi() {
         progress_wheel.spin()
+        Timber.d("api_call_dash  getLeadTypeList()")
         val repository = ShopListRepositoryProvider.provideShopListRepository()
         BaseActivity.compositeDisposable.add(
             repository.getLeadTypeList()
@@ -6693,6 +6733,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     private fun geStageApi() {
         progress_wheel.spin()
+        Timber.d("api_call_dash  getStagList()")
         val repository = ShopListRepositoryProvider.provideShopListRepository()
         BaseActivity.compositeDisposable.add(
             repository.getStagList()
@@ -6745,6 +6786,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     private fun geFunnelStageApi() {
         progress_wheel.spin()
+        Timber.d("api_call_dash  getFunnelStageList()")
         val repository = ShopListRepositoryProvider.provideShopListRepository()
         BaseActivity.compositeDisposable.add(
             repository.getFunnelStageList()
@@ -6798,6 +6840,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private fun getEntityTypeListApi() {
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
+        Timber.d("api_call_dash  entityList()")
         BaseActivity.compositeDisposable.add(
             repository.entityList()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -6841,103 +6884,116 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun getPartyStatusListApi() {
-        val repository = TypeListRepoProvider.provideTypeListRepository()
-        progress_wheel.spin()
-        BaseActivity.compositeDisposable.add(
-            repository.partyStatusList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as PartyStatusResponseModel
-                    if (response.status == NetworkConstant.SUCCESS) {
-                        val list = response.party_status
-                        if (list != null && list.isNotEmpty()) {
-                            AppDatabase.getDBInstance()?.partyStatusDao()?.delete()
-                            doAsync {
-                                list.forEach {
-                                    val party = PartyStatusEntity()
-                                    AppDatabase.getDBInstance()?.partyStatusDao()
-                                        ?.insert(party.apply {
-                                            party_status_id = it.id
-                                            name = it.name
-                                        })
-                                }
+        if(Pref.willShowPartyStatus){
+            val repository = TypeListRepoProvider.provideTypeListRepository()
+            progress_wheel.spin()
+            Timber.d("api_call_dash  partyStatusList()")
+            BaseActivity.compositeDisposable.add(
+                repository.partyStatusList()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as PartyStatusResponseModel
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            val list = response.party_status
+                            if (list != null && list.isNotEmpty()) {
+                                AppDatabase.getDBInstance()?.partyStatusDao()?.delete()
+                                doAsync {
+                                    list.forEach {
+                                        val party = PartyStatusEntity()
+                                        AppDatabase.getDBInstance()?.partyStatusDao()
+                                            ?.insert(party.apply {
+                                                party_status_id = it.id
+                                                name = it.name
+                                            })
+                                    }
 
-                                uiThread {
-                                    progress_wheel.stopSpinning()
-                                    getMeetingTypeListApi()
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getMeetingTypeListApi()
+                                    }
                                 }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getMeetingTypeListApi()
                             }
                         } else {
                             progress_wheel.stopSpinning()
                             getMeetingTypeListApi()
                         }
-                    } else {
-                        progress_wheel.stopSpinning()
-                        getMeetingTypeListApi()
-                    }
 
-                }, { error ->
-                    progress_wheel.stopSpinning()
-                    error.printStackTrace()
-                    getMeetingTypeListApi()
-                })
-        )
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        error.printStackTrace()
+                        getMeetingTypeListApi()
+                    })
+            )
+        }else{
+            getMeetingTypeListApi()
+        }
+
     }
 
     private fun getMeetingTypeListApi() {
-        val repository = LoginRepositoryProvider.provideLoginRepository()
-        progress_wheel.spin()
-        BaseActivity.compositeDisposable.add(
-            repository.getMeetingList()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    val response = result as MeetingListResponseModel
-                    BaseActivity.isApiInitiated = false
-                    if (response.status == NetworkConstant.SUCCESS) {
+        if(Pref.isMeetingAvailable){
+            val repository = LoginRepositoryProvider.provideLoginRepository()
+            progress_wheel.spin()
+            Timber.d("api_call_dash  getMeetingList()")
+            BaseActivity.compositeDisposable.add(
+                repository.getMeetingList()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as MeetingListResponseModel
+                        BaseActivity.isApiInitiated = false
+                        if (response.status == NetworkConstant.SUCCESS) {
 
-                        if (response.meeting_type_list != null && response.meeting_type_list!!.size > 0) {
+                            if (response.meeting_type_list != null && response.meeting_type_list!!.size > 0) {
 
-                            AppDatabase.getDBInstance()!!.addMeetingTypeDao().deleteAll()
+                                AppDatabase.getDBInstance()!!.addMeetingTypeDao().deleteAll()
 
-                            doAsync {
-                                val list = response.meeting_type_list
+                                doAsync {
+                                    val list = response.meeting_type_list
 
-                                for (i in list!!.indices) {
-                                    val meetingType = MeetingTypeEntity()
-                                    meetingType.typeId = list[i].type_id.toInt()
-                                    meetingType.typeText = list[i].type_text
+                                    for (i in list!!.indices) {
+                                        val meetingType = MeetingTypeEntity()
+                                        meetingType.typeId = list[i].type_id.toInt()
+                                        meetingType.typeText = list[i].type_text
 
-                                    AppDatabase.getDBInstance()!!.addMeetingTypeDao()
-                                        .insertAll(meetingType)
+                                        AppDatabase.getDBInstance()!!.addMeetingTypeDao()
+                                            .insertAll(meetingType)
+                                    }
+
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getRemarksList()
+                                    }
                                 }
-
-                                uiThread {
-                                    progress_wheel.stopSpinning()
-                                    getRemarksList()
-                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getRemarksList()
                             }
                         } else {
                             progress_wheel.stopSpinning()
                             getRemarksList()
                         }
-                    } else {
+
+                    }, { error ->
+                        error.printStackTrace()
+                        BaseActivity.isApiInitiated = false
                         progress_wheel.stopSpinning()
                         getRemarksList()
-                    }
+                    })
+            )
+        }else{
+            getRemarksList()
+        }
 
-                }, { error ->
-                    error.printStackTrace()
-                    BaseActivity.isApiInitiated = false
-                    progress_wheel.stopSpinning()
-                    getRemarksList()
-                })
-        )
     }
 
     private fun getRemarksList() {
         progress_wheel.spin()
+        Timber.d("api_call_dash  getRemarksList()")
         val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
         BaseActivity.compositeDisposable.add(
             repository.getRemarksList()
@@ -6979,6 +7035,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     @SuppressLint("RestrictedApi")
     private fun changeUI() {
+
+        Timber.d("api_call_dash  changeUI()")
         tv_shop.text = Pref.shopText + "(s)"
 
         if (Pref.willShowUpdateDayPlan)

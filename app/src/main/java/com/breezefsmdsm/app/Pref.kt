@@ -405,4 +405,6 @@ object Pref : PreferenceHolder() {
     var isEndCall: Boolean by bindToPreferenceField(false, "isEndCall")
 
     var ShowApproxDistanceInNearbyShopList: Boolean by bindToPreferenceField(false, "ShowApproxDistanceInNearbyShopList")
+
+    var IsnewleadtypeforRuby: Boolean by bindToPreferenceField(false, "IsnewleadtypeforRuby")
 }
