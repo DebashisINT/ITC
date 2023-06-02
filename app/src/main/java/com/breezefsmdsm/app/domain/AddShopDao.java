@@ -195,6 +195,9 @@ public interface AddShopDao {
     @Query("update shop_detail set shopStatusUpdate=:shopStatusUpdate where shop_id=:shop_id")
     void updateShopStatus(String shop_id, String shopStatusUpdate);
 
+    @Query("Select * from shop_detail where shopStatusUpdate=0")
+    List<AddShopDBModelEntity> getInActiveShop();
+
 //    @Query("INSERT OR REPLACE INTO SHOP_TABLE (shopId,shopName,address,pinCode,ownerName,isVisited) VALUES (:id, :title, :url, COALESCE((SELECT isSubscribed FROM articles WHERE id = :id), 0));")
 //    void insertOrUpdateShop(long id, String title, String url);
 }

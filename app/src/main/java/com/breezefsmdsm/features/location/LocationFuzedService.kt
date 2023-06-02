@@ -17,22 +17,18 @@ import android.location.GpsStatus
 import android.location.Location
 import android.location.LocationManager
 import android.os.*
+import android.text.TextUtils
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import android.text.TextUtils
-import android.util.Log
-import com.breezefsmdsm.CustomStatic
 import com.breezefsmdsm.MonitorBroadcast
-import timber.log.Timber
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.*
 import com.breezefsmdsm.app.Pref.tempDistance
@@ -55,28 +51,28 @@ import com.breezefsmdsm.features.averageshop.model.ShopActivityRequest
 import com.breezefsmdsm.features.averageshop.model.ShopActivityResponse
 import com.breezefsmdsm.features.averageshop.model.ShopActivityResponseDataList
 import com.breezefsmdsm.features.commondialogsinglebtn.CommonDialogSingleBtn
-import com.breezefsmdsm.features.commondialogsinglebtn.OnDialogClickListener
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
+import com.breezefsmdsm.features.dashboard.presentation.DashboardFragment
 import com.breezefsmdsm.features.dashboard.presentation.SystemEventReceiver
 import com.breezefsmdsm.features.dashboard.presentation.api.ShopVisitImageUploadRepoProvider
-import com.breezefsmdsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezefsmdsm.features.dashboard.presentation.model.ShopVisitImageUploadInputModel
-import com.breezefsmdsm.features.dashboard.presentation.model.StatusDayStartEnd
 import com.breezefsmdsm.features.gpsstatus.GpsReceiver
 import com.breezefsmdsm.features.gpsstatus.LocationCallBack
 import com.breezefsmdsm.features.location.LocationWizard.Companion.NEARBY_RADIUS
 import com.breezefsmdsm.features.location.api.LocationRepoProvider
 import com.breezefsmdsm.features.location.ideallocapi.IdealLocationRepoProvider
 import com.breezefsmdsm.features.location.model.*
-import com.breezefsmdsm.features.location.shopRevisitStatus.ShopRevisitStatusRepository
 import com.breezefsmdsm.features.location.shopRevisitStatus.ShopRevisitStatusRepositoryProvider
 import com.breezefsmdsm.features.location.shopdurationapi.ShopDurationRepositoryProvider
 import com.breezefsmdsm.features.orderhistory.api.LocationUpdateRepositoryProviders
 import com.breezefsmdsm.features.orderhistory.model.LocationData
 import com.breezefsmdsm.features.orderhistory.model.LocationUpdateRequest
-import com.breezefsmdsm.mappackage.SendBrod.Companion.monitorNotiID
 import com.breezefsmdsm.widgets.AppCustomTextView
-import com.pnikosis.materialishprogress.ProgressWheel
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.*
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -86,12 +82,12 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONArray
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.*
 import java.lang.Math.abs
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 /**
@@ -574,7 +570,6 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     override fun onLocationChanged(location: Location) {
         //Pref.IsShowDayStart = true
         //Pref.DayStartMarked = true
-
         try{
             if(location!=null){
                 AppUtils.mLocation = location
@@ -621,6 +616,21 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         if(Pref.IsShowDayStart){
             if(Pref.DayStartMarked){
                 //Timber.d("LocationFuzedService : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
+
+                if(Pref.IsShowMarketSpendTimer){
+                    try{
+                        if(!Pref.DayStartTime.equals("")){
+                            var currentTime = System.currentTimeMillis().toString()
+                            var timeDiff = AppUtils.getTimeFromTimeSpan(Pref.DayStartTime,System.currentTimeMillis().toString())
+                            timeDiff = timeDiff.split(":").get(0)+":"+timeDiff.split(":").get(1)
+                            //DashboardFragment.timerTV.text = "${AppUtils.getMinuteFromTimeStamp(Pref.DayStartTime,System.currentTimeMillis().toString())} + $timeDiff"
+                            DashboardFragment.timerTV.text = "$timeDiff"
+                        }
+                    }catch (ex:Exception){
+                        Timber.d("ex timer text")
+                    }
+                }
+
 
 
                 /*try {

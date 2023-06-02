@@ -3485,6 +3485,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                 Pref.DayStartMarked = false
                 Pref.DayEndMarked = false
+                Pref.DayStartTime = ""
                 Timber.d("R.id.login_TV : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
 
                 var andrV = Build.VERSION.SDK_INT.toInt()

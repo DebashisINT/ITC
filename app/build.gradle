@@ -277,5 +277,8 @@ dependencies {
 
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0' // for calender view
+    implementation 'io.apisense:rhino-android:1.2.0'  // for calculator
+
 }
 apply plugin: 'com.google.gms.google-services'

@@ -1,5 +1,6 @@
 package com.breezefsmdsm.app
 
+import com.breezefsmdsm.features.dashboard.presentation.DashboardFragment
 import com.marcinmoskala.kotlinpreferences.PreferenceHolder
 
 /**
@@ -407,4 +408,19 @@ object Pref : PreferenceHolder() {
     var ShowApproxDistanceInNearbyShopList: Boolean by bindToPreferenceField(false, "ShowApproxDistanceInNearbyShopList")
 
     var IsnewleadtypeforRuby: Boolean by bindToPreferenceField(false, "IsnewleadtypeforRuby")
+
+    var IsShowCalendar: Boolean by bindToPreferenceField(false, "IsShowCalendar")
+    var IsShowCalculator: Boolean by bindToPreferenceField(false, "IsShowCalculator")
+    var IsShowInactiveCustomer: Boolean by bindToPreferenceField(false, "IsShowInactiveCustomer")
+    var IsShowUploadImageInAppProfile: Boolean by bindToPreferenceField(false, "IsShowUploadImageInAppProfile")
+    var IsAttachQRFromProfile: Boolean by bindToPreferenceField(false, "IsAttachQRFromProfile")
+    var IsShowMarketSpendTimer: Boolean by bindToPreferenceField(false, "IsShowMarketSpendTimer")
+    var IsShowWorkType: Boolean by bindToPreferenceField(true, "IsShowWorkType")
+
+    var DayStartTime: String by bindToPreferenceField("", "DayStartTime")
+
+
+    var TimerSec: Int by bindToPreferenceField(0, "TimerSec")
+    var TimerMin: Int by bindToPreferenceField(0, "TimerMin")
+    var TimerHr: Int by bindToPreferenceField(0, "TimerHr")
 }

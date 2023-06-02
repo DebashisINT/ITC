@@ -118,18 +118,41 @@
 
     </androidx.cardview.widget.CardView>
 
-    <com.breezefsmdsm.widgets.AppCustomTextView
-        android:id="@+id/tv_shop_count"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:text="Total Shop(s): 0"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/_13sdp"
-        android:layout_marginLeft="@dimen/_10sdp"
-        android:layout_marginBottom="@dimen/_5sdp"
-        android:layout_marginTop="@dimen/_10sdp"
-        android:visibility="gone"/>
+        android:orientation="horizontal">
+
+        <com.breezefsmdsm.widgets.AppCustomTextView
+            android:id="@+id/tv_shop_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Total Shop(s): 0"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_13sdp"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:visibility="gone"/>
+
+        <com.breezefsmdsm.widgets.AppCustomTextView
+            android:id="@+id/tv_shop_count_inactive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:layout_gravity="center|end"
+            android:text="Inactive Shop(s): 0"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_13sdp"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+
 
     <com.breezefsmdsm.widgets.AppCustomTextView
         android:id="@+id/tv_beat_name"

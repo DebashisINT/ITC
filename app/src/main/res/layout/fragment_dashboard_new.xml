@@ -908,6 +908,16 @@
 
 
 
+                <TextView
+                    android:id="@+id/tv_dash_frag_timer"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_28sdp"
+                    android:hint="HH:MM"
+                    android:gravity="center|start"
+                    android:paddingStart="@dimen/_12sdp"/>
+
+
+
 
 
             <RelativeLayout

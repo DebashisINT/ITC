@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -58,6 +61,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.io.File
+import java.io.FileInputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -96,6 +101,10 @@ class MyProfileFragment : BaseFragment() {
     private lateinit var state_list: List<String>
     private var isStateClicked = false
     private var permissionUtils: PermissionUtils? = null
+
+    private lateinit var ivAttachQR:ImageView
+    private lateinit var llQRRoot:LinearLayout
+    private var qr_image_file = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -201,11 +210,29 @@ class MyProfileFragment : BaseFragment() {
         iv_apply = view.findViewById(R.id.iv_apply)
         profilePicture = view.findViewById(R.id.profile_picture_IV)
         profilePicture.setOnClickListener {
+            Pref.IsAttachQRFromProfile = false
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 initPermissionCheck()
             else
                 showPictureDialog()
         }
+
+        ivAttachQR = view.findViewById(R.id.iv_profile_attach_qr)
+        llQRRoot = view.findViewById(R.id.ll_frag_my_profile_qr_root)
+        if(Pref.IsShowUploadImageInAppProfile == true){
+                llQRRoot.visibility= View.VISIBLE
+            }
+            else{
+            llQRRoot.visibility= View.GONE
+            }
+        ivAttachQR.setOnClickListener {
+            Pref.IsAttachQRFromProfile = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                initPermissionCheck()
+            else
+                showPictureDialog()
+        }
+
         progress_wheel = view.findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
 
@@ -820,7 +847,7 @@ class MyProfileFragment : BaseFragment() {
                 .resize(100, 100)
                 .into(profilePicture)
     }
-
+    // from gallery
     fun setImage(imgRealPath: String) {
         profile_image_file = imgRealPath
         //  Picasso.with(context).load(imgRealPath).into(profilePicture)
@@ -833,6 +860,20 @@ class MyProfileFragment : BaseFragment() {
                 .load(imgRealPath)
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_menu_profile_image).error(R.drawable.ic_menu_profile_image))
                 .into(profilePicture)
+    }
+
+    public fun attachmentQR(imgRealPath: String){
+        qr_image_file = imgRealPath
+
+        try {
+            val f = File(qr_image_file)
+            val options: BitmapFactory.Options = BitmapFactory.Options()
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+            var bitmap = BitmapFactory.decodeStream(FileInputStream(f), null, options)
+            ivAttachQR.setImageBitmap(bitmap)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun showPictureDialog() {
