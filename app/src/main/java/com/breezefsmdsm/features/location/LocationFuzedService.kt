@@ -4254,10 +4254,30 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
 
     override fun onDestroy() {
-        if (gpsReceiver != null)
-            unregisterReceiver(gpsReceiver)
+        //if (gpsReceiver != null)
+            //unregisterReceiver(gpsReceiver)
 
-        unregisterReceiver(eventReceiver)
+        try{
+            Timber.d("service_tag onDestroy")
+            if (gpsReceiver != null)
+                unregisterReceiver(gpsReceiver)
+            println("loc_ex  gpsReceiver success" );
+            Timber.d("loc_ex  gpsReceiver success" )
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            println("loc_ex  gpsReceiver ${ex.printStackTrace()}" );
+            Timber.d("loc_ex  gpsReceiver ${ex.printStackTrace()}" )
+        }
+
+        //unregisterReceiver(eventReceiver)
+
+        try{
+            unregisterReceiver(eventReceiver)
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            println("loc_ex  eventReceiver ${ex.printStackTrace()}" );
+            Timber.d("loc_ex  eventReceiver ${ex.printStackTrace()}" );
+        }
 
         Timber.e("onDestroy : " + "LocationFuzedService")
 //        removeGeofence()
@@ -4277,8 +4297,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
             e.printStackTrace()
         }
 
-        compositeDisposable.clear()
-        mWakeLock.release()
+        try{
+            compositeDisposable.clear()
+            mWakeLock.release()
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
 
         super.onDestroy()
     }
