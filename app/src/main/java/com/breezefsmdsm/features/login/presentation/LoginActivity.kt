@@ -3223,8 +3223,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 }*/
 
                 Handler().postDelayed(Runnable {
-                    if (!Settings.canDrawOverlays(this@LoginActivity)) {
-                        getOverlayPermission()
+                    try{
+                        if (!Settings.canDrawOverlays(this@LoginActivity)) {
+                            getOverlayPermission()
+                        }
+                    }catch (ex:java.lang.Exception){
+                        ex.printStackTrace()
                     }
                 }, 1000)
             }

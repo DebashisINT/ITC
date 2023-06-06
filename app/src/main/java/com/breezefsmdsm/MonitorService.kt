@@ -255,10 +255,14 @@ class MonitorService:Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        stopForeground(true)
-        stopSelf()
-        timer!!.cancel()
+        try{
+            super.onDestroy()
+            stopForeground(true)
+            stopSelf()
+            timer!!.cancel()
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
     }
 
     @SuppressLint("NewApi")

@@ -2553,8 +2553,12 @@ class AppUtils {
         }
 
         fun hiFirstNameText() : String {
-            val firstName = Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)
-            return "Hi $firstName"
+            try{ val firstName = Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)
+                return "Hi $firstName"
+            }catch (ex:Exception){
+                return "Hi ${Pref.user_name}"
+            }
+
         }
 
         fun getAndroidVersion(): String {
