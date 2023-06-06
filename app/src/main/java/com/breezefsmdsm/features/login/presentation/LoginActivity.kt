@@ -5790,6 +5790,36 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                     e.printStackTrace()
                                                     Pref.GPSNetworkIntervalMins = "0"
                                                 }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMarketSpendTimer", ignoreCase = true)) {
+                                                Pref.IsShowMarketSpendTimer = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowMarketSpendTimer = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowWorkType", ignoreCase = true)) {
+                                                Pref.IsShowWorkType = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowWorkType = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowUploadImageInAppProfile", ignoreCase = true)) {
+                                                Pref.IsShowUploadImageInAppProfile = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowUploadImageInAppProfile = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowInactiveCustomer", ignoreCase = true)) {
+                                                Pref.IsShowInactiveCustomer = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowInactiveCustomer = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowCalendar", ignoreCase = true)) {
+                                                Pref.IsShowCalendar = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowCalendar = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowCalculator", ignoreCase = true)) {
+                                                Pref.IsShowCalculator = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowCalculator = response.getconfigure?.get(i)?.Value == "1"
+                                                }
                                             }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {

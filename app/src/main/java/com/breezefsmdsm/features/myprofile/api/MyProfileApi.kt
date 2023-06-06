@@ -2,6 +2,7 @@ package com.breezefsmdsm.features.myprofile.api
 
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.base.BaseResponse
+import com.breezefsmdsm.features.myprofile.presentation.ProfileDataQRResponse
 import com.breezefsmdsm.features.nearbyshops.model.ShopListResponse
 import com.breezefsmdsm.features.nearbyshops.model.StateCityResponseModel
 import io.reactivex.Observable
@@ -19,6 +20,10 @@ interface MyProfileApi {
     @POST("UpdateUserProfile/Profile")
     fun uploadProfileWithImage(@Query("data") addShop: String, @Part logo_img_data: MultipartBody.Part?): Observable<BaseResponse>
 
+    @Multipart
+    @POST("QRCodeImageInfo/SaveQRCodeImage")
+    fun uploadProfileQRImage(@Query("data") addShop: String, @Part logo_img_data: MultipartBody.Part?): Observable<ProfileDataQRResponse>
+
 //    @Multipart
     @POST("UpdateUserProfile/Profile")
     fun uploadProfileWithOutImage(@Query("data") addShop: String): Observable<BaseResponse>
@@ -27,6 +32,10 @@ interface MyProfileApi {
     @POST("Address/FetchAddress")
     fun getStateCityList(@Field("session_token") session_token:String, @Field("user_id") user_id:String,
                         @Field("pin_code") pin_code:String): Observable<StateCityResponseModel>
+
+    @FormUrlEncoded
+    @POST("QRCodeImageFetchDelete/FetchQRCodeImageLink")
+    fun getQrImageApi(@Field("session_token") session_token:String, @Field("user_id") user_id:String): Observable<ProfileDataQRResponse>
 
 
     /**
