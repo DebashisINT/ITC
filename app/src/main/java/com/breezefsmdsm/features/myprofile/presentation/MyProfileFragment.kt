@@ -2,11 +2,14 @@ package com.breezefsmdsm.features.myprofile.presentation
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -56,6 +59,9 @@ import com.breezefsmdsm.features.myprofile.model.citylist.CityListApiResponse
 import com.breezefsmdsm.features.myprofile.model.statelist.StateListApiResponse
 import com.breezefsmdsm.features.nearbyshops.model.StateCityResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.squareup.picasso.Cache
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -107,6 +113,7 @@ class MyProfileFragment : BaseFragment() {
     private lateinit var ivAttachQR:ImageView
     private lateinit var llQRRoot:LinearLayout
     private var qr_image_file = ""
+    var qrImageOnlineLink :String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -231,7 +238,57 @@ class MyProfileFragment : BaseFragment() {
             llQRRoot.visibility= View.GONE
         }
         llQRRoot.setOnClickListener {
-            if(AppUtils.isOnline(mContext)){
+            if(qrImageOnlineLink.equals("")){
+                qrImageProcess()
+            }else{
+                val simpleDialogg = Dialog(mContext)
+                simpleDialogg.setCancelable(true)
+                simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogg.setContentView(R.layout.view_face_img)
+
+
+                val faceImg = simpleDialogg.findViewById(R.id.iv_face_img) as ImageView
+                faceImg.setImageDrawable(null)
+                faceImg.setBackgroundDrawable(null)
+                faceImg.invalidate();
+                faceImg.setImageBitmap(null);
+                val faceName = simpleDialogg.findViewById(R.id.face_name) as AppCustomTextView
+                val faceCanel = simpleDialogg.findViewById(R.id.iv_face_reg_cancel) as ImageView
+                faceName.text = "Image"
+
+                val picasso = Picasso.Builder(mContext)
+                    .memoryCache(Cache.NONE)
+                    .indicatorsEnabled(false)
+                    .loggingEnabled(true)
+                    .build()
+
+                picasso.load(Uri.parse(qrImageOnlineLink))
+                    .centerCrop()
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .resize(500, 500)
+                    .into(faceImg)
+
+                progress_wheel.stopSpinning()
+
+                simpleDialogg.show()
+
+                faceCanel.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                })
+
+                simpleDialogg.setOnCancelListener({ view ->
+                    simpleDialogg.dismiss()
+
+                })
+                simpleDialogg.setOnDismissListener({ view ->
+                    simpleDialogg.dismiss()
+
+                })
+            }
+
+
+            /*if(AppUtils.isOnline(mContext)){
                 Pref.IsAttachQRFromProfile = true
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                     initPermissionCheck()
@@ -239,7 +296,7 @@ class MyProfileFragment : BaseFragment() {
                     showPictureDialog()
             }else{
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
-            }
+            }*/
         }
         if(Pref.IsShowUploadImageInAppProfile){
             getQRImage()
@@ -905,9 +962,11 @@ class MyProfileFragment : BaseFragment() {
                         progress_wheel.stopSpinning()
                         val response = result as ProfileDataQRResponse
                         if (response.status == NetworkConstant.SUCCESS) {
-                            Toaster.msgShort(mContext,"Success")
+                            Toaster.msgShort(mContext,"Upload Success.")
+                            getQRImage()
                         } else {
                             (mContext as DashboardActivity).showSnackMessage(response.message!!)
+
                         }
                     }, { error ->
                         error.printStackTrace()
@@ -939,9 +998,9 @@ class MyProfileFragment : BaseFragment() {
                             .load(response.qr_img_link)
                             .resize(100, 100)
                             .into(ivAttachQR)
-                        llQRRoot.isEnabled = false
-                    } else {
-                        llQRRoot.isEnabled = true
+                        qrImageOnlineLink = response.qr_img_link
+                    } else{
+                        qrImageOnlineLink = ""
                     }
                 },
                     { error ->
@@ -951,7 +1010,18 @@ class MyProfileFragment : BaseFragment() {
 
                     })
         )
+    }
 
+    private fun qrImageProcess(){
+        if(AppUtils.isOnline(mContext)){
+            Pref.IsAttachQRFromProfile = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                initPermissionCheck()
+            else
+                showPictureDialog()
+        }else{
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+        }
     }
 
     fun showPictureDialog() {
