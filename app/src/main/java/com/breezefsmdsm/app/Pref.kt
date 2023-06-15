@@ -423,4 +423,6 @@ object Pref : PreferenceHolder() {
     var TimerSec: Int by bindToPreferenceField(0, "TimerSec")
     var TimerMin: Int by bindToPreferenceField(0, "TimerMin")
     var TimerHr: Int by bindToPreferenceField(0, "TimerHr")
+
+    var IsUpdateVisitDataInTodayTable : Boolean by bindToPreferenceField(false, "IsUpdateVisitDataInTodayTable")
 }

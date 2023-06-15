@@ -2,6 +2,8 @@ package com.breezefsmdsm.app.utils;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import static java.sql.DriverManager.println;
+
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -114,6 +116,18 @@ public class FileLoggingTree extends Timber.DebugTree {
 //                File file = new File(context.getApplicationContext().getFilesDir(), fileName);
 
                 File file = new File("/data/user/0/com.breezefsmdsm/files", fileName);
+
+                //get file size
+                long sizeInBytes = file.length();
+                long sizeInMb = sizeInBytes / (1024 * 1024); //transform in MB
+                long sizeInKb = sizeInBytes / 1024 ; //transform in MB
+                println("log_tag "+sizeInMb);
+                //delete file
+                if(sizeInMb>25){
+                        file.delete();
+                        file = new File("/data/user/0/com.breezefsmdsm/files", fileName);
+                }
+
                 try {
                         if(context==null){
                                 FileOutputStream fos = context.getApplicationContext().openFileOutput(fileName, MODE_PRIVATE);

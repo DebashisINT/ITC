@@ -463,6 +463,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.IsnewleadtypeforRuby != null)
                                     Pref.IsnewleadtypeforRuby = configResponse.IsnewleadtypeforRuby!!
 
+                                if (configResponse.IsUpdateVisitDataInTodayTable != null)
+                                    Pref.IsUpdateVisitDataInTodayTable = configResponse.IsUpdateVisitDataInTodayTable!!
+
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
 

@@ -6311,7 +6311,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (configResponse.IsnewleadtypeforRuby != null)
                             Pref.IsnewleadtypeforRuby = configResponse.IsnewleadtypeforRuby!!
 
-
+                        if (configResponse.IsUpdateVisitDataInTodayTable != null)
+                            Pref.IsUpdateVisitDataInTodayTable = configResponse.IsUpdateVisitDataInTodayTable!!
 
                     }
                     BaseActivity.isApiInitiated = false

@@ -20,6 +20,9 @@ import retrofit2.http.POST
 interface ShopDurationApi {
     //@POST("Shopsubmission/ShopVisited")
     @POST("Shopsubmission/ITCShopVisited")
+    fun submitShopDurationITC(@Body shopDuration: ShopDurationRequest?): Observable<ShopDurationRequest>
+
+    @POST("Shopsubmission/ShopVisited")
     fun submitShopDuration(@Body shopDuration: ShopDurationRequest?): Observable<ShopDurationRequest>
 
     @POST("Shopsubmission/MeetingVisited")
