@@ -73,7 +73,9 @@ import com.breezefsmdsm.features.alarm.presetation.AttendanceReportFragment
 import com.breezefsmdsm.features.alarm.presetation.PerformanceReportFragment
 import com.breezefsmdsm.features.alarm.presetation.VisitReportDetailsFragment
 import com.breezefsmdsm.features.alarm.presetation.VisitReportFragment
+import com.breezefsmdsm.features.attendance.AttendCalendarFrag
 import com.breezefsmdsm.features.attendance.AttendanceFragment
+import com.breezefsmdsm.features.attendance.CalculatorFrag
 import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
 import com.breezefsmdsm.features.attendance.model.AttendanceRequest
 import com.breezefsmdsm.features.attendance.model.AttendanceResponse
@@ -238,6 +240,9 @@ import kotlin.system.exitProcess
 /*
  * Created by rp : 26-10-2017:17:59
  */
+//Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
+
+
 class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, OnCompleteListener<Void>, GpsStatusDetector.GpsStatusDetectorCallBack{
     override fun onComplete(task: Task<Void>) {
         mPendingGeofenceTask = PendingGeofenceTask.NONE;
@@ -291,6 +296,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         })
         AppUtils.changeLanguage(this, "en")
         println("load_frag "+mFragType.toString() + " gl: "+ Pref.gpsAccuracy +"   shop_acc ${Pref.shopLocAccuracy} "+ " usr: "+Pref.user_id)
+
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
@@ -564,6 +570,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private var lastLng = 0.0
     private var prevRevisitTimeStamp = 0L
     private var shop_id = ""
+
+    //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
+    private lateinit var attendence_calender_tv : AppCustomTextView
+    private lateinit var calculator_tv : AppCustomTextView
+    //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
 
 
     @SuppressLint("NewApi")
@@ -1636,6 +1647,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
     private fun initView() {
+        //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
+        attendence_calender_tv = findViewById(R.id.attendence_calender_tv)
+        calculator_tv = findViewById(R.id.calculator_tv)
+        //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
+
         ta_tv = findViewById(R.id.ta_tv)
         view_pp_dd_tv = findViewById(R.id.view_pp_dd_tv)
         iv_shopImage = findViewById(R.id.iv_shopImage)
@@ -1825,6 +1841,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         maps_TV.setOnClickListener(this)
         iv_sync_icon.setOnClickListener(this)
         add_attendence_tv.setOnClickListener(this)
+        attendence_calender_tv.setOnClickListener(this)
+        calculator_tv.setOnClickListener(this)
         my_details_tv.setOnClickListener(this)
         ta_tv.setOnClickListener(this)
         view_pp_dd_tv.setOnClickListener(this)
@@ -2268,6 +2286,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         } else {
             add_attendence_tv.visibility = View.GONE
         }
+        //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
+        if (Pref.IsShowCalendar) {
+            attendence_calender_tv.visibility = View.VISIBLE
+        } else {
+            attendence_calender_tv.visibility = View.GONE
+        }
+        if (Pref.IsShowCalculator) {
+            calculator_tv.visibility = View.VISIBLE
+        } else {
+            calculator_tv.visibility = View.GONE
+        }
+        //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
+
         if (Pref.IsShowMenuAttendance) {
             myAllowRequest.visibility = View.VISIBLE
         } else {
@@ -2566,7 +2597,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                             (mContext as DashboardActivity).showSnackMessage("${AppUtils.hiFirstNameText()}. Attendance already marked for the day.")
                                         }
 
-                                    }, { error ->
+                                    },
+                                        { error ->
                                         progress_wheel.stopSpinning()
                                         error.printStackTrace()
                                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
@@ -2582,6 +2614,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                 //loadFragment(FragType.AddAttendanceFragment, false, "")
             }
+
+            //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
+            R.id.attendence_calender_tv -> {
+                loadFragment(FragType.AttendCalendarFrag, false, "")
+            }
+            R.id.calculator_tv -> {
+                loadFragment(FragType.CalculatorFrag, false, "")
+            }
+            //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
 
             R.id.my_details_tv->{
                 loadFragment(FragType.MyDetailsFrag, false, "")
@@ -3768,6 +3809,20 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     setTopBarVisibility(TopBarConfig.ATTENDENCEBACKLIST)
                 } else
                     setTopBarVisibility(TopBarConfig.ATTENDENCELIST)
+            }
+            FragType.AttendCalendarFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = AttendCalendarFrag()
+                }
+                setTopBarTitle("Attendance Calendar")
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.CalculatorFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = CalculatorFrag()
+                }
+                setTopBarTitle("Calculator")
+                setTopBarVisibility(TopBarConfig.BACK)
             }
             FragType.MyDetailsFrag -> {
 
@@ -7214,7 +7269,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
                     }
 
-                } else if (getCurrentFragType() == FragType.MyProfileFragment /*&& FTStorageUtils.IMG_URI != null*/) {
+                }
+                else if (getCurrentFragType() == FragType.MyProfileFragment /*&& FTStorageUtils.IMG_URI != null*/ && Pref.IsAttachQRFromProfile == false) {
                     /*AppUtils.getCompressContentImage(FTStorageUtils.IMG_URI, this)
                     (getFragment() as MyProfileFragment).setImage(FTStorageUtils.IMG_URI)*/
 
@@ -7249,7 +7305,29 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
 
 
-                } else if (getCurrentFragType() == FragType.ReimbursementFragment) {
+                }
+                else if (getCurrentFragType() == FragType.MyProfileFragment /*&& FTStorageUtils.IMG_URI != null*/ && Pref.IsAttachQRFromProfile == true) {
+                    getCameraImage(data)
+                    if (!TextUtils.isEmpty(filePath)) {
+                        val contentURI = FTStorageUtils.getImageContentUri(this@DashboardActivity, File(Uri.parse(filePath).path).absolutePath)
+                        try {
+                            CropImage.activity(contentURI)
+                                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                                .setMinCropWindowSize(400, 400)
+                                .setAspectRatio(1, 1)
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .setAllowRotation(false)
+                                .setOutputCompressQuality(100)
+                                .start(this)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            Timber.e("Error: " + e.localizedMessage)
+                        }
+                    }
+
+
+                }
+                else if (getCurrentFragType() == FragType.ReimbursementFragment) {
                     /*AppUtils.getCompressContentImage(FTStorageUtils.IMG_URI, this)
                     (getFragment() as MyProfileFragment).setImage(FTStorageUtils.IMG_URI)*/
 
@@ -7819,8 +7897,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                                 addDashboardStartCroppedImg(fileSize, resultUri, false)
                             }
                             getCurrentFragType() == FragType.MyProfileFragment -> {
-                                val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
-                                editProfilePic(fileSize, resultUri)
+                                if(Pref.IsAttachQRFromProfile == false){
+                                    val fileSize = AppUtils.getCompressOldImage(resultUri.toString(), this)
+                                    editProfilePic(fileSize, resultUri)
+                                }else{
+                                    val fileSize = AppUtils.getCompressOldImageForFace(resultUri.toString(), this)
+                                    setProfileQRPic(fileSize,resultUri)
+                                }
+
                             }
                             getCurrentFragType() == FragType.AddDynamicFragment -> {
                                 val fileSize = AppUtils.getCompressBillingImage(resultUri.toString(), this)
@@ -7877,7 +7961,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 }
 //
             } else if (requestCode == PermissionHelper.REQUEST_CODE_STORAGE) {
-                if (getCurrentFragType() == FragType.MyProfileFragment) {
+                if (getCurrentFragType() == FragType.MyProfileFragment && Pref.IsAttachQRFromProfile == false) {
                     //AppUtils.getCompressContentImage(data!!.data, this)
 
                     /*getGalleryImage(this, data)
@@ -7890,6 +7974,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                             .start(this)
 
                     //(getFragment() as MyProfileFragment).setImage(data.data)
+                } else if (getCurrentFragType() == FragType.MyProfileFragment  && Pref.IsAttachQRFromProfile == true) {
+                    CropImage.activity(data?.data)
+                        .setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setMinCropWindowSize(400, 400)
+                        .setAspectRatio(1, 1)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .setAllowRotation(false)
+                        .setOutputCompressQuality(100)
+                        .start(this)
                 } else if (getCurrentFragType() == FragType.MarketingPagerFragment) {
                     AppUtils.getCompressImage(data!!.data.toString())
                     (getFragment() as MarketingPagerFragment).setImage(data.data!!)
@@ -9326,6 +9419,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         /*} else {
             editProfilePic(AppUtils.getCompressImage(filePath))
         }*/
+    }
+
+    private fun setProfileQRPic(fileSize: Long, resultUri: Uri) {
+        val fileSizeInKB = fileSize / 1024
+        (getFragment() as MyProfileFragment).attachmentQR(resultUri.path!!)
     }
 
     private fun getAddFacePic(fileSize: Long, resultUri: Uri) {
@@ -11391,38 +11489,44 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         if (distance * 1000 > autoRevDistance) {
             val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
             if (allShopList != null && allShopList.size > 0) {
-                for (i in 0 until allShopList.size) {
+
+                doAsync {
+
+                    nearbyLoop@ for (i in 0 until allShopList.size) {
+                        val shopLat: Double = allShopList[i].shopLat
+                        val shopLong: Double = allShopList[i].shopLong
+                        if (shopLat != null && shopLong != null) {
+                            val shopLocation = Location("")
+                            shopLocation.latitude = shopLat
+                            shopLocation.longitude = shopLong
+                            shop_id = allShopList[i].shop_id
+                            var isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
+                            println("autorev ${allShopList[i].shopName}  $isShopNearby")
 
 
+                            if (isShopNearby) {
+                                val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(allShopList[i].shop_id, AppUtils.getCurrentDateForShopActi())
+                                if (shopActivityList == null || shopActivityList.isEmpty()) {
 
-                    val shopLat: Double = allShopList[i].shopLat
-                    val shopLong: Double = allShopList[i].shopLong
-                    if (shopLat != null && shopLong != null) {
-                        val shopLocation = Location("")
-                        shopLocation.latitude = shopLat
-                        shopLocation.longitude = shopLong
-                        shop_id = allShopList[i].shop_id
-                        var isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(AppUtils.mLocation, shopLocation, autoRevDistance.toInt())
-                        println("autorev ${allShopList[i].shopName}  $isShopNearby")
+                                    shopCodeListNearby.add(shop_id)
+                                    println("nearby_tag ${shopCodeListNearby.size}")
+                                    /*if(shopCodeListNearby.size == 40){
+                                        break@nearbyLoop
+                                    }*/
 
-
-
-                        if (isShopNearby) {
-                            val shopActivityList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(allShopList[i].shop_id, AppUtils.getCurrentDateForShopActi())
-                            if (shopActivityList == null || shopActivityList.isEmpty()) {
-
-                                shopCodeListNearby.add(shop_id)
-
-                            } else
-                                Timber.e("==" + allShopList[i].shopName + " is visiting now normally (Loc Fuzed Service)==")
+                                } else
+                                    Timber.e("==" + allShopList[i].shopName + " is visiting now normally (Loc Fuzed Service)==")
+                            }
                         }
                     }
-                }
-                println("autorev total nearby size ${shopCodeListNearby.size}")
-                if(shopCodeListNearby.size>0){
-                    revisitShopAll()
-                }else{
-                    progress_wheel.stopSpinning()
+                    println("nearby_tag autorev total nearby size ${shopCodeListNearby.size}")
+                    uiThread {
+                        if(shopCodeListNearby.size>0){
+                            revisitShopAll()
+                        }else{
+                            progress_wheel.stopSpinning()
+                        }
+                    }
                 }
             }
         }
@@ -11431,7 +11535,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     var shopCodeListNearby:ArrayList<String> = ArrayList()
 
     private fun revisitShopAll() {
-
+        Timber.d("revisitShopAll ${shopCodeListNearby.size}")
         if(shopCodeListNearby.size == 0){
 
                 revisit_ll.isEnabled=true

@@ -463,6 +463,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.IsnewleadtypeforRuby != null)
                                     Pref.IsnewleadtypeforRuby = configResponse.IsnewleadtypeforRuby!!
 
+                                if (configResponse.IsUpdateVisitDataInTodayTable != null)
+                                    Pref.IsUpdateVisitDataInTodayTable = configResponse.IsUpdateVisitDataInTodayTable!!
+
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
 
@@ -3223,8 +3226,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 }*/
 
                 Handler().postDelayed(Runnable {
-                    if (!Settings.canDrawOverlays(this@LoginActivity)) {
-                        getOverlayPermission()
+                    try{
+                        if (!Settings.canDrawOverlays(this@LoginActivity)) {
+                            getOverlayPermission()
+                        }
+                    }catch (ex:java.lang.Exception){
+                        ex.printStackTrace()
                     }
                 }, 1000)
             }
@@ -3485,6 +3492,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                 Pref.DayStartMarked = false
                 Pref.DayEndMarked = false
+                Pref.DayStartTime = ""
                 Timber.d("R.id.login_TV : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" " + AppUtils.getCurrentDateTime())
 
                 var andrV = Build.VERSION.SDK_INT.toInt()
@@ -5788,6 +5796,36 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 }catch (e: Exception) {
                                                     e.printStackTrace()
                                                     Pref.GPSNetworkIntervalMins = "0"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMarketSpendTimer", ignoreCase = true)) {
+                                                Pref.IsShowMarketSpendTimer = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowMarketSpendTimer = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowWorkType", ignoreCase = true)) {
+                                                Pref.IsShowWorkType = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowWorkType = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowUploadImageInAppProfile", ignoreCase = true)) {
+                                                Pref.IsShowUploadImageInAppProfile = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowUploadImageInAppProfile = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowInactiveCustomer", ignoreCase = true)) {
+                                                Pref.IsShowInactiveCustomer = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowInactiveCustomer = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowCalendar", ignoreCase = true)) {
+                                                Pref.IsShowCalendar = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowCalendar = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowCalculator", ignoreCase = true)) {
+                                                Pref.IsShowCalculator = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowCalculator = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
 

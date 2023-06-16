@@ -349,6 +349,16 @@ class AppUtils {
             return "$sHours:$sMinute:$sSecond"
         }
 
+        fun getDayDuration(loginTime: String, logoutTime: String): Int {
+            val simpleDateFormat = SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH)
+            val startDate = simpleDateFormat.parse(loginTime)
+            val endDate = simpleDateFormat.parse(logoutTime)
+            val difference = endDate.time - startDate.time
+            var diff=getHourMinuteSeconds(difference).split(":").get(0).toInt()/24
+            return diff+1
+//            return difference.toString()
+        }
+
         fun getHourMinuteFromMins(totalMins: Long): String {
 //            val restDatesinMillis = date1.time - date2.time
 
@@ -574,6 +584,13 @@ class AppUtils {
 
         fun findPrevDay(localdate: LocalDate): LocalDate? {
             return localdate.minusDays(1)
+        }
+
+        fun numberOfDaysInMonth(m: Int, y: Int): Int {
+            var year = y
+            var month = m-1
+            val monthStart: Calendar = GregorianCalendar(year, month, 1)
+            return monthStart.getActualMaximum(Calendar.DAY_OF_MONTH)
         }
 
 
@@ -2536,8 +2553,12 @@ class AppUtils {
         }
 
         fun hiFirstNameText() : String {
-            val firstName = Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)
-            return "Hi $firstName"
+            try{ val firstName = Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)
+                return "Hi $firstName"
+            }catch (ex:Exception){
+                return "Hi ${Pref.user_name}"
+            }
+
         }
 
         fun getAndroidVersion(): String {

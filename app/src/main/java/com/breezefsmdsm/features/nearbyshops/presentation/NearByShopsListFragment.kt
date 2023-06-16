@@ -64,6 +64,7 @@ import com.breezefsmdsm.features.marketing.api.marketingcategorylist.MarketingCa
 import com.breezefsmdsm.features.marketing.model.MarketingCategoryListResponse
 import com.breezefsmdsm.features.nearbyshops.api.ShopListRepositoryProvider
 import com.breezefsmdsm.features.nearbyshops.api.updateaddress.ShopAddressUpdateRepoProvider
+import com.breezefsmdsm.features.nearbyshops.diaog.ShopInactiveDialog
 import com.breezefsmdsm.features.nearbyshops.model.ShopData
 import com.breezefsmdsm.features.nearbyshops.model.ShopListResponse
 import com.breezefsmdsm.features.nearbyshops.model.StageListResponseModel
@@ -89,6 +90,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Pratishruti on 30-10-2017.
  */
+// Rev 1.0 NearByShopsListFragment 25-05-2023 Suman mantis id -- 26211
 class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var mNearByShopsListAdapter: NearByShopsListAdapter
@@ -105,6 +107,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
     private lateinit var shop_list_parent_rl: RelativeLayout
     private lateinit var progress_wheel: com.pnikosis.materialishprogress.ProgressWheel
     private lateinit var tv_shop_count: AppCustomTextView
+    private lateinit var tv_shop_count_inactive: AppCustomTextView
     private lateinit var tv_beat_name: AppCustomTextView
 
     private lateinit var getFloatingVal: ArrayList<String>
@@ -509,6 +512,26 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
         shop_list_parent_rl = view.findViewById(R.id.shop_list_parent_rl)
         iv_nearbyImage = view.findViewById(R.id.iv_nearbyImage)
         tv_shop_count = view.findViewById(R.id.tv_shop_count)
+
+        //Begin Rev 1.0 NearByShopsListFragment 25-05-2023 Suman mantis id -- 26211
+        tv_shop_count_inactive = view.findViewById(R.id.tv_shop_count_inactive)
+        if(Pref.IsShowInactiveCustomer){
+            tv_shop_count_inactive.visibility = View.VISIBLE
+            var inactiveCount = AppDatabase.getDBInstance()!!.addShopEntryDao().getInActiveShop().size
+            tv_shop_count_inactive.text = "Inactive Shop(s): $inactiveCount"
+        }else{
+            tv_shop_count_inactive.visibility = View.GONE
+        }
+        tv_shop_count_inactive.setOnClickListener{
+            var inActiveL = AppDatabase.getDBInstance()!!.addShopEntryDao().getInActiveShop() as ArrayList<AddShopDBModelEntity>
+            if(inActiveL.size>0){
+                ShopInactiveDialog.newInstance(inActiveL){
+                    initAdapter()
+                }.show((mContext as DashboardActivity).supportFragmentManager, "")
+            }
+        }
+        //End of Rev 1.0 NearByShopsListFragment 25-05-2023 Suman mantis id -- 26211
+
         tv_shop_count.visibility = View.VISIBLE
         tv_beat_name = view.findViewById(R.id.tv_beat_name)
 
@@ -644,6 +667,14 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
         setListVisiBility()
         tv_shop_count.text = "Total " + Pref.shopText + "(s): " + list.size
+
+        if(Pref.IsShowInactiveCustomer){
+            tv_shop_count_inactive.visibility = View.VISIBLE
+            var inactiveCount = AppDatabase.getDBInstance()!!.addShopEntryDao().getInActiveShop().size
+            tv_shop_count_inactive.text = "Inactive Shop(s): $inactiveCount"
+        }else{
+            tv_shop_count_inactive.visibility = View.GONE
+        }
 
         mNearByShopsListAdapter = NearByShopsListAdapter(this.mContext!!, list, object : NearByShopsListClickListener {
             override fun onUpdateStageClick(position: Int) {

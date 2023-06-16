@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_5sdp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_row_inactive_shop_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_30sdp"
+            android:hint="Shop Name"
+            android:paddingStart="@dimen/_3sdp"
+            android:gravity="center|start"
+            android:textColor="@color/colorPrimary"/>
+
+        <com.breezefsmdsm.widgets.AppCustomTextView
+            android:id="@+id/tv_row_inactive_shop_update_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:paddingTop="@dimen/_1sdp"
+            android:text="Update Status"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/_10sdp"
+            android:drawableTint="@color/colorPrimary"
+            android:drawableLeft="@drawable/ic_party_status_small"
+            android:drawablePadding="@dimen/_5sdp"
+            android:gravity="center"
+            android:layout_gravity="bottom"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

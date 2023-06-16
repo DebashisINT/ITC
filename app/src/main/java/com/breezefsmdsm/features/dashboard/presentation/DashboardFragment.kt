@@ -69,7 +69,6 @@ import com.breezefsmdsm.features.dashboard.presentation.model.DaystartDayendRequ
 import com.breezefsmdsm.features.dashboard.presentation.model.SelectedRouteListResponseModel
 import com.breezefsmdsm.features.dashboard.presentation.model.StatusDayStartEnd
 import com.breezefsmdsm.features.dashboard.presentation.model.SubmitHomeLocationInputModel
-import com.breezefsmdsm.features.location.LocationFuzedService
 import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.location.SingleShotLocationProvider
 import com.breezefsmdsm.features.location.UserLocationDataEntity
@@ -103,8 +102,6 @@ import com.breezefsmdsm.features.timesheet.api.TimeSheetRepoProvider
 import com.breezefsmdsm.features.timesheet.model.TimeSheetConfigResponseModel
 import com.breezefsmdsm.features.timesheet.model.TimeSheetDropDownResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
-import timber.log.Timber
-import com.github.clans.fab.Label
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.mlkit.vision.common.InputImage
@@ -112,6 +109,7 @@ import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetector
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.hbisoft.hbrecorder.Countdown
 import com.hbisoft.hbrecorder.HBRecorder
 import com.hbisoft.hbrecorder.HBRecorderListener
 import com.pnikosis.materialishprogress.ProgressWheel
@@ -123,13 +121,12 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import org.json.JSONArray
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.*
 import java.net.URL
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.system.exitProcess
 
 /**
  * Created by rp : 31-10-2017:16:49
@@ -422,6 +419,25 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     override fun onResume() {
         super.onResume()
+
+        timerTV = view!!.findViewById(R.id.tv_dash_frag_timer)
+        if(Pref.IsShowMarketSpendTimer){
+            timerTV.visibility = View.VISIBLE
+            try{
+                if(!Pref.DayStartTime.equals("")){
+                    var currentTime = System.currentTimeMillis().toString()
+                    var timeDiff = AppUtils.getTimeFromTimeSpan(Pref.DayStartTime,System.currentTimeMillis().toString())
+                    timeDiff = timeDiff.split(":").get(0)+":"+timeDiff.split(":").get(1)
+                    timerTV.text = "$timeDiff"
+                }
+            }catch (ex:Exception){
+                Timber.d("ex timer text")
+            }
+        }else{
+            timerTV.visibility = View.GONE
+        }
+
+
         if (hbRecorder != null) {
             if (hbRecorder!!.isBusyRecording) {
                 iv_screen_status.setImageResource(R.drawable.green_round)
@@ -543,6 +559,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     @SuppressLint("RestrictedApi")
     private fun initView(view: View?) {
+        timerTV = view!!.findViewById(R.id.tv_dash_frag_timer)
+        if(Pref.IsShowMarketSpendTimer){
+            timerTV.visibility = View.VISIBLE
+        }else{
+            timerTV.visibility = View.GONE
+        }
 
         cancel_timer = view!!.findViewById(R.id.cancel_timer)
         iv_screen_status = view!!.findViewById(R.id.iv_screen_status)
@@ -2054,7 +2076,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             iv_order_icon.visibility = View.VISIBLE
             iv_quot_icon.visibility = View.GONE
             shop_tome_order_tab_LL.visibility = View.GONE
-        } else if (Pref.willActivityShow) {
+        }
+        else if (Pref.willActivityShow) {
             tv_order.text = getString(R.string.activities)
             no_of_order_TV.text = getString(R.string.today_activity)
             avgOrder.text = InfoWizard.getActivityForToday()
@@ -2062,7 +2085,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             iv_order_icon.visibility = View.VISIBLE
             iv_quot_icon.visibility = View.GONE
             shop_tome_order_tab_LL.visibility = View.VISIBLE
-        } else {
+        }
+        else {
             shop_tome_order_tab_LL.visibility = View.VISIBLE
             if (Pref.isQuotationShow) {
                 tv_order.text = getString(R.string.quotation)
@@ -2211,10 +2235,47 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         else
             revisit_ll.visibility = View.GONE
 
+        //test code
+        /*val counter = object: CountUpTimer(80000, 1){
 
+            override fun onCount(count: Int) {
+                println("timet_tag Counting: $count")
+                try{
+                    Pref.TimerSec = count
+                    if( count % 60 == 0){
+                        Pref.TimerSec = 0
+                        Pref.TimerMin = Pref.TimerMin + 1
+                    }
+                    if(Pref.TimerMin == 61){
+                        Pref.TimerMin = 0
+                        Pref.TimerHr =  Pref.TimerHr + 1
+                    }
+
+                    best_performing_shop_TV.text = "${Pref.TimerHr.toInt()}:${Pref.TimerMin.toInt()}:${Pref.TimerSec.toInt()}"
+                }catch (ex:Exception){
+                    println("timet_tag Counting: ex")
+                    ex.printStackTrace()
+                }
+            }
+
+            override fun onFinish() {
+                println("timet_tag Counting done")
+            }
+        }
+        counter.start()*/
+        //test code
 
         initAdapter()
         initBottomAdapter()
+    }
+
+    abstract class CountUpTimer(private val secondsInFuture: Int, countUpIntervalSeconds: Int) : CountDownTimer(secondsInFuture.toLong() * 1000, countUpIntervalSeconds.toLong() * 1000) {
+
+        abstract fun onCount(count: Int)
+
+        override fun onTick(msUntilFinished: Long) {
+            onCount(((secondsInFuture.toLong() * 1000 - msUntilFinished) / 1000).toInt())
+        }
     }
 
 
@@ -3043,8 +3104,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             best_performing_shop_TV.text = "Best performing " + updatedPerformList.size + " shops"*/
 
 
-        val work_type_list = AppDatabase.getDBInstance()?.selectedWorkTypeDao()
-            ?.getTodaysData(AppUtils.getCurrentDate()) as ArrayList<SelectedWorkTypeEntity>
+        val work_type_list = AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.getTodaysData(AppUtils.getCurrentDate()) as ArrayList<SelectedWorkTypeEntity>
 
         if (work_type_list != null && work_type_list.size > 0) {
             no_shop_tv.visibility = View.GONE
@@ -3089,6 +3149,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 if (work_type_list == null || work_type_list.size == 0)
                     no_shop_tv.visibility = View.VISIBLE
             }
+        }
+
+        if(Pref.IsShowWorkType){
+            reportList.visibility = View.VISIBLE
+        }else{
+            reportList.visibility = View.GONE
         }
     }
 
@@ -5983,6 +6049,36 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             e.printStackTrace()
                                             Pref.GPSNetworkIntervalMins = "0"
                                         }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsShowMarketSpendTimer", ignoreCase = true)) {
+                                        Pref.IsShowMarketSpendTimer = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowMarketSpendTimer = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsShowWorkType", ignoreCase = true)) {
+                                        Pref.IsShowWorkType = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowWorkType = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsShowUploadImageInAppProfile", ignoreCase = true)) {
+                                        Pref.IsShowUploadImageInAppProfile = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowUploadImageInAppProfile = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsShowInactiveCustomer", ignoreCase = true)) {
+                                        Pref.IsShowInactiveCustomer = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowInactiveCustomer = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsShowCalendar", ignoreCase = true)) {
+                                        Pref.IsShowCalendar = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowCalendar = response.getconfigure?.get(i)?.Value == "1"
+                                        }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsShowCalculator", ignoreCase = true)) {
+                                        Pref.IsShowCalculator = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowCalculator = response.getconfigure?.get(i)?.Value == "1"
+                                        }
                                     }
 
 
@@ -6215,7 +6311,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (configResponse.IsnewleadtypeforRuby != null)
                             Pref.IsnewleadtypeforRuby = configResponse.IsnewleadtypeforRuby!!
 
-
+                        if (configResponse.IsUpdateVisitDataInTodayTable != null)
+                            Pref.IsUpdateVisitDataInTodayTable = configResponse.IsUpdateVisitDataInTodayTable!!
 
                     }
                     BaseActivity.isApiInitiated = false
@@ -7221,6 +7318,29 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         initAdapter()
         initBottomAdapter()
 
+        if(Pref.IsShowWorkType){
+            reportList.visibility = View.VISIBLE
+        }
+        else{
+            reportList.visibility = View.GONE
+        }
+        timerTV = view!!.findViewById(R.id.tv_dash_frag_timer)
+        if(Pref.IsShowMarketSpendTimer){
+            timerTV.visibility = View.VISIBLE
+            try{
+                if(!Pref.DayStartTime.equals("")){
+                    var currentTime = System.currentTimeMillis().toString()
+                    var timeDiff = AppUtils.getTimeFromTimeSpan(Pref.DayStartTime,System.currentTimeMillis().toString())
+                    timeDiff = timeDiff.split(":").get(0)+":"+timeDiff.split(":").get(1)
+                    timerTV.text = "$timeDiff"
+                }
+            }catch (ex:Exception){
+                Timber.d("ex timer text")
+            }
+        }else{
+            timerTV.visibility = View.GONE
+        }
+
         (mContext as DashboardActivity).updateUI()
     }
 
@@ -7231,6 +7351,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         var hbRecorder: HBRecorder? = null
         lateinit var ll_recorder_root: LinearLayout
         var isRecordRootVisible: Boolean = false
+
+        lateinit var timerTV: TextView
 
     }
 
@@ -8149,6 +8271,25 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             })
                                             simpleDialog.show()
 //                                                    (mContext as DashboardActivity).showSnackMessage("Thanks! Updated Successfully.")
+
+                                            Pref.DayStartTime = System.currentTimeMillis().toString()
+                                            timerTV = view!!.findViewById(R.id.tv_dash_frag_timer)
+                                            if(Pref.IsShowMarketSpendTimer){
+                                                timerTV.visibility = View.VISIBLE
+                                                try{
+                                                    if(!Pref.DayStartTime.equals("")){
+                                                        var currentTime = System.currentTimeMillis().toString()
+                                                        var timeDiff = AppUtils.getTimeFromTimeSpan(Pref.DayStartTime,System.currentTimeMillis().toString())
+                                                        timeDiff = timeDiff.split(":").get(0)+":"+timeDiff.split(":").get(1)
+                                                        timerTV.text = "$timeDiff"
+                                                    }
+                                                }catch (ex:Exception){
+                                                    Timber.d("ex timer text")
+                                                }
+                                            }else{
+                                                timerTV.visibility = View.GONE
+                                            }
+
                                             voiceAttendanceMsg(AppUtils.hiFirstNameText() + " day started successfully.")
                                         }
                                     }
@@ -8163,6 +8304,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             Handler().postDelayed(Runnable {
                                                 //callShopDurationApi()
                                                 //syncShopListOnebyOne()
+                                                Pref.DayStartTime = ""
                                                 syncGpsNetData()
                                             }, 350)
 
@@ -10692,6 +10834,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 }, 150)
 
                             }
+                        }else{
+                            endShopDuration()
                         }
                     }else{
                         endShopDuration()

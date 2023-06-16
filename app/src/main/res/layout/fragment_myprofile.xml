@@ -10,21 +10,54 @@
         android:layout_height="match_parent"
         android:layerType="software">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_picture_IV"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="@dimen/_100sdp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:src="@drawable/ic_menu_profile_image"
-            app:civ_border_color="@color/colorAccent"
-            app:civ_border_width="@dimen/_2sdp" />
+        <LinearLayout
+            android:id="@+id/ll_frag_my_profile_img_root"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_120sdp"
+            android:gravity="center">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_120sdp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_picture_IV"
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:src="@drawable/ic_menu_profile_image"
+                    app:civ_border_color="@color/colorAccent"
+                    app:civ_border_width="@dimen/_2sdp"
+                    android:layout_gravity="center"/>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_frag_my_profile_qr_root"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="end|bottom">
+
+
+                    <ImageView
+                        android:id="@+id/iv_profile_attach_qr"
+                        android:layout_width="@dimen/_23sdp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_attachment"
+                        android:backgroundTint="@color/black" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/profilename_Rl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_picture_IV"
+            android:layout_below="@+id/ll_frag_my_profile_img_root"
             android:gravity="center">
 
             <com.breezefsmdsm.widgets.AppCustomTextView

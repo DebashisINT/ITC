@@ -8,6 +8,8 @@ import com.breezefsmdsm.app.Pref
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.myprofile.model.ProfileUpdateRequestData
+import com.breezefsmdsm.features.myprofile.presentation.ProfileData
+import com.breezefsmdsm.features.myprofile.presentation.ProfileDataQRResponse
 import com.breezefsmdsm.features.nearbyshops.model.StateCityResponseModel
 import io.reactivex.Observable
 import okhttp3.MediaType
@@ -43,7 +45,31 @@ class MyProfileRepository(val apiService: MyProfileApi) {
 
     }
 
+    fun updateProfileQRImage(profileData: ProfileData, profile_img:String, context: Context): Observable<ProfileDataQRResponse> {
+
+        var profile_img_data: MultipartBody.Part?=null
+        var jsonInString=""
+        try {
+            jsonInString = ObjectMapper().writeValueAsString(profileData)
+            if (!TextUtils.isEmpty(profile_img))
+            {
+                val profile_img_file = File(profile_img)
+                val profileImgBody = RequestBody.create(MediaType.parse("multipart/form-data"), profile_img_file)
+                profile_img_data = MultipartBody.Part.createFormData("attachments", profile_img_file.name, profileImgBody)
+            }
+        } catch (e: Throwable) {
+            e.printStackTrace()
+        }
+        return apiService.uploadProfileQRImage(jsonInString,profile_img_data)
+    }
+
+
     fun getStateCityList(pinCode: String): Observable<StateCityResponseModel> {
         return apiService.getStateCityList(Pref.session_token!!, Pref.user_id!!, pinCode)
     }
+
+    fun getQRImage(): Observable<ProfileDataQRResponse> {
+        return apiService.getQrImageApi(Pref.session_token!!,Pref.user_id!!)
+    }
+
 }

@@ -2,9 +2,14 @@ package com.breezefsmdsm.features.myprofile.presentation
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -28,6 +34,7 @@ import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.*
 import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.PermissionUtils
+import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.base.presentation.BaseActivity
 import com.breezefsmdsm.base.presentation.BaseFragment
@@ -52,12 +59,18 @@ import com.breezefsmdsm.features.myprofile.model.citylist.CityListApiResponse
 import com.breezefsmdsm.features.myprofile.model.statelist.StateListApiResponse
 import com.breezefsmdsm.features.nearbyshops.model.StateCityResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
+import com.squareup.picasso.Cache
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.inflate_marketing_detail_image.view.item_img_IV
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import java.io.File
+import java.io.FileInputStream
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -96,6 +109,11 @@ class MyProfileFragment : BaseFragment() {
     private lateinit var state_list: List<String>
     private var isStateClicked = false
     private var permissionUtils: PermissionUtils? = null
+
+    private lateinit var ivAttachQR:ImageView
+    private lateinit var llQRRoot:LinearLayout
+    private var qr_image_file = ""
+    var qrImageOnlineLink :String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -201,13 +219,88 @@ class MyProfileFragment : BaseFragment() {
         iv_apply = view.findViewById(R.id.iv_apply)
         profilePicture = view.findViewById(R.id.profile_picture_IV)
         profilePicture.setOnClickListener {
+            Pref.IsAttachQRFromProfile = false
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 initPermissionCheck()
             else
                 showPictureDialog()
         }
+
+
         progress_wheel = view.findViewById(R.id.progress_wheel)
         progress_wheel.stopSpinning()
+
+        ivAttachQR = view.findViewById(R.id.iv_profile_attach_qr)
+        llQRRoot = view.findViewById(R.id.ll_frag_my_profile_qr_root)
+        if(Pref.IsShowUploadImageInAppProfile == true){
+                llQRRoot.visibility= View.VISIBLE
+        } else{
+            llQRRoot.visibility= View.GONE
+        }
+        llQRRoot.setOnClickListener {
+            if(qrImageOnlineLink.equals("")){
+                qrImageProcess()
+            }else{
+                val simpleDialogg = Dialog(mContext)
+                simpleDialogg.setCancelable(true)
+                simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialogg.setContentView(R.layout.view_face_img)
+
+
+                val faceImg = simpleDialogg.findViewById(R.id.iv_face_img) as ImageView
+                faceImg.setImageDrawable(null)
+                faceImg.setBackgroundDrawable(null)
+                faceImg.invalidate();
+                faceImg.setImageBitmap(null);
+                val faceName = simpleDialogg.findViewById(R.id.face_name) as AppCustomTextView
+                val faceCanel = simpleDialogg.findViewById(R.id.iv_face_reg_cancel) as ImageView
+                faceName.text = "Image"
+
+                val picasso = Picasso.Builder(mContext)
+                    .memoryCache(Cache.NONE)
+                    .indicatorsEnabled(false)
+                    .loggingEnabled(true)
+                    .build()
+
+                picasso.load(Uri.parse(qrImageOnlineLink))
+                    .centerCrop()
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE)
+                    .resize(500, 500)
+                    .into(faceImg)
+
+                progress_wheel.stopSpinning()
+
+                simpleDialogg.show()
+
+                faceCanel.setOnClickListener({ view ->
+                    simpleDialogg.dismiss()
+                })
+
+                simpleDialogg.setOnCancelListener({ view ->
+                    simpleDialogg.dismiss()
+
+                })
+                simpleDialogg.setOnDismissListener({ view ->
+                    simpleDialogg.dismiss()
+
+                })
+            }
+
+
+            /*if(AppUtils.isOnline(mContext)){
+                Pref.IsAttachQRFromProfile = true
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    initPermissionCheck()
+                else
+                    showPictureDialog()
+            }else{
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            }*/
+        }
+        if(Pref.IsShowUploadImageInAppProfile){
+            getQRImage()
+        }
 
         address_EDT = view.findViewById(R.id.address_EDT)
         city_EDT = view.findViewById(R.id.city_EDT)
@@ -272,6 +365,8 @@ class MyProfileFragment : BaseFragment() {
         }
     }
 
+
+
     private fun callStateCityApi() {
         AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
 
@@ -303,7 +398,8 @@ class MyProfileFragment : BaseFragment() {
                                 stateId = ""
                                 (mContext as DashboardActivity).showSnackMessage(response.message!!)
                             }
-                        }, { error ->
+                        },
+                            { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
@@ -820,7 +916,7 @@ class MyProfileFragment : BaseFragment() {
                 .resize(100, 100)
                 .into(profilePicture)
     }
-
+    // from gallery
     fun setImage(imgRealPath: String) {
         profile_image_file = imgRealPath
         //  Picasso.with(context).load(imgRealPath).into(profilePicture)
@@ -833,6 +929,99 @@ class MyProfileFragment : BaseFragment() {
                 .load(imgRealPath)
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_menu_profile_image).error(R.drawable.ic_menu_profile_image))
                 .into(profilePicture)
+    }
+
+    public fun attachmentQR(imgRealPath: String){
+        qr_image_file = imgRealPath
+
+        try {
+            val f = File(qr_image_file)
+            val options: BitmapFactory.Options = BitmapFactory.Options()
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+            var bitmap = BitmapFactory.decodeStream(FileInputStream(f), null, options)
+            ivAttachQR.setImageBitmap(bitmap)
+            callQRUploadApi()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun callQRUploadApi(){
+        try{
+            var pofileObj :ProfileData = ProfileData()
+            pofileObj.user_id = Pref.user_id!!
+            pofileObj.session_token = Pref.session_token!!
+
+            val repository = MyProfileRepoProvider.provideUpdateProfileRepo()
+            progress_wheel.spin()
+            BaseActivity.compositeDisposable.add(
+                repository.updateProfileQRImage(pofileObj, qr_image_file, mContext)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        progress_wheel.stopSpinning()
+                        val response = result as ProfileDataQRResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            Toaster.msgShort(mContext,"Upload Success.")
+                            getQRImage()
+                        } else {
+                            (mContext as DashboardActivity).showSnackMessage(response.message!!)
+
+                        }
+                    }, { error ->
+                        error.printStackTrace()
+                        progress_wheel.stopSpinning()
+                        (mContext as DashboardActivity).showSnackMessage("ERROR")
+                    })
+            )
+        }catch (ex:Exception){
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+        }
+    }
+
+    private fun getQRImage(){
+        if (!AppUtils.isOnline(mContext)) {
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+            return
+        }
+        val repository = MyProfileRepoProvider.provideStateCityRepo()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+            repository.getQRImage()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    progress_wheel.stopSpinning()
+                    val response = result as ProfileDataQRResponse
+                    if (response.status == NetworkConstant.SUCCESS) {
+                        Picasso.get()
+                            .load(response.qr_img_link)
+                            .resize(100, 100)
+                            .into(ivAttachQR)
+                        qrImageOnlineLink = response.qr_img_link
+                    } else{
+                        qrImageOnlineLink = ""
+                    }
+                },
+                    { error ->
+                        error.printStackTrace()
+                        progress_wheel.stopSpinning()
+                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+
+                    })
+        )
+    }
+
+    private fun qrImageProcess(){
+        if(AppUtils.isOnline(mContext)){
+            Pref.IsAttachQRFromProfile = true
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                initPermissionCheck()
+            else
+                showPictureDialog()
+        }else{
+            (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+        }
     }
 
     fun showPictureDialog() {
