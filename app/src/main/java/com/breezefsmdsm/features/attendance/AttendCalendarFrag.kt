@@ -17,6 +17,7 @@ import com.breezefsmdsm.base.presentation.BaseFragment
 import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
 import com.breezefsmdsm.features.attendance.model.AttendanceRequest
 import com.breezefsmdsm.features.attendance.model.AttendanceResponse
+import com.breezefsmdsm.features.attendance.model.DayStartEndListResponse
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.example.xcall.EventDayDecorator
 import com.example.xcall.EventDayDecorator1
@@ -81,7 +82,8 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
             if(selectedDate.year.toString().equals(currentY) && String.format("%02d", selectedDate.month).equals(currentM)){
                 setDataForCurrentMonth(currentYear,currentMonth,currentDay)
             }else{
-                getAttendListApi(startD,endDate)
+                //getAttendListApi(startD,endDate)
+                getDaystartEndListApi(startD,endDate)
             }
         }
     }
@@ -89,7 +91,8 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
     private fun setDataForCurrentMonth(currentYear:String,currentMonth:String,currentDay:String){
         var startDate = "$currentYear-$currentMonth-01"
         var endDate = "$currentYear-$currentMonth-$currentDay"
-        getAttendListApi(startDate,endDate)
+        //getAttendListApi(startDate,endDate)
+        getDaystartEndListApi(startDate,endDate)
     }
 
     private fun getAttendListApi(startD:String,endD:String){
@@ -130,6 +133,46 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
                     })
         )
     }
+
+    private fun getDaystartEndListApi(startD:String,endD:String){
+
+        val attendanceReq = AttendanceRequest()
+        attendanceReq.user_id = Pref.user_id!!
+        attendanceReq.session_token = Pref.session_token
+        attendanceReq.start_date = startD
+        attendanceReq.end_date = endD
+
+        val repository = AttendanceRepositoryProvider.provideAttendanceRepository()
+        progress_wheel.spin()
+        BaseActivity.compositeDisposable.add(
+            repository.getDayStartEndList(attendanceReq)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    val attendanceList = result as DayStartEndListResponse
+                    progress_wheel.stopSpinning()
+                    if (attendanceList.status == "200") {
+                        doAsync {
+                            dateL = ArrayList()
+                            for(i in 0..attendanceList.day_start_end_list!!.size-1){
+                                var obj = attendanceList.day_start_end_list!!.get(i).dayStart_date_time!!.split("T").get(0).toString()
+                                dateL.add(obj)
+                            }
+                            uiThread {
+                                setFinalCal(startD,endD)
+                            }
+                        }
+                    }else{
+                        (mContext as DashboardActivity).showSnackMessage("No Record Found.")
+                    }
+                }, { error ->
+                    progress_wheel.stopSpinning()
+                    error.printStackTrace()
+                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                })
+        )
+    }
+
 
     private fun setFinalCal(startD:String,endD:String){
         if(dateL.size>0){
