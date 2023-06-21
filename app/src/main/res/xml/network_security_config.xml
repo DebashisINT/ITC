@@ -4,6 +4,7 @@
         <domain includeSubdomains="true">3.7.30.86</domain>
        <!--<domain includeSubdomains="true">ftsv2.indusnettechnologies.com</domain>-->
 
+
      </domain-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">api.openweathermap.org</domain>
