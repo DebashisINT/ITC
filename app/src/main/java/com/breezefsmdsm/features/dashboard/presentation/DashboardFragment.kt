@@ -1005,7 +1005,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 simpleDialogV.show()
             }
             else {
-                Timber.d("start_TV.setOnClickListener  andrV < 26"  + " Time :" + AppUtils.getCurrentDateTime())
+                Timber.d("start_TV.setOnClickListener  andrV > 26"  + " Time :" + AppUtils.getCurrentDateTime())
                 CustomStatic.FaceDetectionAccuracyLower = Pref.FaceDetectionAccuracyLower
                 CustomStatic.FaceDetectionAccuracyUpper = Pref.FaceDetectionAccuracyUpper
                 CustomStatic.IsFaceRecognitionOnEyeblink = Pref.IsFaceRecognitionOnEyeblink
