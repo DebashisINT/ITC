@@ -184,7 +184,6 @@ class AdapterUserList (var mContext: Context,var customerList:ArrayList<UserList
                 }else{
                     photo_reg_user_ph_update_name.visibility=View.GONE
                 }
-
                 if(Pref.IsAllowClickForPhotoRegister){
                     click_for_photo_reg_tv.visibility=View.VISIBLE
                 }else{

@@ -168,7 +168,6 @@ class RegisTerFaceFragment: BaseFragment(), View.OnClickListener {
 
         ll_phone = view.findViewById(R.id.ll_regis_face_phone);
         ll_phone.setOnClickListener(this)
-
         if(Pref.IsShowInPortalManualPhotoRegn){
             //if(Pref.IsShowManualPhotoRegnInApp){
             if(isOnlyFacePic!!){
