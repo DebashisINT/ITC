@@ -2617,10 +2617,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
             //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
             R.id.attendence_calender_tv -> {
-                loadFragment(FragType.AttendCalendarFrag, false, "")
+                loadFragment(FragType.AttendCalendarFrag, true, "")
             }
             R.id.calculator_tv -> {
-                loadFragment(FragType.CalculatorFrag, false, "")
+                loadFragment(FragType.CalculatorFrag, true, "")
             }
             //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
 

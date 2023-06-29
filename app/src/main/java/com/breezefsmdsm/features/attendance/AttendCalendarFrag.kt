@@ -59,7 +59,8 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
     private fun initView(view: View) {
         calendarView = view.findViewById(R.id.calendarView_frag_attend_calendar)
         progress_wheel = view.findViewById(R.id.progress_wheel_frag_attend)
-        calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE)
+        //calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE)
+        calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE)
         setCalender()
     }
 
@@ -124,7 +125,7 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
                             }
                         }
                     }else{
-                        (mContext as DashboardActivity).showSnackMessage("No Record Found.")
+                        //(mContext as DashboardActivity).showSnackMessage("No Record Found.")
                     }
                 }, { error ->
                         progress_wheel.stopSpinning()

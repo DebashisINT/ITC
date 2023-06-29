@@ -255,7 +255,7 @@ class MyProfileFragment : BaseFragment() {
                 val faceName = simpleDialogg.findViewById(R.id.face_name) as AppCustomTextView
                 val faceCanel = simpleDialogg.findViewById(R.id.iv_face_reg_cancel) as ImageView
                 faceName.text = "Image"
-
+                faceName.visibility = View.GONE
                 val picasso = Picasso.Builder(mContext)
                     .memoryCache(Cache.NONE)
                     .indicatorsEnabled(false)

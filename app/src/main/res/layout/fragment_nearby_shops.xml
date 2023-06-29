@@ -198,7 +198,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_shop_count_fragment_nearby_shop"
-        android:overScrollMode="never" />
+        android:overScrollMode="never"
+        android:layout_marginTop="@dimen/_5sdp"/>
 
     <com.breezefsmdsm.widgets.AppCustomTextView
         android:id="@+id/no_shop_tv"

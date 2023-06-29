@@ -914,7 +914,11 @@
                     android:layout_height="@dimen/_28sdp"
                     android:hint="HH:MM"
                     android:gravity="center|start"
-                    android:paddingStart="@dimen/_12sdp"/>
+                    android:paddingStart="@dimen/_12sdp"
+                    android:textColor="@color/color_custom_green"
+                    android:textStyle="bold"
+                    android:background="@drawable/shape_cursor_two"
+                    android:layout_marginBottom="@dimen/_3sdp"/>
 
 
 
