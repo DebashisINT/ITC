@@ -6314,6 +6314,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (configResponse.IsUpdateVisitDataInTodayTable != null)
                             Pref.IsUpdateVisitDataInTodayTable = configResponse.IsUpdateVisitDataInTodayTable!!
 
+                        if (configResponse.ConsiderInactiveShopWhileLogin != null)
+                            Pref.ConsiderInactiveShopWhileLogin = configResponse.ConsiderInactiveShopWhileLogin!!
+
                     }
                     BaseActivity.isApiInitiated = false
                     checkToCallAlarmConfigApi()

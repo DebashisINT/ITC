@@ -21,6 +21,10 @@ interface ShopListApi {
     fun getShopList(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<ShopListResponse>
 
     @FormUrlEncoded
+    @POST("Shoplist/ShopInactiveList")
+    fun getShopInativeList(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<ShopListResponse>
+
+    @FormUrlEncoded
     @POST("Shoplist/ShopType")
     fun getShopTypeList(@Field("session_token") session_token:String,@Field("user_id") user_id:String): Observable<ShopTypeResponseModel>
 

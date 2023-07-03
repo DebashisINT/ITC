@@ -145,6 +145,9 @@ import kotlin.collections.ArrayList
 /**
  * Created by Pratishruti on 26-10-2017.
  */
+
+// Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
+
 class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     override fun onLocationChanged(location: Location) {
@@ -466,6 +469,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 if (configResponse.IsUpdateVisitDataInTodayTable != null)
                                     Pref.IsUpdateVisitDataInTodayTable = configResponse.IsUpdateVisitDataInTodayTable!!
 
+                                //Begin Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
+                                if (configResponse.ConsiderInactiveShopWhileLogin != null)
+                                    Pref.ConsiderInactiveShopWhileLogin = configResponse.ConsiderInactiveShopWhileLogin!!
+                                //End Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
+
                                 /*if (configResponse.willShowUpdateDayPlan != null)
                                     Pref.willShowUpdateDayPlan = configResponse.willShowUpdateDayPlan!!
 
@@ -476,7 +484,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     Pref.dailyPlanListHeaderText = configResponse.dailyPlanListHeaderText!!*/
                             }
                             isApiInitiated = false
-                            //gotoHomeActivity()
+
 
                             //checkToCallAlarmConfigApi()
                             isStartOrEndDay()
@@ -484,7 +492,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         }, { error ->
                             isApiInitiated = false
                             error.printStackTrace()
-                            //gotoHomeActivity()
+
 
                             //checkToCallAlarmConfigApi()
                             isStartOrEndDay()
@@ -499,7 +507,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         if (Pref.willAlarmTrigger)
             callAlarmConfig()
         else {
-            //gotoHomeActivity()
+
             checkToCallBillListApi()
         }
     }
@@ -543,12 +551,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             }
 
                             isApiInitiated = false
-                            //gotoHomeActivity()
+
                             checkToCallBillListApi()
                         }, { error ->
                             isApiInitiated = false
                             error.printStackTrace()
-                            //gotoHomeActivity()
+
                             checkToCallBillListApi()
                             progress_wheel.stopSpinning()
                             Timber.d("AlarmConfigApiResponse ERROR: " + error.localizedMessage)
@@ -3107,14 +3115,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                     uiThread {
                                         progress_wheel.stopSpinning()
-                                        //gotoHomeActivity()
+
                                         //sam
                                         getCurrentStockApi()
                                     }
                                 }
                             } else {
                                 progress_wheel.stopSpinning()
-                                //gotoHomeActivity()
+
                                 //sam
                                 getCurrentStockApi()
                             }
@@ -3122,7 +3130,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
                             Timber.d("Visit Remarks List : ERROR " + error.localizedMessage)
-                            //gotoHomeActivity()
+
                             //sam
                             getCurrentStockApi()
                         })
@@ -3132,8 +3140,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun checkToCallTaskListApi() {
         val list = AppDatabase.getDBInstance()?.taskDao()?.getAll()
-        if (list != null && list.isNotEmpty())
-            gotoHomeActivity()
+        if (list != null && list.isNotEmpty()){
+            //gotoHomeActivity()
+        }
         else
             callTaskListApi()
     }
@@ -3171,20 +3180,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                         uiThread {
                                             progress_wheel.stopSpinning()
-                                            //gotoHomeActivity()
+
                                             //sam
                                             getCurrentStockApi()
                                         }
                                     }
                                 } else {
                                     progress_wheel.stopSpinning()
-                                    //gotoHomeActivity()
+
                                     //sam
                                     getCurrentStockApi()
                                 }
                             } else {
                                 progress_wheel.stopSpinning()
-                                //gotoHomeActivity()
+
                                 //sam
                                 getCurrentStockApi()
                             }
@@ -3193,7 +3202,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             progress_wheel.stopSpinning()
                             Timber.d("TASK LIST: " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
                             error.printStackTrace()
-                            //gotoHomeActivity()
+
                             //sam
                             getCurrentStockApi()
                         })
@@ -3551,7 +3560,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 //
 //
 //                }
-                /*gotoHomeActivity()
+                /*
                 isLoginLoaded = true*/
             }
             R.id.forgot_password_TV -> {
@@ -4575,7 +4584,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                         getProductList(AppDatabase.getDBInstance()?.productListDao()?.getAll()?.get(0)?.date)
                                 }
                             } else if (shopList.status == NetworkConstant.NO_DATA) {
-                                //gotoHomeActivity()
+
                                 progress_wheel.stopSpinning()
                                 val assignDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
                                 if (/*(assignDDList == null || assignDDList.isEmpty()) &&*/ !TextUtils.isEmpty(Pref.profile_state))
@@ -4589,7 +4598,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 }
                             } else {
                                 progress_wheel.stopSpinning()
-                                //gotoHomeActivity()
+
                                 val assignDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
                                 if (/*(assignDDList == null || assignDDList.isEmpty()) &&*/ !TextUtils.isEmpty(Pref.profile_state))
                                     getAssignedDDListApi()
@@ -4605,7 +4614,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            //gotoHomeActivity()
+
                             val assignDDList = AppDatabase.getDBInstance()?.ddListDao()?.getAll()
                             if (/*(assignDDList == null || assignDDList.isEmpty()) &&*/ !TextUtils.isEmpty(Pref.profile_state))
                                 getAssignedDDListApi()
@@ -4849,7 +4858,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         println("xyz - getOrderList ended" + AppUtils.getCurrentDateTime());
         val list = AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.getAll()
         if (list != null && list.isNotEmpty()) {
-            //gotoHomeActivity()
+
             //callUserConfigApi()
             //checkToCallCollectionApi()
             AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.delete()
@@ -5854,14 +5863,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             println("xyz - callUserConfigApi ended" + AppUtils.getCurrentDateTime());
                             progress_wheel.stopSpinning()
                             getConfigFetchApi()
-                            //gotoHomeActivity()
+
 
                         }, { error ->
                             Timber.d("callUserConfigApi Error response : "+error.message+" "+ AppUtils.getCurrentDateTimeNew())
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             getConfigFetchApi()
-                            //gotoHomeActivity()
+
                         })
         )
     }
@@ -5921,20 +5930,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                         uiThread {
                                             progress_wheel.stopSpinning()
-                                            //gotoHomeActivity()
+
                                             //callUserConfigApi()
                                             checkToCallCollectionApi()
                                         }
                                     }
                                 } else {
                                     progress_wheel.stopSpinning()
-                                    //gotoHomeActivity()
+
                                     //callUserConfigApi()
                                     checkToCallCollectionApi()
                                 }
                             } else {
                                 progress_wheel.stopSpinning()
-                                //gotoHomeActivity()
+
                                 //callUserConfigApi()
                                 checkToCallCollectionApi()
                             }
@@ -5942,7 +5951,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
-                            //gotoHomeActivity()
+
                             //callUserConfigApi()
                             checkToCallCollectionApi()
                         })
@@ -6586,32 +6595,32 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                         uiThread {
                                             progress_wheel.stopSpinning()
-                                            //gotoHomeActivity()
+
                                             getProspectApi()
                                         }
                                     }
                                 } else {
                                     progress_wheel.stopSpinning()
-                                    //gotoHomeActivity()
+
                                     getProspectApi()
                                 }
                             } else {
                                 progress_wheel.stopSpinning()
-                                //gotoHomeActivity()
+
                                 getProspectApi()
                             }
 
                         }, { error ->
                             progress_wheel.stopSpinning()
                             error.printStackTrace()
-                            //gotoHomeActivity()
+
                             getProspectApi()
                         })
                 )
 
             } catch (ex: java.lang.Exception) {
                 ex.printStackTrace()
-                //gotoHomeActivity()
+
                 getProspectApi()
             }
         }else{
@@ -6673,7 +6682,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun deleteImei(){
         if(Pref.IsIMEICheck){
             Timber.d("deleteImei IsIMEICheck : " + Pref.IsIMEICheck.toString() + "Time : " + AppUtils.getCurrentDateTime())
-            gotoHomeActivity()
+            getInactiveShopL()
             //deleteConcurrentUserDtls()
         }else{
                    try {
@@ -6687,27 +6696,243 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                     val response = result as BaseResponse
                                     Timber.d("deleteImei " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
                                     if (response.status == NetworkConstant.SUCCESS) {
-                                        gotoHomeActivity()
+                                        getInactiveShopL()
                                         //deleteConcurrentUserDtls()
                                     } else {
-                                        gotoHomeActivity()
+                                        getInactiveShopL()
                                         //deleteConcurrentUserDtls()
                                     }
                                 }, { error ->
                                     progress_wheel.stopSpinning()
-                                    gotoHomeActivity()
+                                    getInactiveShopL()
                                     //deleteConcurrentUserDtls()
                                 })
                 )
         } catch (ex: Exception) {
             ex.printStackTrace()
-            gotoHomeActivity()
+                       getInactiveShopL()
          //deleteConcurrentUserDtls()
         }
         }
     }
 
-    private fun deleteConcurrentUserDtls(){
+    //Begin Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
+    private fun getInactiveShopL(){
+        try {
+            if(Pref.ConsiderInactiveShopWhileLogin){
+                val repository = ShopListRepositoryProvider.provideShopListRepository()
+                Timber.d("api_call  deleteImei()")
+                BaseActivity.compositeDisposable.add(
+                    repository.getShopInativeList(Pref.session_token.toString(),Pref.user_id.toString())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as ShopListResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                if (response.data!!.shop_list!!.isNotEmpty()) {
+                                    var shop_list = response.data!!.shop_list!!
+
+                                    doAsync {
+                                        for (i in 0 until shop_list.size) {
+                                            val shopObj = AddShopDBModelEntity()
+                                            shopObj.shop_id = shop_list[i].shop_id
+                                            shopObj.shopName = shop_list[i].shop_name
+                                            shopObj.shopImageLocalPath = shop_list[i].Shop_Image
+                                            shopObj.shopLat = shop_list[i].shop_lat!!.toDouble()
+                                            shopObj.shopLong = shop_list[i].shop_long!!.toDouble()
+                                            shopObj.duration = ""
+                                            shopObj.endTimeStamp = ""
+                                            shopObj.timeStamp = ""
+                                            shopObj.dateOfBirth = shop_list[i].dob
+                                            shopObj.dateOfAniversary = shop_list[i].date_aniversary
+                                            shopObj.visitDate = AppUtils.getCurrentDate()
+                                            if (shop_list[i].total_visit_count == "0")
+                                                shopObj.totalVisitCount = "1"
+                                            else
+                                                shopObj.totalVisitCount = shop_list[i].total_visit_count
+                                            shopObj.address = shop_list[i].address
+                                            shopObj.ownerEmailId = shop_list[i].owner_email
+                                            shopObj.ownerContactNumber = shop_list[i].owner_contact_no
+                                            shopObj.pinCode = shop_list[i].pin_code
+                                            shopObj.isUploaded = true
+                                            shopObj.ownerName = shop_list[i].owner_name
+                                            shopObj.user_id = Pref.user_id
+                                            shopObj.orderValue = 0
+                                            shopObj.type = shop_list[i].type
+                                            shopObj.assigned_to_dd_id = shop_list[i].assigned_to_dd_id
+                                            shopObj.assigned_to_pp_id = shop_list[i].assigned_to_pp_id
+                                            shopObj.isAddressUpdated = shop_list[i].isAddressUpdated == "1"
+                                            shopObj.is_otp_verified = shop_list[i].is_otp_verified
+                                            shopObj.added_date = shop_list[i].added_date
+                                            if (shop_list[i].amount == null || shop_list[i].amount == "0.00")
+                                                shopObj.amount = ""
+                                            else
+                                                shopObj.amount = shop_list[i].amount
+                                            if (shop_list[i].last_visit_date!!.contains("."))
+                                                shopObj.lastVisitedDate = AppUtils.changeAttendanceDateFormat(shop_list[i].last_visit_date!!.split(".")[0])
+                                            else
+                                                shopObj.lastVisitedDate = AppUtils.changeAttendanceDateFormat(shop_list[i].last_visit_date!!)
+                                            if (shopObj.lastVisitedDate == AppUtils.getCurrentDateChanged())
+                                                shopObj.visited = true
+                                            else
+                                                shopObj.visited = false
+                                            if (shop_list[i].entity_code == null)
+                                                shopObj.entity_code = ""
+                                            else
+                                                shopObj.entity_code = shop_list[i].entity_code
+                                            if (shop_list[i].area_id == null)
+                                                shopObj.area_id = ""
+                                            else
+                                                shopObj.area_id = shop_list[i].area_id
+                                            if (TextUtils.isEmpty(shop_list[i].model_id))
+                                                shopObj.model_id = ""
+                                            else
+                                                shopObj.model_id = shop_list[i].model_id
+                                            if (TextUtils.isEmpty(shop_list[i].primary_app_id))
+                                                shopObj.primary_app_id = ""
+                                            else
+                                                shopObj.primary_app_id = shop_list[i].primary_app_id
+                                            if (TextUtils.isEmpty(shop_list[i].secondary_app_id))
+                                                shopObj.secondary_app_id = ""
+                                            else
+                                                shopObj.secondary_app_id = shop_list[i].secondary_app_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].lead_id))
+                                                shopObj.lead_id = ""
+                                            else
+                                                shopObj.lead_id = shop_list[i].lead_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].stage_id))
+                                                shopObj.stage_id = ""
+                                            else
+                                                shopObj.stage_id = shop_list[i].stage_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].funnel_stage_id))
+                                                shopObj.funnel_stage_id = ""
+                                            else
+                                                shopObj.funnel_stage_id = shop_list[i].funnel_stage_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].booking_amount))
+                                                shopObj.booking_amount = ""
+                                            else
+                                                shopObj.booking_amount = shop_list[i].booking_amount
+
+                                            if (TextUtils.isEmpty(shop_list[i].type_id))
+                                                shopObj.type_id = ""
+                                            else
+                                                shopObj.type_id = shop_list[i].type_id
+
+                                            shopObj.family_member_dob = shop_list[i].family_member_dob
+                                            shopObj.director_name = shop_list[i].director_name
+                                            shopObj.person_name = shop_list[i].key_person_name
+                                            shopObj.person_no = shop_list[i].phone_no
+                                            shopObj.add_dob = shop_list[i].addtional_dob
+                                            shopObj.add_doa = shop_list[i].addtional_doa
+
+                                            shopObj.doc_degree = shop_list[i].degree
+                                            shopObj.doc_family_dob = shop_list[i].doc_family_member_dob
+                                            shopObj.specialization = shop_list[i].specialization
+                                            shopObj.patient_count = shop_list[i].average_patient_per_day
+                                            shopObj.category = shop_list[i].category
+                                            shopObj.doc_address = shop_list[i].doc_address
+                                            shopObj.doc_pincode = shop_list[i].doc_pincode
+                                            shopObj.chamber_status = shop_list[i].is_chamber_same_headquarter.toInt()
+                                            shopObj.remarks = shop_list[i].is_chamber_same_headquarter_remarks
+                                            shopObj.chemist_name = shop_list[i].chemist_name
+                                            shopObj.chemist_address = shop_list[i].chemist_address
+                                            shopObj.chemist_pincode = shop_list[i].chemist_pincode
+                                            shopObj.assistant_name = shop_list[i].assistant_name
+                                            shopObj.assistant_no = shop_list[i].assistant_contact_no
+                                            shopObj.assistant_dob = shop_list[i].assistant_dob
+                                            shopObj.assistant_doa = shop_list[i].assistant_doa
+                                            shopObj.assistant_family_dob = shop_list[i].assistant_family_dob
+
+                                            if (TextUtils.isEmpty(shop_list[i].entity_id))
+                                                shopObj.entity_id = ""
+                                            else
+                                                shopObj.entity_id = shop_list[i].entity_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].party_status_id))
+                                                shopObj.party_status_id = ""
+                                            else
+                                                shopObj.party_status_id = shop_list[i].party_status_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].retailer_id))
+                                                shopObj.retailer_id = ""
+                                            else
+                                                shopObj.retailer_id = shop_list[i].retailer_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].dealer_id))
+                                                shopObj.dealer_id = ""
+                                            else
+                                                shopObj.dealer_id = shop_list[i].dealer_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].beat_id))
+                                                shopObj.beat_id = ""
+                                            else
+                                                shopObj.beat_id = shop_list[i].beat_id
+
+                                            if (TextUtils.isEmpty(shop_list[i].account_holder))
+                                                shopObj.account_holder = ""
+                                            else
+                                                shopObj.account_holder = shop_list[i].account_holder
+
+                                            if (TextUtils.isEmpty(shop_list[i].account_no))
+                                                shopObj.account_no = ""
+                                            else
+                                                shopObj.account_no = shop_list[i].account_no
+
+                                            if (TextUtils.isEmpty(shop_list[i].bank_name))
+                                                shopObj.bank_name = ""
+                                            else
+                                                shopObj.bank_name = shop_list[i].bank_name
+
+                                            if (TextUtils.isEmpty(shop_list[i].ifsc_code))
+                                                shopObj.ifsc_code = ""
+                                            else
+                                                shopObj.ifsc_code = shop_list[i].ifsc_code
+
+                                            if (TextUtils.isEmpty(shop_list[i].upi))
+                                                shopObj.upi_id = ""
+                                            else
+                                                shopObj.upi_id = shop_list[i].upi
+
+                                            if (TextUtils.isEmpty(shop_list[i].assigned_to_shop_id))
+                                                shopObj.assigned_to_shop_id = ""
+                                            else
+                                                shopObj.assigned_to_shop_id = shop_list[i].assigned_to_shop_id
+
+                                            shopObj.isShopDuplicate = shop_list[i].isShopDuplicate
+                                            shopObj.shopStatusUpdate = "0"
+                                            AppDatabase.getDBInstance()!!.addShopEntryDao().insert(shopObj)
+                                        }
+                                        uiThread {
+                                            gotoHomeActivity()
+                                        }
+                                    }
+
+                                }else{
+                                    gotoHomeActivity()
+                                }
+                            } else {
+                                gotoHomeActivity()
+                            }
+                        }, { error ->
+                            progress_wheel.stopSpinning()
+                            gotoHomeActivity()
+                        })
+                )
+            }else{
+                gotoHomeActivity()
+            }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            gotoHomeActivity()
+        }
+    }
+    //End Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
+
+    /*private fun deleteConcurrentUserDtls(){
         try{
             progress_wheel.spin()
             val repository = LoginRepositoryProvider.provideLoginRepository()
@@ -6739,9 +6964,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             Timber.d("getConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
             insertConcurrentUserDtls()
         }
-    }
+    }*/
 
-    private fun insertConcurrentUserDtls(){
+    /*private fun insertConcurrentUserDtls(){
         try{
             progress_wheel.spin()
             val repository = LoginRepositoryProvider.provideLoginRepository()
@@ -6754,25 +6979,25 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                         progress_wheel.stopSpinning()
                         var response = result as BaseResponse
                         if (response.status == NetworkConstant.SUCCESS) {
-                            gotoHomeActivity()
+
                         }
                         else {
-                            gotoHomeActivity()
+
                         }
                     }, { error ->
                         progress_wheel.stopSpinning()
                         error.printStackTrace()
                         Timber.d("insertConcurrentUserDtls : " + "error : " + error.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
-                        gotoHomeActivity()
+
                     })
             )
         }catch (ex:Exception){
             progress_wheel.stopSpinning()
             ex.printStackTrace()
             Timber.d("insertConcurrentUserDtls : " + "catch : " + ex.message + "\n" + "Time : " + AppUtils.getCurrentDateTime())
-            gotoHomeActivity()
+
         }
-    }
+    }*/
 
 
     override fun onPause() {
@@ -7063,13 +7288,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                 println("xyz - callUserConfigApi ended" + AppUtils.getCurrentDateTime());
                                 progress_wheel.stopSpinning()
                                 proceedLoginProcess(loginResponse)
-                                //gotoHomeActivity()
+
                             }
                         }, { error ->
                             error.printStackTrace()
                             progress_wheel.stopSpinning()
                             proceedLoginProcess(loginResponse)
-                            //gotoHomeActivity()
+
                         })
         )
     }

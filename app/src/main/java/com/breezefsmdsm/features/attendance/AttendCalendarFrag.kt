@@ -39,9 +39,10 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
     private lateinit var calendarView : MaterialCalendarView
     private lateinit var progress_wheel:ProgressWheel
     var mEventDaysPresent: ArrayList<CalendarDay> = ArrayList()
+    var mEventDaysPresentQualified: ArrayList<CalendarDay> = ArrayList()
     var mEventDaysAbsent: ArrayList<CalendarDay> = ArrayList()
     var mEventDaysToday: ArrayList<CalendarDay> = ArrayList()
-    var dateL:ArrayList<String> = ArrayList()
+    var dateL:ArrayList<Pair<String?, String?>> = ArrayList()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -96,7 +97,7 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
         getDaystartEndListApi(startDate,endDate)
     }
 
-    private fun getAttendListApi(startD:String,endD:String){
+    /*private fun getAttendListApi(startD:String,endD:String){
 
         val attendanceReq = AttendanceRequest()
         attendanceReq.user_id = Pref.user_id!!
@@ -133,7 +134,7 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
                         (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                     })
         )
-    }
+    }*/
 
     private fun getDaystartEndListApi(startD:String,endD:String){
 
@@ -154,10 +155,11 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
                     progress_wheel.stopSpinning()
                     if (attendanceList.status == "200") {
                         doAsync {
+                            //dateL = ArrayList()
                             dateL = ArrayList()
                             for(i in 0..attendanceList.day_start_end_list!!.size-1){
                                 var obj = attendanceList.day_start_end_list!!.get(i).dayStart_date_time!!.split("T").get(0).toString()
-                                dateL.add(obj)
+                                dateL.add(Pair(obj,attendanceList.day_start_end_list!!.get(i).isQualifiedAttendance.toString()))
                             }
                             uiThread {
                                 setFinalCal(startD,endD)
@@ -178,6 +180,7 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
     private fun setFinalCal(startD:String,endD:String){
         if(dateL.size>0){
             mEventDaysPresent.clear()
+            mEventDaysPresentQualified.clear()
             mEventDaysAbsent.clear()
             mEventDaysToday.clear()
             calendarView.removeDecorators()
@@ -191,9 +194,13 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
             }
             outerL@ for(i in 0..totalDaysL.size-1){
                 var isPresent = false
+                var isPresentQualified = false
                innerL@ for(j in 0..dateL.size-1){
-                    if(totalDaysL.get(i).equals(dateL.get(j))){
+                    if(totalDaysL.get(i).equals(dateL.get(j).first)){
                         isPresent = true
+                        if(dateL.get(j).second.equals("1")){
+                            isPresentQualified = true
+                        }
                          break@innerL
                     }
                 }
@@ -201,7 +208,11 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
                 var m = totalDaysL.get(i).split("-").get(1).toInt()
                 var d = totalDaysL.get(i).split("-").get(2).toInt()
                 if(isPresent){
-                    mEventDaysPresent.add(CalendarDay.from(y,m,d))
+                    if(isPresentQualified){
+                        mEventDaysPresentQualified.add(CalendarDay.from(y,m,d))
+                    }else{
+                        mEventDaysPresent.add(CalendarDay.from(y,m,d))
+                    }
                 }else{
                     mEventDaysAbsent.add(CalendarDay.from(y,m,d))
                 }
@@ -209,6 +220,7 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
 
             calendarView.addDecorator(EventDayDecorator(mContext, mEventDaysPresent))
             calendarView.addDecorator(EventDayDecorator1(mContext, mEventDaysAbsent))
+            calendarView.addDecorator(EventDayDecorator4(mContext, mEventDaysPresentQualified))
 
 
             var todayDate = AppUtils.getCurrentDateForShopActi()

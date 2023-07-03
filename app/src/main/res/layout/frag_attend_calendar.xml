@@ -41,10 +41,12 @@
                         android:layout_height="match_parent"
                         android:text="Present"
                         android:gravity="center"
-                        android:textColor="@color/black"/>
+                        android:textColor="#6dba84"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="@dimen/_2sdp" />
 
                     <Space
-                        android:layout_width="@dimen/_50sdp"
+                        android:layout_width="@dimen/_30sdp"
                         android:layout_height="match_parent"/>
 
                     <ImageView
@@ -57,7 +59,27 @@
                         android:layout_height="match_parent"
                         android:text="Absent"
                         android:gravity="center"
-                        android:textColor="@color/black"/>
+                        android:textStyle="bold"
+                        android:textColor="#F33535"
+                        android:layout_marginLeft="@dimen/_2sdp"/>
+
+                    <Space
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="match_parent"/>
+
+                    <ImageView
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:background="@drawable/circle_red"
+                        android:backgroundTint="#E901F1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="Qualified"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="@dimen/_2sdp"/>
 
                 </LinearLayout>
 

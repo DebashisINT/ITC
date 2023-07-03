@@ -79,4 +79,5 @@ class ConfigFetchResponseModel : BaseResponse() {
     var IsnewleadtypeforRuby: Boolean? = null
 
     var IsUpdateVisitDataInTodayTable:Boolean?=null
+    var ConsiderInactiveShopWhileLogin:Boolean?=null
 }

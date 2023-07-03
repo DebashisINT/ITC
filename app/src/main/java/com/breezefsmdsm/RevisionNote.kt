@@ -15,4 +15,6 @@ class RevisionNote {
     // api_call_settings_based  isAppInfoEnable
     // api_call_settings_based  getShopTypeStockVisibility
     // api_call_settings_based  IsnewleadtypeforRuby
+
+    // Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
 }
