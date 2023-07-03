@@ -164,7 +164,7 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
                             }
                         }
                     }else{
-                        (mContext as DashboardActivity).showSnackMessage("No Record Found.")
+                        //(mContext as DashboardActivity).showSnackMessage("No Record Found.")
                     }
                 }, { error ->
                     progress_wheel.stopSpinning()
