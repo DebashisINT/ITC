@@ -21,12 +21,14 @@ class ShopDurationRepository(val apiService: ShopDurationApi) {
 
     fun shopDuration(shopDuration: ShopDurationRequest?): Observable<ShopDurationRequest> {
         Timber.d("ShopDurationRepository shop_visit_api_call"+ AppUtils.getCurrentDateTime().toString()+"\ndata - "+shopDuration.toString())
-        Pref.IsUpdateVisitDataInTodayTable=true
+        return apiService.submitShopDurationITC(shopDuration)
+
+        /*Pref.IsUpdateVisitDataInTodayTable=true
         if(Pref.IsUpdateVisitDataInTodayTable){
             return apiService.submitShopDurationITC(shopDuration)
         }else{
             return apiService.submitShopDuration(shopDuration)
-        }
+        }*/
     }
     //End of Rev 1.0 ShopDurationRepository 07-06-2023  Suman  mantis id 26237
 
