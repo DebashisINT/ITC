@@ -6382,7 +6382,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         login_TV.isEnabled = true
         progress_wheel.stopSpinning()
         setServiceAlarm(this, 1, 123)
-        
+
         val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
         intent.putExtra("fromClass", "LoginActivity")
         overridePendingTransition(0, 0)
