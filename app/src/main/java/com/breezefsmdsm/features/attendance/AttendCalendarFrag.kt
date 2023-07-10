@@ -62,6 +62,16 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
         progress_wheel = view.findViewById(R.id.progress_wheel_frag_attend)
         //calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_MULTIPLE)
         calendarView.setSelectionMode(MaterialCalendarView.SELECTION_MODE_NONE)
+
+        var firstDayOfMonth = AppUtils.getFirstDateOfThisMonth_DD_MM_YY()
+        var y = firstDayOfMonth.split("-").get(2).toInt()
+        var m = firstDayOfMonth.split("-").get(1).toInt()
+        var d = firstDayOfMonth.split("-").get(0).toInt()
+        calendarView.state().edit()
+            .setMinimumDate(CalendarDay.from(y,m,d))
+            .setMaximumDate(CalendarDay.today())
+            .commit()
+
         setCalender()
     }
 
@@ -179,6 +189,9 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
 
     private fun setFinalCal(startD:String,endD:String){
         if(dateL.size>0){
+
+            dateL = dateL.distinctBy { it.first } as ArrayList<Pair<String?, String?>>
+
             mEventDaysPresent.clear()
             mEventDaysPresentQualified.clear()
             mEventDaysAbsent.clear()
@@ -188,7 +201,7 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
             var noOfDays = AppUtils.getDayDuration(startD,endD)
             var totalDaysL:ArrayList<String> = ArrayList()
             var dayCalculation = startD
-            for(i in 0.. noOfDays-1){
+            for(i in 0.. noOfDays-2){
                 totalDaysL.add(dayCalculation)
                 dayCalculation = LocalDate.parse(dayCalculation).plusDays(1).toString()
             }

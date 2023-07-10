@@ -2649,6 +2649,30 @@ class AppUtils {
             return ""
         }
 
+        fun getFirstDateOfThisMonth_DD_MMM_YY(): String {
+            val aCalendar = Calendar.getInstance(Locale.ENGLISH)
+// add -1 month to current month
+            //aCalendar.add(Calendar.MONTH, 1)
+// set DATE to 1, so first date of previous month
+            aCalendar.set(Calendar.DATE, 1)
+            //val df = SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH)
+            val df = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+            val formattedDate = df.format(aCalendar.time)
+            return formattedDate.toString()
+        }
+
+        fun getFirstDateOfThisMonth_DD_MM_YY(): String {
+            val aCalendar = Calendar.getInstance(Locale.ENGLISH)
+// add -1 month to current month
+            //aCalendar.add(Calendar.MONTH, 1)
+// set DATE to 1, so first date of previous month
+            aCalendar.set(Calendar.DATE, 1)
+            //val df = SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH)
+            val df = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+            val formattedDate = df.format(aCalendar.time)
+            return formattedDate.toString()
+        }
+
         /*fun getDurationFromOnlineVideoLink(link: String) : String {
             val retriever = MediaMetadataRetriever()
             retriever.setDataSource(link, HashMap<String, String>())

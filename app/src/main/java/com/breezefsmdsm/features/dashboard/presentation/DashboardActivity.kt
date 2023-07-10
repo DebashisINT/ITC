@@ -74,6 +74,7 @@ import com.breezefsmdsm.features.alarm.presetation.PerformanceReportFragment
 import com.breezefsmdsm.features.alarm.presetation.VisitReportDetailsFragment
 import com.breezefsmdsm.features.alarm.presetation.VisitReportFragment
 import com.breezefsmdsm.features.attendance.AttendCalendarFrag
+import com.breezefsmdsm.features.attendance.AttendSummaryFrag
 import com.breezefsmdsm.features.attendance.AttendanceFragment
 import com.breezefsmdsm.features.attendance.CalculatorFrag
 import com.breezefsmdsm.features.attendance.api.AttendanceRepositoryProvider
@@ -573,6 +574,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
     //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
     private lateinit var attendence_calender_tv : AppCustomTextView
+    private lateinit var attendence_summary_tv : AppCustomTextView
     private lateinit var calculator_tv : AppCustomTextView
     //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
 
@@ -1649,6 +1651,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private fun initView() {
         //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
         attendence_calender_tv = findViewById(R.id.attendence_calender_tv)
+        attendence_summary_tv = findViewById(R.id.attendence_summary_tv)
         calculator_tv = findViewById(R.id.calculator_tv)
         //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
 
@@ -1842,6 +1845,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         iv_sync_icon.setOnClickListener(this)
         add_attendence_tv.setOnClickListener(this)
         attendence_calender_tv.setOnClickListener(this)
+        attendence_summary_tv.setOnClickListener(this)
         calculator_tv.setOnClickListener(this)
         my_details_tv.setOnClickListener(this)
         ta_tv.setOnClickListener(this)
@@ -2292,6 +2296,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         } else {
             attendence_calender_tv.visibility = View.GONE
         }
+
+        if (Pref.IsShowAttendanceSummary) {
+            attendence_summary_tv.visibility = View.VISIBLE
+        } else {
+            attendence_summary_tv.visibility = View.GONE
+        }
         if (Pref.IsShowCalculator) {
             calculator_tv.visibility = View.VISIBLE
         } else {
@@ -2618,6 +2628,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
             R.id.attendence_calender_tv -> {
                 loadFragment(FragType.AttendCalendarFrag, true, "")
+            }
+            R.id.attendence_summary_tv -> {
+                loadFragment(FragType.AttendSummaryFrag, true, "")
             }
             R.id.calculator_tv -> {
                 loadFragment(FragType.CalculatorFrag, true, "")
@@ -3815,6 +3828,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mFragment = AttendCalendarFrag()
                 }
                 setTopBarTitle("Attendance Calendar")
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.AttendSummaryFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = AttendSummaryFrag()
+                }
+                setTopBarTitle("Attendance Summary")
                 setTopBarVisibility(TopBarConfig.BACK)
             }
             FragType.CalculatorFrag -> {

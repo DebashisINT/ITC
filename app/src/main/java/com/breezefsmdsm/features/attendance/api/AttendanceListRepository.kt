@@ -1,5 +1,6 @@
 package com.breezefsmdsm.features.attendance.api
 
+import com.breezefsmdsm.features.attendance.model.AttendSummResponse
 import com.breezefsmdsm.features.attendance.model.AttendanceRequest
 import com.breezefsmdsm.features.attendance.model.AttendanceResponse
 import com.breezefsmdsm.features.attendance.model.DayStartEndListResponse
@@ -14,5 +15,9 @@ class AttendanceListRepository(val apiService: AttendanceListApi) {
     }
     fun getDayStartEndList(attendanceRequest: AttendanceRequest?): Observable<DayStartEndListResponse> {
         return apiService.getDayStartEndListAPI(attendanceRequest)
+    }
+
+    fun getAttendanceSumm(user_id:String):Observable<AttendSummResponse>{
+        return apiService.getAttendanceSummApi(user_id)
     }
 }

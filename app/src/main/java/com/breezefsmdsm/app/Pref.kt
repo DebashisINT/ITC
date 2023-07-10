@@ -427,4 +427,5 @@ object Pref : PreferenceHolder() {
     var IsUpdateVisitDataInTodayTable : Boolean by bindToPreferenceField(false, "IsUpdateVisitDataInTodayTable")
 
     var ConsiderInactiveShopWhileLogin : Boolean by bindToPreferenceField(false, "ConsiderInactiveShopWhileLogin")
+    var IsShowAttendanceSummary : Boolean by bindToPreferenceField(false, "IsShowAttendanceSummary")
 }
