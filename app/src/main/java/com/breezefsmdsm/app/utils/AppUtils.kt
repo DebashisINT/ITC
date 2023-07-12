@@ -1,6 +1,7 @@
 package com.breezefsmdsm.app.utils
 
 import android.Manifest
+import android.R.id.input
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -36,10 +37,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.Pref
-import com.breezefsmdsm.app.utils.RotateImage.calculateInSampleSize
 import com.breezefsmdsm.features.login.model.LoginStateListDataModel
 import com.breezefsmdsm.features.login.model.productlistmodel.ProductRateDataModel
-import timber.log.Timber
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.gson.Gson
@@ -48,6 +47,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 import org.apache.commons.lang3.StringEscapeUtils
+import timber.log.Timber
 import java.io.*
 import java.math.BigDecimal
 import java.sql.Timestamp
@@ -2671,6 +2671,14 @@ class AppUtils {
             val df = SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
             val formattedDate = df.format(aCalendar.time)
             return formattedDate.toString()
+        }
+
+        fun getDateName(dateValue:String):String{
+            val inFormat = SimpleDateFormat("yyyy-MM-dd")
+            val date = inFormat.parse(dateValue)
+            val outFormat = SimpleDateFormat("EEEE")
+            val goal = outFormat.format(date)
+            return goal.toString()
         }
 
         /*fun getDurationFromOnlineVideoLink(link: String) : String {

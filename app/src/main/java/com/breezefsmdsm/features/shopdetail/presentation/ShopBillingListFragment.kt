@@ -695,6 +695,14 @@ class ShopBillingListFragment : BaseFragment() {
                 shopDurationData.spent_duration="00:00:10"
             }
 
+            //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+            if(shopActivity.isNewShop){
+                shopDurationData.isNewShop = 1
+            }else{
+                shopDurationData.isNewShop = 0
+            }
+            //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
             shopDataList.add(shopDurationData)
         }
         else {
@@ -762,6 +770,14 @@ class ShopBillingListFragment : BaseFragment() {
                 }catch (ex:Exception){
                     shopDurationData.spent_duration="00:00:10"
                 }
+
+                //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+                if(shopActivity.isNewShop){
+                    shopDurationData.isNewShop = 1
+                }else{
+                    shopDurationData.isNewShop = 0
+                }
+                //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
                 shopDataList.add(shopDurationData)
             }

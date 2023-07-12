@@ -90,6 +90,9 @@ import kotlin.collections.ArrayList
 /**
  * Created by Pratishruti on 27-10-2017.
  */
+
+// Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
 class AddShopFragment : BaseFragment(), View.OnClickListener {
     private lateinit var captureShopImage: ImageView
     private lateinit var shopImage: RelativeLayout
@@ -2109,6 +2112,10 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         shopActivityEntity.in_time = AppUtils.getCurrentTimeWithMeredian()
         shopActivityEntity.in_loc = shop.actual_address
         shopActivityEntity.shop_revisit_uniqKey=finalUniqKey?.toString()
+
+        //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+        shopActivityEntity.isNewShop = true
+        //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
         AppDatabase.getDBInstance()!!.shopActivityDao().insertAll(shopActivityEntity)
 

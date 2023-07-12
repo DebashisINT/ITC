@@ -298,6 +298,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         AppUtils.changeLanguage(this, "en")
         println("load_frag "+mFragType.toString() + " gl: "+ Pref.gpsAccuracy +"   shop_acc ${Pref.shopLocAccuracy} "+ " usr: "+Pref.user_id)
 
+        //Pref.IsShowCalendar = true
+        //Pref.IsShowAttendanceSummary = true
+
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()

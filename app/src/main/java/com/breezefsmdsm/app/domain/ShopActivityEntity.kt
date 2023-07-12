@@ -106,4 +106,7 @@ class ShopActivityEntity {
 
     @ColumnInfo(name = "assigned_to_pp_id")
     var assigned_to_pp_id = ""*/
+
+    @ColumnInfo(name = "isNewShop")
+    var isNewShop: Boolean = false
 }

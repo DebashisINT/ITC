@@ -17,4 +17,6 @@ class RevisionNote {
     // api_call_settings_based  IsnewleadtypeforRuby
 
     // Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
+
+    // Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 }

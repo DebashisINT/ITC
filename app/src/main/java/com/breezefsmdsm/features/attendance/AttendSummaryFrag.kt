@@ -44,7 +44,7 @@ class AttendSummaryFrag : BaseFragment(), View.OnClickListener {
     private fun initView(view: View) {
         workDaysTV = view.findViewById(R.id.tv_frag_attend_summ_work_days)
         presentDaysTV = view.findViewById(R.id.tv_frag_attend_summ_present_days)
-        absentDaysTV = view.findViewById(R.id.tv_frag_attend_summ_absent_days)
+        //absentDaysTV = view.findViewById(R.id.tv_frag_attend_summ_absent_days)
         qualifiedDaysTV = view.findViewById(R.id.tv_frag_attend_summ_qualified_days)
         getData()
     }
@@ -64,10 +64,10 @@ class AttendSummaryFrag : BaseFragment(), View.OnClickListener {
                         val response = result as AttendSummResponse
                         //progress_wheel.stopSpinning()
                         if (response.status == "200") {
-                            workDaysTV.text = response.total_work_day.toString()
-                            presentDaysTV.text = response.total_present_day.toString()
-                            absentDaysTV.text = response.total_absent_day.toString()
-                            qualifiedDaysTV.text = response.total_qualified_day.toString()
+                            workDaysTV.text = response.total_work_day.toString() //+ " Days"
+                            presentDaysTV.text = response.total_present_day.toString() //+ " Days"
+                            //absentDaysTV.text = response.total_absent_day.toString() + " Days"
+                            qualifiedDaysTV.text = response.total_qualified_day.toString() //+ " Days"
                         }else{
                             (mContext as DashboardActivity).showSnackMessage("No Record Found.")
                         }

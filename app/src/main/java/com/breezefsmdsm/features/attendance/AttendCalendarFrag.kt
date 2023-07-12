@@ -201,8 +201,10 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
             var noOfDays = AppUtils.getDayDuration(startD,endD)
             var totalDaysL:ArrayList<String> = ArrayList()
             var dayCalculation = startD
-            for(i in 0.. noOfDays-2){
-                totalDaysL.add(dayCalculation)
+            for(i in 0.. noOfDays-1){
+                if(!AppUtils.getDateName(dayCalculation).equals("Sunday")){
+                    totalDaysL.add(dayCalculation)
+                }
                 dayCalculation = LocalDate.parse(dayCalculation).plusDays(1).toString()
             }
             outerL@ for(i in 0..totalDaysL.size-1){

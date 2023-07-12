@@ -56,7 +56,7 @@ import com.breezefsmdsm.features.stockCompetetorStock.model.CompetetorStockData
         OrderStatusRemarksModelEntity::class,CurrentStockEntryModelEntity::class,CurrentStockEntryProductModelEntity::class,
            CcompetetorStockEntryModelEntity::class,CompetetorStockEntryProductModelEntity::class,
         ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class,NewGpsStatusEntity::class ),
-        version = 7, exportSchema = false)
+        version = 8, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -173,7 +173,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
                         .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5,MIGRATION_5_6,
-                            MIGRATION_6_7)
+                            MIGRATION_6_7,MIGRATION_7_8)
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -225,8 +225,9 @@ abstract class AppDatabase : RoomDatabase() {
         }
         val MIGRATION_7_8: Migration = object : Migration(7, 8) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITYID' ")
-                database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITY_ID_DATE' ")
+                //database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITYID' ")
+                //database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITY_ID_DATE' ")
+                database.execSQL("ALTER TABLE shop_activity ADD COLUMN isNewShop INTEGER NOT NULL DEFAULT 0 ")
             }
         }
     }

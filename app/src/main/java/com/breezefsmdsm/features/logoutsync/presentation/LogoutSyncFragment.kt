@@ -1215,6 +1215,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 shopDurationData.spent_duration="00:00:10"
             }
 
+            //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+            if(shopActivity.isNewShop){
+                shopDurationData.isNewShop = 1
+            }else{
+                shopDurationData.isNewShop = 0
+            }
+            //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
             shopDataList.add(shopDurationData)
         }
         else {
@@ -1286,6 +1294,13 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     shopDurationData.spent_duration="00:00:10"
                 }
 
+                //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+                if(shopActivity.isNewShop){
+                    shopDurationData.isNewShop = 1
+                }else{
+                    shopDurationData.isNewShop = 0
+                }
+                //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
                 shopDataList.add(shopDurationData)
             }
@@ -2588,6 +2603,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 shopDurationData.spent_duration="00:00:10"
                             }
 
+                            //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+                            if(shopActivity.isNewShop){
+                                shopDurationData.isNewShop = 1
+                            }else{
+                                shopDurationData.isNewShop = 0
+                            }
+                            //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
                             shopDataList.add(shopDurationData)
 
 
@@ -2674,6 +2697,14 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             }catch (ex:Exception){
                                 shopDurationData.spent_duration="00:00:10"
                             }
+
+                            //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+                            if(it.isNewShop){
+                                shopDurationData.isNewShop = 1
+                            }else{
+                                shopDurationData.isNewShop = 0
+                            }
+                            //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
                             shopDataList.add(shopDurationData)
 

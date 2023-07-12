@@ -12,122 +12,298 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/_10sdp">
+        android:padding="@dimen/_10sdp"
+        android:background="#EAF7FA">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_100sdp"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#0b81d9"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/_31sdp"
+                        android:layout_height="@dimen/_31sdp"
+                        app:cardCornerRadius="250dp"
+                        android:layout_gravity="center|start"
+                        app:cardElevation="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/smoke_white"
+                        android:layout_marginTop="@dimen/_2sdp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/icon_cal_c1"
+                            android:padding="@dimen/_7sdp"/>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tv_frag_attend_summ_work_days"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30sdp"
+                        android:textColor="@color/white"
+                        android:text=" N/A"
+                        android:textSize="@dimen/_14sdp"
+                        android:gravity="center|start"
+                        android:shadowColor="#7F000000"
+                        android:shadowDx="-2"
+                        android:shadowDy="-2"
+                        android:shadowRadius="1"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Working Day(s)"
+                        android:gravity="center|start"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <Space
+                android:layout_width="@dimen/_10sdp"
+                android:layout_height="match_parent"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#13971d"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="@dimen/_31sdp"
+                        android:layout_height="@dimen/_31sdp"
+                        app:cardCornerRadius="250dp"
+                        android:layout_gravity="center|start"
+                        app:cardElevation="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/smoke_white"
+                        android:layout_marginTop="@dimen/_2sdp">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/icon_cal_c2"
+                            android:padding="@dimen/_7sdp"/>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tv_frag_attend_summ_present_days"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_30sdp"
+                        android:textColor="@color/white"
+                        android:text=" N/A"
+                        android:textSize="@dimen/_14sdp"
+                        android:gravity="center|start"
+                        android:shadowColor="#7F000000"
+                        android:shadowDx="-2"
+                        android:shadowDy="-2"
+                        android:shadowRadius="1"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Total Present Day(s)"
+                        android:gravity="center|start"
+                        android:singleLine="true"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_145sdp"
+            android:layout_height="@dimen/_100sdp"
+            app:cardBackgroundColor="#bc2c7b"
+            app:cardCornerRadius="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_15sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/_10sdp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="@dimen/_31sdp"
+                    android:layout_height="@dimen/_31sdp"
+                    app:cardCornerRadius="250dp"
+                    android:layout_gravity="center|start"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:cardBackgroundColor="@color/smoke_white"
+                    android:layout_marginTop="@dimen/_2sdp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/icon_cal_c3"
+                        android:padding="@dimen/_5sdp"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tv_frag_attend_summ_qualified_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:textColor="@color/white"
+                    android:text=" N/A"
+                    android:textSize="@dimen/_14sdp"
+                    android:gravity="center|start"
+                    android:shadowColor="#7F000000"
+                    android:shadowDx="-2"
+                    android:shadowDy="-2"
+                    android:shadowRadius="1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Qualified Day(s)"
+                    android:gravity="center|start"
+                    android:singleLine="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <!--<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/shape_cursor_one">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:cardCornerRadius="@dimen/_1sdp"
+                app:cardElevation="@dimen/_1sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                app:cardBackgroundColor="@color/transparent">
+
+                <ImageView
+                    android:layout_width="@dimen/_19sdp"
+                    android:layout_height="@dimen/_19sdp"
+                    android:src="@drawable/ic_calendar"
+                    android:layout_gravity="center"/>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_55sdp"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/_10sdp">
+
+                <TextView
+                    android:id="@+id/tv_frag_attend_summ_work_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Total work day"
+                    android:gravity="center|start"
+                    android:singleLine="true"
+                    android:textColor="@color/date_bg_selected_color"
+                    android:textSize="@dimen/_14sdp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Total work day"
+                    android:gravity="center|start"
+                    android:singleLine="true"
+                    android:textColor="@color/black_50"
+                    android:textSize="@dimen/_12sdp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/_20sdp">
+            android:layout_marginTop="@dimen/_20sdp"
+            android:background="@drawable/shape_cursor_one">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:cardCornerRadius="@dimen/_1sdp"
+                app:cardElevation="@dimen/_1sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                app:cardBackgroundColor="@color/transparent">
+
+                <ImageView
+                    android:layout_width="@dimen/_19sdp"
+                    android:layout_height="@dimen/_19sdp"
+                    android:background="@drawable/ic_history_calendar_icon"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/green"/>
+
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
+                android:layout_height="@dimen/_55sdp"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/_10sdp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:cardCornerRadius="@dimen/_1sdp"
-                    app:cardElevation="@dimen/_3sdp"
-                    app:cardBackgroundColor="@color/transparent">
-
-                    <ImageView
-                        android:layout_width="@dimen/_19sdp"
-                        android:layout_height="@dimen/_19sdp"
-                        android:src="@drawable/ic_calendar"
-                        android:layout_gravity="center"/>
-
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_frag_attend_summ_present_days"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:orientation="vertical"
-                    android:paddingLeft="@dimen/_10sdp">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Total present day"
+                    android:gravity="center|start"
+                    android:singleLine="true"
+                    android:textColor="@color/date_bg_selected_color"
+                    android:textSize="@dimen/_14sdp"/>
 
-                    <TextView
-                        android:id="@+id/tv_frag_attend_summ_work_days"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Total work day"
-                        android:gravity="center|start"
-                        android:singleLine="true"
-                        android:textColor="@color/date_bg_selected_color"
-                        android:textSize="@dimen/_14sdp"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Total work day"
-                        android:gravity="center|start"
-                        android:singleLine="true"
-                        android:textColor="@color/black_50"
-                        android:textSize="@dimen/_12sdp"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="@dimen/_5sdp"
-                android:layout_height="match_parent"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:cardCornerRadius="@dimen/_1sdp"
-                    app:cardElevation="@dimen/_3sdp"
-                    app:cardBackgroundColor="@color/transparent">
-
-                    <ImageView
-                        android:layout_width="@dimen/_19sdp"
-                        android:layout_height="@dimen/_19sdp"
-                        android:background="@drawable/ic_history_calendar_icon"
-                        android:layout_gravity="center"
-                        android:backgroundTint="@color/green"/>
-
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
-                    android:orientation="vertical"
-                    android:paddingLeft="@dimen/_10sdp">
-
-                    <TextView
-                        android:id="@+id/tv_frag_attend_summ_present_days"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Total present day"
-                        android:gravity="center|start"
-                        android:singleLine="true"
-                        android:textColor="@color/date_bg_selected_color"
-                        android:textSize="@dimen/_14sdp"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Total present day"
-                        android:gravity="center|start"
-                        android:singleLine="true"
-                        android:textColor="@color/black_50"
-                        android:textSize="@dimen/_12sdp"/>
-
-                </LinearLayout>
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Total present day"
+                    android:gravity="center|start"
+                    android:singleLine="true"
+                    android:textColor="@color/black_50"
+                    android:textSize="@dimen/_12sdp"/>
 
             </LinearLayout>
 
@@ -194,22 +370,20 @@
 
             </LinearLayout>
 
-            <Space
-                android:layout_width="@dimen/_5sdp"
-                android:layout_height="match_parent"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/shape_cursor_one">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     app:cardCornerRadius="@dimen/_1sdp"
-                    app:cardElevation="@dimen/_3sdp"
+                    app:cardElevation="@dimen/_1sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     app:cardBackgroundColor="@color/transparent">
 
                     <ImageView
@@ -223,7 +397,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_45sdp"
+                    android:layout_height="@dimen/_55sdp"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/_10sdp">
 
@@ -252,7 +426,7 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+        </LinearLayout>-->
 
     </LinearLayout>
 
