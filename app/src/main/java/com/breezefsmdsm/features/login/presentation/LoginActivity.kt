@@ -4366,6 +4366,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             Pref.willAlarmTrigger = loginResponse.user_details!!.willAlarmTrigger?.toBoolean()!!
 
         Pref.willAlarmTrigger=false //  hardcoded for ITC  18-04-2022
+        Timber.d("Login alarm settings Pref.willAlarmTrigger ${Pref.willAlarmTrigger}")
 
         if (!Pref.isAddAttendence)
             Pref.totalS2SDistance = "0.0"
