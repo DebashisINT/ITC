@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
 import com.breezefsmdsm.app.domain.ProspectEntity
+import com.breezefsmdsm.app.domain.StageEntity
 import com.breezefsmdsm.app.utils.Toaster
 import com.breezefsmdsm.widgets.AppCustomTextView
 
@@ -35,6 +36,7 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
 
     private var dsTypePopupWindow: PopupWindow? = null
     private var dsList:ArrayList<ProspectEntity> = ArrayList()
+    private var dsListStage:ArrayList<StageEntity> = ArrayList()
 
     companion object {
 
@@ -68,6 +70,7 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         initView(v)
 
         dsList = AppDatabase.getDBInstance()!!.prosDao().getAll() as ArrayList<ProspectEntity>
+        dsListStage = AppDatabase.getDBInstance()!!.stageDao().getAll() as ArrayList<StageEntity>
 
         return v
     }
@@ -149,7 +152,12 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
                 selectedTypeName=obj.pros_name!!
                 dsTypePopupWindow?.dismiss()
             }
+
+            override fun getDSInfoOnLick(obj: StageEntity) {
+
+            }
         })
+
 
         if (dsTypePopupWindow != null && !dsTypePopupWindow?.isShowing!!) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

@@ -3,6 +3,7 @@ package com.themechangeapp.pickimage
 import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
@@ -24,6 +25,7 @@ class PermissionHelper {
         var REQUEST_CODE_EXO_PLAYER = 99
 
         internal var PERMISSIONS_STORAGE = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        internal var PERMISSIONS_STORAGE_SDK33 = arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_AUDIO,Manifest.permission.READ_MEDIA_VIDEO)
 
         internal var PERMISSIONS_LOCATION = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
@@ -47,7 +49,7 @@ class PermissionHelper {
         }
 
 
-        fun checkStoragePermission(mActivity: Activity): Boolean {
+        /*fun checkStoragePermission(mActivity: Activity): Boolean {
 
             if (ContextCompat.checkSelfPermission(mActivity,
                     Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(mActivity,
@@ -64,6 +66,43 @@ class PermissionHelper {
             } else {
                 return true
             }
+        }*/
+
+        fun checkStoragePermission(mActivity: Activity): Boolean {
+//begin mantis id 26741 Storage permission updation Suman 22-08-2023
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+                if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_MEDIA_VIDEO) != PackageManager.PERMISSION_GRANTED){
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_MEDIA_IMAGES) ||
+                        ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_MEDIA_AUDIO) ||
+                        ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_MEDIA_VIDEO)) {
+                        ActivityCompat.requestPermissions(mActivity, PERMISSIONS_STORAGE_SDK33, REQUEST_CODE_STORAGE)
+                    } else {
+                        ActivityCompat.requestPermissions(mActivity, PERMISSIONS_STORAGE_SDK33, REQUEST_CODE_STORAGE)
+                    }
+                    return false
+                } else {
+                    return true
+                }
+            }else{//end mantis id 26741 Storage permission updation Suman 22-08-2023
+                if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                        ActivityCompat.shouldShowRequestPermissionRationale(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        ActivityCompat.requestPermissions(mActivity, PERMISSIONS_STORAGE, REQUEST_CODE_STORAGE)
+                    } else {
+                        ActivityCompat.requestPermissions(mActivity, PERMISSIONS_STORAGE, REQUEST_CODE_STORAGE)
+                    }
+                    return false
+                } else {
+                    return true
+                }
+            }
+
+
         }
 
         fun checkLocationPermission(mActivity: Activity, mRequestCode: Int): Boolean {

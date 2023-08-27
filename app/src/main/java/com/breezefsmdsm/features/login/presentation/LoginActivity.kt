@@ -3211,6 +3211,19 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun initPermissionCheck() {
 
+        //begin mantis id 26741 Storage permission updation Suman 22-08-2023
+        var permissionList = arrayOf<String>( Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO,)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permissionList += Manifest.permission.READ_MEDIA_IMAGES
+            permissionList += Manifest.permission.READ_MEDIA_AUDIO
+            permissionList += Manifest.permission.READ_MEDIA_VIDEO
+        }else{
+            permissionList += Manifest.permission.WRITE_EXTERNAL_STORAGE
+            permissionList += Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+//end mantis id 26741 Storage permission updation Suman 22-08-2023
+
         permissionUtils = PermissionUtils(this, object : PermissionUtils.OnPermissionListener {
             @TargetApi(Build.VERSION_CODES.M)
             override fun onPermissionGranted() {
@@ -3253,8 +3266,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     System.exit(0)
                 },3000)*/
             }
-
-        }, arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO))
+// mantis id 26741 Storage permission updation Suman 22-08-2023
+        },permissionList)// arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO))
     }
 
     fun fileManagePermii() {
@@ -3925,6 +3938,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun initCameraPermissionCheck() {
+
+        //begin mantis id 26741 Storage permission updation Suman 22-08-2023
+        var permissionList = arrayOf<String>( Manifest.permission.CAMERA)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            permissionList += Manifest.permission.READ_MEDIA_IMAGES
+            permissionList += Manifest.permission.READ_MEDIA_AUDIO
+            permissionList += Manifest.permission.READ_MEDIA_VIDEO
+        }else{
+            permissionList += Manifest.permission.WRITE_EXTERNAL_STORAGE
+            permissionList += Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+//end mantis id 26741 Storage permission updation Suman 22-08-2023
+
         permissionUtils = PermissionUtils(this, object : PermissionUtils.OnPermissionListener {
             override fun onPermissionGranted() {
                 captureFrontImage()
@@ -3933,8 +3960,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             override fun onPermissionNotGranted() {
                 showSnackMessage(getString(R.string.accept_permission))
             }
-
-        }, arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+// mantis id 26741 Storage permission updation Suman 22-08-2023
+        },permissionList) //arrayOf<String>(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
     private fun captureFrontImage() {

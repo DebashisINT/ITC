@@ -73,6 +73,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
   private static final String PERMISSION_EXTERNAL= Manifest.permission.READ_EXTERNAL_STORAGE;
+
   protected int previewWidth = 0;
   protected int previewHeight = 0;
   private boolean debug = false;
@@ -132,11 +133,16 @@ public abstract class CameraActivity extends AppCompatActivity
     setSupportActionBar(toolbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-    if (hasPermission()) {
-      setFragment();
-    } else {
-      requestPermission();
-    }
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+          setFragment();
+      }else{
+          if (hasPermission()) {
+              setFragment();
+          } else {
+              requestPermission();
+          }
+      }
+
 
     threadsTextView = findViewById(R.id.threads);
     plusImageView = findViewById(R.id.plus);
@@ -448,8 +454,7 @@ public abstract class CameraActivity extends AppCompatActivity
 
   private boolean hasPermission() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED
-              && checkSelfPermission(PERMISSION_EXTERNAL) == PackageManager.PERMISSION_GRANTED  ;
+        return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(PERMISSION_EXTERNAL) == PackageManager.PERMISSION_GRANTED  ;
     } else {
       return true;
     }

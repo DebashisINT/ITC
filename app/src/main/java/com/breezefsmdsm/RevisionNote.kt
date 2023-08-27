@@ -19,4 +19,6 @@ class RevisionNote {
     // Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
 
     // Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+    // mantis id 26741 Storage permission updation Suman 22-08-2023
 }

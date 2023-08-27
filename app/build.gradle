@@ -19,12 +19,12 @@ apply plugin: 'de.undercouch.download'
 
 android {
 
-    compileSdkVersion 32
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "com.breezefsmdsm"
         minSdkVersion 26
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 136
         versionName "4.4.2"
         //versionName "2.3.0"
