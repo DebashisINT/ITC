@@ -16,10 +16,24 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.AppDatabase
+import com.breezefsmdsm.app.NetworkConstant
+import com.breezefsmdsm.app.Pref
 import com.breezefsmdsm.app.domain.ProspectEntity
 import com.breezefsmdsm.app.domain.StageEntity
+import com.breezefsmdsm.app.utils.AppUtils
 import com.breezefsmdsm.app.utils.Toaster
+import com.breezefsmdsm.base.presentation.BaseActivity
+import com.breezefsmdsm.features.nearbyshops.api.ShopListRepositoryProvider
+import com.breezefsmdsm.features.nearbyshops.model.StageListResponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_achv.progress_wheel
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
+import timber.log.Timber
+
+//Rev 1.0 Suman 28-08-2023 UpdateDSTypeStatusDialog manti id 26764
 
 class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
     private lateinit var mContext: Context
@@ -35,8 +49,9 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
     private  var selectedTypeName: String = ""
 
     private var dsTypePopupWindow: PopupWindow? = null
-    private var dsList:ArrayList<ProspectEntity> = ArrayList()
-    private var dsListStage:ArrayList<StageEntity> = ArrayList()
+    //Rev 1.0 Suman 28-08-2023 UpdateDSTypeStatusDialog manti id 26764
+    //private var dsList:ArrayList<ProspectEntity> = ArrayList()
+    private var dsList:ArrayList<StageEntity> = ArrayList()
 
     companion object {
 
@@ -69,8 +84,8 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         isCancelable = mIsCancelable
         initView(v)
 
-        dsList = AppDatabase.getDBInstance()!!.prosDao().getAll() as ArrayList<ProspectEntity>
-        dsListStage = AppDatabase.getDBInstance()!!.stageDao().getAll() as ArrayList<StageEntity>
+        //dsList = AppDatabase.getDBInstance()!!.prosDao().getAll() as ArrayList<ProspectEntity>
+        dsList = AppDatabase.getDBInstance()!!.stageDao().getAll() as ArrayList<StageEntity>
 
         return v
     }
@@ -114,10 +129,13 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
                     dsTypePopupWindow?.dismiss()
                 else {
                     if (dsList == null || dsList!!.size == 0) {
-                        Toaster.msgShort(mContext, getString(R.string.no_data_available))
-                        return
+                        //Toaster.msgShort(mContext, getString(R.string.no_data_available))
+                        //return
+                        geStageApi()
+                    }else{
+                        callMeetingTypeDropDownPopUp()
                     }
-                    callMeetingTypeDropDownPopUp()
+
                 }
             }
             R.id.cancel_TV ->{
@@ -131,13 +149,54 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         }
     }
 
+    //Begin Rev 1.0 Suman 28-08-2023 UpdateDSTypeStatusDialog manti id 26764
+    private fun geStageApi() {
+        val repository = ShopListRepositoryProvider.provideShopListRepository()
+        BaseActivity.compositeDisposable.add(
+            repository.getStagList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({ result ->
+                    val response = result as StageListResponseModel
+                    Timber.d("GET STAGE DATA : " + "RESPONSE : " + response.status + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + response.message)
+                    if (response.status == NetworkConstant.SUCCESS) {
+                        if (response.stage_list != null && response.stage_list!!.isNotEmpty()) {
+                            AppDatabase.getDBInstance()?.stageDao()?.deleteAll()
+                            doAsync {
+                                response.stage_list?.forEach {
+                                    val stageEntity = StageEntity()
+                                    AppDatabase.getDBInstance()?.stageDao()?.insertAll(stageEntity.apply {
+                                        stage_id = it.id
+                                        stage_name = it.name
+                                    })
+                                }
+                                uiThread {
+                                    dsList = AppDatabase.getDBInstance()!!.stageDao().getAll() as ArrayList<StageEntity>
+                                    callMeetingTypeDropDownPopUp()
+                                }
+                            }
+                        } else {
+                            Toaster.msgShort(mContext, getString(R.string.no_data_available))
+                        }
+                    } else {
+                        Toaster.msgShort(mContext, getString(R.string.no_data_available))
+                    }
+                }, { error ->
+                    Timber.d("GET STAGE DATA : " + "ERROR : " + "\n" + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name + ",MESSAGE : " + error.localizedMessage)
+                    error.printStackTrace()
+                })
+        )
+    }
+    //End 1.0 Suman 28-08-2023 UpdateDSTypeStatusDialog manti id 26764
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun callMeetingTypeDropDownPopUp() {
 
         val inflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater?
         val customView = inflater!!.inflate(R.layout.popup_meeting_type, null)
 
-        dsTypePopupWindow = PopupWindow(customView, resources.getDimensionPixelOffset(R.dimen._220sdp), RelativeLayout.LayoutParams.WRAP_CONTENT)
+        //dsTypePopupWindow = PopupWindow(customView, resources.getDimensionPixelOffset(R.dimen._220sdp), RelativeLayout.LayoutParams.WRAP_CONTENT)
+        dsTypePopupWindow = PopupWindow(customView, resources.getDimensionPixelOffset(R.dimen._220sdp), resources.getDimensionPixelOffset(R.dimen._220sdp))
         val rv_ds_type_list = customView.findViewById(R.id.rv_meeting_type_list) as RecyclerView
         rv_ds_type_list.layoutManager = LinearLayoutManager(mContext)
 
@@ -145,16 +204,20 @@ class UpdateDSTypeStatusDialog: DialogFragment(), View.OnClickListener {
         dsTypePopupWindow?.isFocusable = true
         dsTypePopupWindow?.update()
 
-        rv_ds_type_list.adapter = DsStatusAdapter(mContext, dsList,object:DsStatusListner{
+        //rv_ds_type_list.adapter = DsStatusAdapter(mContext, dsList,object:DsStatusListner{
+        rv_ds_type_list.adapter = DsStatusAdapter1(mContext, dsList,object:DsStatusListner{
             override fun getDSInfoOnLick(obj: ProspectEntity) {
-                tv_ds_type_dropdown.text = obj.pros_name!!
+               /* tv_ds_type_dropdown.text = obj.pros_name!!
                 selectedTypeID=obj.pros_id!!
                 selectedTypeName=obj.pros_name!!
-                dsTypePopupWindow?.dismiss()
+                dsTypePopupWindow?.dismiss()*/
             }
 
             override fun getDSInfoOnLick(obj: StageEntity) {
-
+                tv_ds_type_dropdown.text = obj.stage_name!!
+                selectedTypeID=obj.stage_id!!
+                selectedTypeName=obj.stage_name!!
+                dsTypePopupWindow?.dismiss()
             }
         })
 

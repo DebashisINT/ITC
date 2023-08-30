@@ -16,15 +16,16 @@ import android.os.*
 import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.breezefsmdsm.BuildConfig
+import com.breezefsmdsm.CustomStatic
+import com.breezefsmdsm.Customdialog.CustomDialog
+import com.breezefsmdsm.Customdialog.OnDialogCustomClickListener
 import com.breezefsmdsm.R
 import com.breezefsmdsm.app.NetworkConstant
 import com.breezefsmdsm.app.Pref
@@ -44,16 +45,12 @@ import com.breezefsmdsm.features.login.presentation.LoginActivity
 import com.breezefsmdsm.features.splash.presentation.api.VersionCheckingRepoProvider
 import com.breezefsmdsm.features.splash.presentation.model.VersionCheckingReponseModel
 import com.breezefsmdsm.widgets.AppCustomTextView
-import timber.log.Timber
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnSuccessListener
-import com.google.firebase.messaging.FirebaseMessaging
-import com.themechangeapp.pickimage.PermissionHelper
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_splash.*
 import net.alexandroid.gps.GpsStatusDetector
+import timber.log.Timber
 import kotlin.system.exitProcess
 
 
