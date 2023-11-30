@@ -154,6 +154,8 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
         attendanceReq.start_date = startD
         attendanceReq.end_date = endD
 
+        //attendanceReq.user_id = "159895"
+
         val repository = AttendanceRepositoryProvider.provideAttendanceRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -202,9 +204,10 @@ class AttendCalendarFrag: BaseFragment(),OnClickListener {
             var totalDaysL:ArrayList<String> = ArrayList()
             var dayCalculation = startD
             for(i in 0.. noOfDays-1){
-                if(!AppUtils.getDateName(dayCalculation).equals("Sunday")){
+                /*if(!AppUtils.getDateName(dayCalculation).equals("Sunday")){
                     totalDaysL.add(dayCalculation)
-                }
+                }*/
+                totalDaysL.add(dayCalculation)
                 dayCalculation = LocalDate.parse(dayCalculation).plusDays(1).toString()
             }
             outerL@ for(i in 0..totalDaysL.size-1){
