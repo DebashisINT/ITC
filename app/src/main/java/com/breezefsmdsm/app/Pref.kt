@@ -428,4 +428,6 @@ object Pref : PreferenceHolder() {
 
     var ConsiderInactiveShopWhileLogin : Boolean by bindToPreferenceField(false, "ConsiderInactiveShopWhileLogin")
     var IsShowAttendanceSummary : Boolean by bindToPreferenceField(false, "IsShowAttendanceSummary")
+
+    var prevAttendanceSummaryOpenTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceSummaryOpenTimeStamp")
 }

@@ -3511,6 +3511,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             R.id.login_TV -> {
 
                 Pref.prevAttendanceNotiDurationTimeStamp = System.currentTimeMillis()
+                Pref.prevAttendanceSummaryOpenTimeStamp = System.currentTimeMillis()
 
                 Pref.DayStartMarked = false
                 Pref.DayEndMarked = false

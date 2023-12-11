@@ -4259,8 +4259,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     selectedwortkType.ID = workTypeList[i].id?.toInt()!!
                                     selectedwortkType.Descrpton = workTypeList[i].name
                                     selectedwortkType.date = AppUtils.getCurrentDate()
-                                    AppDatabase.getDBInstance()?.selectedWorkTypeDao()
-                                        ?.insertAll(selectedwortkType)
+                                    AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.insertAll(selectedwortkType)
                                 }
 
                                 val routeList = response.route_list

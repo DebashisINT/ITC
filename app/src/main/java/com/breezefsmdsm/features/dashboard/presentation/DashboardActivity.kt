@@ -2633,7 +2633,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 loadFragment(FragType.AttendCalendarFrag, true, "")
             }
             R.id.attendence_summary_tv -> {
-                loadFragment(FragType.AttendSummaryFrag, true, "")
+                var diff:Int = shouldAttendSummaryOpen()
+                println("tag_time outside ${Pref.prevAttendanceSummaryOpenTimeStamp}")
+                if(diff > 4){
+                    Pref.prevAttendanceSummaryOpenTimeStamp = System.currentTimeMillis()
+                    println("tag_time inside ${Pref.prevAttendanceSummaryOpenTimeStamp}")
+                    loadFragment(FragType.AttendSummaryFrag, true, "")
+                }else{
+                    Toaster.msgShort(this,"Please try after ${5-diff} min")
+                }
             }
             R.id.calculator_tv -> {
                 loadFragment(FragType.CalculatorFrag, true, "")
@@ -12288,5 +12296,19 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             )
         }
     }
+
+
+    private fun shouldAttendSummaryOpen(): Int {
+        AppUtils.changeLanguage(this,"en")
+        changeLocale()
+        try{
+            var timeDiffInMin :Int = (Math.abs(System.currentTimeMillis() - Pref.prevAttendanceSummaryOpenTimeStamp) / (1000*60)).toInt()
+            return timeDiffInMin
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            return 0
+        }
+    }
+
 
 }
