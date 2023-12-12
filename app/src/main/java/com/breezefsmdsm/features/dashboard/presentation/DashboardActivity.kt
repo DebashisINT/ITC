@@ -2630,7 +2630,17 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
             //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
             R.id.attendence_calender_tv -> {
-                loadFragment(FragType.AttendCalendarFrag, true, "")
+                //loadFragment(FragType.AttendCalendarFrag, true, "")
+
+                var diff:Int = shouldAttendCalenderOpen()
+                println("tag_time outside ${Pref.prevAttendanceCalenderOpenTimeStamp}")
+                if(diff > 4){
+                    Pref.prevAttendanceCalenderOpenTimeStamp = System.currentTimeMillis()
+                    println("tag_time inside ${Pref.prevAttendanceCalenderOpenTimeStamp}")
+                    loadFragment(FragType.AttendCalendarFrag, true, "")
+                }else{
+                    Toaster.msgShort(this,"Please try after ${5-diff} min")
+                }
             }
             R.id.attendence_summary_tv -> {
                 var diff:Int = shouldAttendSummaryOpen()
@@ -12303,6 +12313,18 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         changeLocale()
         try{
             var timeDiffInMin :Int = (Math.abs(System.currentTimeMillis() - Pref.prevAttendanceSummaryOpenTimeStamp) / (1000*60)).toInt()
+            return timeDiffInMin
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            return 0
+        }
+    }
+
+    private fun shouldAttendCalenderOpen(): Int {
+        AppUtils.changeLanguage(this,"en")
+        changeLocale()
+        try{
+            var timeDiffInMin :Int = (Math.abs(System.currentTimeMillis() - Pref.prevAttendanceCalenderOpenTimeStamp) / (1000*60)).toInt()
             return timeDiffInMin
         }catch (ex:Exception){
             ex.printStackTrace()

@@ -430,4 +430,5 @@ object Pref : PreferenceHolder() {
     var IsShowAttendanceSummary : Boolean by bindToPreferenceField(false, "IsShowAttendanceSummary")
 
     var prevAttendanceSummaryOpenTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceSummaryOpenTimeStamp")
+    var prevAttendanceCalenderOpenTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceCalenderOpenTimeStamp")
 }
