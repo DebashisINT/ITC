@@ -364,6 +364,10 @@ class DayWiseFragment : BaseFragment(), View.OnClickListener {
             Timber.d("network_status=====> " + localData.network_status)
             Timber.d("battery_percentage=====> " + localData.battery_percentage)
 
+            //harcoded location isUploaded true begin
+            localData.isUploaded = true
+            //harcoded location isUploaded true end
+
             AppDatabase.getDBInstance()!!.userLocationDataDao().insert(localData)
 
             Timber.d("=======location added to db (Activity)======")

@@ -310,13 +310,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         updateShopTableInDB(shopActityResponse.date_list)
 
 
-                                var list = AppDatabase.getDBInstance()!!.shopActivityDao()
-                                    .getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
+                                var list = AppDatabase.getDBInstance()!!.shopActivityDao().getTotalShopVisitedForADay(AppUtils.getCurrentDateForShopActi())
                                 var totalMinute = InfoWizard.getTotalShopVisitTimeForActi()
-                                Pref.totalShopVisited =
-                                    (Pref.totalShopVisited.toInt() - list.size).toString()
-                                Pref.totalTimeSpenAtShop =
-                                    (Pref.totalTimeSpenAtShop.toInt() - totalMinute).toString()
+                                Pref.totalShopVisited = (Pref.totalShopVisited.toInt() - list.size).toString()
+                                Pref.totalTimeSpenAtShop = (Pref.totalTimeSpenAtShop.toInt() - totalMinute).toString()
 
                                 val todaysShopVisitCount = InfoWizard.getAvergareShopVisitCount()
                                 Timber.e("=======RESPONSE FROM SHOP ACTIVITY API (DASHBOARD FRAGMENT)=======")
@@ -3032,6 +3029,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             if (AppUtils.isOnline(mContext)) "Online" else "Offline"
                         userlocation.battery_percentage =
                             AppUtils.getBatteryPercentage(mContext).toString()
+
+                        //harcoded location isUploaded true begin
+                        userlocation.isUploaded = true
+                        //harcoded location isUploaded true end
+
                         AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
                         Pref.totalS2SDistance =
@@ -4290,8 +4292,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             }
                                         }
 
-                                        AppDatabase.getDBInstance()?.selectedRouteListDao()
-                                            ?.insert(selectedRoute)
+                                        AppDatabase.getDBInstance()?.selectedRouteListDao()?.insert(selectedRoute)
                                     }
                                 }
 
@@ -6945,6 +6946,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         Timber.d("api_call_dash  entityList()")
+        println("tag_entityc_call getEntityTypeListApi calling")
+        Timber.d("tag_entityc_call getEntityTypeListApi calling")
         BaseActivity.compositeDisposable.add(
             repository.entityList()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -9776,6 +9779,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (AppUtils.isOnline(mContext)) "Online" else "Offline"
                     userlocation.battery_percentage =
                         AppUtils.getBatteryPercentage(mContext).toString()
+
+                    //harcoded location isUploaded true begin
+                    userlocation.isUploaded = true
+                    //harcoded location isUploaded true end
+
                     AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
                     Timber.e("=====Shop auto revisit data added=======")

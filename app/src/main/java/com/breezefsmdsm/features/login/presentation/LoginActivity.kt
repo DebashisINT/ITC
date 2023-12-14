@@ -2701,6 +2701,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             val repository = TypeListRepoProvider.provideTypeListRepository()
             progress_wheel.spin()
             Timber.d("api_call  entityList()")
+            println("tag_entityc_call getEntityTypeListApi calling")
+            Timber.d("tag_entityc_call getEntityTypeListApi calling")
             BaseActivity.compositeDisposable.add(
                 repository.entityList()
                     .observeOn(AndroidSchedulers.mainThread())
@@ -2741,6 +2743,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     })
             )
         }else{
+            println("tag_entityc_call getEntityTypeListApi calling bypass")
+            Timber.d("tag_entityc_call getEntityTypeListApi calling bypass")
             checkPartyStatusList()
         }
 
@@ -3212,7 +3216,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun initPermissionCheck() {
 
         //begin mantis id 26741 Storage permission updation Suman 22-08-2023
-        var permissionList = arrayOf<String>( Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO,)
+        var permissionList = arrayOf<String>( Manifest.permission.CAMERA,Manifest.permission.READ_PHONE_STATE, Manifest.permission.RECORD_AUDIO,)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             permissionList += Manifest.permission.READ_MEDIA_IMAGES

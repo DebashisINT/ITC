@@ -300,7 +300,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         //Pref.IsShowCalendar = true
         //Pref.IsShowAttendanceSummary = true
-
+        //Pref.IsShowTotalVisitsOnAppDashboard = true
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
@@ -1206,7 +1206,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         //registerReceiver(geoFenceBroadcast, IntentFilter())
         //checkToShowAddAttendanceAlert()
 
-        callUnreadNotificationApi()
+        //hardcoded callUnreadNotificationApi() call stop begin
+        //callUnreadNotificationApi()
+        //hardcoded callUnreadNotificationApi() call stop end
 
         checkForFingerPrint()
     }
@@ -8588,6 +8590,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 userlocation.meeting = AppDatabase.getDBInstance()!!.addMeetingDao().getMeetingDateWise(AppUtils.getCurrentDateForShopActi()).size.toString()
                 userlocation.network_status = if (AppUtils.isOnline(this)) "Online" else "Offline"
                 userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
+
+                //harcoded location isUploaded true begin
+                userlocation.isUploaded = true
+                //harcoded location isUploaded true end
+
                 AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
                 Timber.e("=====Shop revisit data added=======")
@@ -10569,6 +10576,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 Timber.d("network_status=====> " + localData.network_status)
                 Timber.d("battery_percentage=====> " + localData.battery_percentage)
 
+                //harcoded location isUploaded true begin
+                localData.isUploaded = true
+                //harcoded location isUploaded true end
+
                 AppDatabase.getDBInstance()!!.userLocationDataDao().insert(localData)
 
                 Timber.d("=====================location added to db (Dashboard)======================")
@@ -11711,6 +11722,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     userlocation.updateDateTime = AppUtils.getCurrentDateTime()
                     userlocation.network_status = if (AppUtils.isOnline(this)) "Online" else "Offline"
                     userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
+
+                    //harcoded location isUploaded true begin
+                    userlocation.isUploaded = true
+                    //harcoded location isUploaded true end
+
                     AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
                     Timber.e("=====Shop auto revisit data added=======")
@@ -11929,6 +11945,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                         if (AppUtils.isOnline(mContext)) "Online" else "Offline"
                     userlocation.battery_percentage =
                         AppUtils.getBatteryPercentage(mContext).toString()
+
+                    //harcoded location isUploaded true begin
+                    userlocation.isUploaded = true
+                    //harcoded location isUploaded true end
+
                     AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
                     Timber.e("=====Shop auto revisit data added=======")

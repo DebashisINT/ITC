@@ -6,6 +6,7 @@ import com.breezefsmdsm.base.BaseResponse
 import com.breezefsmdsm.features.addshop.model.*
 import com.breezefsmdsm.features.addshop.model.assigntopplist.AssignToPPListResponseModel
 import io.reactivex.Observable
+import timber.log.Timber
 
 /**
  * Created by Saikat on 22-Jun-20.
@@ -16,6 +17,8 @@ class TypeListRepo(val apiService: TypeListApi) {
     }
 
     fun entityList(): Observable<EntityResponseModel> {
+        println("tag_entityc_call TypeListRepo getEntityTypeListApi calling")
+        Timber.d("tag_entityc_call TypeListRepo getEntityTypeListApi calling")
         return apiService.getEntityList(Pref.session_token!!, Pref.user_id!!)
     }
 

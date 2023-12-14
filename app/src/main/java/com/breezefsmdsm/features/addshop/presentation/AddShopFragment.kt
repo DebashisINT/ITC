@@ -2076,6 +2076,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             userlocation.meeting = AppDatabase.getDBInstance()!!.addMeetingDao().getMeetingDateWise(AppUtils.getCurrentDateForShopActi()).size.toString()
             userlocation.network_status = if (AppUtils.isOnline(mContext)) "Online" else "Offline"
             userlocation.battery_percentage = AppUtils.getBatteryPercentage(mContext).toString()
+
+            //harcoded location isUploaded true begin
+            userlocation.isUploaded = true
+            //harcoded location isUploaded true end
+
             AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
             Timber.e("=====New shop visit data added=======")
@@ -3350,7 +3355,8 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             return
         }
-
+        println("tag_entityc_call getEntityTypeListApi calling")
+        Timber.d("tag_entityc_call getEntityTypeListApi calling")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

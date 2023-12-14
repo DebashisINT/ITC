@@ -4040,7 +4040,8 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
             (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
             return
         }
-
+        println("tag_entityc_call getEntityTypeListApi calling")
+        Timber.d("tag_entityc_call getEntityTypeListApi calling")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

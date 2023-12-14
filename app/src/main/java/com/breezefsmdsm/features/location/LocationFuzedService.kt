@@ -1212,6 +1212,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     userlocation.updateDateTime = AppUtils.getCurrentDateTime()
                     userlocation.network_status = if (AppUtils.isOnline(this)) "Online" else "Offline"
                     userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
+
+                    //harcoded location isUploaded true begin
+                    userlocation.isUploaded = true
+                    //harcoded location isUploaded true end
+
                     AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
                     Timber.e("=====Shop auto revisit data added=======")
@@ -1402,6 +1407,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         userlocation.updateDateTime = AppUtils.getCurrentDateTime()
                         userlocation.network_status = if (AppUtils.isOnline(this)) "Online" else "Offline"
                         userlocation.battery_percentage = AppUtils.getBatteryPercentage(this).toString()
+
+                        //harcoded location isUploaded true begin
+                        userlocation.isUploaded = true
+                        //harcoded location isUploaded true end
+
                         AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(userlocation)
 
                         Timber.e("=====Shop auto revisit data added=======")
@@ -2357,9 +2367,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     private fun syncLocationActivity() {
 
         Timber.d("syncLocationActivity : ENTER")
+        println("tag_loc_sync 0")
 
         if (!shouldLocationActivityUpdate())
             return
+
+        println("tag_loc_sync 1")
 
         Timber.d("syncLocationActivity : Call Api")
 
@@ -2453,11 +2466,12 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         var selectedTimeStamp = 0L
         var allTimeStamp = 0L
         var fiveMinsRowGap = 5
-
+        println("tag_loc_sync 2")
         if (Pref.locationTrackInterval == "30")
             fiveMinsRowGap = 10
-
+        println("tag_loc_sync 3")
         for (i in 0 until allLocationList.size) {
+            println("tag_loc_sync 4")
             if (allLocationList[i].latitude == null || allLocationList[i].longitude == null)
                 continue
 
@@ -2535,6 +2549,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         }
 
         for (i in apiLocationList.indices) {
+            println("tag_loc_sync 5")
             if (!apiLocationList[i].isUploaded) {
 
                 Timber.e("Final Home Duration (Location Fuzed Service)=================> ${apiLocationList[i].home_duration}")
@@ -2563,9 +2578,10 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 locationListAllId.add(locationDataAll)
             }
         }
-
+        println("tag_loc_sync 6")
         Timber.d("syncLocationActivity fuzerService : locationList size"+locationList.size.toString() )
         if (locationList.size > 0) {
+            println("tag_loc_sync 7")
             locationUpdateReq.location_details = locationList
             val repository = LocationUpdateRepositoryProviders.provideLocationUpdareRepository()
 
@@ -3066,6 +3082,11 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
         Pref.totalS2SDistance = String.format("%.2f", distance)*/
 
         location.visit_distance = Pref.visitDistance
+
+        //harcoded location isUploaded true begin
+        location.isUploaded = true
+        //harcoded location isUploaded true end
+
         AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(location)
         Timber.d("Shop to shop distance (At accurate loc save time)====> " + Pref.totalS2SDistance)
         Timber.d(text)
