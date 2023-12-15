@@ -16,6 +16,7 @@ import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -36,6 +37,7 @@ class LoginRepository(val apiService: LoginApi) {
     }
 
     fun deleteConcurrentUserDtls(username: String): Observable<GetConcurrentUserResponse> {
+        Timber.d("Tag deleteConcurrentUserDtlsApi call LoginConcurrentusers/DeleteConcurrentUser api")
         return apiService.deleteConcurrentUserDtlsApi(username)
     }
 

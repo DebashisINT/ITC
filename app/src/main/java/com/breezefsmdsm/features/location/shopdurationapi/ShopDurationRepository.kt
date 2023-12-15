@@ -36,6 +36,7 @@ class ShopDurationRepository(val apiService: ShopDurationApi) {
     }
 
     fun getRemarksList(): Observable<VisitRemarksResponseModel> {
+        Timber.d("tag VisitRemarks/List api call")
         return apiService.getRemarksList(Pref.session_token!!, Pref.user_id!!)
     }
 }
