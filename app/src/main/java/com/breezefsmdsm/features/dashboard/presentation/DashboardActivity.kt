@@ -301,6 +301,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         //Pref.IsShowCalendar = true
         //Pref.IsShowAttendanceSummary = true
         //Pref.IsShowTotalVisitsOnAppDashboard = true
+        //Pref.DistributorGPSAccuracy = "50000"
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()

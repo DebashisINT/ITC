@@ -800,10 +800,10 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                  }, 1000)
 
 
-                Handler().postDelayed(Runnable {
+                /*Handler().postDelayed(Runnable {
                    if(AppUtils.isOnline(this))
                         callShopActivityApiForActivityCheck()
-                }, 1000)
+                }, 1000)*/
 
 
                 //syncShopVisitImage()

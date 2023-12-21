@@ -144,8 +144,14 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                 .setUnselectedDayTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
                 .showTodayButton(false)
                 .init()
-        picker.backgroundColor = Color.WHITE
-        picker.setDate(DateTime())
+
+        Handler().postDelayed(Runnable {
+            picker.backgroundColor = Color.WHITE
+            picker.setDate(DateTime())
+            var dt = DateTime().toLocalDateTime()
+            println("tag_dt $dt")
+        }, 500)
+
 
 
         /*NEW CALENDER*/
@@ -423,7 +429,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                             var actiList = shopActityResponse.date_list as ArrayList<ShopActivityResponseDataList>
                             if(actiList!!.size>1){
                                 Handler().postDelayed(Runnable {
-                                    updateActivityGarbage(actiList,false)
+                                    updateActivityGarbage(actiList.reversed() as java.util.ArrayList<ShopActivityResponseDataList>,false)
                                 }, 150)
                             }
                         }
@@ -503,7 +509,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
             if(isDayeWise == false){
             var todayDate: LocalDate = LocalDate.now()
-            for(p in 0..43){
+            for(p in 0..15){
                 todayDate = AppUtils.findPrevDay(todayDate)!!
                 if(!dateL.contains(todayDate.toString())){
                     AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZeroByDate(false,todayDate.toString())
@@ -531,6 +537,11 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                         AppDatabase.getDBInstance()!!.shopActivityDao().updateShopForIsuploadZero(false,unsyncedList.get(j),listUnsync.get(i)!!.date!!.toString())
                     }
                 }
+
+                if(i==15){
+                    break
+                }
+
             }
             uiThread {
                 progress_wheel.stopSpinning()
@@ -1264,12 +1275,15 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
         try {
 
             if (!AppUtils.isOnline(mContext)) {
+                isShopActivityUpdating = false
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
                 return
             }
             val mList = AppDatabase.getDBInstance()!!.shopActivityDao().getShopForDay(shopId, selectedDate)
-            if (mList.isEmpty())
+            if (mList.isEmpty()){
+                isShopActivityUpdating = false
                 return
+            }
             val shopActivity = mList[0]
 //        var shopActivity = AppDatabase.getDBInstance()!!.shopActivityDao().getShopActivityForId(shopId)
             val shopDurationApiReq = ShopDurationRequest()
@@ -1351,6 +1365,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
             shopDataList.add(shopDurationData)
 
             if (shopDataList.isEmpty()) {
+                isShopActivityUpdating = false
                 return
             }
 
@@ -1389,6 +1404,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({ result ->
+
                                 Timber.d("ShopActivityFromAverageShop : " + "User Id" + Pref.user_id + ", Session Token" + Pref.session_token + ", SHOP_ID: " + mList[0].shopid + ", SHOP: " + mList[0].shop_name + ", RESPONSE:" + result.message)
                                 if (result.status == NetworkConstant.SUCCESS) {
 
@@ -1418,6 +1434,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                                         }
 
                                         uiThread {
+                                            isShopActivityUpdating = false
                                             progress_wheel.stopSpinning()
 
                                             if (unSyncedList.size > 0) {
@@ -1447,7 +1464,9 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                                         }
                                     }
 
-                                } else {
+                                }
+                                else {
+                                    isShopActivityUpdating = false
                                     progress_wheel.stopSpinning()
                                     (mContext as DashboardActivity).showSnackMessage(mContext.getString(R.string.unable_to_sync))
 
@@ -1458,6 +1477,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
 
                             }, { error ->
                                 error.printStackTrace()
+                                isShopActivityUpdating = false
                                 progress_wheel.stopSpinning()
                                 Timber.d("ShopActivityFromAverageShop : " + "User Id" + Pref.user_id + ", Session Token" + Pref.session_token + ", SHOP_ID: " + mList[0].shopid + ", SHOP: " + mList[0].shop_name + ", ERROR:" + error.localizedMessage)
                                 (mContext as DashboardActivity).showSnackMessage(mContext.getString(R.string.unable_to_sync))
@@ -1469,6 +1489,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                             })
             )
         } catch (e: Exception) {
+            isShopActivityUpdating = false
             e.printStackTrace()
         }
     }
@@ -1661,7 +1682,19 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                 if (shop != null) {
 
                     if (shop.isUploaded) {
-                        checkToSyncShop(position)
+                        if(!isShopActivityUpdating){
+                            isShopActivityUpdating = true
+                            if(AppUtils.isOnline(mContext)){
+                                Handler().postDelayed(Runnable {
+                                    checkToSyncShop(position)
+                                }, 500)
+                            }else{
+                                isShopActivityUpdating = false
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.no_internet))
+                            }
+                        }else{
+                            println("print_tag_sync checkToSyncShop not call")
+                        }
                     } else {
                         syncShop(position, shop)
                     }
@@ -2393,6 +2426,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
             if (!ShopActivityEntityList[position].isUploaded)
                 syncShopActivity(ShopActivityEntityList[position].shopid!!)
             else {
+                isShopActivityUpdating = false
                 val unSyncedList = AppDatabase.getDBInstance()!!.shopVisitImageDao().getTodaysUnSyncedListAccordingToShopId(false,
                         ShopActivityEntityList[position].shopid!!, ShopActivityEntityList[position].visited_date!!)
 
@@ -2408,6 +2442,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
                 }
             }
         } catch (e: Exception) {
+            isShopActivityUpdating = false
             e.printStackTrace()
         }
     }
