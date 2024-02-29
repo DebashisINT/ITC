@@ -2,6 +2,7 @@ package com.breezefsmdsm.features.nearbyshops.presentation
 
 import android.content.Context
 import android.graphics.Color
+import android.location.Location
 import androidx.recyclerview.widget.RecyclerView
 import android.text.Html
 import android.text.SpannableString
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import com.breezefsmdsm.R
@@ -24,6 +26,7 @@ import com.breezefsmdsm.app.domain.AddShopDBModelEntity
 import com.breezefsmdsm.app.domain.OrderDetailsListEntity
 import com.breezefsmdsm.app.types.FragType
 import com.breezefsmdsm.app.utils.AppUtils
+import com.breezefsmdsm.app.utils.FTStorageUtils
 import com.breezefsmdsm.features.dashboard.presentation.DashboardActivity
 import com.breezefsmdsm.features.location.LocationWizard
 import com.breezefsmdsm.features.nearbyshops.model.NewOrderModel
@@ -749,6 +752,35 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
             } catch (e: Exception) {
                 e.printStackTrace()
                 itemView.order_amount_tv.visibility = View.GONE
+            }
+
+            try {
+                var mRadious:Int = LocationWizard.NEARBY_RADIUS
+                var location = Location("")
+                location.latitude = Pref.current_latitude.toDouble()
+                location.longitude = Pref.current_longitude.toDouble()
+                var shopLocation = Location("")
+                shopLocation.latitude = list[adapterPosition].shopLat
+                shopLocation.longitude = list[adapterPosition].shopLong
+                val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, mRadious)
+                if (isShopNearby) {
+                    itemView.tv_range.text = "In Range"
+                    itemView.iv_range.setBackgroundResource(R.drawable.inrange);
+                    itemView.tv_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.right_rounded_corner_green_drawable) );
+                    itemView.ll_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bacgreen_round_corner_1) );
+
+                }else{
+                    itemView.tv_range.text = "Out Range"
+                    itemView.iv_range.setBackgroundResource(R.drawable.outrange)
+                    itemView.tv_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.right_rounded_corner_red_drawable) );
+                    itemView.ll_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bacred_round_corner_1) );
+
+                }
+                println("rangeexception "+"success")
+
+            }catch (e:Exception){
+                e.printStackTrace()
+                println("rangeexception "+e.message)
             }
         }
     }

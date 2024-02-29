@@ -45,8 +45,8 @@
 
                 <ImageView
                     android:id="@+id/shop_IV"
-                    android:layout_width="@dimen/_45sdp"
-                    android:layout_height="@dimen/_45sdp"
+                    android:layout_width="@dimen/_48sdp"
+                    android:layout_height="@dimen/_48sdp"
                     android:contentDescription="@null"
                     android:visibility="visible"
                     android:src="@drawable/ic_logo"
@@ -74,7 +74,7 @@
                             android:textColor="@color/login_txt_color"
                             android:textSize="@dimen/_12sdp"
                             android:layout_below="@+id/sync_icon"
-                            android:layout_marginTop="@dimen/_3sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
                            />
 <!--                        android:layout_marginTop="@dimen/_3sdp"-->
 
@@ -663,6 +663,8 @@
                     android:gravity="center"
                     android:layout_gravity="bottom"/>
 
+
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -966,7 +968,103 @@
                 android:visibility="gone"
                 android:layout_gravity="bottom"/>
 
-<!--            <com.breezefsmdsm.widgets.AppCustomTextView-->
+            <LinearLayout
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:orientation="horizontal"
+                android:layout_gravity="right">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                    <com.breezefsmdsm.widgets.AppCustomTextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_10sdp"
+                        android:paddingBottom="@dimen/_5sdp"
+                        android:paddingTop="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        android:drawableLeft="@drawable/ic_registered_shop_direction_select"
+                        android:drawablePadding="@dimen/_5sdp"
+                        android:gravity="center_vertical"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_range"
+                    android:layout_width="@dimen/_205sdp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            >
+
+                            <ImageView
+                                android:id="@+id/iv_range"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_gravity="center"
+                               />
+                        </LinearLayout>
+                        <com.breezefsmdsm.widgets.AppCustomTextView
+
+                            android:id="@+id/tv_range"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="In Range"
+                            android:textSize="@dimen/_11sdp"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+<!--
+            <com.breezefsmdsm.widgets.AppCustomTextView
+                android:id="@+id/tv_range"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:paddingTop="@dimen/_1sdp"
+                android:text="Range"
+                android:paddingStart="@dimen/_5sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp"
+                android:drawableTint="@color/colorPrimary"
+                android:drawableLeft="@drawable/ic_party_status_small"
+                android:drawablePadding="@dimen/_5sdp"
+                android:gravity="center"
+                android:background="@drawable/custom_border"
+                android:visibility="visible"
+                android:layout_gravity="end"/>
+-->
+
+
+            <!--            <com.breezefsmdsm.widgets.AppCustomTextView-->
 <!--                android:id="@+id/update_address_TV"-->
 <!--                android:layout_width="wrap_content"-->
 <!--                android:layout_height="wrap_content"-->
