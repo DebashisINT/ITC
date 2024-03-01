@@ -487,13 +487,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                 //end mantis id 0027285 ShowPartyWithCreateOrder functionality Puja 01-03-2024
 
-                                //begin mantis id 0027282 Allow_past_days_for_apply_reimbursement functionality Puja 01-03-2024
-
-                                if (configResponse.Allow_past_days_for_apply_reimbursement != null)
-                                    Pref.Allow_past_days_for_apply_reimbursement = configResponse.Allow_past_days_for_apply_reimbursement!!
-
-                                //end mantis id 0027282 Allow_past_days_for_apply_reimbursement functionality Puja 01-03-2024
-
                                 //End Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
 
                                 /*if (configResponse.willShowUpdateDayPlan != null)
