@@ -753,35 +753,75 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 e.printStackTrace()
                 itemView.order_amount_tv.visibility = View.GONE
             }
+            if (Pref.ShowPartyWithGeoFence ) {
+                try {
+                    itemView.ll_range.visibility = View.VISIBLE
+                    itemView.ll_order_range.visibility = View.VISIBLE
+                    var mRadious: Int = LocationWizard.NEARBY_RADIUS
+                    var location = Location("")
+                    location.latitude = Pref.current_latitude.toDouble()
+                    location.longitude = Pref.current_longitude.toDouble()
+                    var shopLocation = Location("")
+                    shopLocation.latitude = list[adapterPosition].shopLat
+                    shopLocation.longitude = list[adapterPosition].shopLong
+                    val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(
+                        location,
+                        shopLocation,
+                        mRadious
+                    )
+                    if (isShopNearby) {
+                        itemView.tv_range.text = "In Range"
+                        itemView.iv_range.setBackgroundResource(R.drawable.inrange);
+                        itemView.tv_range.setBackgroundDrawable(
+                            ContextCompat.getDrawable(
+                                context,
+                                R.drawable.right_rounded_corner_green_drawable
+                            )
+                        );
+                        itemView.ll_range.setBackgroundDrawable(
+                            ContextCompat.getDrawable(
+                                context,
+                                R.drawable.bacgreen_round_corner_1
+                            )
+                        );
 
-            try {
-                var mRadious:Int = LocationWizard.NEARBY_RADIUS
-                var location = Location("")
-                location.latitude = Pref.current_latitude.toDouble()
-                location.longitude = Pref.current_longitude.toDouble()
-                var shopLocation = Location("")
-                shopLocation.latitude = list[adapterPosition].shopLat
-                shopLocation.longitude = list[adapterPosition].shopLong
-                val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, mRadious)
-                if (isShopNearby) {
-                    itemView.tv_range.text = "In Range"
-                    itemView.iv_range.setBackgroundResource(R.drawable.inrange);
-                    itemView.tv_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.right_rounded_corner_green_drawable) );
-                    itemView.ll_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bacgreen_round_corner_1) );
+                    } else {
+                        itemView.tv_range.text = "Out Range"
+                        itemView.iv_range.setBackgroundResource(R.drawable.outrange)
+                        itemView.tv_range.setBackgroundDrawable(
+                            ContextCompat.getDrawable(
+                                context,
+                                R.drawable.right_rounded_corner_red_drawable
+                            )
+                        );
+                        itemView.ll_range.setBackgroundDrawable(
+                            ContextCompat.getDrawable(
+                                context,
+                                R.drawable.bacred_round_corner_1
+                            )
+                        );
 
-                }else{
-                    itemView.tv_range.text = "Out Range"
-                    itemView.iv_range.setBackgroundResource(R.drawable.outrange)
-                    itemView.tv_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.right_rounded_corner_red_drawable) );
-                    itemView.ll_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bacred_round_corner_1) );
+                    }
+                    println("rangeexception " + "success")
 
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    println("rangeexception " + e.message)
                 }
-                println("rangeexception "+"success")
-
-            }catch (e:Exception){
-                e.printStackTrace()
-                println("rangeexception "+e.message)
             }
+            else{
+                itemView.ll_range.visibility = View.GONE
+            }
+            if (Pref.ShowPartyWithCreateOrder ){
+                itemView.ll_order.visibility = View.VISIBLE
+                itemView.ll_order_range.visibility = View.VISIBLE
+                itemView.iv_createorder.visibility = View.VISIBLE
+                itemView.ll_order.text = "Create Order"
+            }else{
+                itemView.ll_order.visibility = View.GONE
+
+            }
+
         }
     }
 

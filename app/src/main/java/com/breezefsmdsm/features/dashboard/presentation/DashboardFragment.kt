@@ -6322,6 +6322,23 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         if (configResponse.ConsiderInactiveShopWhileLogin != null)
                             Pref.ConsiderInactiveShopWhileLogin = configResponse.ConsiderInactiveShopWhileLogin!!
 
+                        //begin mantis id 0027279 ShowPartyWithGeoFence functionality Puja 01-03-2024
+                        if (configResponse.ShowPartyWithGeoFence != null)
+                            Pref.ShowPartyWithGeoFence = configResponse.ShowPartyWithGeoFence!!
+
+                        //end mantis id 0027279 ShowPartyWithGeoFence functionality Puja 01-03-2024
+
+                        //begin mantis id 0027285 ShowPartyWithCreateOrder functionality Puja 01-03-2024
+                        if (configResponse.ShowPartyWithCreateOrder != null)
+                            Pref.ShowPartyWithCreateOrder = configResponse.ShowPartyWithCreateOrder!!
+                        //end mantis id 0027285 ShowPartyWithCreateOrder functionality Puja 01-03-2024
+
+                        //begin mantis id 0027282 Allow_past_days_for_apply_reimbursement functionality Puja 01-03-2024
+                        if (configResponse.Allow_past_days_for_apply_reimbursement != null)
+                            Pref.Allow_past_days_for_apply_reimbursement = configResponse.Allow_past_days_for_apply_reimbursement!!
+
+                        //end mantis id 0027282 Allow_past_days_for_apply_reimbursement functionality Puja 01-03-2024
+
                     }
                     BaseActivity.isApiInitiated = false
                     checkToCallAlarmConfigApi()

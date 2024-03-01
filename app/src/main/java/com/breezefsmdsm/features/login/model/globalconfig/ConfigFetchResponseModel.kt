@@ -80,4 +80,16 @@ class ConfigFetchResponseModel : BaseResponse() {
 
     var IsUpdateVisitDataInTodayTable:Boolean?=null
     var ConsiderInactiveShopWhileLogin:Boolean?=null
+
+    //begin mantis id 0027279 ShowPartyWithGeoFence functionality Puja 01-03-2024
+    var ShowPartyWithGeoFence:Boolean? = false
+    //end mantis id 0027279 ShowPartyWithGeoFence functionality Puja 01-03-2024
+
+    //begin mantis id 0027285 ShowPartyWithCreateOrder functionality Puja 01-03-2024
+    var ShowPartyWithCreateOrder:Boolean? = false
+    //end mantis id 0027285 ShowPartyWithCreateOrder functionality Puja 01-03-2024
+
+    //begin mantis id 0027282 Allow_past_days_for_apply_reimbursement functionality Puja 01-03-2024
+    var Allow_past_days_for_apply_reimbursement:String? = ""
+    //end mantis id 0027282 Allow_past_days_for_apply_reimbursement functionality Puja 01-03-2024
 }

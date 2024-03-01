@@ -296,7 +296,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         })
         AppUtils.changeLanguage(this, "en")
-        println("load_frag "+mFragType.toString() + " gl: "+ Pref.gpsAccuracy +"   shop_acc ${Pref.shopLocAccuracy} "+ " usr: "+Pref.user_id)
+        Pref.ShowPartyWithGeoFence  = false
+        Pref.ShowPartyWithCreateOrder  = true
+        println("load_frag "+mFragType.toString() + " gl: "+ Pref.gpsAccuracy +"   shop_acc ${Pref.shopLocAccuracy} "+ " usr: "+Pref.user_id  + " "+Pref.ShowPartyWithGeoFence+ " "+Pref.ShowPartyWithCreateOrder)
 
         //Pref.IsShowCalendar = true
         //Pref.IsShowAttendanceSummary = true

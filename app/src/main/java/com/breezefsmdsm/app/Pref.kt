@@ -431,4 +431,8 @@ object Pref : PreferenceHolder() {
 
     var prevAttendanceSummaryOpenTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceSummaryOpenTimeStamp")
     var prevAttendanceCalenderOpenTimeStamp: Long by bindToPreferenceField(0, "prevAttendanceCalenderOpenTimeStamp")
+    var ShowPartyWithGeoFence: Boolean by bindToPreferenceField(false, "ShowPartyWithGeoFence")
+    var ShowPartyWithCreateOrder: Boolean by bindToPreferenceField(false, "ShowPartyWithCreateOrder")
+    var Allow_past_days_for_apply_reimbursement: String by bindToPreferenceField("", "Allow_past_days_for_apply_reimbursement")
+
 }
