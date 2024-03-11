@@ -218,7 +218,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/n_shops_TV"
                             android:layout_width="@dimen/_70sdp"
                             android:layout_height="match_parent"
@@ -231,7 +231,7 @@
                             android:textStyle="bold"
                             android:visibility="visible" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/no_of_shop_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -254,7 +254,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/n_time_TV"
                             android:layout_width="@dimen/_70sdp"
                             android:layout_height="match_parent"
@@ -267,7 +267,7 @@
                             android:textStyle="bold"
                             android:visibility="visible" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/no_of_time_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -290,7 +290,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/n_order_TV"
                             android:layout_width="@dimen/_70sdp"
                             android:layout_height="match_parent"
@@ -303,7 +303,7 @@
                             android:textStyle="bold"
                             android:visibility="visible" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/no_of_order_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -332,7 +332,7 @@
                             android:layout_height="wrap_content"
                             android:visibility="visible">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:id="@+id/start_TV"
                                 android:layout_width="@dimen/_70sdp"
                                 android:layout_height="@dimen/_50sdp"
@@ -369,7 +369,7 @@
                               android:textStyle="bold"
                               android:visibility="visible" />-->
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/start_shop"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -399,7 +399,7 @@
                             android:layout_height="wrap_content"
                             android:visibility="visible">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:id="@+id/DDVisit_TV"
                                 android:layout_width="@dimen/_70sdp"
                                 android:layout_height="@dimen/_50sdp"
@@ -437,7 +437,7 @@
                             android:textStyle="bold"
                             android:visibility="visible" />-->
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/DDVisitdate_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -466,7 +466,7 @@
                             android:layout_height="wrap_content"
                             android:visibility="visible">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:id="@+id/end_TV"
                                 android:layout_width="@dimen/_70sdp"
                                 android:layout_height="@dimen/_50sdp"
@@ -503,7 +503,7 @@
                              android:textStyle="bold"
                              android:visibility="visible" />-->
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/enddate_TV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -531,7 +531,7 @@
                             android:layout_height="wrap_content"
                             android:visibility="visible">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:layout_width="@dimen/_70sdp"
                                 android:layout_height="@dimen/_50sdp"
                                 android:layout_centerHorizontal="true"
@@ -555,7 +555,7 @@
                         </FrameLayout>
 
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp"
@@ -596,7 +596,7 @@
                             android:src="@drawable/ic_report_shop_icon"
                             android:visibility="gone" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/n_shops_TV"
                             android:layout_width="@dimen/_70sdp"
                             android:layout_height="@dimen/_50sdp"
@@ -614,7 +614,7 @@
                             android:textStyle="bold"
                             android:visibility="visible" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/no_of_shop_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -635,7 +635,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:visibility="visible">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:id="@+id/start_TV"
                                 android:layout_width="@dimen/_70sdp"
                                 android:layout_height="@dimen/_50sdp"
@@ -658,7 +658,7 @@
 
                         </RelativeLayout>
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/start_shop"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -693,7 +693,7 @@
                             android:src="@drawable/ic_report_time_icon"
                             android:visibility="gone" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/n_time_TV"
                             android:layout_width="@dimen/_70sdp"
                             android:layout_height="@dimen/_50sdp"
@@ -708,7 +708,7 @@
                             android:textSize="@dimen/_10sdp"
                             android:textStyle="bold" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/no_of_time_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -732,7 +732,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:visibility="visible">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:id="@+id/DDVisit_TV"
                                 android:layout_width="@dimen/_70sdp"
                                 android:layout_height="@dimen/_50sdp"
@@ -757,7 +757,7 @@
 
                         </RelativeLayout>
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/DDVisitdate_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -803,7 +803,7 @@
                             android:gravity="center"
                             android:visibility="gone">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:id="@+id/rupee_order"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -825,7 +825,7 @@
 
                         </RelativeLayout>
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/n_order_TV"
                             android:layout_width="@dimen/_70sdp"
                             android:layout_height="@dimen/_50sdp"
@@ -842,7 +842,7 @@
                             android:textSize="@dimen/_10sdp"
                             android:textStyle="bold" />
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/no_of_order_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -862,7 +862,7 @@
                             android:layout_marginStart="@dimen/_10sdp"
                             android:visibility="visible">
 
-                            <com.breezefsmdsm.widgets.AppCustomTextView
+                            <com.breezedsm.widgets.AppCustomTextView
                                 android:id="@+id/end_TV"
                                 android:layout_width="@dimen/_70sdp"
                                 android:layout_height="@dimen/_50sdp"
@@ -886,7 +886,7 @@
 
                         </RelativeLayout>
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/enddate_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -929,7 +929,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_custom_border_blue_button">
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/best_performing_shop_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -943,7 +943,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_view_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -997,7 +997,7 @@
                     </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/no_shop_tv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -1046,7 +1046,7 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <com.breezefsmdsm.widgets.AppCustomTextView
+        <com.breezedsm.widgets.AppCustomTextView
             android:id="@+id/tv_pick_date_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -1058,7 +1058,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/_13sdp" />
 
-        <com.breezefsmdsm.widgets.AppCustomTextView
+        <com.breezedsm.widgets.AppCustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -1075,7 +1075,7 @@
             android:padding="@dimen/_10sdp"
             android:weightSum="4.6">
 
-            <com.breezefsmdsm.widgets.AppCustomTextView
+            <com.breezedsm.widgets.AppCustomTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
@@ -1083,7 +1083,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/_11sdp" />
 
-            <com.breezefsmdsm.widgets.AppCustomTextView
+            <com.breezedsm.widgets.AppCustomTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -1092,7 +1092,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/_11sdp" />
 
-            <com.breezefsmdsm.widgets.AppCustomTextView
+            <com.breezedsm.widgets.AppCustomTextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -1112,7 +1112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <com.breezefsmdsm.widgets.AppCustomTextView
+            <com.breezedsm.widgets.AppCustomTextView
                 android:id="@+id/tv_no_data_available"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -1134,7 +1134,7 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <com.breezefsmdsm.app.widgets.MovableFloatingActionButton
+    <com.breezedsm.app.widgets.MovableFloatingActionButton
         android:id="@+id/fab_bot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

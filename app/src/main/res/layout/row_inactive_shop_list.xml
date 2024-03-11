@@ -18,7 +18,7 @@
             android:gravity="center|start"
             android:textColor="@color/colorPrimary"/>
 
-        <com.breezefsmdsm.widgets.AppCustomTextView
+        <com.breezedsm.widgets.AppCustomTextView
             android:id="@+id/tv_row_inactive_shop_update_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

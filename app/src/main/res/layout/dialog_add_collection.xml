@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/dialog_header_TV"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                 android:focusableInTouchMode="true"
                 android:visibility="visible" />
 
-            <com.breezefsmdsm.widgets.AppCustomTextView
+            <com.breezedsm.widgets.AppCustomTextView
                 android:id="@+id/shop_name_TV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp">
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:id="@+id/tv_patient_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_patient"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp">
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:id="@+id/tv_address_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -191,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp">
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:id="@+id/tv_phone_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -214,7 +214,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -236,7 +236,7 @@
                         android:background="@color/light_gray" />
                 </RelativeLayout>
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_collection_hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -259,7 +259,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="@dimen/_13sdp" />
 
-                    <com.breezefsmdsm.widgets.AppCustomEditText
+                    <com.breezedsm.widgets.AppCustomEditText
                         android:id="@+id/et_collection"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -295,7 +295,7 @@
                         android:src="@drawable/ic_gray_down_arrow_icon"
                         android:layout_alignParentRight="true"/>
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:id="@+id/tv_payment_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -318,7 +318,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_payment_mode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -345,7 +345,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp">
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:id="@+id/tv_instrument_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -368,7 +368,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_instrument"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -396,7 +396,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10sdp">
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:id="@+id/tv_bank_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -419,7 +419,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_bank"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -457,7 +457,7 @@
                         android:src="@drawable/ic_calender"
                         android:layout_alignParentRight="true"/>
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:id="@+id/tv_visit_date_asterisk_mark"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -478,7 +478,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_date"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -504,7 +504,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <com.breezefsmdsm.widgets.AppCustomTextView
+                    <com.breezedsm.widgets.AppCustomTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/attach_document"
@@ -519,7 +519,7 @@
                         android:src="@drawable/ic_camera_pic"
                         android:contentDescription="@null"/>
 
-                    <com.breezefsmdsm.widgets.AppCustomEditText
+                    <com.breezedsm.widgets.AppCustomEditText
                         android:id="@+id/et_link"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -544,7 +544,7 @@
                         android:textColorHint="@color/light_gray"
                         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                        <com.breezefsmdsm.widgets.AppCustomEditText
+                        <com.breezedsm.widgets.AppCustomEditText
                             android:id="@+id/et_feedback"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -560,7 +560,7 @@
 
             </LinearLayout>
 
-            <com.breezefsmdsm.widgets.AppCustomTextView
+            <com.breezedsm.widgets.AppCustomTextView
                 android:id="@+id/add_TV"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_35sdp"

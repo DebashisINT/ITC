@@ -312,7 +312,7 @@
                                     android:textColorHint="@color/black"
                                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                                    <com.breezefsmdsm.widgets.AppCustomEditText
+                                    <com.breezedsm.widgets.AppCustomEditText
                                         android:id="@+id/et_patient"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -351,7 +351,7 @@
                                     android:textColorHint="@color/black"
                                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                                    <com.breezefsmdsm.widgets.AppCustomEditText
+                                    <com.breezedsm.widgets.AppCustomEditText
                                         android:id="@+id/et_address"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -390,7 +390,7 @@
                                     android:textColorHint="@color/black"
                                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                                    <com.breezefsmdsm.widgets.AppCustomEditText
+                                    <com.breezedsm.widgets.AppCustomEditText
                                         android:id="@+id/et_phone"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -436,7 +436,7 @@
                                     android:textColorHint="@color/black"
                                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                                    <com.breezefsmdsm.widgets.AppCustomEditText
+                                    <com.breezedsm.widgets.AppCustomEditText
                                         android:id="@+id/et_invoice_no"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -472,7 +472,7 @@
                                 android:orientation="vertical"
                                 android:layout_marginTop="@dimen/_5sdp">
 
-                                <com.breezefsmdsm.widgets.AppCustomTextView
+                                <com.breezedsm.widgets.AppCustomTextView
                                     android:id="@+id/tv_invoice_date"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -520,7 +520,7 @@
                                 android:textColorHint="@color/black"
                                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                                <com.breezefsmdsm.widgets.AppCustomEditText
+                                <com.breezedsm.widgets.AppCustomEditText
                                     android:id="@+id/et_invoice_amount"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -542,7 +542,7 @@
                         android:layout_marginRight="@dimen/_10sdp"
                         android:orientation="vertical">
 
-                        <com.breezefsmdsm.widgets.AppCustomTextView
+                        <com.breezedsm.widgets.AppCustomTextView
                             android:id="@+id/tv_attachment"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -587,7 +587,7 @@
                                 android:textColorHint="@color/black"
                                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                                <com.breezefsmdsm.widgets.AppCustomEditText
+                                <com.breezedsm.widgets.AppCustomEditText
                                     android:id="@+id/et_remark"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -617,7 +617,7 @@
                 android:padding="@dimen/_10sdp"
                 android:visibility="gone">
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_particular"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -627,7 +627,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_brand"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -639,7 +639,7 @@
                     android:textStyle="bold" />
                 <!--android:text="@string/product_rate"-->
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_category"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -649,7 +649,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp" />
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_watt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -662,7 +662,7 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <com.breezefsmdsm.app.utils.swipemenulayout.SwipeMenuRecyclerView
+            <com.breezedsm.app.utils.swipemenulayout.SwipeMenuRecyclerView
                 android:id="@+id/rv_cart_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -672,7 +672,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.breezefsmdsm.widgets.AppCustomTextView
+    <com.breezedsm.widgets.AppCustomTextView
         android:id="@+id/tv_submit_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -709,7 +709,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7">
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -718,7 +718,7 @@
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_total_order_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -734,7 +734,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -743,7 +743,7 @@
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_total_order_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

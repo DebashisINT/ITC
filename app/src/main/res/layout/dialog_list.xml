@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.breezefsmdsm.widgets.AppCustomTextView
+        <com.breezedsm.widgets.AppCustomTextView
             android:id="@+id/dialog_header_TV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
         android:focusableInTouchMode="true"
         android:visibility="visible" />
 
-    <com.breezefsmdsm.widgets.AppCustomEditText
+    <com.breezedsm.widgets.AppCustomEditText
         android:id="@+id/et_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

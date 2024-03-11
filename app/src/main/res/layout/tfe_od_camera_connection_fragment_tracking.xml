@@ -17,12 +17,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.breezefsmdsm.faceRec.customview.AutoFitTextureView
+    <com.breezedsm.faceRec.customview.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <com.breezefsmdsm.faceRec.customview.OverlayView
+    <com.breezedsm.faceRec.customview.OverlayView
         android:id="@+id/tracking_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

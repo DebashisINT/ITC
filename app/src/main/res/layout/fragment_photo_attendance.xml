@@ -32,7 +32,7 @@
             android:padding="@dimen/_7sdp"
             android:layout_gravity="end">
 
-            <com.breezefsmdsm.widgets.AppCustomTextView
+            <com.breezedsm.widgets.AppCustomTextView
                 android:id="@+id/tv_prospect"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

@@ -8,13 +8,13 @@
 
     <ImageView
         android:id="@+id/logo_new"
-        android:layout_width="@dimen/_135sdp"
-        android:layout_height="@dimen/_55sdp"
+        android:layout_width="@dimen/_195sdp"
+        android:layout_height="@dimen/_85sdp"
         android:src="@drawable/breezelogo"
         android:layout_marginTop="@dimen/_150sdp"
         android:layout_centerHorizontal="true" />
 
-    <com.breezefsmdsm.widgets.AppCustomTextView
+    <com.breezedsm.widgets.AppCustomTextView
         android:id="@+id/Logo_name_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

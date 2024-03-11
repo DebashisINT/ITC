@@ -59,7 +59,7 @@
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
-                <com.breezefsmdsm.widgets.AppCustomTextView
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/tv_ta_count"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
