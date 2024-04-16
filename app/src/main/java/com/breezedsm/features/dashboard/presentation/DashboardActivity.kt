@@ -101,6 +101,11 @@ import com.breezedsm.features.commondialogsinglebtn.AddFeedbackSingleBtnDialog
 import com.breezedsm.features.commondialogsinglebtn.CommonDialogSingleBtn
 import com.breezedsm.features.commondialogsinglebtn.OnDialogClickListener
 import com.breezedsm.features.commondialogsinglebtn.TermsAndConditionsSingleBtnDialog
+import com.breezedsm.features.createOrder.CartListFrag
+import com.breezedsm.features.createOrder.OrderListFrag
+import com.breezedsm.features.createOrder.ProductListFrag
+import com.breezedsm.features.createOrder.ViewNewOrdHistoryFrag
+import com.breezedsm.features.createOrder.ViewOrdDtls
 import com.breezedsm.features.dailyPlan.prsentation.AllShopListFragment
 import com.breezedsm.features.dailyPlan.prsentation.DailyPlanListFragment
 import com.breezedsm.features.dailyPlan.prsentation.PlanDetailsFragment
@@ -298,14 +303,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         })
         AppUtils.changeLanguage(this, "en")
-        Pref.ShowPartyWithGeoFence  = false
-        Pref.ShowPartyWithCreateOrder  = false
         println("load_frag "+mFragType.toString() + " gl: "+ Pref.gpsAccuracy +"   shop_acc ${Pref.shopLocAccuracy} "+ " usr: "+Pref.user_id  + " "+Pref.ShowPartyWithGeoFence+ " "+Pref.ShowPartyWithCreateOrder)
 
         //Pref.IsShowCalendar = true
         //Pref.IsShowAttendanceSummary = true
-        //Pref.IsShowTotalVisitsOnAppDashboard = true
-        //Pref.DistributorGPSAccuracy = "50000"
+
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
             mTransaction.addToBackStack(mFragType.toString()).commitAllowingStateLoss()
@@ -583,6 +585,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
     private lateinit var attendence_calender_tv : AppCustomTextView
     private lateinit var attendence_summary_tv : AppCustomTextView
+    private lateinit var menu_total_orders_tv : AppCustomTextView
     private lateinit var calculator_tv : AppCustomTextView
     //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
     private lateinit var privacy_policy_tv_menu: AppCustomTextView// DashboardActivity mantis 0025783 In-app privacy policy working in menu & Login
@@ -1663,6 +1666,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         //Begin Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
         attendence_calender_tv = findViewById(R.id.attendence_calender_tv)
         attendence_summary_tv = findViewById(R.id.attendence_summary_tv)
+        menu_total_orders_tv = findViewById(R.id.menu_total_orders_tv)
         calculator_tv = findViewById(R.id.calculator_tv)
         //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
 
@@ -1862,6 +1866,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         add_attendence_tv.setOnClickListener(this)
         attendence_calender_tv.setOnClickListener(this)
         attendence_summary_tv.setOnClickListener(this)
+        menu_total_orders_tv.setOnClickListener(this)
         calculator_tv.setOnClickListener(this)
         my_details_tv.setOnClickListener(this)
         ta_tv.setOnClickListener(this)
@@ -2324,6 +2329,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         } else {
             attendence_summary_tv.visibility = View.GONE
         }
+        if (Pref.ShowPartyWithCreateOrder) {
+            menu_total_orders_tv.visibility = View.VISIBLE
+        } else {
+            menu_total_orders_tv.visibility = View.GONE
+        }
         if (Pref.IsShowCalculator) {
             calculator_tv.visibility = View.VISIBLE
         } else {
@@ -2671,6 +2681,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 }else{
                     Toaster.msgShort(this,"Please try after ${5-diff} min")
                 }
+            }
+            R.id.menu_total_orders_tv->{
+                (mContext as DashboardActivity).loadFragment(FragType.ViewNewOrdHistoryFrag, true, "")
             }
             R.id.calculator_tv -> {
                 loadFragment(FragType.CalculatorFrag, true, "")
@@ -3780,6 +3793,41 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mFragment = CompetetorStockFragment.getInstance(initializeObject)
                 }
                 setTopBarTitle(getString(R.string.competetor_stock_list))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.OrderListFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = OrderListFrag.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.order_detail))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.ViewOrdDtls -> {
+                if (enableFragGeneration) {
+                    mFragment = ViewOrdDtls.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.order_detail))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.ViewNewOrdHistoryFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = ViewNewOrdHistoryFrag()
+                }
+                setTopBarTitle(getString(R.string.orders))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.ProductListFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = ProductListFrag.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.select_products))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.CartListFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = CartListFrag.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.view_cart))
                 setTopBarVisibility(TopBarConfig.BACK)
             }
             FragType.ViewStockDetailsFragment -> {
@@ -6814,6 +6862,25 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         else if (getFragment() != null && getFragment() is PhotoRegAadhaarFragment) {
             println("PhotoRegAadhaarFragment backpressed");
             super.onBackPressed()
+        }else if (getFragment() != null && getFragment() is CartListFrag) {
+            super.onBackPressed()
+            if (getFragment() != null && getFragment() is ProductListFrag){
+                (getFragment() as ProductListFrag).updateCartSize()
+            }
+        }else if (getFragment() != null && getFragment() is ProductListFrag) {
+            if(getFragment() != null && getFragment() is ProductListFrag){
+                if((getFragment() as ProductListFrag).checkCartSize() != 0){
+                    if (isShowAlert)
+                        showAlert()
+                    else{
+                        super.onBackPressed()
+                        isShowAlert = true
+                    }
+                }else
+                    super.onBackPressed()
+            }
+        }else if (getFragment() != null && getFragment() is OrderListFrag) {
+            loadFragment(FragType.DashboardFragment, false, DashboardType.Home)
         }
         else if (getFragment() != null && getFragment() is ViewAllOrderListFragment && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed) && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)) {
 
@@ -11597,7 +11664,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         shopCodeListNearby= ArrayList()
 
         if (distance * 1000 > autoRevDistance) {
-            val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
+            // Rectify inactive shop 26-03-2024 Suman mantis id 27329 begin
+            val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().getAllActiveShops()
+            // Rectify inactive shop 26-03-2024 Suman mantis id 27329 end
+            //val allShopList = AppDatabase.getDBInstance()!!.addShopEntryDao().all
             if (allShopList != null && allShopList.size > 0) {
 
                 doAsync {

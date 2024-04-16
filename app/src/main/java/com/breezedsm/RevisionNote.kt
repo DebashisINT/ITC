@@ -24,4 +24,12 @@ class RevisionNote {
 
     //harcoded location isUploaded true
     //hardcoded callUnreadNotificationApi() call stop
+    //bypass code
+
+    // Rectify inactive shop 26-03-2024 Suman mantis id 27329
+
+    // Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion
+
+    // Revision 1.0 PhotoAttendanceFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: Sales Rep Type dropdown update
+    // Revision 1.0 DashboardFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: stage list api call update on refresh
 }

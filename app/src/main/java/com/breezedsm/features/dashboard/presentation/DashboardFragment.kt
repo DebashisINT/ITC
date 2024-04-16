@@ -61,6 +61,10 @@ import com.breezedsm.features.averageshop.model.ShopActivityResponse
 import com.breezedsm.features.averageshop.model.ShopActivityResponseDataList
 import com.breezedsm.features.commondialog.presentation.CommonDialog
 import com.breezedsm.features.commondialog.presentation.CommonDialogClickListener
+import com.breezedsm.features.createOrder.GetOrderHistory
+import com.breezedsm.features.createOrder.GetProductRateReq
+import com.breezedsm.features.createOrder.GetProductReq
+import com.breezedsm.features.createOrder.OrderListFrag
 import com.breezedsm.features.dashboard.presentation.api.dashboardApi.DashboardRepoProvider
 import com.breezedsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezedsm.features.dashboard.presentation.api.gteroutelistapi.GetRouteListRepoProvider
@@ -131,6 +135,8 @@ import java.util.*
 /**
  * Created by rp : 31-10-2017:16:49
  */
+// Revision 1.0 DashboardFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: stage list api call update on refresh
+
 class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListener,
     View.OnTouchListener {
 
@@ -154,6 +160,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var avgTime: AppCustomTextView
     private lateinit var avgShop: AppCustomTextView
     private lateinit var avgOrder: AppCustomTextView
+    private lateinit var avgOrderNew: AppCustomTextView
     private lateinit var shops_RL: RelativeLayout
     private lateinit var time_RL: RelativeLayout
     private lateinit var price_RL: RelativeLayout
@@ -223,6 +230,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var ll_dash_day_start_newD: LinearLayout
     private lateinit var ll_dash_point_visit_newD: LinearLayout
     private lateinit var ll_dash_day_end_newD: LinearLayout
+    private lateinit var ll_dash_total_mew_order_newD: LinearLayout
     private lateinit var ll_dash_visit_attendance_newD: LinearLayout
 
     private lateinit var revisit_ll: LinearLayout
@@ -417,6 +425,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     override fun onResume() {
         super.onResume()
 
+        try {
+            Timber.d("lifecycle_activity_tag DashboardFragment onresume()")
+            var ordAmt = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderSumByDate(AppUtils.getCurrentDateForShopActi()).toBigDecimal().toString()
+            avgOrderNew.text = mContext.getString(R.string.rupee_symbol) + String.format("%.02f",ordAmt.toDouble())
+        }catch(e:Exception){
+            e.printStackTrace()
+            Timber.d("lifecycle_activity_tag DashboardFragment ex ${e.printStackTrace()}")
+        }
+
+
+
         timerTV = view!!.findViewById(R.id.tv_dash_frag_timer)
         if(Pref.IsShowMarketSpendTimer){
             timerTV.visibility = View.VISIBLE
@@ -552,6 +571,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
+        println("lifecycle_activity_tag DashboardFragment onAttach()")
     }
 
     @SuppressLint("RestrictedApi")
@@ -591,7 +611,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         avgTime = view.findViewById(R.id.n_time_TV)
         avgShop = view.findViewById(R.id.n_shops_TV)
         avgOrder = view.findViewById(R.id.n_order_TV)
+        avgOrderNew = view.findViewById(R.id.n_new_order_TV)
         avgOrder.text = getString(R.string.rupee_symbol) + "0.00"
+        avgOrderNew.text = mContext.getString(R.string.rupee_symbol) + "0.00"
         //shops_RL = view.findViewById(R.id.shops_RL)
         //time_RL = view.findViewById(R.id.time_RL)
         //price_RL = view.findViewById(R.id.price_RL)
@@ -648,6 +670,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         ll_dash_day_start_newD = view.findViewById(R.id.ll_dash_day_start_newD)
         ll_dash_point_visit_newD = view.findViewById(R.id.ll_dash_point_visit_newD)
         ll_dash_day_end_newD = view.findViewById(R.id.ll_dash_day_end_newD)
+        ll_dash_total_mew_order_newD = view.findViewById(R.id.ll_dash_total_mew_order_newD)
         ll_dash_visit_attendance_newD = view.findViewById(R.id.ll_dash_visit_attendance_newD)
 
         simpleDialogProcess = Dialog(mContext)
@@ -2010,6 +2033,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         //time_RL.setOnClickListener(this)
         //price_RL.setOnClickListener(this)
         ll_dash_total_order_newD.setOnClickListener(this)
+        ll_dash_total_mew_order_newD.setOnClickListener(this)
 
         tv_view_all.setOnClickListener(this)
         tv_pick_date_range.setOnClickListener(this)
@@ -2225,6 +2249,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             //endRL.visibility = View.GONE
             //enddate_TV.visibility = View.GONE
             ll_dash_day_end_newD.visibility = View.GONE
+        }
+        if(Pref.ShowPartyWithCreateOrder){
+            ll_dash_total_mew_order_newD.visibility = View.VISIBLE
+        }else{
+            ll_dash_total_mew_order_newD.visibility = View.GONE
         }
 
         if (Pref.ShowAutoRevisitInDashboard)
@@ -2813,6 +2842,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     true,
                     ""
                 )
+            }
+            R.id.ll_dash_total_mew_order_newD ->{
+                (mContext as DashboardActivity).loadFragment(FragType.ViewNewOrdHistoryFrag, true, "")
             }
 
             //R.id.price_RL -> {
@@ -3752,15 +3784,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
     fun refresh() {
         //checkToCallAssignedDDListApi()
-
+        Timber.d("tag_dash_refresh refresh call")
         var shopDeactiveList=AppDatabase.getDBInstance()?.shopDeactivateDao()!!.getAll()
         if(shopDeactiveList!=null && shopDeactiveList.size>0){
+            Timber.d("tag_dash_refresh refresh call if")
             for(i in 0..shopDeactiveList.size-1){
                 var notificationManager = (mContext as DashboardActivity).getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.cancel(shopDeactiveList.get(i).noti_id!!.toInt())
                 updateShopStatusFromNoti(shopDeactiveList.get(i).shop_id!!)
             }
         }else{
+            Timber.d("tag_dash_refresh refresh call else")
             checkToCallAssignedDDListApi()
         }
 
@@ -3917,9 +3951,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun checkToCallAssignedDDListApi() {
-        if (!TextUtils.isEmpty(Pref.profile_state))
+        Timber.d("tag_dash_refresh checkToCallAssignedDDListApi call")
+        if (!TextUtils.isEmpty(Pref.profile_state)){
+            Timber.d("tag_dash_refresh checkToCallAssignedDDListApi call if")
             getAssignedDDListApi()
+        }
         else {
+            Timber.d("tag_dash_refresh checkToCallAssignedDDListApi call else")
             if (AppDatabase.getDBInstance()?.productListDao()?.getAll()!!.isEmpty())
                 getProductList("")
             else
@@ -3930,6 +3968,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun getAssignedDDListApi() {
+        Timber.d("tag_itc_check assignToDDList call DashboardFragment")
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         var progress_wheel: ProgressWheel? = null
         if (Pref.isAttendanceFeatureOnly)
@@ -4092,6 +4131,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     }
 
     private fun getAssignedToShopApi() {
+        Timber.d("tag_itc_check getAssignedToShopList call DashboardFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -4155,7 +4195,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
 
     private fun getProductList(date: String?) {
+        Timber.d("tag_dash_refresh getProductList call")
         if(Pref.isOrderShow){
+            Timber.d("tag_dash_refresh getProductList call if")
             val repository = ProductListRepoProvider.productListProvider()
             var progress_wheel: ProgressWheel? = null
             if (Pref.isAttendanceFeatureOnly)
@@ -4222,10 +4264,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }else{
             getSelectedRouteListRefresh()
         }
-
     }
 
+
+
+
     private fun getSelectedRouteListRefresh() {
+        Timber.d("getSelectedRouteListRefresh call")
         val list = AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.getAll()
         if (list != null && list.isNotEmpty()) {
             AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.delete()
@@ -6335,6 +6380,12 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                         if (configResponse.IsShowPrivacyPolicyInMenu != null)
                             Pref.IsShowPrivacyPolicyInMenu = configResponse.IsShowPrivacyPolicyInMenu!!
+
+                        if (configResponse.IsAllowZeroRateOrder != null)
+                            Pref.IsAllowZeroRateOrder = configResponse.IsAllowZeroRateOrder!!
+
+                        if (configResponse.IsViewMRPInOrder != null)
+                            Pref.IsViewMRPInOrder = configResponse.IsViewMRPInOrder!!
                     }
                     BaseActivity.isApiInitiated = false
                     checkToCallAlarmConfigApi()
@@ -6738,7 +6789,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                     })
             )
         }else{
-            getEntityTypeListApi()
+            // Revision 1.0 DashboardFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: stage list api call update on refresh begin
+            //getEntityTypeListApi()
+            geStageApi()
+            // Revision 1.0 DashboardFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: stage list api call update on refresh end
         }
 
     }
@@ -7137,21 +7191,184 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
 
                             uiThread {
                                 progress_wheel.stopSpinning()
-                                changeUI()
+                                //changeUI()
+                                getNewProductList()
                             }
                         }
                     } else {
                         progress_wheel.stopSpinning()
-                        changeUI()
+                        //changeUI()
+                        getNewProductList()
                     }
                 }, { error ->
                     progress_wheel.stopSpinning()
                     error.printStackTrace()
                     Timber.d("Visit Remarks List : ERROR " + error.localizedMessage)
-                    changeUI()
+                    //changeUI()
+                    getNewProductList()
                 })
         )
     }
+
+    // Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion begin
+
+    private fun getNewProductList() {
+        if(Pref.ShowPartyWithCreateOrder){
+            progress_wheel.spin()
+            val repository = ProductListRepoProvider.productListProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getProductListITC(Pref.session_token!!, Pref.user_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as GetProductReq
+                        Timber.d("getNewProductList response ${response.status}")
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            var list = response.product_list
+                            if (list != null && list.isNotEmpty()) {
+                                doAsync {
+                                    AppDatabase.getDBInstance()!!.newProductListDao().deleteAll()
+                                    AppDatabase.getDBInstance()?.newProductListDao()?.insertAll(list!!)
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getNewProductRateList()
+                                    }
+                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getNewProductRateList()
+                            }
+                        } else {
+                            progress_wheel.stopSpinning()
+                            getNewProductRateList()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        Timber.d("getNewProductList error ${error.message}")
+                        getNewProductRateList()
+                    })
+            )
+        }else{
+            getNewProductRateList()
+        }
+    }
+
+    private fun getNewProductRateList() {
+        if(Pref.ShowPartyWithCreateOrder){
+            progress_wheel.spin()
+            val repository = ProductListRepoProvider.productListProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getProductRateListITC(Pref.session_token!!, Pref.user_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as GetProductRateReq
+                        Timber.d("getNewProductRateList response ${response.status}")
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            var list = response.product_rate_list
+                            if (list != null && list.isNotEmpty()) {
+                                doAsync {
+                                    Timber.d("rate insert process start ${AppUtils.getCurrentDateTime()}")
+                                    AppDatabase.getDBInstance()!!.newRateListDao().deleteAll()
+                                    AppDatabase.getDBInstance()?.newRateListDao()?.insertAll(list!!)
+                                    Timber.d("rate insert process end ${AppUtils.getCurrentDateTime()}")
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getOrderHistoryList()
+                                    }
+                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getOrderHistoryList()
+                            }
+                        } else {
+                            progress_wheel.stopSpinning()
+                            getOrderHistoryList()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        Timber.d("getNewProductRateList error ${error.message}")
+                        getOrderHistoryList()
+                    })
+            )
+        }else{
+            getOrderHistoryList()
+        }
+    }
+
+    private fun getOrderHistoryList(){
+        var ordHisL = AppDatabase.getDBInstance()!!.newOrderDataDao().getAllOrder() as ArrayList<NewOrderDataEntity>
+        if(Pref.ShowPartyWithCreateOrder && ordHisL.size==0){
+            Timber.d("getOrderHistoryList call")
+            progress_wheel.spin()
+            val repository = ProductListRepoProvider.productListProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getOrderHistory(Pref.user_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as GetOrderHistory
+                        Timber.d("getOrderHistoryList response ${response.status}")
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            doAsync {
+                                Timber.d("getOrderHistoryList data save begin ${AppUtils.getCurrentDateTime()}")
+                                var order_list = response.order_list
+                                for(i in 0..order_list.size-1){
+                                    var obj = NewOrderDataEntity()
+                                    obj.order_id = order_list.get(i).order_id
+                                    obj.order_date = order_list.get(i).order_date
+                                    obj.order_time = order_list.get(i).order_time
+                                    obj.order_date_time = order_list.get(i).order_date_time
+                                    obj.shop_id = order_list.get(i).shop_id
+                                    obj.shop_name = order_list.get(i).shop_name
+                                    obj.shop_type = order_list.get(i).shop_type
+                                    obj.isInrange = order_list.get(i).isInrange
+                                    obj.order_lat = order_list.get(i).order_lat
+                                    obj.order_long = order_list.get(i).order_long
+                                    obj.shop_addr = order_list.get(i).shop_addr
+                                    obj.shop_pincode = order_list.get(i).shop_pincode
+                                    obj.order_total_amt = order_list.get(i).order_total_amt.toString()
+                                    obj.order_remarks = order_list.get(i).order_remarks
+                                    obj.isUploaded = true
+
+                                    var objProductL:ArrayList<NewOrderProductEntity> = ArrayList()
+                                    for( j in 0..order_list.get(i).product_list.size-1){
+                                        var objProduct = NewOrderProductEntity()
+                                        objProduct.order_id = order_list.get(i).product_list.get(j).order_id
+                                        objProduct.product_id = order_list.get(i).product_list.get(j).product_id
+                                        objProduct.product_name = order_list.get(i).product_list.get(j).product_name
+                                        objProduct.submitedQty = order_list.get(i).product_list.get(j).submitedQty.toInt().toString()
+                                        objProduct.submitedSpecialRate = order_list.get(i).product_list.get(j).submitedSpecialRate.toString()
+                                        objProductL.add(objProduct)
+                                    }
+
+                                    AppDatabase.getDBInstance()!!.newOrderDataDao().insert(obj)
+                                    AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(objProductL)
+
+                                }
+                                uiThread {
+                                    Timber.d("getOrderHistoryList data save end ${AppUtils.getCurrentDateTime()}")
+                                    progress_wheel.stopSpinning()
+                                    changeUI()
+                                }
+                            }
+                        } else {
+                            progress_wheel.stopSpinning()
+                            changeUI()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        Timber.d("getOrderHistoryList error ${error.message}")
+                        changeUI()
+                    })
+            )
+        }else{
+            Timber.d("getOrderHistoryList call bypass")
+            changeUI()
+        }
+    }
+
+// Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion end
 
     @SuppressLint("RestrictedApi")
     private fun changeUI() {
@@ -7284,6 +7501,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             //endRL.visibility = View.GONE
             //enddate_TV.visibility = View.GONE
             ll_dash_day_end_newD.visibility = View.GONE
+        }
+        if(Pref.ShowPartyWithCreateOrder){
+            ll_dash_total_mew_order_newD.visibility = View.VISIBLE
+        }else{
+            ll_dash_total_mew_order_newD.visibility = View.GONE
         }
 
         if (Pref.IsShowTotalVisitsOnAppDashboard) {

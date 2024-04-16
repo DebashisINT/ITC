@@ -314,6 +314,20 @@
                     android:textSize="@dimen/_12sdp" />
 
                 <com.breezedsm.widgets.AppCustomTextView
+                    android:id="@+id/menu_total_orders_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_15sdp"
+                    android:drawableStart="@drawable/ic_add_order_report_icon"
+                    android:paddingBottom="@dimen/_7sdp"
+                    android:paddingLeft="@dimen/_17sdp"
+                    android:paddingRight="@dimen/_17sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:text="Total Order(s)"
+                    android:textColor="@color/lightest_gray"
+                    android:textSize="@dimen/_12sdp" />
+
+                <com.breezedsm.widgets.AppCustomTextView
                     android:id="@+id/calculator_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

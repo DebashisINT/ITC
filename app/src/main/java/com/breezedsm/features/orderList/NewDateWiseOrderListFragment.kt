@@ -2210,6 +2210,7 @@ class NewDateWiseOrderListFragment : BaseFragment(), DatePickerListener, View.On
     }
 
     private fun getAssignedDDListApi(shop_id: String?, position: Int, list_: ArrayList<OrderDetailsListEntity>) {
+        Timber.d("tag_itc_check assignToDDList call NewDateWiseOrderListFragment")
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -2264,6 +2265,7 @@ class NewDateWiseOrderListFragment : BaseFragment(), DatePickerListener, View.On
     }
 
     private fun getAssignedToShopApi(shop_id: String?, position: Int, list_: ArrayList<OrderDetailsListEntity>) {
+        Timber.d("tag_itc_check getAssignedToShopList call NewDateWiseOrderListFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

@@ -1121,6 +1121,7 @@
     <string name="select_client" translatable="false">Select Client</string>
     <string name="select_project" translatable="false">Select Project</string>
     <string name="select_product" translatable="false">Select Product</string>
+    <string name="select_products" translatable="false">Select Product(s)</string>
     <string name="select_activity" translatable="false">Select Activity</string>
     <string name="client_name_without_colon" translatable="false">Client</string>
     <string name="project_without_colon" translatable="false">Project</string>
@@ -1525,4 +1526,7 @@ even when the app is closed or not in use.</string>
     <string name="login_net_connected1" translatable="false">You can login now.</string>
 
     <string name="share_db" translatable="false">Share db</string>
+
+    <string name="total_qtys" translatable="false">Total Qty(s):</string>
+    <string name="total_value_with_colon" translatable="false">Total Value (\u20B9):\u0020</string>
 </resources>

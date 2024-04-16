@@ -44,6 +44,8 @@ import com.breezedsm.features.billing.api.AddBillingRepoProvider
 import com.breezedsm.features.billing.model.AddBillingInputParamsModel
 import com.breezedsm.features.commondialog.presentation.CommonDialog
 import com.breezedsm.features.commondialog.presentation.CommonDialogClickListener
+import com.breezedsm.features.createOrder.SyncOrd
+import com.breezedsm.features.createOrder.SyncOrdProductL
 import com.breezedsm.features.dashboard.presentation.DashboardActivity
 import com.breezedsm.features.dashboard.presentation.ReasonDialog
 import com.breezedsm.features.dashboard.presentation.api.ShopVisitImageUploadRepoProvider
@@ -59,6 +61,7 @@ import com.breezedsm.features.location.model.*
 import com.breezedsm.features.location.shopRevisitStatus.ShopRevisitStatusRepositoryProvider
 import com.breezedsm.features.location.shopdurationapi.ShopDurationRepositoryProvider
 import com.breezedsm.features.login.api.LoginRepositoryProvider
+import com.breezedsm.features.login.api.productlistapi.ProductListRepoProvider
 import com.breezedsm.features.login.model.GetConcurrentUserResponse
 import com.breezedsm.features.login.presentation.LoginActivity
 import com.breezedsm.features.logout.presentation.api.LogoutRepositoryProvider
@@ -107,6 +110,8 @@ import kotlin.collections.ArrayList
 /**
  * Created by Kinsuk on 14-01-2019.
  */
+// Revision 1.0   Suman App V4.4.6  04-04-2024  mantis id 27291: Sync unsync order
+
 class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var mContext: Context
@@ -658,6 +663,13 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
         rl_order.apply {
             visibility = if (Pref.isOrderShow)
+                View.VISIBLE
+            else
+                View.GONE
+        }
+
+        rl_order.apply {
+            visibility = if (Pref.ShowPartyWithCreateOrder)
                 View.VISIBLE
             else
                 View.GONE
@@ -1731,7 +1743,10 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
 
     private fun checkToCallSyncOrder() {
+        checkNewOrdSync()
+        /*Timber.d("tag_order_logout call")
         if (Pref.isOrderShow) {
+            Timber.d("tag_order_logout call if")
             val orderList = AppDatabase.getDBInstance()!!.orderDetailsListDao().getUnsyncedData(false)
 
             val orderDetailsList = ArrayList<OrderDetailsListEntity>()
@@ -1768,9 +1783,104 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 else
                     isRetryOrder = false
             }
-        } else
+        } else{
+            Timber.d("tag_order_logout call else")
             checkToGpsStatus()
+        }*/
     }
+
+    // Revision 1.0   Suman App V4.4.6  04-04-2024  mantis id 27291: Sync unsync order begin
+    private fun checkNewOrdSync(){
+        if(Pref.ShowPartyWithCreateOrder){
+            var unsyncOrdL = AppDatabase.getDBInstance()!!.newOrderDataDao().getUnsyncList(false) as ArrayList<NewOrderDataEntity>
+            if(unsyncOrdL.size>0){
+                var ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(unsyncOrdL.get(0).order_id)
+                var ordProductDtls = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(unsyncOrdL.get(0).order_id)
+                var syncOrd = SyncOrd()
+                var syncOrdProductL:ArrayList<SyncOrdProductL> = ArrayList()
+                Timber.d("Order sync for order id ${unsyncOrdL.get(0).order_id}")
+                doAsync {
+                    syncOrd.user_id = Pref.user_id!!
+                    syncOrd.order_id = unsyncOrdL.get(0).order_id
+                    syncOrd.order_date = ordDtls.order_date
+                    syncOrd.order_time = ordDtls.order_time
+                    syncOrd.order_date_time = ordDtls.order_date_time
+                    syncOrd.shop_id = ordDtls.shop_id
+                    syncOrd.shop_name = ordDtls.shop_name
+                    syncOrd.shop_type = ordDtls.shop_type
+                    syncOrd.isInrange = ordDtls.isInrange
+                    syncOrd.order_lat = ordDtls.order_lat
+                    syncOrd.order_long = ordDtls.order_long
+                    syncOrd.shop_addr = ordDtls.shop_addr
+                    syncOrd.shop_pincode = ordDtls.shop_pincode
+                    syncOrd.order_total_amt = ordDtls.order_total_amt.toDouble()
+                    syncOrd.order_remarks = ordDtls.order_remarks
+
+                    for(i in 0..ordProductDtls.size-1){
+                        var obj = SyncOrdProductL()
+                        obj.order_id=ordProductDtls.get(i).order_id
+                        obj.product_id=ordProductDtls.get(i).product_id
+                        obj.product_name=ordProductDtls.get(i).product_name
+                        obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
+                        obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
+
+                        syncOrdProductL.add(obj)
+                    }
+                    syncOrd.product_list = syncOrdProductL
+
+                    uiThread {
+                        val repository = ProductListRepoProvider.productListProvider()
+                        BaseActivity.compositeDisposable.add(
+                            repository.syncProductListITC(syncOrd)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ result ->
+                                    val response = result as BaseResponse
+                                    Timber.d("Order sync status ${response.status}")
+                                    if (response.status == NetworkConstant.SUCCESS) {
+                                        doAsync {
+                                            AppDatabase.getDBInstance()!!.newOrderDataDao().updateIsUploaded(syncOrd.order_id,true)
+                                            uiThread {
+                                                checkNewOrdSync()
+                                            }
+                                        }
+                                    } else {
+                                        Timber.d("Order sync else status ${response.status}")
+                                        tv_order_retry.visibility = View.VISIBLE
+                                        addOrderTickImg.visibility = View.GONE
+                                        addOrderSyncImg.visibility = View.GONE
+                                        stopAnimation(addOrderSyncImg)
+                                        checkToGpsStatus()
+                                    }
+                                }, { error ->
+                                    Timber.d("Order sync else err ${error.message}")
+                                    tv_order_retry.visibility = View.VISIBLE
+                                    addOrderTickImg.visibility = View.GONE
+                                    addOrderSyncImg.visibility = View.GONE
+                                    stopAnimation(addOrderSyncImg)
+                                    checkToGpsStatus()
+                                })
+                        )
+                    }
+                }
+            }else{
+                Timber.d("Order sync no order found to sync")
+                addOrderTickImg.visibility = View.VISIBLE
+                addOrderSyncImg.visibility = View.GONE
+                tv_order_retry.visibility = View.GONE
+                stopAnimation(addOrderSyncImg)
+                checkToGpsStatus()
+            }
+        }else{
+            Timber.d("Order sync no order feature")
+            addOrderTickImg.visibility = View.VISIBLE
+            addOrderSyncImg.visibility = View.GONE
+            tv_order_retry.visibility = View.GONE
+            stopAnimation(addOrderSyncImg)
+            checkToGpsStatus()
+        }
+    }
+    // Revision 1.0   Suman App V4.4.6  04-04-2024  mantis id 27291: Sync unsync order end
 
     //===================================================Add Order==============================================================//
     private fun syncAllOrder(order: OrderDetailsListEntity, orderList: List<OrderDetailsListEntity>) {
@@ -4865,6 +4975,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     Handler().postDelayed(Runnable {
                         tv_logout.isEnabled = true
                         if(Pref.DayEndMarked){
+                            Timber.d("perform_logout_tag call 1")
                             performLogout()
                         }
 
@@ -5166,6 +5277,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     Handler().postDelayed(Runnable {
                         tv_logout.isEnabled = true
                         if(Pref.DayEndMarked){
+                            Timber.d("perform_logout_tag call 2")
                             performLogout()
                         }
 
@@ -5352,6 +5464,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                             Handler().postDelayed(Runnable {
                                                 tv_logout.isEnabled = true
                                                 if(Pref.DayEndMarked){
+                                                    Timber.d("perform_logout_tag call 3")
                                                     performLogout()
                                                 }
 
@@ -5413,6 +5526,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                             Handler().postDelayed(Runnable {
                                                 tv_logout.isEnabled = true
                                                 if(Pref.DayEndMarked){
+                                                    Timber.d("perform_logout_tag call 4")
                                                     performLogout()
                                                 }
 
@@ -5481,6 +5595,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                         Handler().postDelayed(Runnable {
                                             tv_logout.isEnabled = true
                                             if(Pref.DayEndMarked){
+                                                Timber.d("perform_logout_tag call 5")
                                                 performLogout()
                                             }
 
@@ -5900,7 +6015,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     (mContext as DashboardActivity).showSnackMessage("Good internet must required to logout, please switch on the internet and proceed. Thanks.")
                     return
                 }
-
+                Timber.d("perform_logout_tag call 6")
                 performLogout()
 
             }
@@ -5909,6 +6024,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private fun performLogout() {
         if(Pref.DayEndMarked){
+            Timber.d("tag_logout_check performLogout DayEndMarked ${Pref.DayEndMarked}")
             if (Pref.isShowLogoutReason && !TextUtils.isEmpty(Pref.approvedOutTime)) {
                 val currentTimeInLong = AppUtils.convertTimeWithMeredianToLong(AppUtils.getCurrentTimeWithMeredian())
                 val approvedOutTimeInLong = AppUtils.convertTimeWithMeredianToLong(Pref.approvedOutTime)

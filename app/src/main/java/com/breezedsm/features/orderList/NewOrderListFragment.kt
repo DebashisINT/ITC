@@ -1807,6 +1807,7 @@ class NewOrderListFragment : BaseFragment() {
     private fun getAssignedDDListApi(shop_id: String?, position: Int, list_: ArrayList<OrderDetailsListEntity>, isSyncFromList: Boolean) {
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
+        Timber.d("tag_itc_check assignToDDList call NewOrderListFragment")
         BaseActivity.compositeDisposable.add(
                 repository.assignToDDList(Pref.profile_state)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -1859,6 +1860,7 @@ class NewOrderListFragment : BaseFragment() {
     }
 
     private fun getAssignedToShopApi(shop_id: String?, position: Int, list_: ArrayList<OrderDetailsListEntity>, isSyncFromList: Boolean) {
+        Timber.d("tag_itc_check getAssignedToShopList call NewOrderListFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

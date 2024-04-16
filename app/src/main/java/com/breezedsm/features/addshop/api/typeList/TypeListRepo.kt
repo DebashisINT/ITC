@@ -47,6 +47,7 @@ class TypeListRepo(val apiService: TypeListApi) {
     }
 
     fun assignToShopList(state_id: String): Observable<AssignedToShopListResponseModel> {
+        Timber.d("tag_itc_check getAssignedToShopList call")
         return apiService.getAssignedToShopList(Pref.session_token!!, Pref.user_id!!, state_id)
     }
 }

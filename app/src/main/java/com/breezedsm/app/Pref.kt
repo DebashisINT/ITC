@@ -435,5 +435,7 @@ object Pref : PreferenceHolder() {
     var ShowPartyWithCreateOrder: Boolean by bindToPreferenceField(false, "ShowPartyWithCreateOrder")
     var IsShowPrivacyPolicyInMenu: Boolean by bindToPreferenceField(false, "IsShowPrivacyPolicyInMenu")
 
+    var IsAllowZeroRateOrder: Boolean by bindToPreferenceField(false, "IsAllowZeroRateOrder")
+    var IsViewMRPInOrder: Boolean by bindToPreferenceField(false, "IsViewMRPInOrder")
 
 }

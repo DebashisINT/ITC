@@ -26,7 +26,8 @@ class ShopDurationRepository(val apiService: ShopDurationApi) {
         if(Pref.IsUpdateVisitDataInTodayTable){
             return apiService.submitShopDurationITC(shopDuration)
         }else{
-            return apiService.submitShopDuration(shopDuration)
+            return apiService.submitShopDurationITC(shopDuration)
+            //return apiService.submitShopDuration(shopDuration)
         }
     }
     //End of Rev 1.0 ShopDurationRepository 07-06-2023  Suman  mantis id 26237

@@ -28,6 +28,7 @@ import com.breezedsm.app.SearchListener
 import com.breezedsm.app.domain.AddShopDBModelEntity
 import com.breezedsm.app.domain.AssignToDDEntity
 import com.breezedsm.app.domain.ProspectEntity
+import com.breezedsm.app.domain.StageEntity
 import com.breezedsm.app.types.FragType
 import com.breezedsm.app.utils.AppUtils
 import com.breezedsm.app.utils.FTStorageUtils
@@ -81,7 +82,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-
+// Revision 1.0 PhotoAttendanceFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: Sales Rep Type dropdown update
 class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
 
     private lateinit var mContext: Context
@@ -169,13 +170,24 @@ class PhotoAttendanceFragment: BaseFragment(), View.OnClickListener {
         initPermissionCheck()
 
 
-        var prospectList = AppDatabase.getDBInstance()!!.prosDao().getAll() as ArrayList<ProspectEntity>
+        // Revision 1.0 PhotoAttendanceFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: Sales Rep Type dropdown update begin
+     /*   var prospectList = AppDatabase.getDBInstance()!!.prosDao().getAll() as ArrayList<ProspectEntity> // commented for new work
         prosCusList.clear()
         prosCusList.add(ProsCustom("0","All"))
         for(i in 0..prospectList.size-1){
             prosCusList.add(ProsCustom(prospectList.get(i).pros_id!!,prospectList.get(i).pros_name!!))
         }
+        tv_prospect.text=prosCusList.get(0).prosName*/
+
+
+        var stageL = AppDatabase.getDBInstance()!!.stageDao().getAll() as ArrayList<StageEntity>
+        prosCusList.clear()
+        prosCusList.add(ProsCustom("0","All"))
+        for(i in 0..stageL.size-1){
+            prosCusList.add(ProsCustom(stageL.get(i).stage_id!!,stageL.get(i).stage_name!!))
+        }
         tv_prospect.text=prosCusList.get(0).prosName
+        // Revision 1.0 PhotoAttendanceFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: Sales Rep Type dropdown update end
 
         simpleDialogProcess = Dialog(mContext)
         simpleDialogProcess.setCancelable(false)

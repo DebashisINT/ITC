@@ -110,4 +110,12 @@
     <color name="color_custom_red_1">#82F8424E</color>
     <color name="card_custom_back1">#d8d8d8</color>
     <color name="color_custom_white_1">#084e8b</color>
+
+    <color name="color_custom_blue">#0f4990</color>
+
+    <color name="color_1">#378c26</color>
+    <color name="color_2">#023f89</color>
+    <color name="color_3">#810a56</color>
+    <color name="color_4">#470171</color>
+    <color name="color_5">#9e6a1f</color>
 </resources>

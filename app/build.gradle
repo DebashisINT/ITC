@@ -25,8 +25,8 @@ android {
         applicationId "com.breezedsm"
         minSdkVersion 26
         targetSdkVersion 33
-        versionCode 139
-        versionName "4.4.5"
+        versionCode 140
+        versionName "4.4.6"
         //versionName "2.3.0"
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -279,6 +279,6 @@ dependencies {
 
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0' // for calender view
     implementation 'io.apisense:rhino-android:1.2.0'  // for calculator
-
+    implementation 'com.itextpdf:itextg:5.5.10'
 }
 apply plugin: 'com.google.gms.google-services'

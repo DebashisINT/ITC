@@ -19,6 +19,9 @@ public interface AddShopDao {
     @Query("SELECT * FROM " + SHOP_TABLE)
     List<AddShopDBModelEntity> getAll();
 
+    @Query("SELECT * FROM " + SHOP_TABLE+" where shopStatusUpdate = '1' ")
+    List<AddShopDBModelEntity> getAllActiveShops();
+
     @Query("SELECT COUNT(*) from " + SHOP_TABLE)
     int countUsers();
 

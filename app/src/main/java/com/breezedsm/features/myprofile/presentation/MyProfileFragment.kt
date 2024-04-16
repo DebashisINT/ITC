@@ -69,6 +69,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.inflate_marketing_detail_image.view.item_img_IV
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
@@ -602,6 +603,7 @@ class MyProfileFragment : BaseFragment() {
     }
 
     private fun getAssignedDDListApi(message: String) {
+        Timber.d("tag_itc_check assignToDDList call MyProfileFragment")
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -768,6 +770,7 @@ class MyProfileFragment : BaseFragment() {
     }
 
     private fun getAssignedToShopApi(message: String) {
+        Timber.d("tag_itc_check getAssignedToShopList call MyProfileFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

@@ -91,4 +91,8 @@ class ConfigFetchResponseModel : BaseResponse() {
 
     var IsShowPrivacyPolicyInMenu:Boolean?=null// mantis 25912
 
+    var IsAllowZeroRateOrder: Boolean? = null
+
+    var IsViewMRPInOrder:Boolean? = null
+
 }

@@ -766,9 +766,8 @@ class BillingListFragment : BaseFragment(), View.OnClickListener {
 
         if (BaseActivity.isApiInitiated)
             return
-
+        Timber.d("tag_itc_check assignToDDList call BillingListFragment")
         BaseActivity.isApiInitiated = true
-
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -829,7 +828,7 @@ class BillingListFragment : BaseFragment(), View.OnClickListener {
     private fun getAssignedToShopApi(shop_id: String?, billing: BillingEntity) {
         if (BaseActivity.isApiInitiated)
             return
-
+        Timber.d("tag_itc_check getAssignedToShopList call BillingListFragment")
         BaseActivity.isApiInitiated = true
 
         val repository = TypeListRepoProvider.provideTypeListRepository()

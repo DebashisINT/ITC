@@ -2,6 +2,11 @@ package com.breezedsm.features.login.api.productlistapi
 
 import com.breezedsm.app.Pref
 import com.breezedsm.app.domain.ProductListEntity
+import com.breezedsm.base.BaseResponse
+import com.breezedsm.features.createOrder.GetOrderHistory
+import com.breezedsm.features.createOrder.GetProductRateReq
+import com.breezedsm.features.createOrder.GetProductReq
+import com.breezedsm.features.createOrder.SyncOrd
 import com.breezedsm.features.login.model.productlistmodel.ProductListOfflineResponseModel
 import com.breezedsm.features.login.model.productlistmodel.ProductListOfflineResponseModelNew
 import com.breezedsm.features.login.model.productlistmodel.ProductListResponseModel
@@ -14,6 +19,22 @@ import io.reactivex.Observable
 class ProductListRepo(val apiService: ProductListApi) {
     fun getProductList(session_token: String, user_id: String, last_update_date: String): Observable<ProductListResponseModel> {
         return apiService.getProductList(session_token, user_id, last_update_date)
+    }
+
+    fun getProductListITC(session_token: String, user_id: String): Observable<GetProductReq> {
+        return apiService.getProductListITC(session_token, user_id)
+    }
+
+    fun syncProductListITC(obj: SyncOrd): Observable<BaseResponse> {
+        return apiService.syncProductListITC(obj)
+    }
+
+    fun getOrderHistory(user_id:String): Observable<GetOrderHistory> {
+        return apiService.getOrderHistoryApi(user_id)
+    }
+
+    fun getProductRateListITC(session_token: String, user_id: String): Observable<GetProductRateReq> {
+        return apiService.getProductRateListITC(session_token, user_id)
     }
 
 

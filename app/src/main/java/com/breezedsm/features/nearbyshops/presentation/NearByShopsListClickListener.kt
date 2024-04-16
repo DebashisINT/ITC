@@ -24,5 +24,6 @@ interface NearByShopsListClickListener {
     fun onUpdatePartyStatusClick(position: Int)
     fun onUpdateBankDetailsClick(position: Int)
     fun onUpdateStatusClick(obj: AddShopDBModelEntity)
+    fun createOrderClick(obj: AddShopDBModelEntity)
 
 }

@@ -1320,6 +1320,7 @@ class DateWiseQuotationList : BaseFragment(), DatePickerListener {
     }
 
     private fun getAssignedDDListApi(shop_id: String?, quot: QuotationEntity, isEdit: Boolean) {
+        Timber.d("tag_itc_check assignToDDList call DateWiseQuotationList")
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -1374,6 +1375,7 @@ class DateWiseQuotationList : BaseFragment(), DatePickerListener {
     }
 
     private fun getAssignedToShopApi(shop_id: String?, quot: QuotationEntity, isEdit: Boolean) {
+        Timber.d("tag_itc_check getAssignedToShopList call DateWiseQuotationList")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

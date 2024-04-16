@@ -819,7 +819,10 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 itemView.ll_order.text = "Create Order"
             }else{
                 itemView.ll_order.visibility = View.GONE
+            }
 
+            itemView.ll_nearby_shop_create_order_root.setOnClickListener {
+                listener.createOrderClick(list[adapterPosition])
             }
 
         }

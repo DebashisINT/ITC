@@ -110,6 +110,12 @@ public interface AppConstant {
 
     String NEW_GPS_STATUS = "new_gps_status";
 
+    String NEW_PRODUCT_LIST = "new_product_list";
+    String NEW_RATE_LIST = "new_rate_list";
+
+    String NEW_ORDER_DATA = "new_order_data";
+    String NEW_ORDER_PRODUCT = "new_order_product";
+
 
     /*Foreground service intent*/
     int FOREGROUND_SERVICE = 911;

@@ -1234,6 +1234,15 @@ class AppUtils {
             }
         }
 
+        @Throws(ParseException::class)
+        fun getFormatedDateNew(date: String?, initDateFormat: String?, endDateFormat: String?): String? {
+            if(date.equals(""))
+                return ""
+            val initDate: Date = SimpleDateFormat(initDateFormat).parse(date)
+            val formatter = SimpleDateFormat(endDateFormat)
+            return formatter.format(initDate)
+        }
+
         /**
          * Purpose: internet checking
          */

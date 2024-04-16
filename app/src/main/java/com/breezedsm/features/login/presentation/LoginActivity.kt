@@ -60,6 +60,9 @@ import com.breezedsm.features.billing.api.billinglistapi.BillingListRepoProvider
 import com.breezedsm.features.billing.model.BillingListResponseModel
 import com.breezedsm.features.commondialog.presentation.CommonDialog
 import com.breezedsm.features.commondialog.presentation.CommonDialogClickListener
+import com.breezedsm.features.createOrder.GetOrderHistory
+import com.breezedsm.features.createOrder.GetProductRateReq
+import com.breezedsm.features.createOrder.GetProductReq
 import com.breezedsm.features.dashboard.presentation.DashboardActivity
 import com.breezedsm.features.dashboard.presentation.api.dayStartEnd.DayStartEndRepoProvider
 import com.breezedsm.features.dashboard.presentation.api.gteroutelistapi.GetRouteListRepoProvider
@@ -147,6 +150,7 @@ import kotlin.collections.ArrayList
  */
 
 // Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
+// Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion
 
 class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
@@ -489,6 +493,12 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
                                 if (configResponse.IsShowPrivacyPolicyInMenu != null)
                                     Pref.IsShowPrivacyPolicyInMenu = configResponse.IsShowPrivacyPolicyInMenu!!
+
+                                if (configResponse.IsAllowZeroRateOrder != null)
+                                    Pref.IsAllowZeroRateOrder = configResponse.IsAllowZeroRateOrder!!
+
+                                if (configResponse.IsViewMRPInOrder != null)
+                                    Pref.IsViewMRPInOrder = configResponse.IsViewMRPInOrder!!
 
                                 //End Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
 
@@ -3006,6 +3016,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getAssignedToShopApi() {
+        Timber.d("tag_itc_check getAssignedToShopList call LoginActivity")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         Timber.d("api_call  assignToShopList()")
@@ -6277,6 +6288,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         Timber.d("api_call  assignToDDList()")
+        Timber.d("tag_itc_check assignToDDList call LoginActivity")
         BaseActivity.compositeDisposable.add(
                 repository.assignToDDList(Pref.profile_state)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -6433,6 +6445,162 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         }
 
     }
+
+// Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion begin
+
+    private fun getNewProductList() {
+        if(Pref.ShowPartyWithCreateOrder){
+            progress_wheel.spin()
+            val repository = ProductListRepoProvider.productListProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getProductListITC(Pref.session_token!!, Pref.user_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as GetProductReq
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            var list = response.product_list
+                            if (list != null && list.isNotEmpty()) {
+                                doAsync {
+                                    AppDatabase.getDBInstance()!!.newProductListDao().deleteAll()
+                                    AppDatabase.getDBInstance()?.newProductListDao()?.insertAll(list!!)
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getNewProductRateList()
+                                    }
+                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getNewProductRateList()
+                            }
+                        } else {
+                            progress_wheel.stopSpinning()
+                            getNewProductRateList()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        getNewProductRateList()
+                    })
+            )
+        }else{
+            getNewProductRateList()
+        }
+    }
+
+    private fun getNewProductRateList() {
+        if(Pref.ShowPartyWithCreateOrder){
+            progress_wheel.spin()
+            val repository = ProductListRepoProvider.productListProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getProductRateListITC(Pref.session_token!!, Pref.user_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as GetProductRateReq
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            var list = response.product_rate_list
+                            if (list != null && list.isNotEmpty()) {
+                                doAsync {
+                                    Timber.d("rate insert process start ${AppUtils.getCurrentDateTime()}")
+                                    AppDatabase.getDBInstance()!!.newRateListDao().deleteAll()
+                                    AppDatabase.getDBInstance()?.newRateListDao()?.insertAll(list!!)
+                                    Timber.d("rate insert process end ${AppUtils.getCurrentDateTime()}")
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        getOrderHistoryList()
+                                    }
+                                }
+                            } else {
+                                progress_wheel.stopSpinning()
+                                getOrderHistoryList()
+                            }
+                        } else {
+                            progress_wheel.stopSpinning()
+                            getOrderHistoryList()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        getOrderHistoryList()
+                    })
+            )
+        }else{
+            getOrderHistoryList()
+        }
+    }
+
+    private fun getOrderHistoryList(){
+        var ordHisL = AppDatabase.getDBInstance()!!.newOrderDataDao().getAllOrder() as ArrayList<NewOrderDataEntity>
+        if(Pref.ShowPartyWithCreateOrder && ordHisL.size==0){
+            Timber.d("getOrderHistoryList call")
+            progress_wheel.spin()
+            val repository = ProductListRepoProvider.productListProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.getOrderHistory(Pref.user_id!!)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as GetOrderHistory
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            doAsync {
+                                Timber.d("getOrderHistoryList data save begin ${AppUtils.getCurrentDateTime()}")
+                                var order_list = response.order_list
+                                for(i in 0..order_list.size-1){
+                                    var obj = NewOrderDataEntity()
+                                    obj.order_id = order_list.get(i).order_id
+                                    obj.order_date = order_list.get(i).order_date
+                                    obj.order_time = order_list.get(i).order_time
+                                    obj.order_date_time = order_list.get(i).order_date_time
+                                    obj.shop_id = order_list.get(i).shop_id
+                                    obj.shop_name = order_list.get(i).shop_name
+                                    obj.shop_type = order_list.get(i).shop_type
+                                    obj.isInrange = order_list.get(i).isInrange
+                                    obj.order_lat = order_list.get(i).order_lat
+                                    obj.order_long = order_list.get(i).order_long
+                                    obj.shop_addr = order_list.get(i).shop_addr
+                                    obj.shop_pincode = order_list.get(i).shop_pincode
+                                    obj.order_total_amt = order_list.get(i).order_total_amt.toString()
+                                    obj.order_remarks = order_list.get(i).order_remarks
+                                    obj.isUploaded = true
+
+                                    var objProductL:ArrayList<NewOrderProductEntity> = ArrayList()
+                                    for( j in 0..order_list.get(i).product_list.size-1){
+                                        var objProduct = NewOrderProductEntity()
+                                        objProduct.order_id = order_list.get(i).product_list.get(j).order_id
+                                        objProduct.product_id = order_list.get(i).product_list.get(j).product_id
+                                        objProduct.product_name = order_list.get(i).product_list.get(j).product_name
+                                        objProduct.submitedQty = order_list.get(i).product_list.get(j).submitedQty.toInt().toString()
+                                        objProduct.submitedSpecialRate = order_list.get(i).product_list.get(j).submitedSpecialRate.toString()
+                                        objProductL.add(objProduct)
+                                    }
+
+                                    AppDatabase.getDBInstance()!!.newOrderDataDao().insert(obj)
+                                    AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(objProductL)
+
+                                }
+                                uiThread {
+                                    Timber.d("getOrderHistoryList data save end ${AppUtils.getCurrentDateTime()}")
+                                    progress_wheel.stopSpinning()
+                                    gotoHomeActivity()
+                                }
+                            }
+                        } else {
+                            progress_wheel.stopSpinning()
+                            gotoHomeActivity()
+                        }
+                    }, { error ->
+                        progress_wheel.stopSpinning()
+                        gotoHomeActivity()
+                    })
+            )
+        }else{
+            Timber.d("getOrderHistoryList call bypass")
+            gotoHomeActivity()
+        }
+    }
+
+// Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion end
+
+
 
 
     private fun gotoHomeActivity() {
@@ -6964,27 +7132,33 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             AppDatabase.getDBInstance()!!.addShopEntryDao().insert(shopObj)
                                         }
                                         uiThread {
-                                            gotoHomeActivity()
+                                            //gotoHomeActivity()
+                                            getNewProductList()
                                         }
                                     }
 
                                 }else{
-                                    gotoHomeActivity()
+                                    //gotoHomeActivity()
+                                    getNewProductList()
                                 }
                             } else {
-                                gotoHomeActivity()
+                                //gotoHomeActivity()
+                                getNewProductList()
                             }
                         }, { error ->
                             progress_wheel.stopSpinning()
-                            gotoHomeActivity()
+                            //gotoHomeActivity()
+                            getNewProductList()
                         })
                 )
             }else{
-                gotoHomeActivity()
+                //gotoHomeActivity()
+                getNewProductList()
             }
         } catch (ex: Exception) {
             ex.printStackTrace()
-            gotoHomeActivity()
+            //gotoHomeActivity()
+            getNewProductList()
         }
     }
     //End Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464

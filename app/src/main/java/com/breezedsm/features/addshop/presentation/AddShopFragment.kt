@@ -1173,6 +1173,11 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun getAssignedPPListApi(isShopAdded: Boolean, shop_id: String?) {
+        //bypass code begin
+        if(isShopAdded){
+            getAssignedToShopApi(isShopAdded, shop_id)
+        }else{
+        //bypass code end
         val repository = AssignToPPListRepoProvider.provideAssignPPListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -1241,6 +1246,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
                             }
                         })
         )
+        }
     }
     private fun voiceAttendanceMsg(msg: String) {
         if (Pref.isVoiceEnabledForAttendanceSubmit) {
@@ -3839,6 +3845,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun getAssignedDDListApi(shopAdded: Boolean, shop_id: String?) {
+        Timber.d("tag_itc_check assignToDDList call AddShopFragment")
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -3936,6 +3943,7 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun getAssignedToShopApi(shopAdded: Boolean, shop_id: String?) {
+        Timber.d("tag_itc_check getAssignedToShopList call AddShopFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

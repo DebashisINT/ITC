@@ -55,8 +55,9 @@ import com.breezedsm.features.stockCompetetorStock.model.CompetetorStockData
         VisitRemarksEntity::class,ShopVisitCompetetorModelEntity::class,
         OrderStatusRemarksModelEntity::class,CurrentStockEntryModelEntity::class,CurrentStockEntryProductModelEntity::class,
            CcompetetorStockEntryModelEntity::class,CompetetorStockEntryProductModelEntity::class,
-        ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class,NewGpsStatusEntity::class ),
-        version = 8, exportSchema = false)
+        ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class,NewGpsStatusEntity::class,NewProductListEntity::class,NewRateListEntity::class,
+    NewOrderDataEntity::class,NewOrderProductEntity::class),
+        version = 9, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -163,6 +164,12 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun newGpsStatusDao(): NewGpsStatusDao
 
+    abstract fun newProductListDao(): NewProductListDao
+    abstract fun newRateListDao(): NewRateListDao
+
+    abstract fun newOrderDataDao(): NewOrderDataDao
+    abstract fun newOrderProductDao(): NewOrderProductDao
+
     companion object {
         var INSTANCE: AppDatabase? = null
 
@@ -173,7 +180,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
                         .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5,MIGRATION_5_6,
-                            MIGRATION_6_7,MIGRATION_7_8)
+                            MIGRATION_6_7,MIGRATION_7_8,MIGRATION_8_9)
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -228,6 +235,19 @@ abstract class AppDatabase : RoomDatabase() {
                 //database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITYID' ")
                 //database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITY_ID_DATE' ")
                 database.execSQL("ALTER TABLE shop_activity ADD COLUMN isNewShop INTEGER NOT NULL DEFAULT 0 ")
+            }
+        }
+        val MIGRATION_8_9: Migration = object : Migration(8, 9) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("create TABLE new_product_list (product_id TEXT NOT NULL PRIMARY KEY,product_name TEXT NOT NULL,brand_id TEXT NOT NULL," +
+                        "brand_name TEXT NOT NULL,category_id TEXT NOT NULL,category_name TEXT NOT NULL,watt_id TEXT NOT NULL,watt_name TEXT NOT NULL,UOM TEXT NOT NULL )")
+                database.execSQL("create table new_rate_list (product_id TEXT NOT NULL PRIMARY KEY,mrp TEXT NOT NULL,item_price TEXT NOT NULL,specialRate TEXT NOT NULL)")
+                database.execSQL("create table new_order_data (sl_no INTEGER NOT NULL PRIMARY KEY,order_id TEXT NOT NULL,order_date TEXT NOT NULL,order_time TEXT NOT NULL," +
+                        "order_date_time TEXT NOT NULL,shop_id TEXT NOT NULL,shop_name TEXT NOT NULL,shop_type TEXT NOT NULL,isInrange INTEGER NOT NULL DEFAULT 0,order_lat TEXT NOT NULL,order_long TEXT NOT NULL,shop_addr TEXT NOT NULL," +
+                        "shop_pincode TEXT NOT NULL,order_total_amt TEXT NOT NULL,order_remarks TEXT NOT NULL,isUploaded INTEGER NOT NULL DEFAULT 0)")
+
+                database.execSQL("create table new_order_product (sl_no INTEGER NOT NULL PRIMARY KEY,order_id TEXT NOT NULL," +
+                        "product_id TEXT NOT NULL,product_name TEXT NOT NULL,submitedQty TEXT NOT NULL,submitedSpecialRate TEXT NOT NULL)")
             }
         }
     }

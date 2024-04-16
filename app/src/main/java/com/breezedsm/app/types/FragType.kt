@@ -33,5 +33,6 @@ enum class FragType {
     CompetetorStockFragment,AddCompetetorStockFragment,ViewComStockProductDetails,
 
     ProtoRegistrationFragment,RegisTerFaceFragment,DocumentRepoFeatureNewFragment,FromOrganizationFragment,OwnfilesFragment,
-    PhotoAttendanceFragment,TeamAttendanceFragment,PhotoRegAadhaarFragment,MyDetailsFrag,AttendCalendarFrag,CalculatorFrag,AttendSummaryFrag,PrivacypolicyWebviewFrag
+    PhotoAttendanceFragment,TeamAttendanceFragment,PhotoRegAadhaarFragment,MyDetailsFrag,AttendCalendarFrag,CalculatorFrag,AttendSummaryFrag,PrivacypolicyWebviewFrag,
+    OrderListFrag,ProductListFrag,CartListFrag,ViewOrdDtls,ViewNewOrdHistoryFrag
 }

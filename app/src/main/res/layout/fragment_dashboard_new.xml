@@ -451,6 +451,41 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_dash_total_mew_order_newD"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_70sdp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/_7sdp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <com.breezedsm.widgets.AppCustomTextView
+                            android:id="@+id/n_new_order_TV"
+                            android:layout_width="@dimen/_70sdp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="@drawable/rounded_corner_red_bg"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/_10sdp"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+
+                        <com.breezedsm.widgets.AppCustomTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            android:gravity="center"
+                            android:text="Total Order(s)"
+                            android:textColor="@color/login_txt_color"
+                            android:textSize="@dimen/_10sdp"
+                            android:visibility="visible" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/ll_dash_day_end_newD"
                         android:layout_width="@dimen/_90sdp"
                         android:layout_height="@dimen/_70sdp"

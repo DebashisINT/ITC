@@ -2289,8 +2289,8 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     }
 
     private fun getAssignedDDListApi(shop_id: String?, position: Int) {
-
         try {
+            Timber.d("tag_itc_check assignToDDList call AverageShopFragment")
             val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
             progress_wheel.spin()
             BaseActivity.compositeDisposable.add(
@@ -2348,6 +2348,7 @@ class AverageShopFragment : BaseFragment(), DatePickerListener, View.OnClickList
     }
 
     private fun getAssignedToShopApi(shop_id: String?, position: Int) {
+        Timber.d("tag_itc_check getAssignedToShopList call AverageShopFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

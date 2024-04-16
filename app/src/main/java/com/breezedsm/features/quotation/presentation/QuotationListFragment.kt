@@ -1047,6 +1047,7 @@ class QuotationListFragment : BaseFragment() {
     }
 
     private fun getAssignedDDListApi(shop_id: String?, quot: QuotationEntity) {
+        Timber.d("tag_itc_check assignToDDList call QuotationListFragment")
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -1101,6 +1102,7 @@ class QuotationListFragment : BaseFragment() {
     }
 
     private fun getAssignedToShopApi(shop_id: String?, quot: QuotationEntity) {
+        Timber.d("tag_itc_check getAssignedToShopList call QuotationListFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(

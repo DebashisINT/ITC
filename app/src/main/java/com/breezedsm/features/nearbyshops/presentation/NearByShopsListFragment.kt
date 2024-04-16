@@ -39,6 +39,7 @@ import com.breezedsm.app.utils.AppUtils
 import com.breezedsm.app.utils.AppUtils.Companion.changeAttendanceDateFormatToCurrent
 import com.breezedsm.app.utils.FTStorageUtils
 import com.breezedsm.app.utils.NotificationUtils
+import com.breezedsm.app.utils.Toaster
 import com.breezedsm.base.BaseResponse
 import com.breezedsm.base.presentation.BaseActivity
 import com.breezedsm.base.presentation.BaseFragment
@@ -1235,6 +1236,10 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
 
                             }
                         }).show((mContext as DashboardActivity).supportFragmentManager, "")
+            }
+
+            override fun createOrderClick(obj: AddShopDBModelEntity) {
+                (mContext as DashboardActivity).loadFragment(FragType.OrderListFrag, true, obj.shop_id)
             }
 
 
@@ -3058,6 +3063,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun getAssignedDDListApi(shop_id: String?, isFromInitView: Boolean) {
+        Timber.d("tag_itc_check assignToDDList call NearByShopsListFragment")
         val repository = AssignToDDListRepoProvider.provideAssignDDListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -3112,6 +3118,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
     }
 
     private fun getAssignedToShopApi(shop_id: String?, isFromInitView: Boolean) {
+        Timber.d("tag_itc_check getAssignedToShopList call NearByShopListFragment")
         val repository = TypeListRepoProvider.provideTypeListRepository()
         progress_wheel.spin()
         BaseActivity.compositeDisposable.add(
@@ -3456,7 +3463,7 @@ class NearByShopsListFragment : BaseFragment(), View.OnClickListener {
             return
         }
 
-
+        println("tag_call_check inside refreshShopList")
         val shopList = AppDatabase.getDBInstance()!!.addShopEntryDao().getUnSyncedShops(false)
 
         if (shopList != null && shopList.isNotEmpty()) {
