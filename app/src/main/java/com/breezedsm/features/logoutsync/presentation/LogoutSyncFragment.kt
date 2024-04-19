@@ -669,7 +669,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
         }
 
         rl_order.apply {
-            visibility = if (Pref.ShowPartyWithCreateOrder)
+            visibility = if (Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder)
                 View.VISIBLE
             else
                 View.GONE
@@ -1791,7 +1791,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     // Revision 1.0   Suman App V4.4.6  04-04-2024  mantis id 27291: Sync unsync order begin
     private fun checkNewOrdSync(){
-        if(Pref.ShowPartyWithCreateOrder){
+        if(Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder){
             var unsyncOrdL = AppDatabase.getDBInstance()!!.newOrderDataDao().getUnsyncList(false) as ArrayList<NewOrderDataEntity>
             if(unsyncOrdL.size>0){
                 var ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(unsyncOrdL.get(0).order_id)

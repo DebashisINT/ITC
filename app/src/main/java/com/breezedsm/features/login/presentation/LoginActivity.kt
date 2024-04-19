@@ -5904,6 +5904,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowAttendanceSummary = response.getconfigure?.get(i)?.Value == "1"
                                                 }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("ShowUserwisePartyWithGeoFence", ignoreCase = true)) {
+                                                Pref.ShowUserwisePartyWithGeoFence = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.ShowUserwisePartyWithGeoFence = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("ShowUserwisePartyWithCreateOrder", ignoreCase = true)) {
+                                                Pref.ShowUserwisePartyWithCreateOrder = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.ShowUserwisePartyWithCreateOrder = response.getconfigure?.get(i)?.Value == "1"
+                                                }
                                             }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {
@@ -6449,7 +6459,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 // Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion begin
 
     private fun getNewProductList() {
-        if(Pref.ShowPartyWithCreateOrder){
+        if(Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder){
             progress_wheel.spin()
             val repository = ProductListRepoProvider.productListProvider()
             BaseActivity.compositeDisposable.add(
@@ -6488,7 +6498,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun getNewProductRateList() {
-        if(Pref.ShowPartyWithCreateOrder){
+        if(Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder){
             progress_wheel.spin()
             val repository = ProductListRepoProvider.productListProvider()
             BaseActivity.compositeDisposable.add(
@@ -6530,7 +6540,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun getOrderHistoryList(){
         var ordHisL = AppDatabase.getDBInstance()!!.newOrderDataDao().getAllOrder() as ArrayList<NewOrderDataEntity>
-        if(Pref.ShowPartyWithCreateOrder && ordHisL.size==0){
+        if(Pref.ShowPartyWithCreateOrder && ordHisL.size==0 && Pref.ShowUserwisePartyWithCreateOrder){
             Timber.d("getOrderHistoryList call")
             progress_wheel.spin()
             val repository = ProductListRepoProvider.productListProvider()

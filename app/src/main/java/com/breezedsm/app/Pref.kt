@@ -438,4 +438,7 @@ object Pref : PreferenceHolder() {
     var IsAllowZeroRateOrder: Boolean by bindToPreferenceField(false, "IsAllowZeroRateOrder")
     var IsViewMRPInOrder: Boolean by bindToPreferenceField(false, "IsViewMRPInOrder")
 
+    var ShowUserwisePartyWithGeoFence : Boolean by bindToPreferenceField(false, "ShowUserwisePartyWithGeoFence")
+    var ShowUserwisePartyWithCreateOrder : Boolean by bindToPreferenceField(false, "ShowUserwisePartyWithCreateOrder")
+
 }

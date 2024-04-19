@@ -753,7 +753,7 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 e.printStackTrace()
                 itemView.order_amount_tv.visibility = View.GONE
             }
-            if (Pref.ShowPartyWithGeoFence ) {
+            if (Pref.ShowPartyWithGeoFence && Pref.ShowUserwisePartyWithGeoFence) {
                 try {
                     itemView.ll_range.visibility = View.VISIBLE
                     itemView.ll_order_range.visibility = View.VISIBLE
@@ -812,7 +812,7 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
             else{
                 itemView.ll_range.visibility = View.GONE
             }
-            if (Pref.ShowPartyWithCreateOrder ){
+            if (Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder){
                 itemView.ll_order.visibility = View.VISIBLE
                 itemView.ll_order_range.visibility = View.VISIBLE
                 itemView.iv_createorder.visibility = View.VISIBLE

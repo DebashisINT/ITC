@@ -303,7 +303,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
         })
         AppUtils.changeLanguage(this, "en")
-        println("load_frag "+mFragType.toString() + " gl: "+ Pref.gpsAccuracy +"   shop_acc ${Pref.shopLocAccuracy} "+ " usr: "+Pref.user_id  + " "+Pref.ShowPartyWithGeoFence+ " "+Pref.ShowPartyWithCreateOrder)
+        println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.ShowUserwisePartyWithGeoFence+" "+Pref.ShowUserwisePartyWithCreateOrder )
 
         //Pref.IsShowCalendar = true
         //Pref.IsShowAttendanceSummary = true
@@ -2329,7 +2329,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         } else {
             attendence_summary_tv.visibility = View.GONE
         }
-        if (Pref.ShowPartyWithCreateOrder) {
+        if (Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder) {
             menu_total_orders_tv.visibility = View.VISIBLE
         } else {
             menu_total_orders_tv.visibility = View.GONE
