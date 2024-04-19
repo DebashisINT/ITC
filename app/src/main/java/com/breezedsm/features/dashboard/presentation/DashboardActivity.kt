@@ -2882,7 +2882,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     }
                     else {
                         progress_wheel.spin()
-                        revisit_ll.isEnabled=false
+                        //revisit_ll.isEnabled=false
                         //checkAutoRevisit()
 
                         var loc:Location = Location("")
@@ -11718,7 +11718,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         Timber.d("revisitShopAll ${shopCodeListNearby.size}")
         if(shopCodeListNearby.size == 0){
 
-                revisit_ll.isEnabled=true
+                //revisit_ll.isEnabled=true
                 progress_wheel.stopSpinning()
                 val simpleDialog = Dialog(mContext)
                 simpleDialog.setCancelable(false)
