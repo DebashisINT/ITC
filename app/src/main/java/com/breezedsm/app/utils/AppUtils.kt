@@ -2294,8 +2294,9 @@ class AppUtils {
         }
 
         fun getSharedPreferencesIsScreenRecorderEnable(context: Context):Boolean{
-            val mPrefs = context.getSharedPreferences("IsScreenRecorderEnable_STATUS", Context.MODE_PRIVATE)
-            return mPrefs.getBoolean("IsScreenRecorderEnable",false)
+            /*val mPrefs = context.getSharedPreferences("IsScreenRecorderEnable_STATUS", Context.MODE_PRIVATE)
+            return mPrefs.getBoolean("IsScreenRecorderEnable",false)*/
+            return false
         }
 
 

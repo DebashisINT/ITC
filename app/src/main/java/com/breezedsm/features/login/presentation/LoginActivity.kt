@@ -5475,14 +5475,14 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 } else {
                                                     AppUtils.saveSharedPreferencesIsFaceDetectionWithCaptcha(this, false)
                                                 }
-                                            } else if (response.getconfigure!![i].Key.equals("IsScreenRecorderEnable", ignoreCase = true)) {
+                                            } /*else if (response.getconfigure!![i].Key.equals("IsScreenRecorderEnable", ignoreCase = true)) {
                                                 Pref.IsScreenRecorderEnable = response.getconfigure!![i].Value == "1"
                                                 if (Pref.IsScreenRecorderEnable) {
                                                     AppUtils.saveSharedPreferencesIsScreenRecorderEnable(this, true)
                                                 } else {
                                                     AppUtils.saveSharedPreferencesIsScreenRecorderEnable(this, false)
                                                 }
-                                            }
+                                            }*/
                                             //else if (response.getconfigure?.get(i)?.Key.equals("IsFromPortal", ignoreCase = true)) {
                                             else if (response.getconfigure?.get(i)?.Key.equals("IsDocRepoFromPortal", ignoreCase = true)) {
                                                 Pref.IsFromPortal = response.getconfigure!![i].Value == "1"

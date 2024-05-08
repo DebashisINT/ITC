@@ -5381,25 +5381,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                                 false
                                             )
                                         }
-                                    } else if (response.getconfigure!![i].Key.equals(
-                                            "IsScreenRecorderEnable",
-                                            ignoreCase = true
-                                        )
-                                    ) {
-                                        Pref.IsScreenRecorderEnable =
-                                            response.getconfigure!![i].Value == "1"
-                                        if (Pref.IsScreenRecorderEnable) {
-                                            AppUtils.saveSharedPreferencesIsScreenRecorderEnable(
-                                                mContext,
-                                                true
-                                            )
+                                    } /*else if (response.getconfigure!![i].Key.equals("IsScreenRecorderEnable", ignoreCase = true)) {
+                                        Pref.IsScreenRecorderEnable = response.getconfigure!![i].Value == "1"
+                                        if (Pref.IsScreenRecorderEnable) { AppUtils.saveSharedPreferencesIsScreenRecorderEnable(mContext, true)
                                         } else {
-                                            AppUtils.saveSharedPreferencesIsScreenRecorderEnable(
-                                                mContext,
-                                                false
-                                            )
+                                            AppUtils.saveSharedPreferencesIsScreenRecorderEnable(mContext, false)
                                         }
-                                    }
+                                    }*/
                                     //else if (response.getconfigure?.get(i)?.Key.equals("IsFromPortal", ignoreCase = true)) {
                                     else if (response.getconfigure?.get(i)?.Key.equals(
                                             "IsDocRepoFromPortal",
