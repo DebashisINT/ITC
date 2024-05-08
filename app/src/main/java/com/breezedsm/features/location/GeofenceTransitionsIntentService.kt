@@ -25,6 +25,7 @@ import io.reactivex.schedulers.Schedulers
 /**
  * Created by Saikat on 04-01-2019.
  */
+// Rev 1.0 Suman 06-05-2024 Suman GeofenceTransitionsIntentService mantis 27335
 class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsIntentService") {
 
     private val TAG = "GeofenceTransitionsIS"
@@ -188,6 +189,17 @@ class GeofenceTransitionsIntentService : IntentService("GeofenceTransitionsInten
             shopDurationData.isNewShop = 0
         }
         //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+        // Rev 1.0 Suman 06-05-2024 Suman GeofenceTransitionsIntentService mantis 27335  begin
+        try {
+            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+            shopDurationData.shop_lat=shopOb.shopLat.toString()
+            shopDurationData.shop_long=shopOb.shopLong.toString()
+            shopDurationData.shop_addr=shopOb.address.toString()
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+        // Rev 1.0 Suman 06-05-2024 Suman GeofenceTransitionsIntentService mantis 27335  end
 
         shopDataList.add(shopDurationData)
 

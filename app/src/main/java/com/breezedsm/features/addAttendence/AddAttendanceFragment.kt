@@ -12,7 +12,6 @@ import android.graphics.*
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.os.*
-import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.TextUtils
@@ -69,7 +68,6 @@ import com.breezedsm.features.photoReg.api.GetUserListPhotoRegProvider
 import com.breezedsm.features.photoReg.model.UserFacePicUrlResponse
 import com.breezedsm.widgets.AppCustomEditText
 import com.breezedsm.widgets.AppCustomTextView
-import timber.log.Timber
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -90,12 +88,15 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
 import java.util.*
-import kotlin.collections.ArrayList
+import java.util.concurrent.Executor
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 /**
  * Created by Saikat on 29-08-2018.
@@ -2591,8 +2592,8 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                                 //var bitmap :Bitmap? = null
                                 //registerFace(bitmap);
                                 println("reg_face - GetImageFromUrl called"+AppUtils.getCurrentDateTime());
-                                GetImageFromUrl().execute(CustomStatic.FaceUrl)
-
+                                //GetImageFromUrl().execute(CustomStatic.FaceUrl)
+                                faceImgProcess(CustomStatic.FaceUrl)
                                 Timber.d(" AddAttendanceFragment : FaceRegistration/FaceMatch" +response.status.toString() +", : "  + ", Success: ")
                             }else{
                                 BaseActivity.isApiInitiated = false
@@ -2659,7 +2660,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
     private fun registerFace(mBitmap: Bitmap?) {
         //BaseActivity.isApiInitiated=false
-        println("reg_face - add_attendance_registerFace"+AppUtils.getCurrentDateTime());
+        Timber.d("reg_face - add_attendance_registerFace"+AppUtils.getCurrentDateTime());
         try {
             if (mBitmap == null) {
                 //Toast.makeText(this, "No File", Toast.LENGTH_SHORT).show()
@@ -2674,14 +2675,14 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             faceBmp = Bitmap.createBitmap(TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, Bitmap.Config.ARGB_8888)
             faceDetector?.process(image)?.addOnSuccessListener(OnSuccessListener<List<Face>> { faces ->
                 if (faces.size == 0) {
-                    println("reg_face - add_attendance_registerFace no face detected"+AppUtils.getCurrentDateTime());
+                    Timber.d("reg_face - add_attendance_registerFace no face detected"+AppUtils.getCurrentDateTime());
                     return@OnSuccessListener
                 }
                 Handler().post {
                     object : Thread() {
                         override fun run() {
                             //action
-                            println("reg_face - add_attendance_registerFace face detected"+AppUtils.getCurrentDateTime());
+                            Timber.d("reg_face - add_attendance_registerFace face detected"+AppUtils.getCurrentDateTime());
                             onFacesDetected(1, faces, true) //no need to add currtime
                         }
                     }.start()
@@ -2832,6 +2833,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 //    }
 
         Log.e("xc", "startabc" )
+        Timber.d("start startActivityForResult")
         val rec = mappedRecognitions[0]
         FaceStartActivity.detector.register("", rec)
         val intent = Intent(mContext, DetectorActivity::class.java)
@@ -2871,6 +2873,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             //this.imageView = img;
         }
         override fun doInBackground(vararg url: String?): Bitmap {
+            println("tag_attend_face_process1 begin")
             var bitmappppx: Bitmap? = null
             val stringUrl = url[0]
             bitmappppx = null
@@ -2886,11 +2889,37 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
         override fun onPostExecute(result: Bitmap?) {
             super.onPostExecute(result)
-            println("reg_face - registerFace called"+AppUtils.getCurrentDateTime());
+            Timber.d("reg_face - registerFace called"+AppUtils.getCurrentDateTime());
+            println("tag_attend_face_process1 end")
             registerFace(result)
         }
 
     }
+
+    //new face image process begin
+    fun faceImgProcess(faceUrl:String){
+        Timber.d("tag_attend_face_process begin")
+        var executorService : ExecutorService = Executors.newSingleThreadExecutor()
+        Handler(Looper.getMainLooper()).postDelayed({
+            executorService.execute{
+                var bitmappppx: Bitmap? = null
+                val stringUrl = faceUrl
+                bitmappppx = null
+                val inputStream: InputStream
+                try {
+                    inputStream = URL(stringUrl).openStream()
+                    bitmappppx = BitmapFactory.decodeStream(inputStream)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                Timber.d("tag_attend_face_process end")
+                registerFace(bitmappppx!!)
+            }
+        }, 1000)
+    }
+
+    //new face image process end
+
 
 
     private fun isLocationServiceRunning(serviceClass: Class<*>): Boolean {

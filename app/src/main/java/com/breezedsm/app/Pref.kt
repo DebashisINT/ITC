@@ -441,4 +441,7 @@ object Pref : PreferenceHolder() {
     var ShowUserwisePartyWithGeoFence : Boolean by bindToPreferenceField(false, "ShowUserwisePartyWithGeoFence")
     var ShowUserwisePartyWithCreateOrder : Boolean by bindToPreferenceField(false, "ShowUserwisePartyWithCreateOrder")
 
+    var user_ShopStatus: Boolean by bindToPreferenceField(false, "user_ShopStatus")
+    var IsRouteUpdateForShopUser : Boolean by bindToPreferenceField(true, "IsRouteUpdateForShopUser")
+
 }

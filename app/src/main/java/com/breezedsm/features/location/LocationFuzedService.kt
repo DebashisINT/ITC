@@ -93,7 +93,8 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by riddhi on 10/11/17.
  */
-
+// Rev 1.0 Suman 06-05-2024 Suman LocationFuzedService mantis 27335
+// Rev 2.0 LocationFuzedService v 4.4.7 Suman 08/05/2024 mantis 0027427 location sync update
 class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
         OnCompleteListener<Void>, GpsStatus.Listener {
     override fun onComplete(p0: Task<Void>) {
@@ -3086,9 +3087,18 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
 
         location.visit_distance = Pref.visitDistance
 
-        //harcoded location isUploaded true begin
+
+
+        // 13.0 LocationFuzedService v 4.2.6 Suman 08/05/2024 mantis 0027427 location sync update begin
+
+        /*//harcoded location isUploaded true begin
         location.isUploaded = true
-        //harcoded location isUploaded true end
+        //harcoded location isUploaded true end*/
+
+        if(Pref.IsRouteUpdateForShopUser == false){
+            location.isUploaded = true
+        }
+        // 13.0 LocationFuzedService v 4.2.6 Suman 08/05/2024 mantis 0027427 location sync update end
 
         AppDatabase.getDBInstance()!!.userLocationDataDao().insertAll(location)
         Timber.d("Shop to shop distance (At accurate loc save time)====> " + Pref.totalS2SDistance)
@@ -3425,6 +3435,17 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                         }
                         //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+                        // Rev 1.0 Suman 06-05-2024 Suman LocationFuzedService mantis 27335 begin
+                        try {
+                            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                            shopDurationData.shop_lat=shopOb.shopLat.toString()
+                            shopDurationData.shop_long=shopOb.shopLong.toString()
+                            shopDurationData.shop_addr=shopOb.address.toString()
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
+                        // Rev 1.0 Suman 06-05-2024 Suman LocationFuzedService mantis 27335 end
+
 
                         shopDataList.add(shopDurationData)
 
@@ -3533,6 +3554,17 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                             shopDurationData.isNewShop = 0
                         }
                         //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+                        // Rev 1.0 Suman 06-05-2024 Suman LocationFuzedService mantis 27335 begin
+                        try {
+                            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                            shopDurationData.shop_lat=shopOb.shopLat.toString()
+                            shopDurationData.shop_long=shopOb.shopLong.toString()
+                            shopDurationData.shop_addr=shopOb.address.toString()
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
+                        // Rev 1.0 Suman 06-05-2024 Suman LocationFuzedService mantis 27335 end
 
                         shopDataList.add(shopDurationData)
 

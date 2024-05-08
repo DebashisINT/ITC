@@ -136,6 +136,7 @@ import java.util.*
  * Created by rp : 31-10-2017:16:49
  */
 // Revision 1.0 DashboardFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: stage list api call update on refresh
+// Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335
 
 class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListener,
     View.OnTouchListener {
@@ -6139,6 +6140,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                             Pref.ShowUserwisePartyWithCreateOrder = response.getconfigure?.get(i)?.Value == "1"
                                         }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsRouteUpdateForShopUser", ignoreCase = true)) {
+                                        Pref.IsRouteUpdateForShopUser = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsRouteUpdateForShopUser = response.getconfigure?.get(i)?.Value == "1"
+                                        }
                                     }
 
 
@@ -7579,22 +7585,27 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         else{
             reportList.visibility = View.GONE
         }
-        timerTV = view!!.findViewById(R.id.tv_dash_frag_timer)
-        if(Pref.IsShowMarketSpendTimer){
-            timerTV.visibility = View.VISIBLE
-            try{
-                if(!Pref.DayStartTime.equals("")){
-                    var currentTime = System.currentTimeMillis().toString()
-                    var timeDiff = AppUtils.getTimeFromTimeSpan(Pref.DayStartTime,System.currentTimeMillis().toString())
-                    timeDiff = timeDiff.split(":").get(0)+":"+timeDiff.split(":").get(1)
-                    timerTV.text = "$timeDiff"
+        try {
+            timerTV = view!!.findViewById(R.id.tv_dash_frag_timer)
+            if(Pref.IsShowMarketSpendTimer){
+                timerTV.visibility = View.VISIBLE
+                try{
+                    if(!Pref.DayStartTime.equals("")){
+                        var currentTime = System.currentTimeMillis().toString()
+                        var timeDiff = AppUtils.getTimeFromTimeSpan(Pref.DayStartTime,System.currentTimeMillis().toString())
+                        timeDiff = timeDiff.split(":").get(0)+":"+timeDiff.split(":").get(1)
+                        timerTV.text = "$timeDiff"
+                    }
+                }catch (ex:Exception){
+                    Timber.d("ex timer text")
                 }
-            }catch (ex:Exception){
-                Timber.d("ex timer text")
+            }else{
+                timerTV.visibility = View.GONE
             }
-        }else{
-            timerTV.visibility = View.GONE
+        }catch (ex:Exception){
+            ex.printStackTrace()
         }
+
 
         (mContext as DashboardActivity).updateUI()
     }
@@ -10319,6 +10330,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                 }
                                 //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+                                // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 begin
+                                try {
+                                    var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                                    shopDurationData.shop_lat=shopOb.shopLat.toString()
+                                    shopDurationData.shop_long=shopOb.shopLong.toString()
+                                    shopDurationData.shop_addr=shopOb.address.toString()
+                                }catch (ex:Exception){
+                                    ex.printStackTrace()
+                                }
+                                // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 end
+
                                 shopDataList.add(shopDurationData)
 
                                 //////////////////////////
@@ -10431,6 +10453,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                     shopDurationData.isNewShop = 0
                                 }
                                 //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+                                // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 begin
+                                try {
+                                    var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                                    shopDurationData.shop_lat=shopOb.shopLat.toString()
+                                    shopDurationData.shop_long=shopOb.shopLong.toString()
+                                    shopDurationData.shop_addr=shopOb.address.toString()
+                                }catch (ex:Exception){
+                                    ex.printStackTrace()
+                                }
+                                // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 end
 
                                 shopDataList.add(shopDurationData)
 
@@ -11004,6 +11037,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             }
                             //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+                            // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 begin
+                            try {
+                                var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                                shopDurationData.shop_lat=shopOb.shopLat.toString()
+                                shopDurationData.shop_long=shopOb.shopLong.toString()
+                                shopDurationData.shop_addr=shopOb.address.toString()
+                            }catch (ex:Exception){
+                                ex.printStackTrace()
+                            }
+                            // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 end
+
                             shopDataList.add(shopDurationData)
 
                             //////////////////////////
@@ -11326,6 +11370,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         }
                         //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+                        // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 begin
+                        try {
+                            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                            shopDurationData.shop_lat=shopOb.shopLat.toString()
+                            shopDurationData.shop_long=shopOb.shopLong.toString()
+                            shopDurationData.shop_addr=shopOb.address.toString()
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
+                        // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 end
+
                         shopDataList.add(shopDurationData)
 
                         //////////////////////////
@@ -11409,6 +11464,17 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                             shopDurationData.isNewShop = 0
                         }
                         //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+                        // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 begin
+                        try {
+                            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                            shopDurationData.shop_lat=shopOb.shopLat.toString()
+                            shopDurationData.shop_long=shopOb.shopLong.toString()
+                            shopDurationData.shop_addr=shopOb.address.toString()
+                        }catch (ex:Exception){
+                            ex.printStackTrace()
+                        }
+                        // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335 end
 
                         shopDataList.add(shopDurationData)
 

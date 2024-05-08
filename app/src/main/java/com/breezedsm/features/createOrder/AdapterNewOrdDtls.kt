@@ -47,7 +47,7 @@ class AdapterNewOrdDtls(var mContext:Context, var ordL:ArrayList<NewOrderDataEnt
                 var orderIdtext = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Order ID: </font> <font color="+
                     mContext.resources.getColor(R.color.black) + ">" + "${mList.get(adapterPosition).order_id}" + "</font>"
                 var orderDatetext = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Date: </font> <font color="+
-                        mContext.resources.getColor(R.color.black) + ">" + "${AppUtils.convertDateTimeToCommonFormat(mList.get(adapterPosition).order_date)}" + "</font>"
+                        mContext.resources.getColor(R.color.black) + ">" + "${AppUtils.convertToDateLikeOrderFormat(mList.get(adapterPosition).order_date)}" + "</font>"
                 var productL = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(mList.get(adapterPosition).order_id) as ArrayList<NewOrderProductEntity>
 
                 var orderItemstext = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Order item(s): </font> <font color="+

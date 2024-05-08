@@ -4,6 +4,7 @@ package com.breezedsm.features.location.model
 /**
  * Created by Pratishruti on 28-11-2017.
  */
+// Rev 1.0 Suman 06-05-2024 Suman mantis 27335
 class ShopDurationRequestData {
 
     var shop_id: String? = null
@@ -32,6 +33,12 @@ class ShopDurationRequestData {
 
     var shopid: String? = null
     var isNewShop: Int = 0
+
+    // Rev 1.0 Suman 06-05-2024 Suman mantis 27335 begin
+    var shop_lat: String = "0"
+    var shop_long: String = "0"
+    var shop_addr: String? = "NA"
+    // Rev 1.0 Suman 06-05-2024 Suman mantis 27335 end
 
 //    "visited_date": "yyyy-MM-dd",
 //    "visited_time": "yyyy-MM-dd HH:mm:ss",

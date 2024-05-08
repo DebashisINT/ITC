@@ -35,4 +35,6 @@ class UserDetail {
     var attendance_text: String? = null
     var distributor_name: String? = null
     var market_worked: String? = null
+
+    var user_ShopStatus: Boolean = false
 }

@@ -151,6 +151,7 @@ import kotlin.collections.ArrayList
 
 // Rev 1.0 LoginActivity Suman 03-07-2023 mantis 26464
 // Revision 2.0   Suman App V4.4.6  04-04-2024  mantis id 27291: New Order Module api implement & room insertion
+// 3.0  LoginActivity Login parameter user_ShopStatus Suman 29-04-2024 mantis id 0027391 v4.4.7
 
 class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
@@ -4381,6 +4382,20 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
         println("xyz - doAfterLoginFunctionality started" + AppUtils.getCurrentDateTime());
         // setEveningAlarm(this, 15, 9)
 
+        // 3.0  LoginActivity Login parameter user_ShopStatus Suman 29-04-2024 mantis id 0027391 v4.4.7 begin
+        try {
+            Pref.user_ShopStatus = loginResponse.user_details!!.user_ShopStatus!!
+        }catch (ex:Exception){
+            ex.printStackTrace()
+            Pref.user_ShopStatus = false
+        }
+        if(Pref.user_ShopStatus){
+            AppDatabase.getDBInstance()!!.addShopEntryDao().deleteAll()
+            AppDatabase.getDBInstance()!!.shopActivityDao().deleteAll()
+        }
+        Timber.d("tag_login_shop_status ${Pref.user_ShopStatus}")
+        // 3.0  LoginActivity Login parameter user_ShopStatus Suman 29-04-2024 mantis id 0027391 v4.4.7 end
+
         Pref.user_id = loginResponse.user_details!!.user_id
         Pref.temp_user_id = loginResponse.user_details!!.user_id
         Pref.user_name = loginResponse.user_details!!.name
@@ -4626,6 +4641,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun callShopListApi() {
+        Timber.d("tag_login_shop_status calling callShopListApi")
         println("xyz - getListFromDatabase end" + AppUtils.getCurrentDateTime());
         val repository = ShopListRepositoryProvider.provideShopListRepository()
         progress_wheel.spin()
@@ -5913,6 +5929,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 Pref.ShowUserwisePartyWithCreateOrder = response.getconfigure!![i].Value == "1"
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.ShowUserwisePartyWithCreateOrder = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsRouteUpdateForShopUser", ignoreCase = true)) {
+                                                Pref.IsRouteUpdateForShopUser = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsRouteUpdateForShopUser = response.getconfigure?.get(i)?.Value == "1"
                                                 }
                                             }
 

@@ -570,6 +570,20 @@ class AppUtils {
             return formattedDate.toString()
         }
 
+        fun convertToDateLikeOrderFormat(date: String): String {
+            try {
+                val f = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                val d = f.parse(date)
+                val date = SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH)
+                return date.format(d)
+//            System.out.println("Time: " + time.format(d))
+            } catch (e: ParseException) {
+                e.printStackTrace()
+                return getCurrentDate()
+            }
+
+        }
+
         fun getFormattedDateForActivity(c: Calendar): String {
             val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
             val formattedDate = df.format(c.time)

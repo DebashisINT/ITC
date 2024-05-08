@@ -262,6 +262,36 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         shopDurationData.isFirstShopVisited = shopActivity.isFirstShopVisited
         shopDurationData.distanceFromHomeLoc = shopActivity.distance_from_home_loc
         shopDurationData.next_visit_date = shopActivity.next_visit_date
+
+        //duration garbage fix
+        try{
+            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
+            {
+                shopDurationData.spent_duration="00:00:10"
+            }
+        }catch (ex:Exception){
+            shopDurationData.spent_duration="00:00:10"
+        }
+
+        //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+        if(shopActivity.isNewShop){
+            shopDurationData.isNewShop = 1
+        }else{
+            shopDurationData.isNewShop = 0
+        }
+        //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+        // Rev 1.0 Suman 06-05-2024 Suman GeofenceTransitionsIntentService mantis 27335  begin
+        try {
+            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+            shopDurationData.shop_lat=shopOb.shopLat.toString()
+            shopDurationData.shop_long=shopOb.shopLong.toString()
+            shopDurationData.shop_addr=shopOb.address.toString()
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+        // Rev 1.0 Suman 06-05-2024 Suman GeofenceTransitionsIntentService mantis 27335  end
+
         shopDataList.add(shopDurationData)
 
         if (shopDataList.isEmpty()) {

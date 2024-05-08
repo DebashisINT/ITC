@@ -60,6 +60,7 @@ import kotlin.collections.ArrayList
 /**
  * Created by Kinsuk on 15-11-2017.
  */
+// Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335
 class AvgTimespentShopListFragment : BaseFragment(), DatePickerListener, View.OnClickListener {
 
 
@@ -278,6 +279,17 @@ class AvgTimespentShopListFragment : BaseFragment(), DatePickerListener, View.On
                 shopDurationData.isNewShop = 0
             }
             //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+            // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 begin
+            try {
+                var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                shopDurationData.shop_lat=shopOb.shopLat.toString()
+                shopDurationData.shop_long=shopOb.shopLong.toString()
+                shopDurationData.shop_addr=shopOb.address.toString()
+            }catch (ex:Exception){
+                ex.printStackTrace()
+            }
+            // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 end
 
             shopDataList.add(shopDurationData)
 
@@ -1148,6 +1160,17 @@ class AvgTimespentShopListFragment : BaseFragment(), DatePickerListener, View.On
                 }
                 //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+                // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 begin
+                try {
+                    var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                    shopDurationData.shop_lat=shopOb.shopLat.toString()
+                    shopDurationData.shop_long=shopOb.shopLong.toString()
+                    shopDurationData.shop_addr=shopOb.address.toString()
+                }catch (ex:Exception){
+                    ex.printStackTrace()
+                }
+                // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 27335 end
+
                 shopDataList.add(shopDurationData)
             }
         }
@@ -1441,6 +1464,17 @@ class AvgTimespentShopListFragment : BaseFragment(), DatePickerListener, View.On
             }
             //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+            // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 begin
+            try {
+                var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                shopDurationData.shop_lat=shopOb.shopLat.toString()
+                shopDurationData.shop_long=shopOb.shopLong.toString()
+                shopDurationData.shop_addr=shopOb.address.toString()
+            }catch (ex:Exception){
+                ex.printStackTrace()
+            }
+            // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 27335 end
+
             shopDataList.add(shopDurationData)
 
             if (shopDataList.isEmpty()) {
@@ -1724,6 +1758,17 @@ class AvgTimespentShopListFragment : BaseFragment(), DatePickerListener, View.On
             shopDurationData.isNewShop = 0
         }
         //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+        // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 begin
+        try {
+            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+            shopDurationData.shop_lat=shopOb.shopLat.toString()
+            shopDurationData.shop_long=shopOb.shopLong.toString()
+            shopDurationData.shop_addr=shopOb.address.toString()
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+        // Rev 1.0 Suman 06-05-2024 Suman AvgTimespentShopListFragment mantis 27335 27335 end
 
         shopDataList.add(shopDurationData)
 

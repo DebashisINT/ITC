@@ -111,7 +111,7 @@ import kotlin.collections.ArrayList
  * Created by Kinsuk on 14-01-2019.
  */
 // Revision 1.0   Suman App V4.4.6  04-04-2024  mantis id 27291: Sync unsync order
-
+// Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335
 class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var mContext: Context
@@ -1235,6 +1235,17 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             }
             //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+            // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 begin
+            try {
+                var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                shopDurationData.shop_lat=shopOb.shopLat.toString()
+                shopDurationData.shop_long=shopOb.shopLong.toString()
+                shopDurationData.shop_addr=shopOb.address.toString()
+            }catch (ex:Exception){
+                ex.printStackTrace()
+            }
+            // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 end
+
             shopDataList.add(shopDurationData)
         }
         else {
@@ -1313,6 +1324,17 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                     shopDurationData.isNewShop = 0
                 }
                 //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+                // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 begin
+                try {
+                    var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                    shopDurationData.shop_lat=shopOb.shopLat.toString()
+                    shopDurationData.shop_long=shopOb.shopLong.toString()
+                    shopDurationData.shop_addr=shopOb.address.toString()
+                }catch (ex:Exception){
+                    ex.printStackTrace()
+                }
+                // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 end
 
                 shopDataList.add(shopDurationData)
             }
@@ -2721,6 +2743,17 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             }
                             //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+                            // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 begin
+                            try {
+                                var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                                shopDurationData.shop_lat=shopOb.shopLat.toString()
+                                shopDurationData.shop_long=shopOb.shopLong.toString()
+                                shopDurationData.shop_addr=shopOb.address.toString()
+                            }catch (ex:Exception){
+                                ex.printStackTrace()
+                            }
+                            // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 end
+
                             shopDataList.add(shopDurationData)
 
 
@@ -2815,6 +2848,17 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                 shopDurationData.isNewShop = 0
                             }
                             //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+                            // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 begin
+                            try {
+                                var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                                shopDurationData.shop_lat=shopOb.shopLat.toString()
+                                shopDurationData.shop_long=shopOb.shopLong.toString()
+                                shopDurationData.shop_addr=shopOb.address.toString()
+                            }catch (ex:Exception){
+                                ex.printStackTrace()
+                            }
+                            // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335 end
 
                             shopDataList.add(shopDurationData)
 

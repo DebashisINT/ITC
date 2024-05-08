@@ -85,7 +85,7 @@ import java.util.*
 /**
  * Created by Pratishruti on 26-10-2017.
  */
-
+// Rev 1.0 Suman 06-05-2024 Suman BaseActivity mantis 27335
 open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetectorCallBack {
 
     private val mRegistry = LifecycleRegistry(this)
@@ -1504,6 +1504,17 @@ fun isMonitorServiceRunning(): Boolean {
             }
             //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
 
+            // Rev 1.0 Suman 06-05-2024 Suman BaseActivity mantis 27335 begin
+            try {
+                var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+                shopDurationData.shop_lat=shopOb.shopLat.toString()
+                shopDurationData.shop_long=shopOb.shopLong.toString()
+                shopDurationData.shop_addr=shopOb.address.toString()
+            }catch (ex:Exception){
+                ex.printStackTrace()
+            }
+            // Rev 1.0 Suman 06-05-2024 Suman BaseActivity mantis 27335 end
+
             shopDataList.add(shopDurationData)
 
             Timber.d("========SYNC ALL VISITED SHOP DATA (AVERAGE SHOP)=====")
@@ -1703,6 +1714,17 @@ fun isMonitorServiceRunning(): Boolean {
             shopDurationData.isNewShop = 0
         }
         //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
+
+        // Rev 1.0 Suman 06-05-2024 Suman BaseActivity mantis 27335 begin
+        try {
+            var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
+            shopDurationData.shop_lat=shopOb.shopLat.toString()
+            shopDurationData.shop_long=shopOb.shopLong.toString()
+            shopDurationData.shop_addr=shopOb.address.toString()
+        }catch (ex:Exception){
+            ex.printStackTrace()
+        }
+        // Rev 1.0 Suman 06-05-2024 Suman BaseActivity mantis 27335 end
 
         shopDataList.add(shopDurationData)
 
