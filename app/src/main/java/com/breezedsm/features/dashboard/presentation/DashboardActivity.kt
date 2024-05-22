@@ -309,7 +309,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         AppUtils.changeLanguage(this, "en")
         println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.IsRouteUpdateForShopUser )
 
-        //Pref.IsShowUserWiseDateWiseOrderInApp = true
+        Pref.IsShowUserWiseDateWiseOrderInApp = true
 
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())

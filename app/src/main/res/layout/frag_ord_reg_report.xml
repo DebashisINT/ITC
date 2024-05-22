@@ -241,6 +241,19 @@
             <include layout="@layout/empty_page_layout"/>
         </LinearLayout>
 
+        <com.breezedsm.app.widgets.MovableFloatingActionButton
+            android:id="@+id/fab_frag_ord_report_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:background="@color/white"
+            android:src="@drawable/ic_share"
+            android:tint="@color/white"
+            app:fabSize="normal"
+            android:layout_marginBottom="@dimen/_50sdp"
+            android:layout_marginRight="@dimen/_10sdp"/>
+
+
     </FrameLayout>
 
 </LinearLayout>
