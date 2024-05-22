@@ -638,26 +638,22 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
             document.close()
 
             var sendingPath = path + fileName + ".pdf"
-            if (!pathNew.equals("")) {
+            if(!pathNew.equals("")){
                 sendingPath = pathNew
             }
-            try {
+            try{
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 val fileUrl = Uri.parse(sendingPath)
                 val file = File(fileUrl.path)
-                val uri: Uri = FileProvider.getUriForFile(
-                    mContext,
-                    mContext.applicationContext.packageName.toString() + ".provider",
-                    file
-                )
+                val uri: Uri = FileProvider.getUriForFile(mContext, mContext.applicationContext.packageName.toString() + ".provider", file)
                 shareIntent.type = "image/png"
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
                 startActivity(Intent.createChooser(shareIntent, "Share pdf using"))
-            } catch (ex: Exception) {
+            }catch (ex:Exception){
                 ex.printStackTrace()
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                println("printshareex"+ex.printStackTrace())
             }
+
         }
         catch (ex:Exception){
             ex.printStackTrace()
