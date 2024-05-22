@@ -44,9 +44,9 @@ class AdapterNewOrdDtls(var mContext:Context, var ordL:ArrayList<NewOrderDataEnt
     inner class NewOrdDtlsViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         fun bindItems(context: Context,mList:ArrayList<NewOrderDataEntity>,listner : AdapterNewOrdDtls.OnCLick){
             itemView.apply {
-                var orderIdtext = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Order ID: </font> <font color="+
+                var orderIdtext = "<font color=" + mContext.resources.getColor(R.color.black) + ">Order ID: </font> <font color="+
                     mContext.resources.getColor(R.color.black) + ">" + "${mList.get(adapterPosition).order_id}" + "</font>"
-                var orderDatetext = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Date: </font> <font color="+
+                var orderDatetext = "<font color=" + mContext.resources.getColor(R.color.black) + ">Date: </font> <font color="+
                         mContext.resources.getColor(R.color.black) + ">" + "${AppUtils.convertToDateLikeOrderFormat(mList.get(adapterPosition).order_date)}" + "</font>"
                 var productL = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(mList.get(adapterPosition).order_id) as ArrayList<NewOrderProductEntity>
 

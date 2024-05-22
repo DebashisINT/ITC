@@ -1494,7 +1494,8 @@ even when the app is closed or not in use.</string>
     <string name="power_off_msg" translatable="false">Device Power Saver is ON.
     GPS Tracking or detection may not be working Properly.</string>
 
-    <string name="face_not_msg" translatable="false">Your registration is pending. Please talk to your head to get this done to login in the system. Thanks.</string>
+    <!--Suman 21-05-2024 Mantis id 27464-->
+    <string name="face_not_msg" translatable="false">Your Face registration is pending. Please talk to your head to get this done to login in the system. Thanks.</string>
 
     <string name="aadhaar_reg_guide_header" translatable="false">Aadhar Registration Guide:</string>
     <string name="aadhaar_reg_guide_body" translatable="false">1. Avoid Background area\n

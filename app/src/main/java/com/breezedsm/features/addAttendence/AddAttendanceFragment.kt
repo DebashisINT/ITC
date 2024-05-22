@@ -2832,12 +2832,16 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 //      lastSaved = System.currentTimeMillis();
 //    }
 
-        Log.e("xc", "startabc" )
-        Timber.d("start startActivityForResult")
-        val rec = mappedRecognitions[0]
-        FaceStartActivity.detector.register("", rec)
-        val intent = Intent(mContext, DetectorActivity::class.java)
-        startActivityForResult(intent, 171)
+        try {
+            Log.e("xc", "startabc" )
+            Timber.d("start startActivityForResult")
+            val rec = mappedRecognitions[0]
+            FaceStartActivity.detector.register("", rec)
+            val intent = Intent(mContext, DetectorActivity::class.java)
+            startActivityForResult(intent, 171)
+        } catch (e: Exception) {
+            Timber.d("error ${e.message}")
+        }
 //        startActivity(new Intent(this,DetectorActivity.class));
 //        finish();
 

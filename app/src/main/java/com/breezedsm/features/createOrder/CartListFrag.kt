@@ -208,6 +208,7 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
                     obj.product_name = ProductListFrag.finalOrderDataList.get(i).product_name
                     obj.submitedQty = ProductListFrag.finalOrderDataList.get(i).submitedQty
                     obj.submitedSpecialRate = ProductListFrag.finalOrderDataList.get(i).submitedRate
+                    obj.shop_id = shop_id
                     orderProductDtls.add(obj)
                 }
                 AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(orderProductDtls)

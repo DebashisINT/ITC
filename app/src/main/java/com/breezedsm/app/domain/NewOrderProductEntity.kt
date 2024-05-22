@@ -13,4 +13,5 @@ data class NewOrderProductEntity (
     @ColumnInfo var product_name:String = "",
     @ColumnInfo var submitedQty:String = "",
     @ColumnInfo var submitedSpecialRate:String = "",
+    @ColumnInfo var shop_id:String = ""
 )

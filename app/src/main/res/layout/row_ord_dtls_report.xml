@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="@dimen/_5sdp"
+    app:cardCornerRadius="@dimen/_5sdp"
+    android:layout_margin="@dimen/_3sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_ord_dtls_date"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_25sdp"
+            android:background="@drawable/shape_cursor_blue3"
+            android:text="Date"
+            android:gravity="center|start"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:paddingLeft="@dimen/_5sdp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_ord_dtls_list_dtls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/_30sdp"
+            android:orientation="horizontal"
+            android:background="@drawable/shape_button_custom">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Day wise total :"
+                android:textSize="@dimen/_11sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_ord_dtls_total_qty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:text="Qty"
+                android:textSize="@dimen/_10sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_ord_dtls_total_amt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Amt"
+                android:textSize="@dimen/_10sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

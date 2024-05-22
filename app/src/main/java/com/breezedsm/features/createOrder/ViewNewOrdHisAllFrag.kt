@@ -1,10 +1,10 @@
 package com.breezedsm.features.createOrder
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.breezedsm.R
@@ -23,7 +22,6 @@ import com.breezedsm.app.AppDatabase
 import com.breezedsm.app.NetworkConstant
 import com.breezedsm.app.Pref
 import com.breezedsm.app.domain.NewOrderDataEntity
-import com.breezedsm.app.domain.NewProductListEntity
 import com.breezedsm.app.types.FragType
 import com.breezedsm.app.utils.AppUtils
 import com.breezedsm.app.utils.ToasterMiddle
@@ -32,8 +30,6 @@ import com.breezedsm.base.presentation.BaseActivity
 import com.breezedsm.base.presentation.BaseFragment
 import com.breezedsm.features.dashboard.presentation.DashboardActivity
 import com.breezedsm.features.login.api.productlistapi.ProductListRepoProvider
-import com.github.jhonnyx2012.horizontalpicker.DatePickerListener
-import com.github.jhonnyx2012.horizontalpicker.HorizontalPicker
 import com.itextpdf.text.BadElementException
 import com.itextpdf.text.BaseColor
 import com.itextpdf.text.Chunk
@@ -52,110 +48,67 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
-import org.joda.time.DateTime
-import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-
-class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerListener {
-
+class ViewNewOrdHisAllFrag: BaseFragment(), View.OnClickListener {
     private lateinit var mContext: Context
+
+    private lateinit var tv_ordCnt:TextView
+    private lateinit var rv_ordDtls:RecyclerView
+    private lateinit var progress_wheel: ProgressWheel
 
     private lateinit var ll_no_data_root: LinearLayout
     private lateinit var tv_noDataHeader:TextView
     private lateinit var tv_noDataBody:TextView
-    private lateinit var img_direction:ImageView
+    private lateinit var img_direction: ImageView
+
+    private lateinit var adapterNewOrdDtls:AdapterNewOrdDtls
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
     }
 
-    private lateinit var picker: HorizontalPicker
-    private var selectedDate:String = ""
-    private lateinit var tvSyncAll:TextView
-    private lateinit var adapterNewOrdDtls:AdapterNewOrdDtls
-    private lateinit var rvOrdDtls:RecyclerView
-
-    private lateinit var progress_wheel: ProgressWheel
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        val view = inflater.inflate(R.layout.frag_view_ord_his, container, false)
-        selectedDate = AppUtils.getCurrentDateForShopActi()
+        val view = inflater.inflate(R.layout.frag_view_ord_his_all, container, false)
         initView(view)
         return view
     }
 
+    @SuppressLint("UseRequireInsteadOfGet")
     private fun initView(view: View?) {
-        picker = view!!.findViewById<HorizontalPicker>(R.id.datePicker)
-        picker.setListener(this)
-            .setDays(60)
-            .setOffset(30)
-            .setDateSelectedColor(ContextCompat.getColor(mContext, R.color.colorPrimary))//box color
-            .setDateSelectedTextColor(ContextCompat.getColor(mContext, R.color.white))
-            .setMonthAndYearTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))//month color
-            .setTodayButtonTextColor(ContextCompat.getColor(mContext, R.color.date_selector_color))
-            .setTodayDateTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            .setTodayDateBackgroundColor(ContextCompat.getColor(mContext, R.color.transparent))//
-            .setUnselectedDayTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            .setDayOfWeekTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            .setUnselectedDayTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-            .showTodayButton(false)
-            .init()
-        picker.backgroundColor = Color.WHITE
-        picker.setDate(DateTime())
-
-        tvSyncAll = view.findViewById(R.id.tv_frag_view_ord_sync_all)
-        rvOrdDtls = view.findViewById(R.id.rv_ord_dtls_his)
-        progress_wheel = view.findViewById(R.id.pw_frag_view_ord_his)
+        tv_ordCnt = view!!.findViewById(R.id.tv_frag_view_all_ord_count)
+        rv_ordDtls = view.findViewById(R.id.rv_frag_view_all_ord_rv)
+        progress_wheel = view.findViewById(R.id.pw_frag_view_all_ord)
 
         ll_no_data_root = view.findViewById(R.id.ll_no_data_root)
         tv_noDataHeader = view.findViewById(R.id.tv_empty_page_msg_head)
         tv_noDataBody = view.findViewById(R.id.tv_empty_page_msg)
         img_direction = view.findViewById(R.id.img_direction)
 
-        ll_no_data_root.visibility = View.VISIBLE
-        tv_noDataHeader.text = "No Order Found"
-        tv_noDataBody.visibility = View.GONE
         img_direction.visibility = View.GONE
-        rvOrdDtls.visibility = View.GONE
+        tv_noDataBody.visibility = View.GONE
+        tv_noDataHeader.text = "No order found."
 
         progress_wheel.stopSpinning()
 
-        tvSyncAll.setOnClickListener(this)
+        setData()
+
     }
 
-    override fun onClick(v: View?) {
-        when(v!!.id){
-            tvSyncAll.id ->{
-                if(AppUtils.isOnline(mContext)){
-                    syncOrdAll()
-                }else{
-                    ToasterMiddle.msgShort(mContext,mContext.getString(R.string.login_net_disconnected1))
-                }
-            }
-        }
-    }
+    fun setData(){
+        progress_wheel.spin()
 
-    override fun onDateSelected(dateSelected: DateTime?) {
-        var dateTime = dateSelected.toString()
-        var dateFormat = dateTime.substring(0, dateTime.indexOf('T'))
-        selectedDate = dateFormat
-
-
-        orderHis(selectedDate)
-    }
-
-    private fun orderHis(ordDate:String){
-        var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getTodayOrderOrderBy(ordDate) as ArrayList<NewOrderDataEntity>
+        var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getAllOrderOrderBy() as ArrayList<NewOrderDataEntity>
         if(ordL.size>0){
-            ll_no_data_root.visibility = View.GONE
-
-            rvOrdDtls.visibility = View.VISIBLE
+            ll_no_data_root.visibility=View.GONE
+            rv_ordDtls.visibility=View.VISIBLE
+            tv_ordCnt.visibility=View.VISIBLE
+            tv_ordCnt.text = "Total Order(s) : ${ordL.size}"
             progress_wheel.spin()
             adapterNewOrdDtls = AdapterNewOrdDtls(mContext,ordL,object :AdapterNewOrdDtls.OnCLick{
                 override fun onShareCLick(obj: NewOrderDataEntity) {
@@ -175,19 +128,21 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
                 }
 
             })
-            rvOrdDtls.adapter = adapterNewOrdDtls
+            rv_ordDtls.adapter = adapterNewOrdDtls
             Handler().postDelayed(Runnable {
                 progress_wheel.stopSpinning()
-            }, 1100)
+            }, 2000)
 
         }else{
-            ll_no_data_root.visibility = View.VISIBLE
-            tv_noDataHeader.text = "No Order Found"
-            tv_noDataBody.visibility = View.GONE
-            img_direction.visibility = View.GONE
-            rvOrdDtls.visibility = View.GONE
+            progress_wheel.stopSpinning()
+            ll_no_data_root.visibility=View.VISIBLE
+            rv_ordDtls.visibility=View.GONE
+            tv_ordCnt.visibility=View.GONE
         }
+    }
 
+    override fun onClick(p0: View?) {
+        TODO("Not yet implemented")
     }
 
     private fun sharePDF(obj: NewOrderDataEntity){
@@ -196,13 +151,23 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
         fileName = fileName.replace("/", "_")
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() +"/ORDERDETALIS/"
 
+        var pathNew = ""
+
         val dir = File(path)
         if (!dir.exists()) {
             dir.mkdirs()
         }
 
         try {
-            PdfWriter.getInstance(document, FileOutputStream(path + fileName + ".pdf"))
+            try {
+                PdfWriter.getInstance(document, FileOutputStream(path + fileName + ".pdf"))
+            }catch (ex:Exception){
+                ex.printStackTrace()
+
+                pathNew = mContext.filesDir.toString() + "/" + fileName+".pdf"
+                //val file = File(mContext.filesDir.toString() + "/" + fileName)
+                PdfWriter.getInstance(document, FileOutputStream(pathNew))
+            }
             document.open()
             var font: Font = Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD)
             var font1: Font = Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL)
@@ -217,15 +182,15 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
             space15f.spacingAfter = 15f
 
             //image add begin
-            val bm: Bitmap = BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher)
-            val bitmap = Bitmap.createScaledBitmap(bm, 50, 50, true);
+            val bm: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.breezelogo)
+            val bitmap = Bitmap.createScaledBitmap(bm, 80, 80, true);
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
             var img: Image? = null
             val byteArray: ByteArray = stream.toByteArray()
             try {
                 img = Image.getInstance(byteArray)
-                img.scaleToFit(90f, 90f)
+                img.scaleToFit(110f, 110f)
                 img.scalePercent(70f)
                 img.alignment = Image.ALIGN_LEFT
             } catch (e: BadElementException) {
@@ -391,6 +356,9 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
             document.close()
 
             var sendingPath = path + fileName + ".pdf"
+            if(!pathNew.equals("")){
+                sendingPath = pathNew
+            }
             try{
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 val fileUrl = Uri.parse(sendingPath)
@@ -460,7 +428,7 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
                                     uiThread {
                                         progress_wheel.stopSpinning()
                                         ToasterMiddle.msgShort(mContext,mContext.getString(R.string.sync_done))
-                                        orderHis(selectedDate)
+                                        setData()
                                     }
                                 }
                             } else {
@@ -477,77 +445,5 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
 
     }
 
-    private fun syncOrdAll(){
-        progress_wheel.spin()
-        var unsyncOrdL = AppDatabase.getDBInstance()!!.newOrderDataDao().getUnsyncList(false) as ArrayList<NewOrderDataEntity>
-        if(unsyncOrdL.size>0){
-            var ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(unsyncOrdL.get(0).order_id)
-            var ordProductDtls = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(unsyncOrdL.get(0).order_id)
-            var syncOrd = SyncOrd()
-            var syncOrdProductL:ArrayList<SyncOrdProductL> = ArrayList()
-            Timber.d("Order sync for order id ${unsyncOrdL.get(0).order_id}")
-            doAsync {
-                syncOrd.user_id = Pref.user_id!!
-                syncOrd.order_id = unsyncOrdL.get(0).order_id
-                syncOrd.order_date = ordDtls.order_date
-                syncOrd.order_time = ordDtls.order_time
-                syncOrd.order_date_time = ordDtls.order_date_time
-                syncOrd.shop_id = ordDtls.shop_id
-                syncOrd.shop_name = ordDtls.shop_name
-                syncOrd.shop_type = ordDtls.shop_type
-                syncOrd.isInrange = ordDtls.isInrange
-                syncOrd.order_lat = ordDtls.order_lat
-                syncOrd.order_long = ordDtls.order_long
-                syncOrd.shop_addr = ordDtls.shop_addr
-                syncOrd.shop_pincode = ordDtls.shop_pincode
-                syncOrd.order_total_amt = ordDtls.order_total_amt.toDouble()
-                syncOrd.order_remarks = ordDtls.order_remarks
-
-                for(i in 0..ordProductDtls.size-1){
-                    var obj = SyncOrdProductL()
-                    obj.order_id=ordProductDtls.get(i).order_id
-                    obj.product_id=ordProductDtls.get(i).product_id
-                    obj.product_name=ordProductDtls.get(i).product_name
-                    obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
-                    obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
-
-                    syncOrdProductL.add(obj)
-                }
-                syncOrd.product_list = syncOrdProductL
-
-                uiThread {
-                    val repository = ProductListRepoProvider.productListProvider()
-                    BaseActivity.compositeDisposable.add(
-                        repository.syncProductListITC(syncOrd)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({ result ->
-                                val response = result as BaseResponse
-                                progress_wheel.stopSpinning()
-                                Timber.d("Order sync status ${response.status}")
-                                if (response.status == NetworkConstant.SUCCESS) {
-                                    doAsync {
-                                        AppDatabase.getDBInstance()!!.newOrderDataDao().updateIsUploaded(syncOrd.order_id,true)
-                                        uiThread {
-                                            progress_wheel.stopSpinning()
-                                            syncOrdAll()
-                                        }
-                                    }
-                                } else {
-                                    Timber.d("Order sync else status ${response.status}")
-                                    progress_wheel.stopSpinning()
-                                }
-                            }, { error ->
-                                Timber.d("Order sync else err ${error.message}")
-                                progress_wheel.stopSpinning()
-                            })
-                    )
-                }
-            }
-        }else{
-            progress_wheel.stopSpinning()
-            orderHis(selectedDate)
-        }
-    }
 
 }

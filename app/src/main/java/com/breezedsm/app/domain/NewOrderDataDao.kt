@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.breezedsm.app.AppConstant
+import com.breezedsm.features.createOrder.DateWiseOrdReportFrag
 import java.math.BigDecimal
 
 @Dao
@@ -41,4 +42,53 @@ interface NewOrderDataDao {
 
     @Query("update new_order_data set isUploaded=:isUploaded where order_id=:order_id ")
     fun updateIsUploaded(order_id:String,isUploaded:Boolean)
+
+    @Query("Select * from new_order_data order by order_date desc ,order_id desc")
+    fun getAllOrderOrderBy(): List<NewOrderDataEntity>
+
+    @Query("select * from new_order_data \n" +
+            "where order_date between :fromD and :toD \n" +
+            "order by order_date asc,order_time asc")
+    fun getOrderDtlsDateWise(fromD:String,toD:String): List<NewOrderDataEntity>
+
+    @Query("select distinct(order_date) from new_order_data \n" +
+            "where order_date between :fromD and :toD \n" +
+            "order by order_date asc,order_time asc")
+    fun getDistinctOrdDates(fromD:String,toD:String): List<String>
+
+    @Query("select case when sum(submitedQty) IS NULL then '0' ELSE \n" +
+            " sum(submitedQty) end as qty from new_order_product where order_id = :order_id ")
+    fun getQtySumByOrdID(order_id:String): String
+
+    @Query("select order_date,shop_id,shop_name,sum(orderQtyTotal) as orderQtyTotal,cast(sum(orderValueTotal) as TEXT) as orderValueTotal\n" +
+            "from(\n" +
+            "select a.order_date,a.order_id,a.shop_id,a.shop_name,\n" +
+            "(b.orderValueTotal) as orderValueTotal,(b.orderQtyTotal) as orderQtyTotal\n" +
+            "from new_order_data a\n" +
+            "inner join \n" +
+            "(select order_id,shop_id,(submitedqty) as orderQtyTotal,(submitedqty*submitedSpecialRate) as orderValueTotal \n" +
+            "from new_order_product) b \n" +
+            "on a.order_id=b.order_id and a.shop_id = b.shop_id\n" +
+            "where a.order_date between :fromD and :toD\n" +
+            ") ab\n" +
+            "group by ab.order_date,ab.shop_id order by order_date asc")
+    fun getOrdReportByDt(fromD:String,toD:String): List<DateWiseOrdReportFrag.OrdReportDtlsQuery>
+
+    @Query("\n" +
+            "select shop_id,shop_name,orderQtyTotal,cast (orderValueTotal as TEXT) as orderValueTotal from (\n" +
+            "select order_date,shop_id,shop_name,sum(orderQtyTotal) as orderQtyTotal,sum(orderValueTotal) as orderValueTotal\n" +
+            "from(\n" +
+            "select a.order_date,a.order_id,a.shop_id,a.shop_name,\n" +
+            "(b.orderValueTotal) as orderValueTotal,(b.orderQtyTotal) as orderQtyTotal\n" +
+            "from new_order_data a\n" +
+            "inner join \n" +
+            "(select order_id,shop_id,(submitedqty) as orderQtyTotal,(submitedqty*submitedSpecialRate) as orderValueTotal \n" +
+            "from new_order_product) b \n" +
+            "on a.order_id=b.order_id and a.shop_id = b.shop_id\n" +
+            "where a.order_date between :speceficDt and :speceficDt\n" +
+            ") ab\n" +
+            "group by ab.order_date,ab.shop_id order by order_date asc\n" +
+            ") where order_date = :speceficDt")
+    fun getOrdReportBySingleDt(speceficDt:String): List<DateWiseOrdReportFrag.OrdReportDtls>
+
 }

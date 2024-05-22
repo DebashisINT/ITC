@@ -102,8 +102,10 @@ import com.breezedsm.features.commondialogsinglebtn.CommonDialogSingleBtn
 import com.breezedsm.features.commondialogsinglebtn.OnDialogClickListener
 import com.breezedsm.features.commondialogsinglebtn.TermsAndConditionsSingleBtnDialog
 import com.breezedsm.features.createOrder.CartListFrag
+import com.breezedsm.features.createOrder.DateWiseOrdReportFrag
 import com.breezedsm.features.createOrder.OrderListFrag
 import com.breezedsm.features.createOrder.ProductListFrag
+import com.breezedsm.features.createOrder.ViewNewOrdHisAllFrag
 import com.breezedsm.features.createOrder.ViewNewOrdHistoryFrag
 import com.breezedsm.features.createOrder.ViewOrdDtls
 import com.breezedsm.features.dailyPlan.prsentation.AllShopListFragment
@@ -302,11 +304,12 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
 
 
         })
+        Pref.IsShowMenuAnyDesk = false
+        Pref.isOrderShow = false
         AppUtils.changeLanguage(this, "en")
-        println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.ShowUserwisePartyWithGeoFence+" "+Pref.ShowUserwisePartyWithCreateOrder )
+        println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.IsRouteUpdateForShopUser )
 
-        //Pref.IsShowCalendar = true
-        //Pref.IsShowAttendanceSummary = true
+        //Pref.IsShowUserWiseDateWiseOrderInApp = true
 
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
@@ -586,6 +589,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     private lateinit var attendence_calender_tv : AppCustomTextView
     private lateinit var attendence_summary_tv : AppCustomTextView
     private lateinit var menu_total_orders_tv : AppCustomTextView
+    private lateinit var menu_total_orders_register_report : AppCustomTextView
     private lateinit var calculator_tv : AppCustomTextView
     //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
     private lateinit var privacy_policy_tv_menu: AppCustomTextView// DashboardActivity mantis 0025783 In-app privacy policy working in menu & Login
@@ -1355,14 +1359,18 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 && AppUtils.convertDateTimeWithMeredianToLong(AppUtils.getCurrentTimeWithMeredian()) <= AppUtils.convertDateTimeWithMeredianToLong(outTime)) {*/
 
         Handler().postDelayed(Runnable {
-            if (!Pref.isAddAttendence && !Pref.isAutoLogout && forceLogoutDialog == null) {
-                isAttendanceAlertPresent = true
-                showAddAttendanceAlert()
-            } else {
-                isAttendanceAlertPresent = false
+            try {
+                if (!Pref.isAddAttendence && !Pref.isAutoLogout && forceLogoutDialog == null) {
+                    isAttendanceAlertPresent = true
+                    showAddAttendanceAlert()
+                } else {
+                    isAttendanceAlertPresent = false
 
-                if (isOrderDialogShow)
-                    showOrderCollectionAlert(isOrderAdded, isCollectionAdded)
+                    if (isOrderDialogShow)
+                        showOrderCollectionAlert(isOrderAdded, isCollectionAdded)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }, 250)
 
@@ -1386,83 +1394,87 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         }).show(supportFragmentManager, "CommonDialogSingleBtn")*/
 
 
-        if (dialog == null || !dialog?.isVisible!!) {
-            dialog = CommonDialog.getInstance(AppUtils.hiFirstNameText(), getString(R.string.attendance_msg_bdy1), /*getString(R.string.cancel),
-                    getString(R.string.ok),*/ true, object : CommonDialogClickListener {
-                override fun onLeftClick() {
-                }
+        try {
+            if (dialog == null || !dialog?.isVisible!!) {
+                dialog = CommonDialog.getInstance(AppUtils.hiFirstNameText(), getString(R.string.attendance_msg_bdy1), /*getString(R.string.cancel),
+                        getString(R.string.ok),*/ true, object : CommonDialogClickListener {
+                    override fun onLeftClick() {
+                    }
 
-                override fun onRightClick(editableData: String) {
-                    if (!isGpsDisabled) {
+                    override fun onRightClick(editableData: String) {
+                        if (!isGpsDisabled) {
 
-                        /*if (!TextUtils.isEmpty(Pref.current_latitude) && !TextUtils.isEmpty(Pref.current_longitude)) {
-                            if (Pref.isHomeLocAvailable) {
+                            /*if (!TextUtils.isEmpty(Pref.current_latitude) && !TextUtils.isEmpty(Pref.current_longitude)) {
+                                if (Pref.isHomeLocAvailable) {
 
-                                if (!TextUtils.isEmpty(Pref.home_latitude) && !TextUtils.isEmpty(Pref.home_longitude)) {
-                                    val distance = LocationWizard.getDistance(Pref.home_latitude.toDouble(), Pref.home_longitude.toDouble(), Pref.current_latitude.toDouble(),
-                                            Pref.current_longitude.toDouble())
+                                    if (!TextUtils.isEmpty(Pref.home_latitude) && !TextUtils.isEmpty(Pref.home_longitude)) {
+                                        val distance = LocationWizard.getDistance(Pref.home_latitude.toDouble(), Pref.home_longitude.toDouble(), Pref.current_latitude.toDouble(),
+                                                Pref.current_longitude.toDouble())
 
-                                    Timber.e("Distance from home====> $distance")
+                                        Timber.e("Distance from home====> $distance")
 
-                                    if (distance * 1000 > 50) {
+                                        if (distance * 1000 > 50) {
+                                            isAddAttendaceAlert = true
+                                            loadFragment(FragType.AddAttendanceFragment, true, "")
+                                        } else
+                                            (mContext as DashboardActivity).showSnackMessage("Attendance can not be added from home")
+                                    } else {
+                                        Timber.e("========Home location is not available========")
                                         isAddAttendaceAlert = true
                                         loadFragment(FragType.AddAttendanceFragment, true, "")
-                                    } else
-                                        (mContext as DashboardActivity).showSnackMessage("Attendance can not be added from home")
+                                    }
+
                                 } else {
-                                    Timber.e("========Home location is not available========")
+                                    Timber.e("========isHomeLocAvailable is false========")
                                     isAddAttendaceAlert = true
                                     loadFragment(FragType.AddAttendanceFragment, true, "")
                                 }
-
                             } else {
-                                Timber.e("========isHomeLocAvailable is false========")
-                                isAddAttendaceAlert = true
-                                loadFragment(FragType.AddAttendanceFragment, true, "")
-                            }
-                        } else {
-                            Timber.e("========Current location is not available========")*/
-                        isAddAttendaceAlert = true
+                                Timber.e("========Current location is not available========")*/
+                            isAddAttendaceAlert = true
 
 
-                        val attendanceReq = AttendanceRequest()
-                        attendanceReq.user_id = Pref.user_id!!
-                        attendanceReq.session_token = Pref.session_token
-                        attendanceReq.start_date = AppUtils.getCurrentDateForCons()
-                        attendanceReq.end_date = AppUtils.getCurrentDateForCons()
+                            val attendanceReq = AttendanceRequest()
+                            attendanceReq.user_id = Pref.user_id!!
+                            attendanceReq.session_token = Pref.session_token
+                            attendanceReq.start_date = AppUtils.getCurrentDateForCons()
+                            attendanceReq.end_date = AppUtils.getCurrentDateForCons()
 
-                        val repository = AttendanceRepositoryProvider.provideAttendanceRepository()
-                        progress_wheel.spin()
-                        BaseActivity.compositeDisposable.add(
-                                repository.getAttendanceList(attendanceReq)
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribeOn(Schedulers.io())
-                                        .subscribe({ result ->
-                                            val attendanceList = result as AttendanceResponse
-                                            if (attendanceList.status == "205") {
+                            val repository = AttendanceRepositoryProvider.provideAttendanceRepository()
+                            progress_wheel.spin()
+                            BaseActivity.compositeDisposable.add(
+                                    repository.getAttendanceList(attendanceReq)
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribeOn(Schedulers.io())
+                                            .subscribe({ result ->
+                                                val attendanceList = result as AttendanceResponse
+                                                if (attendanceList.status == "205") {
+                                                    progress_wheel.stopSpinning()
+                                                    loadFragment(FragType.AddAttendanceFragment, true, "")
+                                                } else if (attendanceList.status == NetworkConstant.SUCCESS) {
+                                                    progress_wheel.stopSpinning()
+                                                    Pref.isAddAttendence = true
+                                                    (mContext as DashboardActivity).showSnackMessage("${AppUtils.hiFirstNameText()}. Attendance already marked for the day.")
+                                                }
+
+                                            }, { error ->
                                                 progress_wheel.stopSpinning()
-                                                loadFragment(FragType.AddAttendanceFragment, true, "")
-                                            } else if (attendanceList.status == NetworkConstant.SUCCESS) {
-                                                progress_wheel.stopSpinning()
-                                                Pref.isAddAttendence = true
-                                                (mContext as DashboardActivity).showSnackMessage("${AppUtils.hiFirstNameText()}. Attendance already marked for the day.")
-                                            }
-
-                                        }, { error ->
-                                            progress_wheel.stopSpinning()
-                                            error.printStackTrace()
-                                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
-                                        })
-                        )
+                                                error.printStackTrace()
+                                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                            })
+                            )
 
 
-                        //loadFragment(FragType.AddAttendanceFragment, true, "")
-                        //}
+                            //loadFragment(FragType.AddAttendanceFragment, true, "")
+                            //}
+                        }
                     }
-                }
 
-            })//.show(supportFragmentManager, "")
-            dialog?.show(supportFragmentManager, "")
+                })//.show(supportFragmentManager, "")
+                dialog?.show(supportFragmentManager, "")
+            }
+        } catch (e: Exception) {
+           e.printStackTrace()
         }
     }
 
@@ -1667,6 +1679,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         attendence_calender_tv = findViewById(R.id.attendence_calender_tv)
         attendence_summary_tv = findViewById(R.id.attendence_summary_tv)
         menu_total_orders_tv = findViewById(R.id.menu_total_orders_tv)
+        menu_total_orders_register_report = findViewById(R.id.menu_total_orders_register_report)
         calculator_tv = findViewById(R.id.calculator_tv)
         //End of Rev 1.0 DashboardActivity 24-05-2023 Suman mantis id 26211
 
@@ -1730,10 +1743,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     })*/
 
 
-            Glide.with(mContext)
-                    .load(Pref.profile_img)
-                    .apply(RequestOptions.placeholderOf(R.drawable.ic_menu_profile_image).error(R.drawable.ic_menu_profile_image))
-                    .into(profilePicture)
+            try {
+                Glide.with(mContext)
+                        .load(Pref.profile_img)
+                        .apply(RequestOptions.placeholderOf(R.drawable.ic_menu_profile_image).error(R.drawable.ic_menu_profile_image))
+                        .into(profilePicture)
+            } catch (e: Exception) {
+                Timber.d("err ${e.message}")
+            }
 
         } else
             profilePicture.setImageResource(R.drawable.ic_menu_profile_image)
@@ -1867,6 +1884,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         attendence_calender_tv.setOnClickListener(this)
         attendence_summary_tv.setOnClickListener(this)
         menu_total_orders_tv.setOnClickListener(this)
+        menu_total_orders_register_report.setOnClickListener(this)
         calculator_tv.setOnClickListener(this)
         my_details_tv.setOnClickListener(this)
         ta_tv.setOnClickListener(this)
@@ -2334,6 +2352,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         } else {
             menu_total_orders_tv.visibility = View.GONE
         }
+        if(Pref.IsShowUserWiseDateWiseOrderInApp){
+            menu_total_orders_register_report.visibility = View.VISIBLE
+        }else{
+            menu_total_orders_register_report.visibility = View.GONE
+        }
         if (Pref.IsShowCalculator) {
             calculator_tv.visibility = View.VISIBLE
         } else {
@@ -2684,6 +2707,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
             R.id.menu_total_orders_tv->{
                 (mContext as DashboardActivity).loadFragment(FragType.ViewNewOrdHistoryFrag, true, "")
+            }
+            R.id.menu_total_orders_register_report->{
+                (mContext as DashboardActivity).loadFragment(FragType.DateWiseOrdReportFrag, false, "")
             }
             R.id.calculator_tv -> {
                 loadFragment(FragType.CalculatorFrag, true, "")
@@ -3815,6 +3841,20 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 }
                 setTopBarTitle(getString(R.string.orders))
                 setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.ViewNewOrdHisAllFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = ViewNewOrdHisAllFrag()
+                }
+                setTopBarTitle(getString(R.string.orders))
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+            FragType.DateWiseOrdReportFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = DateWiseOrdReportFrag()
+                }
+                setTopBarTitle("Date Wise Order Register")
+                setTopBarVisibility(TopBarConfig.GENERIC)
             }
             FragType.ProductListFrag -> {
                 if (enableFragGeneration) {
@@ -5273,6 +5313,31 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_header_back_arrow)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 }
+            }
+            TopBarConfig.GENERIC -> {
+                iv_home_icon.visibility = View.VISIBLE
+                iv_search_icon.visibility = View.GONE
+                iv_sync_icon.visibility = View.GONE
+                rl_cart.visibility = View.GONE
+                iv_filter_icon.visibility = View.GONE
+                rl_confirm_btn.visibility = View.GONE
+                iv_list_party.visibility = View.GONE
+                logo.visibility = View.GONE
+                iv_map.visibility = View.GONE
+                iv_settings.visibility = View.GONE
+                ic_calendar.visibility = View.GONE
+                ic_chat_bot.visibility = View.GONE
+                iv_cancel_chat.visibility = View.GONE
+                iv_people.visibility = View.GONE
+                iv_scan.visibility = View.GONE
+                iv_view_text.visibility = View.GONE
+                fl_net_status.visibility = View.GONE
+
+                supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+                // Show hamburger
+                mDrawerToggle.isDrawerIndicatorEnabled = true
+                toolbar.setNavigationIcon(R.drawable.ic_header_menu_icon)
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             }
             TopBarConfig.LEAVELIST -> {
                 iv_home_icon.visibility = View.VISIBLE

@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             android:orientation="horizontal"
-            android:background="@drawable/shape_cursor_one"
+            android:background="@drawable/shape_cursor_blue1"
             android:padding="@dimen/_3sdp">
 
             <LinearLayout
@@ -69,7 +69,7 @@
                         android:id="@+id/iv_row_ord_dtls_share"
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_20sdp"
-                        android:backgroundTint="@color/color_blue_light_dark"
+                        android:backgroundTint="@color/colorPrimaryDark"
                         android:background="@drawable/ic_share"/>
 
                     <Space
@@ -81,7 +81,7 @@
                         android:layout_width="@dimen/_20sdp"
                         android:layout_height="@dimen/_12sdp"
                         android:background="@drawable/ic_view_icon"
-                        android:backgroundTint="@color/color_blue_light_dark" />
+                        android:backgroundTint="@color/colorPrimaryDark" />
 
                     <Space
                         android:layout_width="@dimen/_10sdp"

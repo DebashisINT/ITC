@@ -1615,6 +1615,27 @@ class AppUtils {
             return convertedDate
         }
 
+        fun getIsEndDayAfterStartDay(startD: String,endD:String): Boolean {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+            var convertedStartDate = Date()
+            var convertedEndDate = Date()
+            try {
+                convertedStartDate = dateFormat.parse(startD)
+                convertedEndDate = dateFormat.parse(endD)
+            } catch (e: ParseException) {
+                e.printStackTrace()
+            }
+            if(convertedStartDate.before(convertedEndDate) ){
+                return true
+            }else if(convertedStartDate.equals(convertedEndDate)){
+                return true
+            } else {
+                return false
+            }
+        }
+
+
+
         fun getCurrentISODateTime(): String {
             val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
             return df.format(Date()).toString()

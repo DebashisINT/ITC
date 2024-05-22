@@ -971,15 +971,17 @@
             <LinearLayout
                 android:id="@+id/ll_order_range"
                 android:layout_marginBottom="@dimen/_10sdp"
-                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_3sdp"
+                android:layout_marginLeft="@dimen/_3sdp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:orientation="horizontal"
                 android:layout_gravity="right"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_5sdp">
 
-                <LinearLayout
-                    android:id="@+id/ll_nearby_shop_create_order_root"
+                <!--<LinearLayout
+
                     android:layout_width="@dimen/_205sdp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -996,14 +998,14 @@
                             android:visibility="gone"
                             android:layout_marginBottom="@dimen/_5sdp"
                             android:layout_marginStart="@dimen/_5sdp"
-                            android:id="@+id/iv_createorder"
+
                             android:layout_width="@dimen/_17sdp"
                             android:layout_height="@dimen/_17sdp"
                             android:src="@drawable/order_add"
                             />
                     </LinearLayout>
                     <com.breezedsm.widgets.AppCustomTextView
-                        android:id="@+id/ll_order"
+
                         android:layout_weight="1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -1016,13 +1018,59 @@
                         android:textSize="@dimen/_10sdp"
                         android:visibility="gone"
                         android:gravity="center_vertical"/>
+                </LinearLayout>-->
+
+                <LinearLayout
+                    android:id="@+id/ll_nearby_shop_create_order_root"
+                    android:layout_width="@dimen/_110sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:background="@drawable/bacred_round_corner_3">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:layout_gravity="center">
+
+                            <ImageView
+                                android:id="@+id/iv_createorder"
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/order_add" />
+                        </LinearLayout>
+                        <com.breezedsm.widgets.AppCustomTextView
+                            android:id="@+id/ll_order"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:fontFamily="sans-serif"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Create Order"
+                            android:textSize="@dimen/_11sdp"
+                            android:background="@drawable/right_rounded_corner_blue_drawable"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
 
                 <LinearLayout
                     android:id="@+id/ll_range"
-                    android:layout_width="@dimen/_135sdp"
+                    android:layout_width="@dimen/_110sdp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_gravity="end">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -1057,6 +1105,7 @@
 
                     </LinearLayout>
                 </LinearLayout>
+
 
             </LinearLayout>
 

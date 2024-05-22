@@ -443,5 +443,6 @@ object Pref : PreferenceHolder() {
 
     var user_ShopStatus: Boolean by bindToPreferenceField(false, "user_ShopStatus")
     var IsRouteUpdateForShopUser : Boolean by bindToPreferenceField(true, "IsRouteUpdateForShopUser")
+    var IsShowUserWiseDateWiseOrderInApp : Boolean by bindToPreferenceField(false, "IsShowUserWiseDateWiseOrderInApp")
 
 }

@@ -154,6 +154,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
     private lateinit var shop_ll: LinearLayout
     private lateinit var attandance_ll: LinearLayout
     private lateinit var order_ll: LinearLayout
+    private lateinit var order_ll_new: LinearLayout
     private var mFragment: DashboardType = DashboardType.Home
     private lateinit var reportList: RecyclerView
     private lateinit var adapter: ReportAdapter
@@ -672,6 +673,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         ll_dash_point_visit_newD = view.findViewById(R.id.ll_dash_point_visit_newD)
         ll_dash_day_end_newD = view.findViewById(R.id.ll_dash_day_end_newD)
         ll_dash_total_mew_order_newD = view.findViewById(R.id.ll_dash_total_mew_order_newD)
+        order_ll_new = view.findViewById(R.id.order_ll_new)
         ll_dash_visit_attendance_newD = view.findViewById(R.id.ll_dash_visit_attendance_newD)
 
         simpleDialogProcess = Dialog(mContext)
@@ -2035,6 +2037,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         //price_RL.setOnClickListener(this)
         ll_dash_total_order_newD.setOnClickListener(this)
         ll_dash_total_mew_order_newD.setOnClickListener(this)
+        order_ll_new.setOnClickListener(this)
 
         tv_view_all.setOnClickListener(this)
         tv_pick_date_range.setOnClickListener(this)
@@ -2253,8 +2256,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
         if(Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder){
             ll_dash_total_mew_order_newD.visibility = View.VISIBLE
+            order_ll_new.visibility = View.VISIBLE
         }else{
             ll_dash_total_mew_order_newD.visibility = View.GONE
+            order_ll_new.visibility = View.GONE
         }
 
         if (Pref.ShowAutoRevisitInDashboard)
@@ -2846,6 +2851,9 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
             }
             R.id.ll_dash_total_mew_order_newD ->{
                 (mContext as DashboardActivity).loadFragment(FragType.ViewNewOrdHistoryFrag, true, "")
+            }
+            R.id.order_ll_new ->{
+                (mContext as DashboardActivity).loadFragment(FragType.ViewNewOrdHisAllFrag, true, "")
             }
 
             //R.id.price_RL -> {
@@ -6133,6 +6141,11 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                             Pref.IsRouteUpdateForShopUser = response.getconfigure?.get(i)?.Value == "1"
                                         }
+                                    }else if (response.getconfigure?.get(i)?.Key.equals("IsShowUserWiseDateWiseOrderInApp", ignoreCase = true)) {
+                                        Pref.IsShowUserWiseDateWiseOrderInApp = response.getconfigure!![i].Value == "1"
+                                        if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                            Pref.IsShowUserWiseDateWiseOrderInApp = response.getconfigure?.get(i)?.Value == "1"
+                                        }
                                     }
 
 
@@ -7343,6 +7356,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                         objProduct.product_name = order_list.get(i).product_list.get(j).product_name
                                         objProduct.submitedQty = order_list.get(i).product_list.get(j).submitedQty.toInt().toString()
                                         objProduct.submitedSpecialRate = order_list.get(i).product_list.get(j).submitedSpecialRate.toString()
+                                        objProduct.shop_id = order_list.get(i).shop_id
                                         objProductL.add(objProduct)
                                     }
 
@@ -7508,8 +7522,10 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         }
         if(Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder){
             ll_dash_total_mew_order_newD.visibility = View.VISIBLE
+            order_ll_new.visibility = View.VISIBLE
         }else{
             ll_dash_total_mew_order_newD.visibility = View.GONE
+            order_ll_new.visibility = View.GONE
         }
 
         if (Pref.IsShowTotalVisitsOnAppDashboard) {

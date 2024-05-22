@@ -788,18 +788,8 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                     } else {
                         itemView.tv_range.text = "Out Range"
                         itemView.iv_range.setBackgroundResource(R.drawable.outrange)
-                        itemView.tv_range.setBackgroundDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.right_rounded_corner_red_drawable
-                            )
-                        );
-                        itemView.ll_range.setBackgroundDrawable(
-                            ContextCompat.getDrawable(
-                                context,
-                                R.drawable.bacred_round_corner_1
-                            )
-                        );
+                        itemView.tv_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.right_rounded_corner_red_drawable));
+                        itemView.ll_range.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bacred_round_corner_1));
 
                     }
                     println("rangeexception " + "success")
@@ -813,16 +803,20 @@ class NearByShopsListAdapter(context: Context, list: List<AddShopDBModelEntity>,
                 itemView.ll_range.visibility = View.GONE
             }
             if (Pref.ShowPartyWithCreateOrder && Pref.ShowUserwisePartyWithCreateOrder){
-                itemView.ll_order.visibility = View.VISIBLE
+                itemView.ll_nearby_shop_create_order_root.visibility = View.VISIBLE
                 itemView.ll_order_range.visibility = View.VISIBLE
                 itemView.iv_createorder.visibility = View.VISIBLE
                 itemView.ll_order.text = "Create Order"
             }else{
-                itemView.ll_order.visibility = View.GONE
+                itemView.ll_nearby_shop_create_order_root.visibility = View.GONE
             }
 
             itemView.ll_nearby_shop_create_order_root.setOnClickListener {
                 listener.createOrderClick(list[adapterPosition])
+            }
+
+            itemView.ll_range.setOnClickListener {
+                println("tag_click")
             }
 
         }

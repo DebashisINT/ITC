@@ -5935,6 +5935,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsRouteUpdateForShopUser = response.getconfigure?.get(i)?.Value == "1"
                                                 }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsShowUserWiseDateWiseOrderInApp", ignoreCase = true)) {
+                                                Pref.IsShowUserWiseDateWiseOrderInApp = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsShowUserWiseDateWiseOrderInApp = response.getconfigure?.get(i)?.Value == "1"
+                                                }
                                             }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {
@@ -6575,38 +6580,43 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                             doAsync {
                                 Timber.d("getOrderHistoryList data save begin ${AppUtils.getCurrentDateTime()}")
                                 var order_list = response.order_list
-                                for(i in 0..order_list.size-1){
-                                    var obj = NewOrderDataEntity()
-                                    obj.order_id = order_list.get(i).order_id
-                                    obj.order_date = order_list.get(i).order_date
-                                    obj.order_time = order_list.get(i).order_time
-                                    obj.order_date_time = order_list.get(i).order_date_time
-                                    obj.shop_id = order_list.get(i).shop_id
-                                    obj.shop_name = order_list.get(i).shop_name
-                                    obj.shop_type = order_list.get(i).shop_type
-                                    obj.isInrange = order_list.get(i).isInrange
-                                    obj.order_lat = order_list.get(i).order_lat
-                                    obj.order_long = order_list.get(i).order_long
-                                    obj.shop_addr = order_list.get(i).shop_addr
-                                    obj.shop_pincode = order_list.get(i).shop_pincode
-                                    obj.order_total_amt = order_list.get(i).order_total_amt.toString()
-                                    obj.order_remarks = order_list.get(i).order_remarks
-                                    obj.isUploaded = true
+                                try {
+                                    for(i in 0..order_list.size-1){
+                                        var obj = NewOrderDataEntity()
+                                        obj.order_id = order_list.get(i).order_id
+                                        obj.order_date = order_list.get(i).order_date
+                                        obj.order_time = order_list.get(i).order_time
+                                        obj.order_date_time = order_list.get(i).order_date_time
+                                        obj.shop_id = order_list.get(i).shop_id
+                                        obj.shop_name = order_list.get(i).shop_name
+                                        obj.shop_type = order_list.get(i).shop_type
+                                        obj.isInrange = order_list.get(i).isInrange
+                                        obj.order_lat = order_list.get(i).order_lat
+                                        obj.order_long = order_list.get(i).order_long
+                                        obj.shop_addr = order_list.get(i).shop_addr
+                                        obj.shop_pincode = order_list.get(i).shop_pincode
+                                        obj.order_total_amt = String.format("%.02f",order_list.get(i).order_total_amt.toBigDecimal()).toString()
+                                        obj.order_remarks = order_list.get(i).order_remarks
+                                        obj.isUploaded = true
 
-                                    var objProductL:ArrayList<NewOrderProductEntity> = ArrayList()
-                                    for( j in 0..order_list.get(i).product_list.size-1){
-                                        var objProduct = NewOrderProductEntity()
-                                        objProduct.order_id = order_list.get(i).product_list.get(j).order_id
-                                        objProduct.product_id = order_list.get(i).product_list.get(j).product_id
-                                        objProduct.product_name = order_list.get(i).product_list.get(j).product_name
-                                        objProduct.submitedQty = order_list.get(i).product_list.get(j).submitedQty.toInt().toString()
-                                        objProduct.submitedSpecialRate = order_list.get(i).product_list.get(j).submitedSpecialRate.toString()
-                                        objProductL.add(objProduct)
+                                        var objProductL:ArrayList<NewOrderProductEntity> = ArrayList()
+                                        for( j in 0..order_list.get(i).product_list.size-1){
+                                            var objProduct = NewOrderProductEntity()
+                                            objProduct.order_id = order_list.get(i).product_list.get(j).order_id
+                                            objProduct.product_id = order_list.get(i).product_list.get(j).product_id
+                                            objProduct.product_name = order_list.get(i).product_list.get(j).product_name
+                                            objProduct.submitedQty = order_list.get(i).product_list.get(j).submitedQty.toInt().toString()
+                                            objProduct.submitedSpecialRate = order_list.get(i).product_list.get(j).submitedSpecialRate.toString()
+                                            objProduct.shop_id = order_list.get(i).shop_id
+                                            objProductL.add(objProduct)
+                                        }
+
+                                        AppDatabase.getDBInstance()!!.newOrderDataDao().insert(obj)
+                                        AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(objProductL)
+
                                     }
-
-                                    AppDatabase.getDBInstance()!!.newOrderDataDao().insert(obj)
-                                    AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(objProductL)
-
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
                                 }
                                 uiThread {
                                     Timber.d("getOrderHistoryList data save end ${AppUtils.getCurrentDateTime()}")
