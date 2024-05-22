@@ -56,6 +56,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
     private lateinit var tvToDate: TextView
     private lateinit var tvTotalQty: TextView
     private lateinit var tvTotalValue: TextView
+    private lateinit var llFooterRoot: LinearLayout
 
     private lateinit var adapterDtOrdRept: AdapterDtOrdRept
     private lateinit var rvDtls: RecyclerView
@@ -100,6 +101,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
         tv_empty_page_msg = view.findViewById(R.id.tv_empty_page_msg)
         img_direction = view.findViewById(R.id.img_direction)
         fab_frag_ord_report_share = view.findViewById(R.id.fab_frag_ord_report_share)
+        llFooterRoot = view.findViewById(R.id.ll_frag_ord_footer_root)
 
         cvFromDate.setOnClickListener(this)
         cvToDate.setOnClickListener(this)
@@ -142,8 +144,18 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                         }
                     }, mYear, mMonth, mDay
                 )
-                datePickerDialog.datePicker.maxDate =
-                    Calendar.getInstance(Locale.ENGLISH).timeInMillis
+
+
+
+                datePickerDialog.datePicker.maxDate = Calendar.getInstance(Locale.ENGLISH).timeInMillis
+
+                val mCalendar = Calendar.getInstance()
+                val minDay = mDay-15
+                val minMonth = mMonth
+                val minYear = mYear
+                mCalendar.set(minYear, minMonth, minDay)
+                datePickerDialog.datePicker.minDate = mCalendar.timeInMillis
+
                 datePickerDialog.show()
             }
 
@@ -188,6 +200,14 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                 )
                 datePickerDialog.datePicker.maxDate =
                     Calendar.getInstance(Locale.ENGLISH).timeInMillis
+
+                val mCalendar = Calendar.getInstance()
+                val minDay = mDay-15
+                val minMonth = mMonth
+                val minYear = mYear
+                mCalendar.set(minYear, minMonth, minDay)
+                datePickerDialog.datePicker.minDate = mCalendar.timeInMillis
+
                 datePickerDialog.show()
             }
 
@@ -262,6 +282,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                         if (ordDtlsQueryL.size > 0) {
                             ll_no_data_root.visibility = View.GONE
                             rvDtls.visibility = View.VISIBLE
+                            llFooterRoot.visibility = View.VISIBLE
                             tv_empty_page_msg_head.text = "No data found"
                             try {
                                 var totalQty =
@@ -293,6 +314,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                         }else{
                             ll_no_data_root.visibility = View.VISIBLE
                             rvDtls.visibility = View.GONE
+                            llFooterRoot.visibility = View.GONE
                             tv_empty_page_msg_head.text = "No data found"
                         }
                     } else {

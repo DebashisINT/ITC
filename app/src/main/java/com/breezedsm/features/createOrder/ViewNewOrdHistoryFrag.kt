@@ -127,6 +127,8 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
         progress_wheel.stopSpinning()
 
         tvSyncAll.setOnClickListener(this)
+
+        ll_no_data_root.visibility = View.GONE
     }
 
     override fun onClick(v: View?) {

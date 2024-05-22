@@ -6147,7 +6147,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                                             Pref.IsShowUserWiseDateWiseOrderInApp = response.getconfigure?.get(i)?.Value == "1"
                                         }
                                     }
-
+                                    //hardcoded
+                                    Pref.IsShowUserWiseDateWiseOrderInApp = true
 
 
 

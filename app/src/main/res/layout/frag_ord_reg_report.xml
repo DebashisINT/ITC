@@ -183,6 +183,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             <LinearLayout
+                android:id="@+id/ll_frag_ord_footer_root"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:orientation="horizontal"
