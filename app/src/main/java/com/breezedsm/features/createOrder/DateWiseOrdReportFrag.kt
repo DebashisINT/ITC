@@ -403,7 +403,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
 
     private fun sharePDF(finalL: ArrayList<OrdReportDateRoot>) {
         var document: Document = Document()
-        var fileName = "FTS"+ "_" + AppUtils.getCurrentDateTime()
+        var fileName = "FTS"+ "_" + AppUtils.getCurrentDateTime().replace(" ","").replace(":","_")
         fileName = fileName.replace("/", "_")
         val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() +"/ORDERDETALIS/"
 
