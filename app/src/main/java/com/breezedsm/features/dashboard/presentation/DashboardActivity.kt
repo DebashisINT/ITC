@@ -306,8 +306,9 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         })
         Pref.IsShowMenuAnyDesk = false
         Pref.isOrderShow = false
+
         AppUtils.changeLanguage(this, "en")
-        println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.IsRouteUpdateForShopUser )
+        println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.IsRouteUpdateForShopUser +Pref.isSeenTermsConditions)
 
         Pref.IsShowUserWiseDateWiseOrderInApp = true
 
