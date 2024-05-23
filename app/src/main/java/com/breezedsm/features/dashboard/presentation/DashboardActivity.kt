@@ -1016,7 +1016,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
     private fun showTermsConditionsPopup() {
-
+        Pref.termsConditionsText=""
         if (TextUtils.isEmpty(Pref.termsConditionsText)) {
             checkToShowHomeLocationAlert()
             return
