@@ -207,7 +207,7 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
         var pathNew = ""
 
         try {
-            PdfWriter.getInstance(document, FileOutputStream(path + fileName + ".pdf"))
+            //PdfWriter.getInstance(document, FileOutputStream(path + fileName + ".pdf"))
 
             try {
                 PdfWriter.getInstance(document, FileOutputStream(path + fileName + ".pdf"))
