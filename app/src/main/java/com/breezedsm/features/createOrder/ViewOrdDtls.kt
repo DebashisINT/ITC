@@ -78,7 +78,7 @@ class ViewOrdDtls: BaseFragment(), View.OnClickListener {
         val text = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Order ID: </font> <font color="+
                 mContext.resources.getColor(R.color.black) + ">" + "${ordDtlsObj.order_id}" + "</font>"
         tv_ordID.text = Html.fromHtml(text)
-        tv_ordDate.text = AppUtils.convertDateTimeToCommonFormat(ordDtlsObj.order_date)
+        tv_ordDate.text = AppUtils.convertToDateLikeOrderFormat(ordDtlsObj.order_date)
         val itemCnt = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Total item(s): </font> <font color="+
                 mContext.resources.getColor(R.color.black) + ">" + productL!!.size + "</font>"
         tv_totalItemCount.text = Html.fromHtml(itemCnt)

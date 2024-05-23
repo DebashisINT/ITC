@@ -103,6 +103,8 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
         fab_frag_ord_report_share = view.findViewById(R.id.fab_frag_ord_report_share)
         llFooterRoot = view.findViewById(R.id.ll_frag_ord_footer_root)
 
+        llFooterRoot.visibility = View.GONE
+
         cvFromDate.setOnClickListener(this)
         cvToDate.setOnClickListener(this)
         cvDateSubmit.setOnClickListener(this)
@@ -584,15 +586,15 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
 
                     document.add(Paragraph())
 
-                    val space25f = Paragraph("", font)
+                    /*val space25f = Paragraph("", font)
                     space25f.spacingAfter = 5f
-                    document.add(space25f)
+                    document.add(space25f)*/
                 }
                 //test code begin
 
-                val space10f = Paragraph("", font)
+               /* val space10f = Paragraph("", font)
                 space10f.spacingAfter = 10f
-                document.add(space10f)
+                document.add(space10f)*/
 
 
                 val tableRows = PdfPTable(widths)

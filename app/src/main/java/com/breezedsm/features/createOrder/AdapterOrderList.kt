@@ -33,7 +33,7 @@ class AdapterOrderList(var mContext: Context, var ordL: ArrayList<NewOrderDataEn
 
     inner class OrderListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItems(context: Context,ordL:ArrayList<NewOrderDataEntity>,listner : OnActionClick){
-            itemView.tv_row_ord_date.text = AppUtils.convertDateTimeToCommonFormat(ordL.get(adapterPosition).order_date)//AppUtils.getFormatedDateNew(ordL.get(adapterPosition).order_date,"yyyy-mm-dd","dd-mm-yyyy")
+            itemView.tv_row_ord_date.text = AppUtils.convertToDateLikeOrderFormat(ordL.get(adapterPosition).order_date)//AppUtils.getFormatedDateNew(ordL.get(adapterPosition).order_date,"yyyy-mm-dd","dd-mm-yyyy")
             itemView.tv_row_ord_amt.text = "Amt: ₹ "+String.format("%.02f",ordL.get(adapterPosition).order_total_amt.toDouble())
             itemView.tv_row_ord_id.text = "Order ID: "+ordL.get(adapterPosition).order_id
 

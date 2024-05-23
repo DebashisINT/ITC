@@ -113,7 +113,7 @@ class OrderListFrag: BaseFragment(), View.OnClickListener {
 
         var ordAmt = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderAmtByShop(shop_id).toBigDecimal().toString()
         val text1 = "<font color=" + mContext.resources.getColor(R.color.dark_gray) + ">Total Order Amt: </font> <font color="+
-                mContext.resources.getColor(R.color.black) + ">" + "₹ $ordAmt" + "</font>"
+                mContext.resources.getColor(R.color.black) + ">" + "₹ ${String.format("%.02f",ordAmt.toBigDecimal())}" + "</font>"
         tv_totalOrdAmt.text = Html.fromHtml(text1)
 
         fab_addProduct.setOnClickListener({

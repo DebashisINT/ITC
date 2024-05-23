@@ -48,6 +48,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -103,7 +104,8 @@ class ViewNewOrdHisAllFrag: BaseFragment(), View.OnClickListener {
     fun setData(){
         progress_wheel.spin()
 
-        var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getAllOrderOrderBy() as ArrayList<NewOrderDataEntity>
+        //var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getAllOrderOrderBy() as ArrayList<NewOrderDataEntity>
+        var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getAllOrderOrderByShopMasterValidation() as ArrayList<NewOrderDataEntity>
         if(ordL.size>0){
             ll_no_data_root.visibility=View.GONE
             rv_ordDtls.visibility=View.VISIBLE
@@ -214,7 +216,7 @@ class ViewNewOrdHisAllFrag: BaseFragment(), View.OnClickListener {
             ordNo.spacingAfter = 2f
             document.add(ordNo)
 
-            val ordDate = Paragraph("Order Date   :   " + AppUtils.convertDateTimeToCommonFormat(obj.order_date), font)
+            val ordDate = Paragraph("Order Date   :   " + AppUtils.convertToDateLikeOrderFormat(obj.order_date), font)
             ordDate.alignment = Element.ALIGN_LEFT
             ordDate.spacingAfter = 2f
             document.add(ordDate)
@@ -374,6 +376,7 @@ class ViewNewOrdHisAllFrag: BaseFragment(), View.OnClickListener {
 
         }catch (ex:Exception){
             ex.printStackTrace()
+            Timber.d("err ${ex.printStackTrace()}")
         }
 
     }

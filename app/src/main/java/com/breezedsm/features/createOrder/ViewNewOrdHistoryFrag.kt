@@ -153,7 +153,8 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
     }
 
     private fun orderHis(ordDate:String){
-        var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getTodayOrderOrderBy(ordDate) as ArrayList<NewOrderDataEntity>
+        //var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getTodayOrderOrderBy(ordDate) as ArrayList<NewOrderDataEntity>
+        var ordL = AppDatabase.getDBInstance()!!.newOrderDataDao().getTodayOrderOrderByShopMasterValidation(ordDate) as ArrayList<NewOrderDataEntity>
         if(ordL.size>0){
             ll_no_data_root.visibility = View.GONE
 
@@ -203,8 +204,21 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
             dir.mkdirs()
         }
 
+        var pathNew = ""
+
         try {
             PdfWriter.getInstance(document, FileOutputStream(path + fileName + ".pdf"))
+
+            try {
+                PdfWriter.getInstance(document, FileOutputStream(path + fileName + ".pdf"))
+            }catch (ex:Exception){
+                ex.printStackTrace()
+
+                pathNew = mContext.filesDir.toString() + "/" + fileName+".pdf"
+                //val file = File(mContext.filesDir.toString() + "/" + fileName)
+                PdfWriter.getInstance(document, FileOutputStream(pathNew))
+            }
+
             document.open()
             var font: Font = Font(Font.FontFamily.HELVETICA, 10f, Font.BOLD)
             var font1: Font = Font(Font.FontFamily.HELVETICA, 8f, Font.NORMAL)
@@ -251,7 +265,7 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
             ordNo.spacingAfter = 2f
             document.add(ordNo)
 
-            val ordDate = Paragraph("Order Date   :   " + AppUtils.convertDateTimeToCommonFormat(obj.order_date), font)
+            val ordDate = Paragraph("Order Date   :   " + AppUtils.convertToDateLikeOrderFormat(obj.order_date), font)
             ordDate.alignment = Element.ALIGN_LEFT
             ordDate.spacingAfter = 2f
             document.add(ordDate)
@@ -332,7 +346,11 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
             for(i in 0..ordProductL.size-1){
                 sLNo = (i+1).toString() +" "
                 item = ordProductL!!.get(i).product_name +  "       "
-                uom = AppDatabase.getDBInstance()!!.newProductListDao().getProductDtls(ordProductL.get(i).product_id).UOM.toString()
+                try {
+                    uom = AppDatabase.getDBInstance()!!.newProductListDao().getProductDtls(ordProductL.get(i).product_id).UOM.toString()
+                }catch (ex:Exception){
+                    uom = "N.A."
+                }
                 qty = ordProductL!!.get(i).submitedQty +" "
                 rate = ordProductL!!.get(i).submitedSpecialRate.toString() +" "
                 total =  String.format("%.02f",(ordProductL!!.get(i).submitedQty.toDouble() * ordProductL!!.get(i).submitedSpecialRate.toDouble()))
@@ -393,6 +411,11 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
             document.close()
 
             var sendingPath = path + fileName + ".pdf"
+            if(!pathNew.equals("")){
+                sendingPath = pathNew
+            }
+
+
             try{
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 val fileUrl = Uri.parse(sendingPath)
@@ -408,6 +431,7 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
 
         }catch (ex:Exception){
             ex.printStackTrace()
+            Timber.d("err ${ex.printStackTrace()}")
         }
 
     }

@@ -18,6 +18,11 @@ interface NewOrderDataDao {
     @Query("Select * from new_order_data where order_date=:order_date order by order_id desc")
     fun getTodayOrderOrderBy(order_date:String): List<NewOrderDataEntity>
 
+    @Query("Select * from new_order_data where order_date=:order_date AND\n" +
+            "shop_id in(select shop_id from shop_detail)\n" +
+            " order by order_id desc")
+    fun getTodayOrderOrderByShopMasterValidation(order_date:String): List<NewOrderDataEntity>
+
     @Query("Select * from new_order_data")
     fun getAllOrder(): List<NewOrderDataEntity>
 
@@ -45,6 +50,10 @@ interface NewOrderDataDao {
 
     @Query("Select * from new_order_data order by order_date desc ,order_id desc")
     fun getAllOrderOrderBy(): List<NewOrderDataEntity>
+
+    @Query(" Select * from new_order_data\n" +
+            "where shop_id in(select shop_id from shop_detail) order by order_date desc ,order_id desc")
+    fun getAllOrderOrderByShopMasterValidation(): List<NewOrderDataEntity>
 
     @Query("select * from new_order_data \n" +
             "where order_date between :fromD and :toD \n" +
