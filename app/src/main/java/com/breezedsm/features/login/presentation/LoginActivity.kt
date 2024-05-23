@@ -6647,7 +6647,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun gotoHomeActivity() {
         //hardcoded
         Pref.IsShowUserWiseDateWiseOrderInApp = true
-
+        Pref.isSeenTermsConditions = true
         login_TV.isEnabled = true
         progress_wheel.stopSpinning()
         setServiceAlarm(this, 1, 123)
