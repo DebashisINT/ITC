@@ -121,9 +121,14 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when(p0!!.id){
             ll_placeOrder.id ->{
+                Timber.d("tag_ord_place ll_placeOrder.id called enable status : ${ll_placeOrder.isEnabled}")
                 if(iseditCommit){
+                    ll_placeOrder.isEnabled = false
+                    Timber.d("tag_ord_place ll_placeOrder.id called inside if enable status : ${ll_placeOrder.isEnabled}")
                     showCheckAlert("Order Confirmation", "Would you like to confirm the order?")
                 }else{
+                    ll_placeOrder.isEnabled = true
+                    Timber.d("tag_ord_place ll_placeOrder.id called inside else enable status : ${ll_placeOrder.isEnabled}")
                     openDialog("Please click on tick to save this edit.")
                 }
             }
@@ -150,6 +155,7 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
                 showRemarksAlert()
         }
         dialogNo.setOnClickListener {
+            ll_placeOrder.isEnabled = true
             simpleDialog.cancel()
         }
         simpleDialog.show()
@@ -159,68 +165,75 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
         isOrderProcessing = true
         progress_wheel.spin()
         Handler().postDelayed(Runnable {
-            val orderListDetails = NewOrderDataEntity()
+            try {
+                val orderListDetails = NewOrderDataEntity()
 
-            val todayOrdL = AppDatabase.getDBInstance()!!.newOrderDataDao().getTodayOrder(AppUtils.getCurrentDateForShopActi()) as ArrayList<NewOrderDataEntity>
-            if(todayOrdL.size==0){
-                orderListDetails.order_id = Pref.user_id + AppUtils.getCurrentDateMonth() + "0001"
-            }else{
-                val lastId = todayOrdL[todayOrdL.size-1].order_id?.toLong()
-                val finalId = lastId!! + 1
-                orderListDetails.order_id = finalId.toString()
-            }
-            orderListDetails.order_date = AppUtils.getCurrentDateForShopActi()
-            orderListDetails.order_time = AppUtils.getCurrentTime()
-            orderListDetails.order_date_time = orderListDetails.order_date+" "+orderListDetails.order_time
-            orderListDetails.shop_id = shop_id
-
-            val addShopData = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shop_id)
-            var mRadious: Int = LocationWizard.NEARBY_RADIUS
-            var location = Location("")
-            location.latitude = Pref.current_latitude.toDouble()
-            location.longitude = Pref.current_longitude.toDouble()
-            var shopLocation = Location("")
-            shopLocation.latitude = addShopData.shopLat
-            shopLocation.longitude = addShopData.shopLong
-            val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, mRadious)
-
-            orderListDetails.shop_name = addShopData.shopName
-            orderListDetails.shop_type = addShopData.type
-            if (isShopNearby) {
-                orderListDetails.isInrange = 1
-            }else{
-                orderListDetails.isInrange = 0
-            }
-            orderListDetails.order_lat = Pref.current_latitude.toString()
-            orderListDetails.order_long = Pref.current_longitude.toString()
-            orderListDetails.shop_addr = addShopData.address
-            orderListDetails.shop_pincode = addShopData.pinCode
-            orderListDetails.order_total_amt = String.format("%.2f",ProductListFrag.finalOrderDataList!!.sumByDouble { it.submitedQty.toInt() * it.submitedRate.toDouble() }).toString()
-            orderListDetails.order_remarks = remarks
-            orderListDetails.isUploaded = false
-            AppDatabase.getDBInstance()!!.newOrderDataDao().insert(orderListDetails)
-            doAsync {
-                var orderProductDtls : ArrayList<NewOrderProductEntity> = ArrayList()
-                for(i in 0..ProductListFrag.finalOrderDataList.size-1){
-                    var obj : NewOrderProductEntity = NewOrderProductEntity()
-                    obj.order_id = orderListDetails.order_id
-                    obj.product_id = ProductListFrag.finalOrderDataList.get(i).product_id
-                    obj.product_name = ProductListFrag.finalOrderDataList.get(i).product_name
-                    obj.submitedQty = ProductListFrag.finalOrderDataList.get(i).submitedQty
-                    obj.submitedSpecialRate = ProductListFrag.finalOrderDataList.get(i).submitedRate
-                    obj.shop_id = shop_id
-                    orderProductDtls.add(obj)
+                val todayOrdL = AppDatabase.getDBInstance()!!.newOrderDataDao().getTodayOrder(AppUtils.getCurrentDateForShopActi()) as ArrayList<NewOrderDataEntity>
+                if(todayOrdL.size==0){
+                    orderListDetails.order_id = Pref.user_id + AppUtils.getCurrentDateMonth() + "0001"
+                }else{
+                    val lastId = todayOrdL[todayOrdL.size-1].order_id?.toLong()
+                    val finalId = lastId!! + 1
+                    orderListDetails.order_id = finalId.toString()
                 }
-                AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(orderProductDtls)
-                uiThread {
-                    if(AppUtils.isOnline(mContext)){
-                        syncOrd(orderListDetails.order_id,addShopData)
-                    }else{
-                        progress_wheel.stopSpinning()
-                        msgShow("${AppUtils.hiFirstNameText()}. Your order for ${addShopData.shopName} has been placed successfully.Order No. is ${orderListDetails.order_id}")
+                orderListDetails.order_date = AppUtils.getCurrentDateForShopActi()
+                orderListDetails.order_time = AppUtils.getCurrentTime()
+                orderListDetails.order_date_time = orderListDetails.order_date+" "+orderListDetails.order_time
+                orderListDetails.shop_id = shop_id
+
+                val addShopData = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shop_id)
+                var mRadious: Int = LocationWizard.NEARBY_RADIUS
+                var location = Location("")
+                location.latitude = Pref.current_latitude.toDouble()
+                location.longitude = Pref.current_longitude.toDouble()
+                var shopLocation = Location("")
+                shopLocation.latitude = addShopData.shopLat
+                shopLocation.longitude = addShopData.shopLong
+                val isShopNearby = FTStorageUtils.checkShopPositionWithinRadious(location, shopLocation, mRadious)
+
+                orderListDetails.shop_name = addShopData.shopName
+                orderListDetails.shop_type = addShopData.type
+                if (isShopNearby) {
+                    orderListDetails.isInrange = 1
+                }else{
+                    orderListDetails.isInrange = 0
+                }
+                orderListDetails.order_lat = Pref.current_latitude.toString()
+                orderListDetails.order_long = Pref.current_longitude.toString()
+                orderListDetails.shop_addr = addShopData.address
+                orderListDetails.shop_pincode = addShopData.pinCode
+                orderListDetails.order_total_amt = String.format("%.2f",ProductListFrag.finalOrderDataList!!.sumByDouble { it.submitedQty.toInt() * it.submitedRate.toDouble() }).toString()
+                orderListDetails.order_remarks = remarks
+                orderListDetails.isUploaded = false
+                AppDatabase.getDBInstance()!!.newOrderDataDao().insert(orderListDetails)
+                doAsync {
+                    var orderProductDtls : ArrayList<NewOrderProductEntity> = ArrayList()
+                    for(i in 0..ProductListFrag.finalOrderDataList.size-1){
+                        var obj : NewOrderProductEntity = NewOrderProductEntity()
+                        obj.order_id = orderListDetails.order_id
+                        obj.product_id = ProductListFrag.finalOrderDataList.get(i).product_id
+                        obj.product_name = ProductListFrag.finalOrderDataList.get(i).product_name
+                        obj.submitedQty = ProductListFrag.finalOrderDataList.get(i).submitedQty
+                        obj.submitedSpecialRate = ProductListFrag.finalOrderDataList.get(i).submitedRate
+                        obj.shop_id = shop_id
+                        orderProductDtls.add(obj)
                     }
+                    AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(orderProductDtls)
+                    uiThread {
+                        ll_placeOrder.isEnabled = true
+                        if(AppUtils.isOnline(mContext)){
+                            syncOrd(orderListDetails.order_id,addShopData)
+                        }else{
+                            progress_wheel.stopSpinning()
+                            msgShow("${AppUtils.hiFirstNameText()}. Your order for ${addShopData.shopName} has been placed successfully.Order No. is ${orderListDetails.order_id}")
+                        }
 
+                    }
                 }
+            } catch (e: Exception) {
+                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                Timber.d("error ${e.printStackTrace()}")
+                ll_placeOrder.isEnabled = true
             }
         }, 1000)
     }
@@ -241,6 +254,7 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
             simpleDialog.cancel()
         }
         ivCancel.setOnClickListener({ view ->
+            ll_placeOrder.isEnabled = true
             simpleDialog.cancel()
         })
         simpleDialog.show()

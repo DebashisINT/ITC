@@ -32,4 +32,7 @@ class RevisionNote {
 
     // Revision 1.0 PhotoAttendanceFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: Sales Rep Type dropdown update
     // Revision 1.0 DashboardFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: stage list api call update on refresh
+
+    //Revision 1.0 Suman 2024-05-30 mantis id 27495
+
 }

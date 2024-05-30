@@ -3862,14 +3862,16 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mFragment = ProductListFrag.getInstance(initializeObject)
                 }
                 setTopBarTitle(getString(R.string.select_products))
-                setTopBarVisibility(TopBarConfig.BACK)
+                //setTopBarVisibility(TopBarConfig.BACK)
+                setTopBarVisibility(TopBarConfig.MENU_ONLY_BACK)
             }
             FragType.CartListFrag -> {
                 if (enableFragGeneration) {
                     mFragment = CartListFrag.getInstance(initializeObject)
                 }
                 setTopBarTitle(getString(R.string.view_cart))
-                setTopBarVisibility(TopBarConfig.BACK)
+                //setTopBarVisibility(TopBarConfig.BACK)
+                setTopBarVisibility(TopBarConfig.MENU_ONLY_BACK)
             }
             FragType.ViewStockDetailsFragment -> {
                 if (enableFragGeneration) {
@@ -6149,6 +6151,33 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     iv_home_icon.visibility = View.VISIBLE
                     logo.visibility = View.VISIBLE
                 }
+
+                // Show back button
+                supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_header_back_arrow)
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
+            TopBarConfig.MENU_ONLY_BACK -> {
+                iv_home_icon.visibility = View.GONE
+                mDrawerToggle.isDrawerIndicatorEnabled = false
+                iv_search_icon.visibility = View.GONE
+                iv_sync_icon.visibility = View.GONE
+                rl_cart.visibility = View.GONE
+                iv_filter_icon.visibility = View.GONE
+                rl_confirm_btn.visibility = View.GONE
+                logo.visibility = View.GONE
+                logo.clearAnimation()
+                logo.animate().cancel()
+                iv_list_party.visibility = View.GONE
+                iv_map.visibility = View.GONE
+                iv_settings.visibility = View.GONE
+                ic_calendar.visibility = View.GONE
+                ic_chat_bot.visibility = View.GONE
+                iv_cancel_chat.visibility = View.GONE
+                iv_people.visibility = View.GONE
+                iv_scan.visibility = View.GONE
+                iv_view_text.visibility = View.GONE
+                fl_net_status.visibility = View.GONE
 
                 // Show back button
                 supportActionBar!!.setDisplayHomeAsUpEnabled(true)

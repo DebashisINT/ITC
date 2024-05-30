@@ -101,6 +101,7 @@ import java.util.concurrent.Executors
 /**
  * Created by Saikat on 29-08-2018.
  */
+//Revision 1.0 Suman 2024-05-30 mantis id 27495
 class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog.OnDateSetListener, OnMapReadyCallback {
 
     private lateinit var mContext: Context
@@ -1573,7 +1574,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                         tv_attendance_submit.text = getString(R.string.submit_button_text)
 
                     //01-09-2021
-                    cv_work_type_root.visibility= View.GONE
+                    //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
+                    //cv_work_type_root.visibility= View.GONE
+                    //Revision 1.0 Suman 2024-05-30 mantis id 27495 and
                     cv_dd_field.visibility = View.GONE
                     cv_route.visibility = View.GONE
                     cv_dd_field.visibility = View.GONE
@@ -1685,7 +1688,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                 dialogYes.setOnClickListener({ view ->
                     simpleDialog.cancel()
                     AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
-                    workTypeId="9"
+                    //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
+                    //workTypeId="9"
+                    //Revision 1.0 Suman 2024-05-30 mantis id 27495 end
                     if(Pref.IsShowDayStart){
                         getLocforStart()
                     }
@@ -1697,7 +1702,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             }
             else{
                 AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
-                workTypeId="9"
+                //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
+                //workTypeId="9"
+                //Revision 1.0 Suman 2024-05-30 mantis id 27495 end
                 if(Pref.IsShowDayStart){
                     getLocforStart()
                 }
