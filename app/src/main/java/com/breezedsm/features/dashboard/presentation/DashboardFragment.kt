@@ -137,6 +137,7 @@ import java.util.*
  */
 // Revision 1.0 DashboardFragment  Suman App V4.4.6  09-04-2024  mantis id 27357: stage list api call update on refresh
 // Rev 2.0 Suman 06-05-2024 Suman DashboardFragment mantis 27335
+// Rev 3.0 Suman 03-06-2024 Suman DashboardFragment mantis 27499
 
 class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListener,
     View.OnTouchListener {
@@ -8345,9 +8346,13 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
         simpleDialog.setCancelable(false)
         simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         simpleDialog.setContentView(R.layout.dialog_end_day_sale_value)
-        val et_saleValue: EditText =
-            simpleDialog.findViewById(R.id.dialog_et_sale_value) as EditText
+        val tv_head: AppCustomTextView = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+        val et_saleValue: EditText = simpleDialog.findViewById(R.id.dialog_et_sale_value) as EditText
         val submit = simpleDialog.findViewById(R.id.tv_dialog_submit) as AppCustomTextView
+
+        // Rev 3.0 Suman 03-06-2024 Suman DashboardFragment mantis 27499 begin
+        tv_head.text = "Enter Delivery value"
+        // Rev 3.0 Suman 03-06-2024 Suman DashboardFragment mantis 27499 end
 
         et_saleValue.setOnFocusChangeListener({ v, hasFocus ->
             if (hasFocus) {
