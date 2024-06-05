@@ -101,6 +101,7 @@ import com.breezedsm.features.commondialogsinglebtn.AddFeedbackSingleBtnDialog
 import com.breezedsm.features.commondialogsinglebtn.CommonDialogSingleBtn
 import com.breezedsm.features.commondialogsinglebtn.OnDialogClickListener
 import com.breezedsm.features.commondialogsinglebtn.TermsAndConditionsSingleBtnDialog
+import com.breezedsm.features.createOrder.CartEditListFrag
 import com.breezedsm.features.createOrder.CartListFrag
 import com.breezedsm.features.createOrder.DateWiseOrdReportFrag
 import com.breezedsm.features.createOrder.OrderListFrag
@@ -308,6 +309,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         Pref.isOrderShow = false
 
         AppUtils.changeLanguage(this, "en")
+        Pref.OrderEditEnable= true
+        Pref.OrderDeleteEnable= true
         println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.IsRouteUpdateForShopUser +Pref.isSeenTermsConditions)
 
         Pref.IsShowUserWiseDateWiseOrderInApp = true
@@ -3868,6 +3871,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             FragType.CartListFrag -> {
                 if (enableFragGeneration) {
                     mFragment = CartListFrag.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.view_cart))
+                //setTopBarVisibility(TopBarConfig.BACK)
+                setTopBarVisibility(TopBarConfig.MENU_ONLY_BACK)
+            }
+            FragType.CartEditListFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = CartEditListFrag.getInstance(initializeObject)
                 }
                 setTopBarTitle(getString(R.string.view_cart))
                 //setTopBarVisibility(TopBarConfig.BACK)

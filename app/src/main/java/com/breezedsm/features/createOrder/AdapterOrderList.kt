@@ -6,11 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.breezedsm.R
+import com.breezedsm.app.Pref
 import com.breezedsm.app.domain.NewOrderDataEntity
 import com.breezedsm.app.utils.AppUtils
 import kotlinx.android.synthetic.main.row_order_list.view.iv_row_ord_sync
 import kotlinx.android.synthetic.main.row_order_list.view.tv_row_ord_amt
 import kotlinx.android.synthetic.main.row_order_list.view.tv_row_ord_date
+import kotlinx.android.synthetic.main.row_order_list.view.tv_row_ord_delete
+import kotlinx.android.synthetic.main.row_order_list.view.tv_row_ord_edit
 import kotlinx.android.synthetic.main.row_order_list.view.tv_row_ord_id
 import kotlinx.android.synthetic.main.row_order_list.view.tv_row_ord_view
 
@@ -52,11 +55,26 @@ class AdapterOrderList(var mContext: Context, var ordL: ArrayList<NewOrderDataEn
             itemView.tv_row_ord_view.setOnClickListener {
                 listner.onViewClick(ordL.get(adapterPosition))
             }
+            if(Pref.OrderEditEnable){
+                itemView.tv_row_ord_edit.visibility = View.VISIBLE
+            }else{
+                itemView.tv_row_ord_edit.visibility = View.GONE
+            }
+            if(Pref.OrderDeleteEnable){
+                itemView.tv_row_ord_delete.visibility = View.VISIBLE
+            }else{
+                itemView.tv_row_ord_delete.visibility = View.GONE
+            }
+            itemView.tv_row_ord_edit.setOnClickListener {
+                listner.onEditClick(ordL.get(adapterPosition))
+            }
         }
     }
 
     interface OnActionClick {
         fun onViewClick(obj:NewOrderDataEntity)
         fun onSyncClick(obj:NewOrderDataEntity)
+        fun onEditClick(obj:NewOrderDataEntity)
+        fun onDelClick(obj:NewOrderDataEntity)
     }
 }

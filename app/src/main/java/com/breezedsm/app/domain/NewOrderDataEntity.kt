@@ -24,4 +24,8 @@ data class NewOrderDataEntity (
     @ColumnInfo var order_remarks:String = "",
     @ColumnInfo var isUploaded:Boolean = false,
 
+    @ColumnInfo var order_edit_date_time:String = "",
+    @ColumnInfo var order_edit_remarks:String = "",
+    @ColumnInfo var isEdited:Boolean = false,
+
 )

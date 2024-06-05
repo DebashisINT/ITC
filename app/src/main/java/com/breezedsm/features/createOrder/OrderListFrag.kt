@@ -151,6 +151,22 @@ class OrderListFrag: BaseFragment(), View.OnClickListener {
 
                 }
 
+                override fun onEditClick(obj: NewOrderDataEntity) {
+                    if (Pref.isAddAttendence == false){
+                        (mContext as DashboardActivity).checkToShowAddAttendanceAlert()
+                    }else{
+                        (mContext as DashboardActivity).loadFragment(FragType.CartEditListFrag, true, obj.order_id)
+                    }
+                }
+
+                override fun onDelClick(obj: NewOrderDataEntity) {
+                    if (Pref.isAddAttendence == false){
+                        (mContext as DashboardActivity).checkToShowAddAttendanceAlert()
+                    }else{
+
+                    }
+                }
+
             })
             rv_ordList.adapter = adapterOrderList
         }else{

@@ -6,7 +6,7 @@ import com.marcinmoskala.kotlinpreferences.PreferenceHolder
 /**
  * Created by Pratishruti on 08-11-2017.
  */
-
+//Rev 1.0 Suman 03-06-2024 mantis id 27433
 object Pref : PreferenceHolder() {
     var text: String? by bindToPreferenceFieldNullable()
     var num: Int by bindToPreferenceField(0, "SomeIntKey")
@@ -445,4 +445,8 @@ object Pref : PreferenceHolder() {
     var IsRouteUpdateForShopUser : Boolean by bindToPreferenceField(true, "IsRouteUpdateForShopUser")
     var IsShowUserWiseDateWiseOrderInApp : Boolean by bindToPreferenceField(false, "IsShowUserWiseDateWiseOrderInApp")
 
+    //Rev 1.0 Suman 03-06-2024 mantis id 27433 begin
+    var OrderEditEnable : Boolean by bindToPreferenceField(false, "OrderEditEnable")
+    var OrderDeleteEnable : Boolean by bindToPreferenceField(false, "OrderDeleteEnable")
+    //Rev 1.0 Suman 03-06-2024 mantis id 27433 end
 }

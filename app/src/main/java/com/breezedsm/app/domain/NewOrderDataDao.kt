@@ -100,4 +100,9 @@ interface NewOrderDataDao {
             ") where order_date = :speceficDt")
     fun getOrdReportBySingleDt(speceficDt:String): List<DateWiseOrdReportFrag.OrdReportDtls>
 
+    @Query("update new_order_data set order_edit_date_time = :order_edit_date_time,order_total_amt=:order_total_amt," +
+            " order_edit_remarks=:order_edit_remarks,isEdited=:isEdited \n" +
+            "where order_id =:order_id ")
+    fun updateOrdEdit(order_id:String,order_edit_date_time:String,order_total_amt:String,order_edit_remarks:String,isEdited:Boolean)
+
 }
