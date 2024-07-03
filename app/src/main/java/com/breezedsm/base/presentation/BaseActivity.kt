@@ -165,7 +165,7 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
         } /*else
             Pref.isAutoLogout = false*/
 
-//        Pref.isAutoLogout=true
+        //Pref.isAutoLogout=true
         if (Pref.isAutoLogout) {
 
             Pref.isAddAttendence = false
@@ -665,7 +665,13 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
     }
 
     fun endDay(location: Location) {
-        try{
+        //Suman 03-07-2024 mantis id 27598 begin
+        Pref.DayStartMarked = false
+        Pref.DayEndMarked = false
+
+        calllogoutApi(Pref.user_id!!, Pref.session_token!!)
+
+        /*try{
             var saleValue: String = ""
             var dayst: DaystartDayendRequest = DaystartDayendRequest()
             dayst.user_id = Pref.user_id
@@ -718,7 +724,9 @@ open class BaseActivity : AppCompatActivity(), GpsStatusDetector.GpsStatusDetect
         catch (ex:java.lang.Exception){
             ex.printStackTrace()
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-        }
+        }*/
+
+        //Suman 03-07-2024 mantis id 27598 end
 
 
     }
