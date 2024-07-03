@@ -1583,7 +1583,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
 
                     //01-09-2021
                     //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
-                    //cv_work_type_root.visibility= View.GONE
+                    cv_work_type_root.visibility= View.GONE
                     //Revision 1.0 Suman 2024-05-30 mantis id 27495 and
                     cv_dd_field.visibility = View.GONE
                     cv_route.visibility = View.GONE
@@ -1697,7 +1697,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     simpleDialog.cancel()
                     AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
                     //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
-                    //workTypeId="9"
+                    workTypeId="9"
                     //Revision 1.0 Suman 2024-05-30 mantis id 27495 end
                     if(Pref.IsShowDayStart){
                         getLocforStart()
@@ -1711,7 +1711,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             else{
                 AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
                 //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
-                //workTypeId="9"
+                workTypeId="9"
                 //Revision 1.0 Suman 2024-05-30 mantis id 27495 end
                 if(Pref.IsShowDayStart){
                     getLocforStart()
