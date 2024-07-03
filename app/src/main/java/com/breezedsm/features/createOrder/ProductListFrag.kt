@@ -195,6 +195,8 @@ class ProductListFrag : BaseFragment(), View.OnClickListener {
                 }
             }
             ll_grSel.id ->{
+                ll_grSel.isEnabled = false
+
                 var brandList = AppDatabase.getDBInstance()?.newProductListDao()?.getDistinctBrandList() as ArrayList<CommonProductCatagory>
                 if (brandList.size > 0) {
                     ProductCatagoryDialog.newInstance(brandList, "Select Group", {
@@ -213,10 +215,17 @@ class ProductListFrag : BaseFragment(), View.OnClickListener {
 
                     }).show((mContext as DashboardActivity).supportFragmentManager, "")
                 } else {
+                    ll_grSel.isEnabled = true
                     ToasterMiddle.msgShort(mContext, "No Group Found")
                 }
+
+                Handler().postDelayed(Runnable {
+                    ll_grSel.isEnabled = true
+                }, 1000)
             }
             ll_catagorySel.id->{
+                ll_catagorySel.isEnabled = false
+
                 if (!selGrIDStr.equals("")) {
                     var categoryList = AppDatabase.getDBInstance()?.newProductListDao()?.getDistinctCategoryList(selGrIDStr) as ArrayList<CommonProductCatagory>
                     if (categoryList.size > 0) {
@@ -235,10 +244,18 @@ class ProductListFrag : BaseFragment(), View.OnClickListener {
                         ToasterMiddle.msgShort(mContext, "No Category Found")
                     }
                 }else{
+                    ll_catagorySel.isEnabled = true
                     ToasterMiddle.msgShort(mContext, "Please select Group first")
                 }
+
+                Handler().postDelayed(Runnable {
+                    ll_catagorySel.isEnabled = true
+                }, 1000)
             }
             ll_measureSel.id->{
+                ll_measureSel.isEnabled = false
+
+                println("tag_select ll_measureSel")
                 if (!selGrIDStr.equals("")) {
                     if(!selCategoryIDStr.equals("")){
                         var measureList: ArrayList<CommonProductCatagory> = ArrayList()
@@ -256,19 +273,33 @@ class ProductListFrag : BaseFragment(), View.OnClickListener {
                             ToasterMiddle.msgShort(mContext, "No Measurement Found")
                         }
                     }else{
-                        ToasterMiddle.msgShort(mContext, "Please select Measurement first")
+                        ToasterMiddle.msgShort(mContext, "Please select Category first")
                     }
                 } else {
+                    ll_measureSel.isEnabled = true
                     ToasterMiddle.msgShort(mContext, "Please select Group first")
                 }
+
+                Handler().postDelayed(Runnable {
+                    ll_measureSel.isEnabled = true
+                }, 1000)
             }
             ll_cart.id -> {
+                ll_cart.isEnabled = false
+
+                progressWheel.spin()
+
                 if(finalOrderDataList.size>0){
                     var obj : FinalData = FinalData()
                     obj.shop_id = shop_id
                     obj.product_list = finalOrderDataList
                     (mContext as DashboardActivity).loadFragment(FragType.CartListFrag, true, obj)
                 }
+
+                Handler().postDelayed(Runnable {
+                    ll_cart.isEnabled = true
+                    progressWheel.stopSpinning()
+                }, 200)
             }
             R.id.iv_frag_ord_prod_mic -> {
                 progressWheel.spin()

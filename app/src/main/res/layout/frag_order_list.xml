@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:wheel="http://schemas.android.com/tools"
-    android:background="@color/white"
+    android:background="@color/smoke_white"
     android:focusable="true"
     android:clickable="true">
     
@@ -17,7 +17,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/smoke_white"
+            app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/_10sdp"
             android:elevation="@dimen/_5sdp">
             
@@ -39,8 +39,8 @@
 
                     <TextView
                         android:id="@+id/tv_frag_ord_list_shop_name_initial"
-                        android:layout_width="@dimen/_43sdp"
-                        android:layout_height="@dimen/_43sdp"
+                        android:layout_width="@dimen/_33sdp"
+                        android:layout_height="@dimen/_33sdp"
                         android:background="@color/blue"
                         android:gravity="center"
                         android:text=""

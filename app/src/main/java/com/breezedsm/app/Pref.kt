@@ -446,7 +446,10 @@ object Pref : PreferenceHolder() {
     var IsShowUserWiseDateWiseOrderInApp : Boolean by bindToPreferenceField(false, "IsShowUserWiseDateWiseOrderInApp")
 
     //Rev 1.0 Suman 03-06-2024 mantis id 27433 begin
-    var OrderEditEnable : Boolean by bindToPreferenceField(false, "OrderEditEnable")
-    var OrderDeleteEnable : Boolean by bindToPreferenceField(false, "OrderDeleteEnable")
+    var IsOrderEditEnable : Boolean by bindToPreferenceField(false, "IsOrderEditEnable")
+    var IsOrderDeleteEnable : Boolean by bindToPreferenceField(false, "IsOrderDeleteEnable")
     //Rev 1.0 Suman 03-06-2024 mantis id 27433 end
+
+    var AttendWorkTypeID: String by bindToPreferenceField("", "AttendWorkTypeID")
+    var AttendWorkTypeName: String by bindToPreferenceField("", "AttendWorkTypeName")
 }

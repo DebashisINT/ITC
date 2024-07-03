@@ -59,7 +59,8 @@
             android:paddingVertical="@dimen/_5sdp"
             android:text="@string/label_install_anydesk"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp" />
+            android:textSize="@dimen/_10sdp"
+            android:visibility="gone"/>
 
         <com.breezedsm.widgets.AppCustomTextView
             android:id="@+id/activity_login_tvappCustomLogs"

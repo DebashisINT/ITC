@@ -137,6 +137,15 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_row_ord_dtls_order_modify_dt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:gravity="center|start"
+                android:textSize="@dimen/_12sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Shop Name"/>
+
+            <TextView
                 android:id="@+id/tv_row_ord_dtls_order_shop_name"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"

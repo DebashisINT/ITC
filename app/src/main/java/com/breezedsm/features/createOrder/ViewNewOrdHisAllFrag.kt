@@ -413,6 +413,10 @@ class ViewNewOrdHisAllFrag: BaseFragment(), View.OnClickListener {
                 obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
                 obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
 
+                obj.total_amt=ordProductDtls.get(i).total_amt.toString().toDouble()
+                obj.mrp=ordProductDtls.get(i).mrp.toString().toDouble()
+                obj.itemPrice=ordProductDtls.get(i).itemPrice.toString().toDouble()
+
                 syncOrdProductL.add(obj)
             }
             syncOrd.product_list = syncOrdProductL

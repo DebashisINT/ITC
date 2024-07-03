@@ -105,6 +105,7 @@ import com.breezedsm.features.createOrder.CartEditListFrag
 import com.breezedsm.features.createOrder.CartListFrag
 import com.breezedsm.features.createOrder.DateWiseOrdReportFrag
 import com.breezedsm.features.createOrder.OrderListFrag
+import com.breezedsm.features.createOrder.ProductEditListFrag
 import com.breezedsm.features.createOrder.ProductListFrag
 import com.breezedsm.features.createOrder.ViewNewOrdHisAllFrag
 import com.breezedsm.features.createOrder.ViewNewOrdHistoryFrag
@@ -309,11 +310,10 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         Pref.isOrderShow = false
 
         AppUtils.changeLanguage(this, "en")
-        Pref.OrderEditEnable= true
-        Pref.OrderDeleteEnable= true
-        println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.IsRouteUpdateForShopUser +Pref.isSeenTermsConditions)
 
-        Pref.IsShowUserWiseDateWiseOrderInApp = true
+        println("load_frag "+mFragType.toString() +" usr: "+Pref.user_id + " "+Pref.DistributorGPSAccuracy)
+
+        //Pref.IsShowUserWiseDateWiseOrderInApp = true
 
         if (addToStack) {
             mTransaction.add(R.id.frame_layout_container, getFragInstance(mFragType, initializeObject, true)!!, mFragType.toString())
@@ -1227,7 +1227,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         //callUnreadNotificationApi()
         //hardcoded callUnreadNotificationApi() call stop end
 
-        checkForFingerPrint()
+        //checkForFingerPrint()
     }
 
 
@@ -3881,6 +3881,14 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                     mFragment = CartEditListFrag.getInstance(initializeObject)
                 }
                 setTopBarTitle(getString(R.string.view_cart))
+                //setTopBarVisibility(TopBarConfig.BACK)
+                setTopBarVisibility(TopBarConfig.MENU_ONLY_BACK)
+            }
+            FragType.ProductEditListFrag -> {
+                if (enableFragGeneration) {
+                    mFragment = ProductEditListFrag.getInstance(initializeObject)
+                }
+                setTopBarTitle(getString(R.string.select_products))
                 //setTopBarVisibility(TopBarConfig.BACK)
                 setTopBarVisibility(TopBarConfig.MENU_ONLY_BACK)
             }
@@ -6987,6 +6995,13 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             }
         }else if (getFragment() != null && getFragment() is OrderListFrag) {
             loadFragment(FragType.DashboardFragment, false, DashboardType.Home)
+            /*progress_wheel.spin()
+
+            Handler().postDelayed(Runnable {
+                loadFragment(FragType.NearByShopsListFragment, false, "")
+                progress_wheel.stopSpinning()
+            }, 700)*/
+
         }
         else if (getFragment() != null && getFragment() is ViewAllOrderListFragment && (ShopDetailFragment.isOrderEntryPressed || AddShopFragment.isOrderEntryPressed) && AppUtils.getSharedPreferenceslogOrderStatusRequired(this)) {
 
@@ -7066,6 +7081,41 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
             })
             simpleDialog.show()
 
+        }else if(getFragment() != null && getFragment() is ProductEditListFrag){
+            super.onBackPressed()
+            if(getFragment() != null && getFragment() is CartEditListFrag){
+                (getFragment() as CartEditListFrag).updateCart()
+            }
+        }else if(getFragment() != null && getFragment() is CartEditListFrag){
+            if(CartEditListFrag.isCartChanges){
+                val simpleDialog = Dialog(mContext)
+                simpleDialog.setCancelable(false)
+                simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                simpleDialog.setContentView(R.layout.dialog_yes_no)
+
+                val tv_header = simpleDialog.findViewById(R.id.dialog_yes_no_headerTV) as AppCustomTextView
+                val tv_body = simpleDialog.findViewById(R.id.dialog_cancel_order_header_TV) as AppCustomTextView
+                val tv_ok = simpleDialog.findViewById(R.id.tv_dialog_yes_no_yes) as AppCustomTextView
+                val tv_no = simpleDialog.findViewById(R.id.tv_dialog_yes_no_no) as AppCustomTextView
+
+                tv_header.text = AppUtils.hiFirstNameText()
+                tv_body.text = "Are you sure you want to exit from edit mode? Any unsaved changes will be lost.\n"
+                tv_ok.setOnClickListener {
+                    simpleDialog.dismiss()
+                    CartEditListFrag.isCartChanges = false
+                    super.onBackPressed()
+                }
+
+                tv_no.setOnClickListener{
+                    simpleDialog.dismiss()
+                }
+                simpleDialog.show()
+            }else{
+                super.onBackPressed()
+                if (getFragment() != null && getFragment() is OrderListFrag){
+                    (getFragment() as OrderListFrag).updateData()
+                }
+            }
         }/*else if (getFragment() != null && getFragment() is RegisTerFaceFragment) {
             super.onBackPressed()
             if (getFragment() != null && getFragment() is ProtoRegistrationFragment){

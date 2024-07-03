@@ -90,4 +90,7 @@ interface NewProductListDao {
 
     @Query("select * from new_product_list where product_id=:product_id")
     fun getProductDtls(product_id:String): NewProductListEntity
+
+    @Query("select * from new_product_list where product_id=:product_id")
+    fun isProductAvaliable(product_id:String): NewProductListEntity
 }

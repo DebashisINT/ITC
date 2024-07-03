@@ -18,19 +18,27 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.breezedsm.R
 import com.breezedsm.app.AppDatabase
+import com.breezedsm.app.NetworkConstant
 import com.breezedsm.app.Pref
 import com.breezedsm.app.domain.AddShopDBModelEntity
 import com.breezedsm.app.domain.NewOrderDataEntity
 import com.breezedsm.app.domain.NewOrderProductEntity
+import com.breezedsm.app.domain.NewProductListEntity
 import com.breezedsm.app.types.FragType
 import com.breezedsm.app.utils.AppUtils
 import com.breezedsm.app.utils.FTStorageUtils
+import com.breezedsm.app.utils.ToasterMiddle
+import com.breezedsm.base.BaseResponse
+import com.breezedsm.base.presentation.BaseActivity
 import com.breezedsm.base.presentation.BaseFragment
 import com.breezedsm.features.dashboard.presentation.DashboardActivity
 import com.breezedsm.features.location.LocationWizard
+import com.breezedsm.features.login.api.productlistapi.ProductListRepoProvider
 import com.breezedsm.widgets.AppCustomTextView
 import com.google.android.material.textfield.TextInputEditText
 import com.pnikosis.materialishprogress.ProgressWheel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import timber.log.Timber
@@ -43,11 +51,11 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
     private lateinit var tv_totalValue: TextView
     private lateinit var ll_placeOrder: LinearLayout
     private lateinit var tv_addNewProduct: TextView
+    private lateinit var ordID: TextView
 
     private lateinit var adapterCartEditList: AdapterCartEditList
 
-    private lateinit var ordDtls : NewOrderDataEntity
-    private lateinit var ordProductDtlsL : ArrayList<FinalProductRateSubmit>
+
     private lateinit var addShopData : AddShopDBModelEntity
 
     override fun onAttach(context: Context) {
@@ -56,6 +64,10 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
     }
 
     companion object {
+         var isCartChanges = false
+         var ordDtls : NewOrderDataEntity = NewOrderDataEntity()
+         var ordProductDtlsL : ArrayList<FinalProductRateSubmit> = ArrayList()
+
         var order_id: String = ""
         var iseditCommit:Boolean = true
         fun getInstance(objects: Any): CartEditListFrag {
@@ -79,29 +91,36 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
         tv_totalValue = view!!.findViewById(R.id.tv_ord_prod_cart_edit_frag_total_value)
         ll_placeOrder = view!!.findViewById(R.id.ll_ord_prod_cart_edit_frag_place_order)
         tv_addNewProduct = view!!.findViewById(R.id.tv_frag_cart_edit_add_new_product)
+        ordID = view!!.findViewById(R.id.tv_frag_cart_edit_ord_id)
 
         ll_placeOrder.setOnClickListener(this)
         tv_addNewProduct.setOnClickListener(this)
+
+        ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(order_id)
+        addShopData = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(ordDtls.shop_id)
+        ordProductDtlsL = ArrayList()
+        ordProductDtlsL = AppDatabase.getDBInstance()!!.newOrderProductDao().getCustomOrdProductL(order_id) as ArrayList<FinalProductRateSubmit>
+        ordID.text = "Order ID: \n$order_id"
+
         setData()
     }
 
     fun setData(){
         try {
-             ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(order_id)
-             addShopData = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(ordDtls.shop_id)
-             ordProductDtlsL = ArrayList()
-             ordProductDtlsL = AppDatabase.getDBInstance()!!.newOrderProductDao().getCustomOrdProductL(order_id) as ArrayList<FinalProductRateSubmit>
 
             tv_totalQty.text= ordProductDtlsL.sumOf { it.submitedQty.toInt() }.toString()
             tv_totalValue.text= String.format("%.2f",ordProductDtlsL!!.sumByDouble { it.submitedQty.toInt() * it.submitedRate.toDouble() }).toString()
 
+
             adapterCartEditList = AdapterCartEditList(mContext,ordProductDtlsL,object :AdapterCartEditList.OnCartOptiOnClick{
                 override fun onDelChangeClick(cartSize: Int) {
+                    isCartChanges=true
                     tv_totalQty.text= ordProductDtlsL.sumOf { it.submitedQty.toInt() }.toString()
                     tv_totalValue.text= String.format("%.2f",ordProductDtlsL!!.sumByDouble { it.submitedQty.toInt() * it.submitedRate.toDouble() }).toString()
                 }
 
                 override fun onRateQtyChange() {
+                    isCartChanges=true
                     tv_totalQty.text= ordProductDtlsL.sumOf { it.submitedQty.toInt() }.toString()
                     tv_totalValue.text= String.format("%.2f",ordProductDtlsL!!.sumByDouble { it.submitedQty.toInt() * it.submitedRate.toDouble() }).toString()
                 }
@@ -119,19 +138,45 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when(p0!!.id){
             ll_placeOrder.id->{
-                Timber.d("tag_ord_place ll_placeOrder.id called enable status : ${ll_placeOrder.isEnabled}")
+                println("tag_click ll_placeOrder")
+                ll_placeOrder.isEnabled = false
+
                 if(iseditCommit){
-                    ll_placeOrder.isEnabled = false
-                    Timber.d("tag_ord_place ll_placeOrder.id called inside if enable status : ${ll_placeOrder.isEnabled}")
-                    showCheckAlert("Order Confirmation", "Would you like to confirm the order edit?")
+                    if(ordProductDtlsL.size==0){
+                        ll_placeOrder.isEnabled = true
+                        ToasterMiddle.msgLong(mContext,"Please select product.")
+                    }else{
+                        //check product avaliable in product master
+                        var productIdL = ordProductDtlsL.map { it.product_id } as ArrayList<String>
+                        var proExistanceL = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductExistance(productIdL) as ArrayList<NewProductListEntity>
+
+                        if(productIdL.size != proExistanceL.size){
+                            ll_placeOrder.isEnabled = true
+
+                            val simpleDialog = Dialog(mContext)
+                            simpleDialog.setCancelable(false)
+                            simpleDialog.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                            simpleDialog.setContentView(R.layout.dialog_message)
+                            val dialogHeader = simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
+                            val body = simpleDialog.findViewById(R.id.dialog_message_header_TV) as AppCustomTextView
+                            dialogHeader.text = AppUtils.hiFirstNameText()
+                            body.text = "Product(s) are not available. Talk to Manager."
+                            val dialogYes = simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
+                            dialogYes.setOnClickListener({ view ->
+                                simpleDialog.cancel()
+                            })
+                            simpleDialog.show()
+                        }else{
+                            showCheckAlert("Order Confirmation", "Would you like to confirm the order edit?")
+                        }
+                    }
                 }else{
                     ll_placeOrder.isEnabled = true
-                    Timber.d("tag_ord_place ll_placeOrder.id called inside else enable status : ${ll_placeOrder.isEnabled}")
                     openDialog("Please click on tick to save this edit.")
                 }
             }
             tv_addNewProduct.id ->{
-
+                (mContext as DashboardActivity).loadFragment(FragType.ProductEditListFrag, true, ordDtls.order_id)
             }
         }
     }
@@ -162,7 +207,6 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
         simpleDialog.show()
     }
 
-
     private fun editSaveOrder(remarks:String=""){
         progress_wheel.spin()
         Handler().postDelayed(Runnable {
@@ -187,27 +231,106 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
                         obj.submitedQty = ordProductDtlsL.get(i).submitedQty
                         obj.submitedSpecialRate = ordProductDtlsL.get(i).submitedRate
                         obj.shop_id = ordDtls.shop_id
+
+                        obj.total_amt = ordProductDtlsL.get(i).total_amt
+                        obj.mrp = ordProductDtlsL.get(i).mrp
+                        obj.itemPrice = ordProductDtlsL.get(i).item_price
+
                         orderProductDtls.add(obj)
                     }
                     AppDatabase.getDBInstance()!!.newOrderProductDao().deleteProductByOrdID(orderListDetails.order_id)
                     AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(orderProductDtls)
                     uiThread {
-                        ll_placeOrder.isEnabled = true
-                        if(AppUtils.isOnline(mContext) && false){
-                            //syncOrd(orderListDetails.order_id,addShopData)
+                        if(AppUtils.isOnline(mContext)){
+                            editOrderApi(orderListDetails.order_id,addShopData)
                         }else{
                             progress_wheel.stopSpinning()
-                            msgShow("${AppUtils.hiFirstNameText()}. Your order for ${addShopData.shopName} has been edited successfully.Order No. is ${orderListDetails.order_id}")
+                            msgShow("${AppUtils.hiFirstNameText()}. Your order for ${addShopData.shopName} has been saved successfully.Order No. is ${orderListDetails.order_id}")
                         }
 
                     }
                 }
-            } catch (e: Exception) {
+            }
+            catch (e: Exception) {
                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                 Timber.d("error ${e.printStackTrace()}")
                 ll_placeOrder.isEnabled = true
             }
         }, 1000)
+    }
+
+    fun editOrderApi(ordId:String, addShopData: AddShopDBModelEntity){
+        progress_wheel.spin()
+        var ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(ordId)
+        var ordProductDtls = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(ordId)
+        var editOrd = EditOrd()
+        var editOrdProductL:ArrayList<SyncOrdProductL> = ArrayList()
+
+        doAsync {
+            editOrd.user_id = Pref.user_id!!
+            editOrd.order_id = ordId
+            editOrd.order_date = ordDtls.order_date
+            editOrd.order_time = ordDtls.order_time
+            editOrd.order_date_time = ordDtls.order_date_time
+            editOrd.shop_id = ordDtls.shop_id
+            editOrd.shop_name = ordDtls.shop_name
+            editOrd.shop_type = ordDtls.shop_type
+            editOrd.isInrange = ordDtls.isInrange
+            editOrd.order_lat = ordDtls.order_lat
+            editOrd.order_long = ordDtls.order_long
+            editOrd.shop_addr = ordDtls.shop_addr
+            editOrd.shop_pincode = ordDtls.shop_pincode
+            editOrd.order_total_amt = ordDtls.order_total_amt.toDouble()
+            editOrd.order_remarks = ordDtls.order_remarks
+
+            editOrd.order_edit_date_time = ordDtls.order_edit_date_time
+            editOrd.order_edit_remarks = ordDtls.order_edit_remarks
+
+            for(i in 0..ordProductDtls.size-1){
+                var obj = SyncOrdProductL()
+                obj.order_id=ordProductDtls.get(i).order_id
+                obj.product_id=ordProductDtls.get(i).product_id
+                obj.product_name=ordProductDtls.get(i).product_name
+                obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
+                obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
+
+                obj.total_amt=ordProductDtls.get(i).total_amt.toString().toDouble()
+                obj.mrp=ordProductDtls.get(i).mrp.toString().toDouble()
+                obj.itemPrice=ordProductDtls.get(i).itemPrice.toString().toDouble()
+
+                editOrdProductL.add(obj)
+            }
+            editOrd.product_list = editOrdProductL
+
+            uiThread {
+                val repository = ProductListRepoProvider.productListProvider()
+                BaseActivity.compositeDisposable.add(
+                    repository.editProductListITC(editOrd)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({ result ->
+                            val response = result as BaseResponse
+                            if (response.status == NetworkConstant.SUCCESS) {
+                                doAsync {
+                                    AppDatabase.getDBInstance()!!.newOrderDataDao().updateIsEdited(editOrd.order_id,false)
+                                    uiThread {
+                                        progress_wheel.stopSpinning()
+                                        msgShow("${AppUtils.hiFirstNameText()}. Your order for ${addShopData.shopName} has been saved successfully.Order No. is ${editOrd.order_id}")
+                                    }
+                                }
+                            } else {
+                                ll_placeOrder.isEnabled = true
+                                progress_wheel.stopSpinning()
+                                (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                            }
+                        }, { error ->
+                            ll_placeOrder.isEnabled = true
+                            progress_wheel.stopSpinning()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        })
+                )
+            }
+        }
     }
 
     fun msgShow(msg:String){
@@ -222,7 +345,9 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
         bodyTv.text = msg
         okTV.setOnClickListener({ view ->
             simpleDialog.cancel()
-            (mContext as DashboardActivity).loadFragment(FragType.OrderListFrag, false,ordDtls.shop_id)
+            ordProductDtlsL = ArrayList()
+            isCartChanges=false
+            (mContext as DashboardActivity).onBackPressed()
         })
         simpleDialog.show()
         voiceOrderMsg()
@@ -250,7 +375,6 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
         simpleDialog.show()
     }
 
-
     fun openDialog(text:String){
         val simpleDialog = Dialog(mContext)
         simpleDialog.setCancelable(false)
@@ -267,7 +391,7 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
 
     private fun voiceOrderMsg() {
         if (Pref.isVoiceEnabledForOrderSaved) {
-            val msg = "Hi, Order edited successfully."
+            val msg = "Hi, Order saved successfully."
             val speechStatus = (mContext as DashboardActivity).textToSpeech.speak(
                 msg,
                 TextToSpeech.QUEUE_FLUSH,
@@ -276,5 +400,9 @@ class CartEditListFrag: BaseFragment(), View.OnClickListener {
             if (speechStatus == TextToSpeech.ERROR)
                 Log.e("Add Order", "TTS error in converting Text to Speech!")
         }
+    }
+
+    fun updateCart(){
+        setData()
     }
 }

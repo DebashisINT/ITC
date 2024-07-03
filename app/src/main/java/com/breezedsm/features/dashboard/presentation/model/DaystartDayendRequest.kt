@@ -18,4 +18,7 @@ class DaystartDayendRequest {
     var visit_distributor_date_time: String? = null
     var IsDDvistedOnceByDay: String? = null
 
+    var attendance_worktype_id: String? = null
+    var attendance_worktype_name: String? = null
+
 }

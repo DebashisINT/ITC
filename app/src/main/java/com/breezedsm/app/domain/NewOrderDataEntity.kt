@@ -24,8 +24,9 @@ data class NewOrderDataEntity (
     @ColumnInfo var order_remarks:String = "",
     @ColumnInfo var isUploaded:Boolean = false,
 
-    @ColumnInfo var order_edit_date_time:String = "",
-    @ColumnInfo var order_edit_remarks:String = "",
-    @ColumnInfo var isEdited:Boolean = false,
+    @ColumnInfo(name = "order_edit_date_time", defaultValue = "") var order_edit_date_time:String = "",
+    @ColumnInfo(name = "order_edit_remarks", defaultValue = "") var order_edit_remarks:String = "",
+    @ColumnInfo(name = "isEdited", defaultValue = "0") var isEdited:Boolean = false,
+    @ColumnInfo(name = "isDeleted", defaultValue = "0") var isDeleted:Boolean = false
 
 )

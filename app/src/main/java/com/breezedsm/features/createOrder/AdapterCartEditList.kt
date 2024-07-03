@@ -1,5 +1,6 @@
 package com.breezedsm.features.createOrder
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -7,8 +8,10 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.breezedsm.R
+import com.breezedsm.app.AppDatabase
 import com.breezedsm.app.Pref
 import com.breezedsm.app.utils.AppUtils
 import com.breezedsm.app.utils.CustomSpecialTextWatcher1
@@ -17,8 +20,10 @@ import com.breezedsm.features.dashboard.presentation.DashboardActivity
 import com.breezedsm.widgets.AppCustomTextView
 import kotlinx.android.synthetic.main.row_cart_l.view.iv_row_ord_opti_cart_del
 import kotlinx.android.synthetic.main.row_cart_l.view.iv_row_ord_opti_cart_tick
+import kotlinx.android.synthetic.main.row_cart_l.view.ll_row_cart_l_product_na_root
 import kotlinx.android.synthetic.main.row_cart_l.view.tv_row_ord_cart_list_item_price
 import kotlinx.android.synthetic.main.row_cart_l.view.tv_row_ord_cart_list_mrp
+import kotlinx.android.synthetic.main.row_cart_l.view.tv_row_ord_cart_list_total_amt
 import kotlinx.android.synthetic.main.row_cart_l.view.tv_row_ord_opti_cart_list_qty
 import kotlinx.android.synthetic.main.row_cart_l.view.tv_row_ord_opti_cart_list_rate
 import kotlinx.android.synthetic.main.row_cart_l.view.tv_row_ord_opti_cart_product_name
@@ -44,14 +49,44 @@ class AdapterCartEditList(val mContext: Context, var finalOrderDataList : ArrayL
     }
 
     inner class CartListViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-        fun bindItems(context: Context,cartList:ArrayList<FinalProductRateSubmit>,listner : AdapterCartEditList.OnCartOptiOnClick){
+        @SuppressLint("SuspiciousIndentation")
+        fun bindItems(context: Context, cartList:ArrayList<FinalProductRateSubmit>, listner : AdapterCartEditList.OnCartOptiOnClick){
 
             itemView.tv_row_ord_opti_cart_product_name.text = cartList.get(adapterPosition).product_name
             itemView.tv_row_ord_cart_list_mrp.setText(cartList.get(adapterPosition).mrp)
             itemView.tv_row_ord_cart_list_item_price.setText(cartList.get(adapterPosition).item_price)
             itemView.tv_row_ord_opti_cart_list_qty.setText(cartList.get(adapterPosition).submitedQty)
             itemView.tv_row_ord_opti_cart_list_rate.setText(cartList.get(adapterPosition).submitedRate)
+            itemView.tv_row_ord_cart_list_total_amt.setText(cartList.get(adapterPosition).total_amt)
 
+            try {
+              var isProductAvaliable  = AppDatabase.getDBInstance()!!.newProductListDao().isProductAvaliable(cartList.get(adapterPosition).product_id)
+                if(isProductAvaliable == null){
+                    itemView.ll_row_cart_l_product_na_root.visibility = View.VISIBLE
+                    itemView.tv_row_ord_opti_cart_product_name.setTextColor(ContextCompat.getColor(mContext,R.color.gray_50))
+                    itemView.tv_row_ord_cart_list_mrp.setTextColor(ContextCompat.getColor(mContext,R.color.gray_50))
+                    itemView.tv_row_ord_cart_list_item_price.setTextColor(ContextCompat.getColor(mContext,R.color.gray_50))
+                    itemView.tv_row_ord_opti_cart_list_qty.setTextColor(ContextCompat.getColor(mContext,R.color.gray_50))
+                    itemView.tv_row_ord_opti_cart_list_rate.setTextColor(ContextCompat.getColor(mContext,R.color.gray_50))
+                    itemView.tv_row_ord_cart_list_total_amt.setTextColor(ContextCompat.getColor(mContext,R.color.gray_50))
+
+                    itemView.tv_row_ord_opti_cart_list_qty.isEnabled = false
+                    itemView.tv_row_ord_opti_cart_list_rate.isEnabled = false
+                }else{
+                    itemView.ll_row_cart_l_product_na_root.visibility = View.GONE
+                    itemView.tv_row_ord_opti_cart_product_name.setTextColor(ContextCompat.getColor(mContext,R.color.black))
+                    itemView.tv_row_ord_cart_list_mrp.setTextColor(ContextCompat.getColor(mContext,R.color.black))
+                    itemView.tv_row_ord_cart_list_item_price.setTextColor(ContextCompat.getColor(mContext,R.color.black))
+                    itemView.tv_row_ord_opti_cart_list_qty.setTextColor(ContextCompat.getColor(mContext,R.color.black))
+                    itemView.tv_row_ord_opti_cart_list_rate.setTextColor(ContextCompat.getColor(mContext,R.color.black))
+                    itemView.tv_row_ord_cart_list_total_amt.setTextColor(ContextCompat.getColor(mContext,R.color.black))
+
+                    itemView.tv_row_ord_opti_cart_list_qty.isEnabled = true
+                    itemView.tv_row_ord_opti_cart_list_rate.isEnabled = true
+                }
+            }catch (ex:Exception){
+                ex.printStackTrace()
+            }
             if(Pref.IsViewMRPInOrder){
                 itemView.ll_row_ord_pro_list_mrp_root.visibility = View.VISIBLE
             }else{
@@ -158,16 +193,24 @@ class AdapterCartEditList(val mContext: Context, var finalOrderDataList : ArrayL
                 }
                 if(isQtyChanging){
                     finalOrderDataList.get(adapterPosition).submitedQty = changQtyStr
+                    var totalAmtChanged = String.format("%.2f",
+                        (finalOrderDataList.get(adapterPosition).submitedQty.toInt() * finalOrderDataList.get(adapterPosition).submitedRate.toDouble()).toBigDecimal()).toString()
+                    finalOrderDataList.get(adapterPosition).total_amt = totalAmtChanged
+                    itemView.tv_row_ord_cart_list_total_amt.setText(totalAmtChanged)
                     listner.onRateQtyChange()
                     notifyDataSetChanged()
                 }
                 if(isRateChanging){
                     finalOrderDataList.get(adapterPosition).submitedRate = changRateStr
+                    var totalAmtChanged = String.format("%.2f",
+                        (finalOrderDataList.get(adapterPosition).submitedQty.toInt() * finalOrderDataList.get(adapterPosition).submitedRate.toDouble()).toBigDecimal()).toString()
+                    finalOrderDataList.get(adapterPosition).total_amt = totalAmtChanged
                     listner.onRateQtyChange()
                     notifyDataSetChanged()
                 }
             }
             itemView.iv_row_ord_opti_cart_del.setOnClickListener {
+                itemView.iv_row_ord_opti_cart_del.isEnabled = false
                 val simpleDialogg = Dialog(mContext)
                 simpleDialogg.setCancelable(false)
                 simpleDialogg.getWindow()!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -182,9 +225,11 @@ class AdapterCartEditList(val mContext: Context, var finalOrderDataList : ArrayL
                     simpleDialogg.dismiss()
                     finalOrderDataList.removeAt(adapterPosition)
                     listner.onDelChangeClick(finalOrderDataList.size)
+                    itemView.iv_row_ord_opti_cart_del.isEnabled = true
                     notifyDataSetChanged()
                 }
                 dialogNo.setOnClickListener {
+                    itemView.iv_row_ord_opti_cart_del.isEnabled = true
                     simpleDialogg.dismiss()
                 }
                 simpleDialogg.show()

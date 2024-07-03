@@ -1,5 +1,6 @@
 package com.breezedsm.features.createOrder
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,6 +88,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
         return view
     }
 
+    @SuppressLint("RestrictedApi")
     private fun initView(view: View?) {
         cvFromDate = view!!.findViewById(R.id.cv_frag_ord_report_from_date)
         cvToDate = view!!.findViewById(R.id.cv_frag_ord_report_to_date)
@@ -112,18 +115,23 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
 
         tv_empty_page_msg.visibility = View.GONE
         img_direction.visibility = View.GONE
+        fab_frag_ord_report_share.visibility = View.GONE
 
         fab_frag_ord_report_share.setCustomClickListener {
+            println("tag_click fab_frag_ord_report_share click")
             dataProcessing()
         }
 
     }
 
 
-
+    @SuppressLint("RestrictedApi")
     override fun onClick(p0: View?) {
         when (p0!!.id) {
             cvFromDate.id -> {
+
+                cvFromDate.isEnabled = false
+
                 val cFromDate = Calendar.getInstance(Locale.ENGLISH)
                 var mYear: Int = cFromDate.get(Calendar.YEAR)
                 var mMonth: Int = cFromDate.get(Calendar.MONTH)
@@ -159,11 +167,18 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                 datePickerDialog.datePicker.minDate = mCalendar.timeInMillis
 
                 datePickerDialog.show()
+
+                Handler().postDelayed(Runnable {
+                    cvFromDate.isEnabled = true
+                }, 1000)
             }
 
             cvToDate.id -> {
+                cvToDate.isEnabled = false
+
                 if (str_selectedFromDate.equals("")) {
                     ToasterMiddle.msgLong(mContext, "Please select From Date.")
+                    cvToDate.isEnabled = true
                     return
                 }
                 val cFromDate = Calendar.getInstance(Locale.ENGLISH)
@@ -211,9 +226,15 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                 datePickerDialog.datePicker.minDate = mCalendar.timeInMillis
 
                 datePickerDialog.show()
+
+                Handler().postDelayed(Runnable {
+                    cvToDate.isEnabled = true
+                }, 1000)
             }
 
             cvDateSubmit.id -> {
+
+                cvDateSubmit.isEnabled = false
                 /*try {
                     if(!str_selectedFromDate.equals("") && !str_selectedToDate.equals("")){
                         var ordDateL = AppDatabase.getDBInstance()!!.newOrderDataDao().getDistinctOrdDates(str_selectedFromDate,str_selectedToDate) as ArrayList<String>
@@ -282,6 +303,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                         var finalL: ArrayList<OrdReportDateRoot> = ArrayList()
                         var ordDtlsQueryL = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrdReportByDt(str_selectedFromDate, str_selectedToDate) as ArrayList<OrdReportDtlsQuery>
                         if (ordDtlsQueryL.size > 0) {
+                            fab_frag_ord_report_share.visibility = View.VISIBLE
                             ll_no_data_root.visibility = View.GONE
                             rvDtls.visibility = View.VISIBLE
                             llFooterRoot.visibility = View.VISIBLE
@@ -315,6 +337,7 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                             }
                         }else{
                             ll_no_data_root.visibility = View.VISIBLE
+                            fab_frag_ord_report_share.visibility = View.GONE
                             rvDtls.visibility = View.GONE
                             llFooterRoot.visibility = View.GONE
                             tv_empty_page_msg_head.text = "No data found"
@@ -325,6 +348,10 @@ class DateWiseOrdReportFrag : BaseFragment(), View.OnClickListener {
                 } catch (ex: Exception) {
                     ex.printStackTrace()
                 }
+
+                Handler().postDelayed(Runnable {
+                    cvDateSubmit.isEnabled = true
+                }, 1000)
             }
         }
     }

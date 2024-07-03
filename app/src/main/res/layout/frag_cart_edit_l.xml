@@ -25,25 +25,64 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
-                    android:padding="@dimen/_5sdp">
+                    android:layout_height="@dimen/_45sdp"
+                    android:padding="@dimen/_2sdp"
+                    android:gravity="center">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        app:cardCornerRadius="@dimen/_5sdp"
+                        app:cardElevation="@dimen/_5sdp"
+                        app:cardBackgroundColor="@color/white"
+                        android:layout_marginLeft="@dimen/_3sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:background="@color/transparent">
+
+                            <ImageView
+                                android:layout_width="@dimen/_18sdp"
+                                android:layout_height="@dimen/_18sdp"
+                                android:src="@drawable/order_add"
+                                android:layout_marginLeft="@dimen/_3sdp"
+                                android:layout_gravity="center"/>
+
+                            <TextView
+                                android:id="@+id/tv_frag_cart_edit_ord_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Order ID #"
+                                android:gravity="center|start"
+                                android:paddingLeft="@dimen/_5sdp"
+                                android:textSize="@dimen/_11sdp"
+                                android:textColor="#15539e"
+                                android:textStyle="bold"
+                                />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
 
                     <Space
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="match_parent" />
 
                     <TextView
                         android:id="@+id/tv_frag_cart_edit_add_new_product"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/_35sdp"
                         android:gravity="center"
                         android:padding="@dimen/_5sdp"
                         android:background="@drawable/shape_cursor_blue"
                         android:backgroundTint="#15539e"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp"
-                        android:text="+ Add New Item"/>
+                        android:text="+ Add New Item(s)"/>
 
                 </LinearLayout>
 

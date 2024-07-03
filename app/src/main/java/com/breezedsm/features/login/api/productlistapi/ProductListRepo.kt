@@ -3,6 +3,8 @@ package com.breezedsm.features.login.api.productlistapi
 import com.breezedsm.app.Pref
 import com.breezedsm.app.domain.ProductListEntity
 import com.breezedsm.base.BaseResponse
+import com.breezedsm.features.createOrder.DeleteOrd
+import com.breezedsm.features.createOrder.EditOrd
 import com.breezedsm.features.createOrder.GetOrderHistory
 import com.breezedsm.features.createOrder.GetProductRateReq
 import com.breezedsm.features.createOrder.GetProductReq
@@ -29,6 +31,10 @@ class ProductListRepo(val apiService: ProductListApi) {
         return apiService.syncProductListITC(obj)
     }
 
+    fun editProductListITC(obj: EditOrd): Observable<BaseResponse> {
+        return apiService.editProductListITC(obj)
+    }
+
     fun getOrderHistory(user_id:String): Observable<GetOrderHistory> {
         return apiService.getOrderHistoryApi(user_id)
     }
@@ -49,5 +55,9 @@ class ProductListRepo(val apiService: ProductListApi) {
 
     fun getProductRateOfflineListNew(): Observable<ProductListOfflineResponseModelNew> {
         return apiService.getOfflineProductRateListNew(Pref.session_token!!, Pref.user_id!!)
+    }
+
+    fun deleteOrderITC(obj: DeleteOrd): Observable<BaseResponse> {
+        return apiService.deleteOrderITCApi(obj)
     }
 }

@@ -468,6 +468,11 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
                 obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
                 obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
 
+                obj.total_amt=ordProductDtls.get(i).total_amt.toString().toDouble()
+                obj.mrp=ordProductDtls.get(i).mrp.toString().toDouble()
+                obj.itemPrice=ordProductDtls.get(i).itemPrice.toString().toDouble()
+
+
                 syncOrdProductL.add(obj)
             }
             syncOrd.product_list = syncOrdProductL
@@ -536,6 +541,11 @@ class ViewNewOrdHistoryFrag: BaseFragment(), View.OnClickListener, DatePickerLis
                     obj.product_name=ordProductDtls.get(i).product_name
                     obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
                     obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
+
+                    obj.total_amt=ordProductDtls.get(i).total_amt.toString().toDouble()
+                    obj.mrp=ordProductDtls.get(i).mrp.toString().toDouble()
+                    obj.itemPrice=ordProductDtls.get(i).itemPrice.toString().toDouble()
+
 
                     syncOrdProductL.add(obj)
                 }

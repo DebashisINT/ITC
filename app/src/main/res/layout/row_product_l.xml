@@ -130,7 +130,7 @@
                         android:enabled="false"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:textSize="@dimen/_11sdp"
+                        android:textSize="@dimen/_10sdp"
                         android:textColor="@color/bill_blue" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -154,7 +154,7 @@
                     android:background="@drawable/back_round_corner_5"
                     android:src="@drawable/ic_white_rupee_icon"
                     android:padding="@dimen/_3sdp"
-                    android:backgroundTint="@color/green"
+                    android:backgroundTint="@color/blue"
                     android:layout_gravity="center"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -174,15 +174,58 @@
                         android:enabled="false"
                         android:imeOptions="actionNext"
                         android:inputType="numberDecimal"
-                        android:textSize="@dimen/_11sdp"
+                        android:textSize="@dimen/_10sdp"
                         android:textColor="@color/bill_blue" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
             <Space
-                android:layout_width="@dimen/_58sdp"
+                android:layout_width="@dimen/_3sdp"
                 android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center|start"
+                android:paddingStart="@dimen/_3sdp">
+
+                <ImageView
+                    android:id="@+id/iv_total_amt_back"
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:background="@drawable/back_round_corner_5"
+                    android:src="@drawable/ic_money"
+                    android:tint="@color/white"
+                    android:padding="@dimen/_3sdp"
+                    android:backgroundTint="@color/gray_50"
+                    android:layout_gravity="center"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout"
+                    android:layout_marginLeft="@dimen/_3sdp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tv_row_ord_pro_list_total_amt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:gravity="center|start|top"
+                        android:hint="Amount"
+                        android:enabled="false"
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"
+                        android:inputType="numberDecimal"
+                        android:textSize="@dimen/_10sdp"
+                        android:textColor="@color/bill_blue" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

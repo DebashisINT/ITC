@@ -281,7 +281,7 @@
                     android:paddingLeft="@dimen/_17sdp"
                     android:paddingRight="@dimen/_17sdp"
                     android:paddingTop="@dimen/_15sdp"
-                    android:text="@string/add_attendance"
+                    android:text="@string/add_attendance_new"
                     android:textColor="@color/lightest_gray"
                     android:textSize="@dimen/_12sdp" />
 

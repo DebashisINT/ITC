@@ -15,11 +15,14 @@ interface NewOrderDataDao {
     @Query("Select * from new_order_data where order_date=:order_date ")
     fun getTodayOrder(order_date:String): List<NewOrderDataEntity>
 
+    @Query("update  new_order_data set order_edit_date_time = '' where order_edit_date_time = '1900-01-01 00:00:00' ")
+    fun updateGarbageEditDateTime()
+
     @Query("Select * from new_order_data where order_date=:order_date order by order_id desc")
     fun getTodayOrderOrderBy(order_date:String): List<NewOrderDataEntity>
 
     @Query("Select * from new_order_data where order_date=:order_date AND\n" +
-            "shop_id in(select shop_id from shop_detail)\n" +
+            "shop_id in(select shop_id from shop_detail) and isDeleted = 0 \n" +
             " order by order_id desc")
     fun getTodayOrderOrderByShopMasterValidation(order_date:String): List<NewOrderDataEntity>
 
@@ -29,7 +32,7 @@ interface NewOrderDataDao {
     @Query("Select * from new_order_data where isUploaded=:isUploaded ")
     fun getUnsyncList(isUploaded:Boolean): List<NewOrderDataEntity>
 
-    @Query("Select * from new_order_data where shop_id=:shop_id order by order_date desc,order_id desc")
+    @Query("Select * from new_order_data where shop_id=:shop_id and isDeleted = 0 order by order_date desc,order_id desc")
     fun getOrderByShop(shop_id:String): List<NewOrderDataEntity>
 
     @Query("Select * from new_order_data where order_id=:order_id")
@@ -37,22 +40,25 @@ interface NewOrderDataDao {
 
     @Query("select \n" +
             "case when sum(order_total_amt) IS NULL then '0.00' else sum(order_total_amt) END as total\n" +
-            " from new_order_data where shop_id = :shop_id")
+            " from new_order_data where shop_id = :shop_id and isDeleted=0")
     fun getOrderAmtByShop(shop_id:String): Double
 
     @Query("select \n" +
             "case when sum(order_total_amt) IS NULL then '0.00' else sum(order_total_amt) END as total\n" +
-            " from new_order_data where order_date = :order_date")
+            " from new_order_data where order_date = :order_date and isDeleted = 0")
     fun getOrderSumByDate(order_date:String): Double
 
     @Query("update new_order_data set isUploaded=:isUploaded where order_id=:order_id ")
     fun updateIsUploaded(order_id:String,isUploaded:Boolean)
 
+    @Query("update new_order_data set isEdited=:isEdited where order_id=:order_id ")
+    fun updateIsEdited(order_id:String,isEdited:Boolean)
+
     @Query("Select * from new_order_data order by order_date desc ,order_id desc")
     fun getAllOrderOrderBy(): List<NewOrderDataEntity>
 
     @Query(" Select * from new_order_data\n" +
-            "where shop_id in(select shop_id from shop_detail) order by order_date desc ,order_id desc")
+            "where shop_id in(select shop_id from shop_detail) and isDeleted = 0 order by order_date desc ,order_id desc")
     fun getAllOrderOrderByShopMasterValidation(): List<NewOrderDataEntity>
 
     @Query("select * from new_order_data \n" +
@@ -105,4 +111,17 @@ interface NewOrderDataDao {
             "where order_id =:order_id ")
     fun updateOrdEdit(order_id:String,order_edit_date_time:String,order_total_amt:String,order_edit_remarks:String,isEdited:Boolean)
 
+
+    @Query("update new_order_data set isDeleted = :isDeleted " +
+            "where order_id =:order_id ")
+    fun updateOrdDelete(order_id:String,isDeleted:Boolean)
+
+    @Query("delete from new_order_data where order_id =:order_id ")
+    fun deleteOrderHeader(order_id:String)
+
+    @Query("Select * from new_order_data where isDeleted=:isDeleted")
+    fun getDeleteL(isDeleted:Boolean): List<NewOrderDataEntity>
+
+    @Query("Select * from new_order_data where isEdited=:isEdited")
+    fun getEditedL(isEdited:Boolean): List<NewOrderDataEntity>
 }

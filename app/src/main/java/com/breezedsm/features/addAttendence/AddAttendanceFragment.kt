@@ -969,6 +969,14 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                             else {
                                 workTypeId = workTypeList[i].ID.toString()
                                 tv_work_type.text = workTypeList[i].Descrpton
+
+                                //Suman 06-06-2024 mantis id 0027517 begin
+                                try {
+                                    Pref.AttendWorkTypeName = workTypeList[i].Descrpton.toString()
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                                //Suman 06-06-2024 mantis id 0027517 end
                             }
                         }
                     } else {
@@ -2403,6 +2411,10 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                             Timber.d("AddAttendance Response Msg=========> " + response.message)
                             if (response.status == NetworkConstant.SUCCESS) {
 
+                                //Suman 06-06-2024 mantis id 0027517 begin
+                                Pref.AttendWorkTypeID = addAttendenceModel.work_type
+                                //Suman 06-06-2024 mantis id 0027517 end
+
                                 /*if (AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.getAll() != null)
                             AppDatabase.getDBInstance()?.selectedWorkTypeDao()?.delete()
 
@@ -2731,152 +2743,157 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     }
 
     fun onFacesDetected(currTimestamp: Long, faces: List<Face>, add: Boolean) {
-        val paint = Paint()
-        paint.color = Color.RED
-        paint.style = Paint.Style.STROKE
-        paint.strokeWidth = 2.0f
-        val mappedRecognitions: MutableList<Recognition> = LinkedList()
+        try {
+            val paint = Paint()
+            paint.color = Color.RED
+            paint.style = Paint.Style.STROKE
+            paint.strokeWidth = 2.0f
+            val mappedRecognitions: MutableList<Recognition> = LinkedList()
 
 
-        //final List<Classifier.Recognition> results = new ArrayList<>();
+            //final List<Classifier.Recognition> results = new ArrayList<>();
 
-        // Note this can be done only once
-        val sourceW = rgbFrameBitmap!!.width
-        val sourceH = rgbFrameBitmap!!.height
-        val targetW = portraitBmp!!.width
-        val targetH = portraitBmp!!.height
-        val transform = createTransform(
-                sourceW,
-                sourceH,
-                targetW,
-                targetH,
-                90)
-        val mutableBitmap = portraitBmp!!.copy(Bitmap.Config.ARGB_8888, true)
-        val cv = Canvas(mutableBitmap)
+            // Note this can be done only once
+            val sourceW = rgbFrameBitmap!!.width
+            val sourceH = rgbFrameBitmap!!.height
+            val targetW = portraitBmp!!.width
+            val targetH = portraitBmp!!.height
+            val transform = createTransform(
+                    sourceW,
+                    sourceH,
+                    targetW,
+                    targetH,
+                    90)
+            val mutableBitmap = portraitBmp!!.copy(Bitmap.Config.ARGB_8888, true)
+            val cv = Canvas(mutableBitmap)
 
-        // draws the original image in portrait mode.
-        cv.drawBitmap(rgbFrameBitmap!!, transform!!, null)
-        val cvFace = Canvas(faceBmp!!)
-        val saved = false
-        for (face in faces) {
-            //results = detector.recognizeImage(croppedBitmap);
-            val boundingBox = RectF(face.boundingBox)
+            // draws the original image in portrait mode.
+            cv.drawBitmap(rgbFrameBitmap!!, transform!!, null)
+            val cvFace = Canvas(faceBmp!!)
+            val saved = false
+            for (face in faces) {
+                //results = detector.recognizeImage(croppedBitmap);
+                val boundingBox = RectF(face.boundingBox)
 
-            //final boolean goodConfidence = result.getConfidence() >= minimumConfidence;
-            val goodConfidence = true //face.get;
-            if (boundingBox != null && goodConfidence) {
+                //final boolean goodConfidence = result.getConfidence() >= minimumConfidence;
+                val goodConfidence = true //face.get;
+                if (boundingBox != null && goodConfidence) {
 
-                // maps crop coordinates to original
-                cropToFrameTransform?.mapRect(boundingBox)
+                    // maps crop coordinates to original
+                    cropToFrameTransform?.mapRect(boundingBox)
 
-                // maps original coordinates to portrait coordinates
-                val faceBB = RectF(boundingBox)
-                transform.mapRect(faceBB)
+                    // maps original coordinates to portrait coordinates
+                    val faceBB = RectF(boundingBox)
+                    transform.mapRect(faceBB)
 
-                // translates portrait to origin and scales to fit input inference size
-                //cv.drawRect(faceBB, paint);
-                val sx = TF_OD_API_INPUT_SIZE.toFloat() / faceBB.width()
-                val sy = TF_OD_API_INPUT_SIZE.toFloat() / faceBB.height()
-                val matrix = Matrix()
-                matrix.postTranslate(-faceBB.left, -faceBB.top)
-                matrix.postScale(sx, sy)
-                cvFace.drawBitmap(portraitBmp!!, matrix, null)
+                    // translates portrait to origin and scales to fit input inference size
+                    //cv.drawRect(faceBB, paint);
+                    val sx = TF_OD_API_INPUT_SIZE.toFloat() / faceBB.width()
+                    val sy = TF_OD_API_INPUT_SIZE.toFloat() / faceBB.height()
+                    val matrix = Matrix()
+                    matrix.postTranslate(-faceBB.left, -faceBB.top)
+                    matrix.postScale(sx, sy)
+                    cvFace.drawBitmap(portraitBmp!!, matrix, null)
 
-                //canvas.drawRect(faceBB, paint);
-                var label = ""
-                var confidence = -1f
-                var color = Color.BLUE
-                var extra: Any? = null
-                var crop: Bitmap? = null
-                if (add) {
-                    try {
-                        crop = Bitmap.createBitmap(portraitBmp!!,
-                                faceBB.left.toInt(),
-                                faceBB.top.toInt(),
-                                faceBB.width().toInt(),
-                                faceBB.height().toInt())
-                    } catch (eon: java.lang.Exception) {
-                        //runOnUiThread(Runnable { Toast.makeText(mContext, "Failed to detect", Toast.LENGTH_LONG) })
-                    }
-                }
-                val startTime = SystemClock.uptimeMillis()
-                val resultsAux = FaceStartActivity.detector.recognizeImage(faceBmp, add)
-                val lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime
-                if (resultsAux.size > 0) {
-                    val result = resultsAux[0]
-                    extra = result.extra
-                    //          Object extra = result.getExtra();
-//          if (extra != null) {
-//            LOGGER.i("embeeding retrieved " + extra.toString());
-//          }
-                    val conf = result.distance
-                    if (conf < 1.0f) {
-                        confidence = conf
-                        label = result.title
-                        color = if (result.id == "0") {
-                            Color.GREEN
-                        } else {
-                            Color.RED
+                    //canvas.drawRect(faceBB, paint);
+                    var label = ""
+                    var confidence = -1f
+                    var color = Color.BLUE
+                    var extra: Any? = null
+                    var crop: Bitmap? = null
+                    if (add) {
+                        try {
+                            crop = Bitmap.createBitmap(portraitBmp!!,
+                                    faceBB.left.toInt(),
+                                    faceBB.top.toInt(),
+                                    faceBB.width().toInt(),
+                                    faceBB.height().toInt())
+                        } catch (eon: java.lang.Exception) {
+                            //runOnUiThread(Runnable { Toast.makeText(mContext, "Failed to detect", Toast.LENGTH_LONG) })
                         }
                     }
+                    val startTime = SystemClock.uptimeMillis()
+                    val resultsAux = FaceStartActivity.detector.recognizeImage(faceBmp, add)
+                    val lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime
+                    if (resultsAux.size > 0) {
+                        val result = resultsAux[0]
+                        extra = result.extra
+                        //          Object extra = result.getExtra();
+    //          if (extra != null) {
+    //            LOGGER.i("embeeding retrieved " + extra.toString());
+    //          }
+                        val conf = result.distance
+                        if (conf < 1.0f) {
+                            confidence = conf
+                            label = result.title
+                            color = if (result.id == "0") {
+                                Color.GREEN
+                            } else {
+                                Color.RED
+                            }
+                        }
+                    }
+                    val flip = Matrix()
+                    flip.postScale(1f, -1f, previewWidth / 2.0f, previewHeight / 2.0f)
+
+                    //flip.postScale(1, -1, targetW / 2.0f, targetH / 2.0f);
+                    flip.mapRect(boundingBox)
+                    val result = Recognition(
+                            "0", label, confidence, boundingBox)
+                    result.color = color
+                    result.location = boundingBox
+                    result.extra = extra
+                    result.crop = crop
+                    mappedRecognitions.add(result)
                 }
-                val flip = Matrix()
-                flip.postScale(1f, -1f, previewWidth / 2.0f, previewHeight / 2.0f)
-
-                //flip.postScale(1, -1, targetW / 2.0f, targetH / 2.0f);
-                flip.mapRect(boundingBox)
-                val result = Recognition(
-                        "0", label, confidence, boundingBox)
-                result.color = color
-                result.location = boundingBox
-                result.extra = extra
-                result.crop = crop
-                mappedRecognitions.add(result)
             }
-        }
 
-        //    if (saved) {
+            //    if (saved) {
 //      lastSaved = System.currentTimeMillis();
 //    }
 
-        try {
-            Log.e("xc", "startabc" )
-            Timber.d("start startActivityForResult")
-            val rec = mappedRecognitions[0]
-            FaceStartActivity.detector.register("", rec)
-            val intent = Intent(mContext, DetectorActivity::class.java)
-            startActivityForResult(intent, 171)
-        } catch (e: Exception) {
-            Timber.d("error ${e.message}")
-        }
+            try {
+                Log.e("xc", "startabc" )
+                Timber.d("start startActivityForResult")
+                val rec = mappedRecognitions[0]
+                FaceStartActivity.detector.register("", rec)
+                val intent = Intent(mContext, DetectorActivity::class.java)
+                startActivityForResult(intent, 171)
+            } catch (e: Exception) {
+                Timber.d("error ${e.message}")
+            }
 //        startActivity(new Intent(this,DetectorActivity.class));
 //        finish();
 
-        // detector.register("Sakil", rec);
-        /*   runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ivFace.setImageBitmap(rec.getCrop());
-                //showAddFaceDialog(rec);
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                LayoutInflater inflater = getLayoutInflater();
-                View dialogLayout = inflater.inflate(R.layout.image_edit_dialog, null);
-                ImageView ivFace = dialogLayout.findViewById(R.id.dlg_image);
-                TextView tvTitle = dialogLayout.findViewById(R.id.dlg_title);
-                EditText etName = dialogLayout.findViewById(R.id.dlg_input);
+            // detector.register("Sakil", rec);
+            /*   runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ivFace.setImageBitmap(rec.getCrop());
+                        //showAddFaceDialog(rec);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        LayoutInflater inflater = getLayoutInflater();
+                        View dialogLayout = inflater.inflate(R.layout.image_edit_dialog, null);
+                        ImageView ivFace = dialogLayout.findViewById(R.id.dlg_image);
+                        TextView tvTitle = dialogLayout.findViewById(R.id.dlg_title);
+                        EditText etName = dialogLayout.findViewById(R.id.dlg_input);
 
-                tvTitle.setText("Register Your Face");
-                ivFace.setImageBitmap(rec.getCrop());
-                etName.setHint("Please tell your name");
-                detector.register("sam", rec); //for register a face
+                        tvTitle.setText("Register Your Face");
+                        ivFace.setImageBitmap(rec.getCrop());
+                        etName.setHint("Please tell your name");
+                        detector.register("sam", rec); //for register a face
 
-                //button.setPressed(true);
-                //button.performClick();
-            }
+                        //button.setPressed(true);
+                        //button.performClick();
+                    }
 
-        });*/
+                });*/
 
-        // updateResults(currTimestamp, mappedRecognitions);
+            // updateResults(currTimestamp, mappedRecognitions);
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Timber.d("onfacedetected err ${e.printStackTrace()}")
+        }
     }
 
     inner class GetImageFromUrl : AsyncTask<String?, Void?, Bitmap?>() {

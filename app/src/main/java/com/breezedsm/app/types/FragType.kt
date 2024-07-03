@@ -35,5 +35,5 @@ enum class FragType {
     ProtoRegistrationFragment,RegisTerFaceFragment,DocumentRepoFeatureNewFragment,FromOrganizationFragment,OwnfilesFragment,
     PhotoAttendanceFragment,TeamAttendanceFragment,PhotoRegAadhaarFragment,MyDetailsFrag,AttendCalendarFrag,CalculatorFrag,AttendSummaryFrag,PrivacypolicyWebviewFrag,
     OrderListFrag,ProductListFrag,CartListFrag,ViewOrdDtls,ViewNewOrdHistoryFrag,ViewNewOrdHisAllFrag,DateWiseOrdReportFrag,
-    CartEditListFrag
+    CartEditListFrag,ProductEditListFrag
 }

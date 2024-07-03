@@ -121,14 +121,18 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
     override fun onClick(p0: View?) {
         when(p0!!.id){
             ll_placeOrder.id ->{
-                Timber.d("tag_ord_place ll_placeOrder.id called enable status : ${ll_placeOrder.isEnabled}")
+                println("tag_click ll_placeOrder")
+                ll_placeOrder.isEnabled = false
+
                 if(iseditCommit){
-                    ll_placeOrder.isEnabled = false
-                    Timber.d("tag_ord_place ll_placeOrder.id called inside if enable status : ${ll_placeOrder.isEnabled}")
-                    showCheckAlert("Order Confirmation", "Would you like to confirm the order?")
+                    if(ProductListFrag.finalOrderDataList.size == 0){
+                        ll_placeOrder.isEnabled = true
+                        ToasterMiddle.msgLong(mContext,"Please select product.")
+                    }else{
+                        showCheckAlert("Order Confirmation", "Would you like to confirm the order?")
+                    }
                 }else{
                     ll_placeOrder.isEnabled = true
-                    Timber.d("tag_ord_place ll_placeOrder.id called inside else enable status : ${ll_placeOrder.isEnabled}")
                     openDialog("Please click on tick to save this edit.")
                 }
             }
@@ -216,11 +220,18 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
                         obj.submitedQty = ProductListFrag.finalOrderDataList.get(i).submitedQty
                         obj.submitedSpecialRate = ProductListFrag.finalOrderDataList.get(i).submitedRate
                         obj.shop_id = shop_id
+
+                        //Suman 11-06-2024 mantis id 27535 begin
+                        obj.total_amt = String.format("%.2f",
+                            (ProductListFrag.finalOrderDataList.get(i).submitedQty.toInt() * ProductListFrag.finalOrderDataList.get(i).submitedRate.toDouble()).toBigDecimal()).toString()
+                        obj.mrp = ProductListFrag.finalOrderDataList.get(i).mrp
+                        obj.itemPrice = ProductListFrag.finalOrderDataList.get(i).item_price
+                        //Suman 11-06-2024 mantis id 27535 end
+
                         orderProductDtls.add(obj)
                     }
                     AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(orderProductDtls)
                     uiThread {
-                        ll_placeOrder.isEnabled = true
                         if(AppUtils.isOnline(mContext)){
                             syncOrd(orderListDetails.order_id,addShopData)
                         }else{
@@ -263,7 +274,7 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
     private fun syncOrd(ordId:String, addShopData: AddShopDBModelEntity){
         progress_wheel.spin()
         var ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(ordId)
-        var ordProductDtls = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(ordId)
+        var ordProductDtls = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(ordId) as ArrayList<NewOrderProductEntity>
         var syncOrd = SyncOrd()
         var syncOrdProductL:ArrayList<SyncOrdProductL> = ArrayList()
 
@@ -292,6 +303,10 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
                 obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
                 obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
 
+                obj.total_amt=ordProductDtls.get(i).total_amt.toString().toDouble()
+                obj.mrp=ordProductDtls.get(i).mrp.toString().toDouble()
+                obj.itemPrice=ordProductDtls.get(i).itemPrice.toString().toDouble()
+
                 syncOrdProductL.add(obj)
             }
             syncOrd.product_list = syncOrdProductL
@@ -313,10 +328,12 @@ class CartListFrag: BaseFragment(), View.OnClickListener {
                                     }
                                 }
                             } else {
+                                ll_placeOrder.isEnabled = true
                                 progress_wheel.stopSpinning()
                                 (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                             }
                         }, { error ->
+                            ll_placeOrder.isEnabled = true
                             progress_wheel.stopSpinning()
                             (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
                         })

@@ -15,6 +15,7 @@ import com.breezedsm.app.utils.ToasterMiddle
 import com.breezedsm.features.dashboard.presentation.DashboardActivity
 import kotlinx.android.synthetic.main.row_product_l.view.cv_row_ord_pro_list_shop_add_product
 import kotlinx.android.synthetic.main.row_product_l.view.iv_row_ord_opti_product_list_add_img
+import kotlinx.android.synthetic.main.row_product_l.view.iv_total_amt_back
 import kotlinx.android.synthetic.main.row_product_l.view.ll_row_ord_opti_product_list_add_text_root
 import kotlinx.android.synthetic.main.row_product_l.view.ll_row_ord_pro_list_mrp_root
 import kotlinx.android.synthetic.main.row_product_l.view.tv_row_ord_opti_product_list_add_text
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.row_product_l.view.tv_row_ord_opti_product
 import kotlinx.android.synthetic.main.row_product_l.view.tv_row_ord_opti_product_list_uom
 import kotlinx.android.synthetic.main.row_product_l.view.tv_row_ord_pro_list_item_price
 import kotlinx.android.synthetic.main.row_product_l.view.tv_row_ord_pro_list_mrp
+import kotlinx.android.synthetic.main.row_product_l.view.tv_row_ord_pro_list_total_amt
 
 class AdapterProductList(val mContext: Context, var proList : ArrayList<ProductRateList>, shop_id:String, var finalOrderDataList : ArrayList<FinalProductRateSubmit>,
                          var listner: OnProductOptiOnClick):
@@ -77,18 +79,23 @@ class AdapterProductList(val mContext: Context, var proList : ArrayList<ProductR
             if(!finalOrderDataList.map { it.product_id }.contains(prooductList.get(adapterPosition).product_id)){
                 itemView.tv_row_ord_opti_product_list_qty.setText("")
                 itemView.tv_row_ord_opti_product_list_add_text.text = "Add"
+                itemView.tv_row_ord_pro_list_total_amt.setText("")
                 itemView.ll_row_ord_opti_product_list_add_text_root.background.setTint(mContext.getResources().getColor(R.color.color_custom_blue))
+                itemView.iv_total_amt_back.background.setTint(mContext.getResources().getColor(R.color.gray_50))
                 itemView.iv_row_ord_opti_product_list_add_img.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.icon_shopping))
             }else{
                 var ob = finalOrderDataList.filter{it.product_id.equals(prooductList.get(adapterPosition).product_id)}.first()
                 itemView.tv_row_ord_opti_product_list_qty.setText(ob.submitedQty.toString())
                 itemView.tv_row_ord_opti_product_list_rate.setText(ob.submitedRate.toString())
                 itemView.tv_row_ord_opti_product_list_add_text.text = "Added"
+                itemView.tv_row_ord_pro_list_total_amt.setText(ob.total_amt)
                 itemView.ll_row_ord_opti_product_list_add_text_root.background.setTint(mContext.getResources().getColor(R.color.color_custom_green))
+                itemView.iv_total_amt_back.background.setTint(mContext.getResources().getColor(R.color.color_custom_green))
                 itemView.iv_row_ord_opti_product_list_add_img.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_tick_nw))
             }
 
             itemView.cv_row_ord_pro_list_shop_add_product.setOnClickListener {
+                CartEditListFrag.isCartChanges=true
                 try {
                     if(itemView.tv_row_ord_opti_product_list_rate.text.toString().length==0){
                         itemView.tv_row_ord_opti_product_list_rate.setError("Please enter valid rate.")
@@ -130,14 +137,21 @@ class AdapterProductList(val mContext: Context, var proList : ArrayList<ProductR
                     submitedRate = changingRate
                     mrp=prooductList.get(adapterPosition).mrp
                     item_price=prooductList.get(adapterPosition).item_price
+                    total_amt = String.format("%.2f", (submitedQty.toInt() * submitedRate.toDouble()).toBigDecimal()).toString()
                 }
                 finalOrderDataList.add(addObj)
                 //prooductList.get(adapterPosition).submitedQty = addObj.submitedQty
 
                 itemView.tv_row_ord_opti_product_list_add_text.text = "Added"
                 itemView.ll_row_ord_opti_product_list_add_text_root.background.setTint(mContext.getResources().getColor(R.color.color_custom_green))
+                itemView.iv_total_amt_back.background.setTint(mContext.getResources().getColor(R.color.color_custom_green))
+                itemView.iv_row_ord_opti_product_list_add_img.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_tick_nw))
 
                 ToasterMiddle.msgShort(mContext,prooductList.get(adapterPosition).product_name + " added.")
+
+                itemView.tv_row_ord_pro_list_total_amt.setText(addObj.total_amt)
+
+
                 listner.onProductAddClick(finalOrderDataList.size,finalOrderDataList.sumOf { it.submitedRate.toDouble() * it.submitedQty.toInt() })
             }
 

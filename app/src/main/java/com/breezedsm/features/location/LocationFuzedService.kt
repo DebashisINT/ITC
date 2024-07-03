@@ -233,8 +233,7 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     notificationIntent, PendingIntent.FLAG_IMMUTABLE)
 
 
-            var icon = BitmapFactory.decodeResource(resources,
-                    R.drawable.ic_add)
+            var icon = BitmapFactory.decodeResource(resources, R.drawable.ic_add)
 
             /*var notification = NotificationCompat.Builder(this)
                     .setContentTitle("Tracking System Activated")

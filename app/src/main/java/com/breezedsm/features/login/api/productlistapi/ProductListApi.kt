@@ -3,6 +3,8 @@ package com.breezedsm.features.login.api.productlistapi
 import com.breezedsm.app.NetworkConstant
 import com.breezedsm.app.domain.ProductListEntity
 import com.breezedsm.base.BaseResponse
+import com.breezedsm.features.createOrder.DeleteOrd
+import com.breezedsm.features.createOrder.EditOrd
 import com.breezedsm.features.createOrder.GetOrderHistory
 import com.breezedsm.features.createOrder.GetProductRateReq
 import com.breezedsm.features.createOrder.GetProductReq
@@ -35,6 +37,9 @@ interface ProductListApi {
     @POST("ITCOrderWithProductDetail/ITCOrderWithProductDetailSave")
     fun syncProductListITC(@Body addOrder: SyncOrd): Observable<BaseResponse>
 
+    @POST("ITCOrderWithProductDetail/ITCOrderWithProductDetailEdit")
+    fun editProductListITC(@Body editOrder: EditOrd): Observable<BaseResponse>
+
     @FormUrlEncoded
     @POST("ITCOrderWithProductDetail/ITCListForOrderedProduct")
     fun getOrderHistoryApi( @Field("user_id") user_id: String): Observable<GetOrderHistory>
@@ -57,6 +62,9 @@ interface ProductListApi {
     @POST("ProductList/OfflineProductRate")
     fun getOfflineProductRateListNew(@Field("session_token") session_token: String, @Field("user_id") user_id: String): Observable<ProductListOfflineResponseModelNew>
 
+
+    @POST("ITCOrderWithProductDetail/ITCOrderWithProductDetailDelete")
+    fun deleteOrderITCApi(@Body addOrder: DeleteOrd): Observable<BaseResponse>
 
     /**
      * Companion object to create the GithubApiService

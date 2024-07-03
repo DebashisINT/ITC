@@ -14,9 +14,14 @@
     <!--Map Key-->
     <!--<string name="MAP_ProjectAPIKey">AIzaSyBRrqsLZFqThqM8uxw_k94pZMbv3-3h0dM</string>-->
 <!--    <string name="MAP_ProjectAPIKey" translatable="false">AIzaSyCbYMZjnt8T6yivYfIa4_R9oy-L3SIYyrQ</string>-->
-    <string name="MAP_ProjectAPIKey" translatable="false">AIzaSyDt4K_4qm-xMO7FfKF08Nj25FgJIh0jhBY</string>
+   <!--   <string name="MAP_ProjectAPIKey" translatable="false">AIzaSyDt4K_4qm-xMO7FfKF08Nj25FgJIh0jhBY</string>-->
+      <string name="MAP_ProjectAPIKey" translatable="false">AIzaSyBIg1krvBIbM3KqD1c35h9PUZHPBkimER0</string>
 
-    <!--Login-->
+      <string name="loc_msg_new_new" translatable="false">Field Sales Management App collects location data after you open and login into the App, to identify nearby Parties location even when the app is running in the background and not in use.This app collects location data to enable nearby shops, GPS route,
+   even when the app is closed or not in use.Reimbursement is issued with distance traveled for specific GPS route.
+   \nThis is a core functionality of this app.</string>
+
+      <!--Login-->
     <string name="username" translatable="false">Enter Login ID</string>
     <string name="password" translatable="false">Enter Password</string>
     <string name="login" translatable="false">Login</string>
@@ -58,6 +63,7 @@
     <string name="view_attendance" translatable="false">View Attendance</string>
     <string name="order_list" translatable="false">Order List</string>
     <string name="add_attendance" translatable="false">Add Visit</string>
+    <string name="add_attendance_new" translatable="false">Add Visit/Attendance</string>
     <string name="ta_text" translatable="false">TA</string>
     <string name="pp_dd_text" translatable="false">View PP/DD Stock</string>
     <string name="pp_dd_header_text" translatable="false">PP/DD Stock</string>
@@ -344,7 +350,7 @@
     <string name="face_reg_success" translatable="false">Face  Registration successfully</string>
     <string name="face_match_success" translatable="false">Face  matched successfully</string>
     <string name="not_match" translatable="false">Not Matched</string>
-    <string name="no_reg_face" translatable="false">Face  is not registered </string>
+    <string name="no_reg_face" translatable="false">Face is not registered </string>
     <string name="enter_closing_stock_alert" translatable="false">Please enter closing stock</string>
     <string name="add_order_text" translatable="false">Add Order</string>
     <string name="add_order_rate" translatable="false">Add Rate</string>

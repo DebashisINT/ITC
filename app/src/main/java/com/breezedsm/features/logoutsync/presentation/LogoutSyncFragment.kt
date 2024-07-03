@@ -44,6 +44,9 @@ import com.breezedsm.features.billing.api.AddBillingRepoProvider
 import com.breezedsm.features.billing.model.AddBillingInputParamsModel
 import com.breezedsm.features.commondialog.presentation.CommonDialog
 import com.breezedsm.features.commondialog.presentation.CommonDialogClickListener
+import com.breezedsm.features.createOrder.DeleteOrd
+import com.breezedsm.features.createOrder.EditOrd
+import com.breezedsm.features.createOrder.OrdID
 import com.breezedsm.features.createOrder.SyncOrd
 import com.breezedsm.features.createOrder.SyncOrdProductL
 import com.breezedsm.features.dashboard.presentation.DashboardActivity
@@ -112,6 +115,7 @@ import kotlin.collections.ArrayList
  */
 // Revision 1.0   Suman App V4.4.6  04-04-2024  mantis id 27291: Sync unsync order
 // Rev 2.0 Suman 06-05-2024 Suman LogoutSyncFragment mantis 27335
+// Rev 3.0 Suman 06-06-2024 Suman LogoutSyncFragment mantis 27433
 class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
 
     private lateinit var mContext: Context
@@ -1846,6 +1850,10 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                         obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
                         obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
 
+                        obj.total_amt=ordProductDtls.get(i).total_amt.toString().toDouble()
+                        obj.mrp=ordProductDtls.get(i).mrp.toString().toDouble()
+                        obj.itemPrice=ordProductDtls.get(i).itemPrice.toString().toDouble()
+
                         syncOrdProductL.add(obj)
                     }
                     syncOrd.product_list = syncOrdProductL
@@ -1872,7 +1880,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                         addOrderTickImg.visibility = View.GONE
                                         addOrderSyncImg.visibility = View.GONE
                                         stopAnimation(addOrderSyncImg)
-                                        checkToGpsStatus()
+                                        deleteOrdApi()
                                     }
                                 }, { error ->
                                     Timber.d("Order sync else err ${error.message}")
@@ -1880,7 +1888,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                                     addOrderTickImg.visibility = View.GONE
                                     addOrderSyncImg.visibility = View.GONE
                                     stopAnimation(addOrderSyncImg)
-                                    checkToGpsStatus()
+                                    deleteOrdApi()
                                 })
                         )
                     }
@@ -1891,7 +1899,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 addOrderSyncImg.visibility = View.GONE
                 tv_order_retry.visibility = View.GONE
                 stopAnimation(addOrderSyncImg)
-                checkToGpsStatus()
+                deleteOrdApi()
             }
         }else{
             Timber.d("Order sync no order feature")
@@ -1899,10 +1907,141 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
             addOrderSyncImg.visibility = View.GONE
             tv_order_retry.visibility = View.GONE
             stopAnimation(addOrderSyncImg)
-            checkToGpsStatus()
+            deleteOrdApi()
         }
     }
     // Revision 1.0   Suman App V4.4.6  04-04-2024  mantis id 27291: Sync unsync order end
+
+    // Rev 3.0 Suman 06-06-2024 Suman LogoutSyncFragment mantis 27433 begin
+    fun deleteOrdApi(){
+        var deleteL = AppDatabase.getDBInstance()!!.newOrderDataDao().getDeleteL(true) as ArrayList<NewOrderDataEntity>
+        if (deleteL.size > 0) {
+            var deleteOrd: DeleteOrd = DeleteOrd()
+            deleteOrd.user_id = Pref.user_id.toString()
+            deleteOrd.session_token = Pref.session_token.toString()
+            for (i in 0..deleteL.size - 1) {
+                deleteOrd.order_delete_list.add(OrdID(deleteL.get(i).order_id))
+            }
+
+            val repository = ProductListRepoProvider.productListProvider()
+            BaseActivity.compositeDisposable.add(
+                repository.deleteOrderITC(deleteOrd)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({ result ->
+                        val response = result as BaseResponse
+                        if (response.status == NetworkConstant.SUCCESS) {
+                            doAsync {
+                                var ordIDL = deleteOrd.order_delete_list.map { it.order_id }
+                                for(i in 0..ordIDL.size-1){
+                                    AppDatabase.getDBInstance()!!.newOrderDataDao().deleteOrderHeader(ordIDL.get(i))
+                                    AppDatabase.getDBInstance()!!.newOrderProductDao().deleteProductByOrdID(ordIDL.get(i))
+                                }
+                                uiThread {
+                                    progress_wheel.stopSpinning()
+                                    editOrderApi()
+                                }
+                            }
+                        } else {
+                            editOrderApi()
+                            progress_wheel.stopSpinning()
+                            (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                        }
+                    }, { error ->
+                        editOrderApi()
+                        progress_wheel.stopSpinning()
+                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                    })
+            )
+        }else{
+            progress_wheel.stopSpinning()
+            editOrderApi()
+        }
+    }
+
+    fun editOrderApi(){
+        try {
+            var editL = AppDatabase.getDBInstance()!!.newOrderDataDao().getEditedL(true) as ArrayList<NewOrderDataEntity>
+            if(editL.size>0){
+                var ordObj = editL.get(0)
+                var ordDtls = AppDatabase.getDBInstance()!!.newOrderDataDao().getOrderByID(ordObj.order_id)
+                var ordProductDtls = AppDatabase.getDBInstance()!!.newOrderProductDao().getProductsOrder(ordObj.order_id)
+                var editOrd = EditOrd()
+                var editOrdProductL:ArrayList<SyncOrdProductL> = ArrayList()
+
+                doAsync {
+                    editOrd.user_id = Pref.user_id!!
+                    editOrd.order_id = ordObj.order_id
+                    editOrd.order_date = ordDtls.order_date
+                    editOrd.order_time = ordDtls.order_time
+                    editOrd.order_date_time = ordDtls.order_date_time
+                    editOrd.shop_id = ordDtls.shop_id
+                    editOrd.shop_name = ordDtls.shop_name
+                    editOrd.shop_type = ordDtls.shop_type
+                    editOrd.isInrange = ordDtls.isInrange
+                    editOrd.order_lat = ordDtls.order_lat
+                    editOrd.order_long = ordDtls.order_long
+                    editOrd.shop_addr = ordDtls.shop_addr
+                    editOrd.shop_pincode = ordDtls.shop_pincode
+                    editOrd.order_total_amt = ordDtls.order_total_amt.toDouble()
+                    editOrd.order_remarks = ordDtls.order_remarks
+
+                    editOrd.order_edit_date_time = ordDtls.order_edit_date_time
+                    editOrd.order_edit_remarks = ordDtls.order_edit_remarks
+
+                    for(i in 0..ordProductDtls.size-1){
+                        var obj = SyncOrdProductL()
+                        obj.order_id=ordProductDtls.get(i).order_id
+                        obj.product_id=ordProductDtls.get(i).product_id
+                        obj.product_name=ordProductDtls.get(i).product_name
+                        obj.submitedQty=ordProductDtls.get(i).submitedQty.toDouble()
+                        obj.submitedSpecialRate=ordProductDtls.get(i).submitedSpecialRate.toDouble()
+
+                        obj.total_amt=ordProductDtls.get(i).total_amt.toString().toDouble()
+                        obj.mrp=ordProductDtls.get(i).mrp.toString().toDouble()
+                        obj.itemPrice=ordProductDtls.get(i).itemPrice.toString().toDouble()
+
+                        editOrdProductL.add(obj)
+                    }
+                    editOrd.product_list = editOrdProductL
+
+                    uiThread {
+                        val repository = ProductListRepoProvider.productListProvider()
+                        BaseActivity.compositeDisposable.add(
+                            repository.editProductListITC(editOrd)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({ result ->
+                                    val response = result as BaseResponse
+                                    if (response.status == NetworkConstant.SUCCESS) {
+                                        doAsync {
+                                            AppDatabase.getDBInstance()!!.newOrderDataDao().updateIsEdited(editOrd.order_id,false)
+                                            uiThread {
+                                                editOrderApi()
+                                               }
+                                        }
+                                    } else {
+                                        checkToGpsStatus()
+                                        (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                    }
+                                }, { error ->
+                                    checkToGpsStatus()
+                                    (mContext as DashboardActivity).showSnackMessage(getString(R.string.something_went_wrong))
+                                })
+                        )
+                    }
+                }
+            }else{
+                checkToGpsStatus()
+            }
+        } catch (e: Exception) {
+            checkToGpsStatus()
+        }
+
+    }
+    // Rev 3.0 Suman 06-06-2024 Suman LogoutSyncFragment mantis 27433 end
+
+
 
     //===================================================Add Order==============================================================//
     private fun syncAllOrder(order: OrderDetailsListEntity, orderList: List<OrderDetailsListEntity>) {

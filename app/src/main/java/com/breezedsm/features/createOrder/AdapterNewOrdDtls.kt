@@ -5,11 +5,9 @@ import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.breezedsm.R
 import com.breezedsm.app.AppDatabase
-import com.breezedsm.app.domain.AddShopDBModelEntity
 import com.breezedsm.app.domain.NewOrderDataEntity
 import com.breezedsm.app.domain.NewOrderProductEntity
 import com.breezedsm.app.utils.AppUtils
@@ -20,9 +18,9 @@ import kotlinx.android.synthetic.main.row_ord_dtls_new.view.tv_row_ord_dtls_orde
 import kotlinx.android.synthetic.main.row_ord_dtls_new.view.tv_row_ord_dtls_order_date
 import kotlinx.android.synthetic.main.row_ord_dtls_new.view.tv_row_ord_dtls_order_id
 import kotlinx.android.synthetic.main.row_ord_dtls_new.view.tv_row_ord_dtls_order_items
+import kotlinx.android.synthetic.main.row_ord_dtls_new.view.tv_row_ord_dtls_order_modify_dt
 import kotlinx.android.synthetic.main.row_ord_dtls_new.view.tv_row_ord_dtls_order_shop_addr
 import kotlinx.android.synthetic.main.row_ord_dtls_new.view.tv_row_ord_dtls_order_shop_name
-import kotlinx.android.synthetic.main.row_order_list.view.iv_row_ord_sync
 import timber.log.Timber
 
 class AdapterNewOrdDtls(var mContext:Context, var ordL:ArrayList<NewOrderDataEntity>, var listner: AdapterNewOrdDtls.OnCLick):
@@ -66,6 +64,18 @@ class AdapterNewOrdDtls(var mContext:Context, var ordL:ArrayList<NewOrderDataEnt
                 }catch (ex:Exception){
                     ex.printStackTrace()
                     Timber.d("tag_ex_order ${ex.printStackTrace()} for ${mList.get(adapterPosition).shop_id}")
+                }
+
+                try {
+                    if(mList.get(adapterPosition).order_edit_date_time.equals("")){
+                        itemView.tv_row_ord_dtls_order_modify_dt.visibility = View.GONE
+                    }else{
+                        itemView.tv_row_ord_dtls_order_modify_dt.visibility = View.VISIBLE
+                        itemView.tv_row_ord_dtls_order_modify_dt.text = "Modify Date-Time : "+AppUtils.convertToDateLikeOrderFormat(mList.get(adapterPosition).order_edit_date_time.split(" ").get(0)) +
+                                "   "+mList.get(adapterPosition).order_edit_date_time.split(" ").get(1)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
 
 

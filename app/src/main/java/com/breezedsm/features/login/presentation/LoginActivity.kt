@@ -3400,7 +3400,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 getIMEI()
         }*/
         takeActionOnGeofence()
-        checkForFingerPrint()
+        //checkForFingerPrint()
     }
 
     private fun checkForFingerPrint() {
@@ -3666,6 +3666,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                     simpleDialog.dismiss()
 
                 }
+                tvappCustomAnydesk.visibility = View.GONE
                 tvappCustomAnydesk.setOnClickListener {
                     var launchIntent: Intent? = packageManager.getLaunchIntentForPackage("com.anydesk.anydeskandroid")
                     if (launchIntent != null) {
@@ -4628,8 +4629,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     private fun getListFromDatabase() {
         println("xyz - isStartOrEndDay end" + AppUtils.getCurrentDateTime());
         println("xyz - getListFromDatabase started" + AppUtils.getCurrentDateTime());
+
         list = AppDatabase.getDBInstance()!!.addShopEntryDao().uniqueShoplist
-        if (list.isEmpty())
+        if (list.isEmpty() || true)
             callShopListApi()
         else {
             /*if (AppDatabase.getDBInstance()?.productListDao()?.getAll()!!.isEmpty())
@@ -5940,6 +5942,16 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                 if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
                                                     Pref.IsShowUserWiseDateWiseOrderInApp = response.getconfigure?.get(i)?.Value == "1"
                                                 }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsOrderEditEnable", ignoreCase = true)) {
+                                                Pref.IsOrderEditEnable = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsOrderEditEnable = response.getconfigure?.get(i)?.Value == "1"
+                                                }
+                                            }else if (response.getconfigure?.get(i)?.Key.equals("IsOrderDeleteEnable", ignoreCase = true)) {
+                                                Pref.IsOrderDeleteEnable = response.getconfigure!![i].Value == "1"
+                                                if (!TextUtils.isEmpty(response.getconfigure?.get(i)?.Value)) {
+                                                    Pref.IsOrderDeleteEnable = response.getconfigure?.get(i)?.Value == "1"
+                                                }
                                             }
 
                                             /*else if (response.getconfigure?.get(i)?.Key.equals("isFingerPrintMandatoryForAttendance", ignoreCase = true)) {
@@ -6063,6 +6075,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
     }
 
     private fun convertToShopListSetAdapter(shop_list: List<ShopData>) {
+        AppDatabase.getDBInstance()!!.addShopEntryDao().deleteShopAll()
         val list: MutableList<AddShopDBModelEntity> = ArrayList()
 
         for (i in 0 until shop_list.size) {
@@ -6586,7 +6599,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                         obj.order_id = order_list.get(i).order_id
                                         obj.order_date = order_list.get(i).order_date
                                         obj.order_time = order_list.get(i).order_time
-                                        obj.order_date_time = order_list.get(i).order_date_time
+                                        obj.order_date_time = order_list.get(i).order_date_time.replace("T"," ")
                                         obj.shop_id = order_list.get(i).shop_id
                                         obj.shop_name = order_list.get(i).shop_name
                                         obj.shop_type = order_list.get(i).shop_type
@@ -6598,6 +6611,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                         obj.order_total_amt = String.format("%.02f",order_list.get(i).order_total_amt.toBigDecimal()).toString()
                                         obj.order_remarks = order_list.get(i).order_remarks
                                         obj.isUploaded = true
+                                        obj.order_edit_remarks = order_list.get(i).order_edit_remarks
+                                        obj.order_edit_date_time = order_list.get(i).order_edit_date_time.replace("T"," ")
+                                        obj.isEdited = false
 
                                         var objProductL:ArrayList<NewOrderProductEntity> = ArrayList()
                                         for( j in 0..order_list.get(i).product_list.size-1){
@@ -6608,11 +6624,18 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                             objProduct.submitedQty = order_list.get(i).product_list.get(j).submitedQty.toInt().toString()
                                             objProduct.submitedSpecialRate = order_list.get(i).product_list.get(j).submitedSpecialRate.toString()
                                             objProduct.shop_id = order_list.get(i).shop_id
+
+                                            objProduct.total_amt = order_list.get(i).product_list.get(j).total_amt.toString()
+                                            objProduct.mrp = order_list.get(i).product_list.get(j).mrp.toString()
+                                            objProduct.itemPrice = order_list.get(i).product_list.get(j).itemPrice.toString()
+
                                             objProductL.add(objProduct)
                                         }
 
                                         AppDatabase.getDBInstance()!!.newOrderDataDao().insert(obj)
                                         AppDatabase.getDBInstance()!!.newOrderProductDao().insertAll(objProductL)
+
+                                        AppDatabase.getDBInstance()!!.newOrderDataDao().updateGarbageEditDateTime()
 
                                     }
                                 } catch (e: Exception) {
@@ -6646,7 +6669,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
     private fun gotoHomeActivity() {
         //hardcoded
-        Pref.IsShowUserWiseDateWiseOrderInApp = true
         Pref.isSeenTermsConditions = true
         login_TV.isEnabled = true
         progress_wheel.stopSpinning()

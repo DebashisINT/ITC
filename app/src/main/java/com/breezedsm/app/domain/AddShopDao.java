@@ -114,6 +114,9 @@ public interface AddShopDao {
     @Query("DELETE FROM shop_detail where shop_id=:shopId")
     int deleteShopById(String shopId);
 
+    @Query("DELETE FROM shop_detail")
+    int deleteShopAll();
+
     @Query("Select * from shop_detail where isUploaded=:isUploaded")
     List<AddShopDBModelEntity> getUnSyncedShops(Boolean isUploaded);
 
