@@ -1492,7 +1492,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     dialogYes.setOnClickListener({ view ->
                         simpleDialog.cancel()
                         AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
-                        workTypeId="9"
+                        workTypeId = "9"
                         if(Pref.IsShowDayStart){
                             getLocforStart()
                         }
@@ -1504,7 +1504,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                 }
                 else{
                     AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
-                    workTypeId="9"
+                    workTypeId = "9"
                     if(Pref.IsShowDayStart){
                         getLocforStart()
                     }
@@ -1697,7 +1697,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                     simpleDialog.cancel()
                     AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
                     //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
-                    workTypeId="9"
+                    workTypeId = "9"
                     //Revision 1.0 Suman 2024-05-30 mantis id 27495 end
                     if(Pref.IsShowDayStart){
                         getLocforStart()
@@ -1711,7 +1711,7 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
             else{
                 AppUtils.hideSoftKeyboard(mContext as DashboardActivity)
                 //Revision 1.0 Suman 2024-05-30 mantis id 27495 begin
-                workTypeId="9"
+                workTypeId = "9"
                 //Revision 1.0 Suman 2024-05-30 mantis id 27495 end
                 if(Pref.IsShowDayStart){
                     getLocforStart()

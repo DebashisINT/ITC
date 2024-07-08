@@ -8063,8 +8063,8 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                 addr = ""
             }
 
-            dayst.attendance_worktype_id = Pref.AttendWorkTypeID
-            dayst.attendance_worktype_name = Pref.AttendWorkTypeName
+            dayst.attendance_worktype_id = "9"//Pref.AttendWorkTypeID
+            dayst.attendance_worktype_name = ""//Pref.AttendWorkTypeName
 
             progress_wheel.spin()
             val repository = DayStartEndRepoProvider.dayStartRepositiry()

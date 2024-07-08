@@ -11532,7 +11532,11 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
     }
 
     fun endDayForAuto(location: Location) {
-        try{
+        //Suman 03-07-2024 mantis id 27598 begin
+        isForceLogout = true
+        loadFragment(FragType.LogoutSyncFragment, true, "")
+
+     /*   try{
             var saleValue: String = ""
             var dayst: DaystartDayendRequest = DaystartDayendRequest()
             dayst.user_id = Pref.user_id
@@ -11583,7 +11587,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         catch (ex:java.lang.Exception){
             ex.printStackTrace()
             calllogoutApi(Pref.user_id!!, Pref.session_token!!)
-        }
+        }*/
 
 
     }

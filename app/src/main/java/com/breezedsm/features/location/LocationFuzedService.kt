@@ -570,6 +570,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
     override fun onLocationChanged(location: Location) {
         //Pref.IsShowDayStart = true
         //Pref.DayStartMarked = true
+
+        Timber.d("onLocationChanged ")
         try{
             if(location!=null){
                 AppUtils.mLocation = location
