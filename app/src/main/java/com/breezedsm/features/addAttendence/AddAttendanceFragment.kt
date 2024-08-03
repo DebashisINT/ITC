@@ -1059,7 +1059,9 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 171) {
+            Timber.d("171 received")
             if (resultCode == Activity.RESULT_OK) {
+                Timber.d("171 received RESULT_OK")
                 CustomStatic.FaceDetectionAccuracyLower=Pref.FaceDetectionAccuracyLower
                 CustomStatic.FaceDetectionAccuracyUpper=Pref.FaceDetectionAccuracyUpper
                 if (data != null) {
@@ -1075,11 +1077,14 @@ class AddAttendanceFragment : Fragment(), View.OnClickListener, DatePickerDialog
                         }else{
                             //31-08-2021
                             BaseActivity.isApiInitiated=true
-
+                            Timber.d("171 received RESULT_OK calling prepareAddAttendanceInputParams")
                             prepareAddAttendanceInputParams()
                         }
+                    }else{
+                        Timber.d("171 received RESULT_OK face not match")
                     }
-
+                }else{
+                    Timber.d("171 received RESULT_OK null")
                 }
             }
         }
