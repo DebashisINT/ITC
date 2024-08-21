@@ -36,7 +36,7 @@ class DynamicRepo(val apiService: DynamicApi) {
         else {
             profile_img_file = File(file_link)
 
-            if (!profile_img_file?.exists()) {
+            if (!profile_img_file?.exists()!!) {
                 profile_img_file?.createNewFile()
             }
         }
@@ -86,7 +86,7 @@ class DynamicRepo(val apiService: DynamicApi) {
         else {
             profile_img_file = File(file_link)
 
-            if (!profile_img_file?.exists()) {
+            if (!profile_img_file?.exists()!!) {
                 profile_img_file?.createNewFile()
             }
         }

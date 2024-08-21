@@ -22,7 +22,7 @@ class AdapterCompetetorStock(val context: Context, val stockList: List<Ccompetet
     }
 
     override fun getItemCount(): Int {
-        return stockList?.size
+        return stockList?.size!!
     }
 
     override fun onBindViewHolder(holder: CompetetorStockViewHolder, position: Int) {

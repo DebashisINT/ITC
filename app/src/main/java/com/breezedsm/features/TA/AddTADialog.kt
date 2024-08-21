@@ -101,8 +101,8 @@ class AddTADialog : DialogFragment(), View.OnTouchListener, View.OnClickListener
         from_date_edt = v?.findViewById(R.id.from_date_edt)!!
         to_date_edt = v?.findViewById(R.id.to_date_edt)!!
         upload_doc_btn = v?.findViewById(R.id.upload_doc_btn)!!
-        uploaded_doc_name_tv = v?.findViewById(R.id.uploaded_doc_name_tv)
-        dialog_header_TV = v?.findViewById(R.id.dialog_header_TV)
+        uploaded_doc_name_tv = v?.findViewById(R.id.uploaded_doc_name_tv)!!
+        dialog_header_TV = v?.findViewById(R.id.dialog_header_TV)!!
         from_date_tl = v?.findViewById(R.id.from_date_tl)!!
         to_date_tl = v?.findViewById(R.id.to_date_tl)!!
         total_amount_edt = v?.findViewById(R.id.total_amount_edt)!!

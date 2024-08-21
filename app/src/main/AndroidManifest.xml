@@ -153,8 +153,7 @@
 
         <service
             android:name=".features.alarm.presetation.AlarmRingingService"
-            android:enabled="true"
-            android:exported="true"/>
+            android:enabled="true" />
         <service
             android:name=".features.alarm.presetation.FloatingWidgetService"
             android:enabled="true"

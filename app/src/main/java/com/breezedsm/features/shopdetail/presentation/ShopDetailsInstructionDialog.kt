@@ -43,7 +43,7 @@ class ShopDetailsInstructionDialog : DialogFragment(), View.OnClickListener {
         //addShopData = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopDetail(shopId)
         isCancelable = false
 
-        initView(v)
+        initView(v!!)
         initClickListener()
 
         return v

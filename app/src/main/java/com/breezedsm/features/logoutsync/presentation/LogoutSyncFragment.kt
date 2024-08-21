@@ -438,9 +438,9 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                 //for(i in 0..unsyncData.size-1){
                     currentStock.user_id=Pref.user_id
                     currentStock.session_token=Pref.session_token
-                    currentStock.shop_id=unsyncData?.get(i).shop_id
-                    currentStock.visited_datetime=unsyncData?.get(i).visited_datetime
-                    currentStock.competitor_stock_id=unsyncData?.get(i).competitor_stock_id
+                    currentStock.shop_id=unsyncData?.get(i)!!.shop_id
+                    currentStock.visited_datetime=unsyncData?.get(i)?.visited_datetime
+                    currentStock.competitor_stock_id=unsyncData?.get(i)?.competitor_stock_id
 
                     var currentProductStockList= AppDatabase.getDBInstance()?.competetorStockEntryProductDao()?.getComProductStockByStockIDUnsynced(currentStock?.competitor_stock_id.toString())
                     var productList:MutableList<ShopAddCompetetorStockProductList> = ArrayList()
@@ -3106,7 +3106,7 @@ class LogoutSyncFragment : BaseFragment(), View.OnClickListener {
                             revisitStatusList.clear()
                             var data=AppDatabase.getDBInstance()?.shopVisitOrderStatusRemarksDao()!!.getUnsyncedList()
                             if(data != null ){
-                                for(i in data?.indices){
+                                for(i in data?.indices!!){
                                     var revisitStatusObj=ShopRevisitStatusRequestData()
                                     revisitStatusObj.shop_id=data?.get(i)?.shop_id!!
                                     revisitStatusObj.order_status=data?.get(i)?.order_status!!

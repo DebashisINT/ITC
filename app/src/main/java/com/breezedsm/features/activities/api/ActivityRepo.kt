@@ -46,7 +46,7 @@ class ActivityRepo(val apiService: ActivityApi) {
             else {
                 profile_img_file = File(item.link)
 
-                if (!profile_img_file?.exists()) {
+                if (!profile_img_file?.exists()!!) {
                     profile_img_file?.createNewFile()
                 }
             }

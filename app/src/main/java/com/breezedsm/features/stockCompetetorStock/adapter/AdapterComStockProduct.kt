@@ -18,7 +18,7 @@ class AdapterComStockProduct(val context: Context,val stockList:List<CompetetorS
     }
 
     override fun getItemCount(): Int {
-        return stockList?.size
+        return stockList?.size!!
     }
 
     override fun onBindViewHolder(holder: ComStockProductViewHolder, position: Int) {

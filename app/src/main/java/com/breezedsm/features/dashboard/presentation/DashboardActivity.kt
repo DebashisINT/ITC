@@ -1219,7 +1219,8 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
         networkIntentFilter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION)
         registerReceiver(gpsReceiver, networkIntentFilter);
 
-        registerReceiver(broadcastReceiver, filter)
+        //registerReceiver(broadcastReceiver, filter)
+        mContext.registerReceiver(broadcastReceiver, filter, Context.RECEIVER_EXPORTED)
         //registerReceiver(geoFenceBroadcast, IntentFilter())
         //checkToShowAddAttendanceAlert()
 

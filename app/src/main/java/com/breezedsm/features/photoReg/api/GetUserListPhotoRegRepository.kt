@@ -137,7 +137,7 @@ class GetUserListPhotoRegRepository(val apiService : GetUserListPhotoRegApi) {
             else {
                 attachment = File(item.link)
 
-                if (!attachment?.exists()) {
+                if (!attachment?.exists()!!) {
                     attachment?.createNewFile()
                 }
             }

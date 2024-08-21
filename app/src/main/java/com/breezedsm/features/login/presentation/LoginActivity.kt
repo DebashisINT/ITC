@@ -6687,7 +6687,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             Timber.d("API_Optimization GET getCurrentStockApi Login : enable " + "Time : " + AppUtils.getCurrentDateTime() + ", USER :" + Pref.user_name)
         progress_wheel.spin()
         var shopAll = AppDatabase.getDBInstance()!!.shopCurrentStockEntryDao().getShopStockAll()
-        if (shopAll != null && shopAll?.isNotEmpty()) {
+        if (shopAll != null && shopAll?.isNotEmpty()!!) {
             progress_wheel.stopSpinning()
             getCompStockApi()
         } else {
@@ -6720,8 +6720,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                                                         var objjj = CurrentStockEntryProductModelEntity()
                                                         objjj.stock_id = response.stock_list?.get(i)?.stock_id!!
                                                         objjj.shop_id = response.stock_list?.get(i)?.shop_id!!
-                                                        objjj.product_id = proDuctList?.get(j).product_id.toString()!!
-                                                        objjj.product_stock_qty = proDuctList?.get(j).product_stock_qty!!
+                                                        objjj.product_id = proDuctList?.get(j)!!.product_id.toString()!!
+                                                        objjj.product_stock_qty = proDuctList?.get(j)!!.product_stock_qty!!
                                                         objjj.user_id = Pref.user_id
                                                         objjj.isUploaded = true
 
@@ -6771,7 +6771,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
 
         progress_wheel.spin()
         var comListAll = AppDatabase.getDBInstance()!!.competetorStockEntryDao().getCompetetorStockAll()
-        if (comListAll != null && comListAll?.isNotEmpty()) {
+        if (comListAll != null && comListAll?.isNotEmpty()!!) {
             progress_wheel.stopSpinning()
             getShopTypeStockVisibility()
         } else {

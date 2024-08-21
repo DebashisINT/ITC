@@ -74,7 +74,7 @@ class UpdateShopStockFragment : BaseFragment(), View.OnClickListener{
         super.onResume()
 
         var shopAll=AppDatabase.getDBInstance()!!.shopCurrentStockEntryDao().getShopStockAll()
-        if (shopAll != null && shopAll?.isNotEmpty()){
+        if (shopAll != null && shopAll?.isNotEmpty()!!){
             getStockList()
         }else{
             if (AppUtils.isOnline(mContext)){
@@ -104,7 +104,7 @@ class UpdateShopStockFragment : BaseFragment(), View.OnClickListener{
 
     private fun getStockList(){
         var list = AppDatabase.getDBInstance()?.shopCurrentStockEntryDao()!!.getShopStockAllByShopID(shop_id)
-        if(list?.size>0){
+        if(list?.size!!>0){
             rvStockDetails.adapter= AdapterShowStockList(mContext,list,object: ShowStockOnClick{
                 override fun stockListOnClick(stockID: String) {
                     (mContext as DashboardActivity).loadFragment(FragType.ViewStockDetailsFragment, true, stockID)
@@ -163,8 +163,8 @@ class UpdateShopStockFragment : BaseFragment(), View.OnClickListener{
                                                     var objjj = CurrentStockEntryProductModelEntity()
                                                     objjj.stock_id=response.stock_list?.get(i)?.stock_id!!
                                                     objjj.shop_id= response.stock_list?.get(i)?.shop_id!!
-                                                    objjj.product_id= proDuctList?.get(j).product_id.toString()!!
-                                                    objjj.product_stock_qty=proDuctList?.get(j).product_stock_qty!!
+                                                    objjj.product_id= proDuctList?.get(j)!!.product_id.toString()!!
+                                                    objjj.product_stock_qty=proDuctList?.get(j)!!.product_stock_qty!!
                                                     objjj.user_id=Pref.user_id
                                                     objjj.isUploaded=true
 

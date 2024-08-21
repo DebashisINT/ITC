@@ -33,7 +33,7 @@ class AddBillingRepo(val apiService: AddBillingApi) {
         else {
             profile_img_file = File(image)
 
-            if (!profile_img_file?.exists()) {
+            if (!profile_img_file?.exists()!!) {
                 profile_img_file?.createNewFile()
             }
         }

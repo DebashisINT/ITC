@@ -51,7 +51,7 @@ class MyJobRepo(val apiService: MyJobApi) {
             else {
                 attachment = File(item.link)
 
-                if (!attachment?.exists()) {
+                if (!attachment?.exists()!!) {
                     attachment?.createNewFile()
                 }
             }
@@ -104,7 +104,7 @@ class MyJobRepo(val apiService: MyJobApi) {
             else {
                 attachment = File(item.link)
 
-                if (!attachment?.exists()) {
+                if (!attachment?.exists()!!) {
                     attachment?.createNewFile()
                 }
             }
@@ -157,7 +157,7 @@ class MyJobRepo(val apiService: MyJobApi) {
             else {
                 attachment = File(item.link)
 
-                if (!attachment?.exists()) {
+                if (!attachment?.exists()!!) {
                     attachment?.createNewFile()
                 }
             }
@@ -210,7 +210,7 @@ class MyJobRepo(val apiService: MyJobApi) {
             else {
                 attachment = File(item.link)
 
-                if (!attachment?.exists()) {
+                if (!attachment?.exists()!!) {
                     attachment?.createNewFile()
                 }
             }
@@ -263,7 +263,7 @@ class MyJobRepo(val apiService: MyJobApi) {
             else {
                 attachment = File(item.link)
 
-                if (!attachment?.exists()) {
+                if (!attachment?.exists()!!) {
                     attachment?.createNewFile()
                 }
             }
@@ -320,7 +320,7 @@ class MyJobRepo(val apiService: MyJobApi) {
             else {
                 attachment = File(item.link)
 
-                if (!attachment?.exists()) {
+                if (!attachment?.exists()!!) {
                     attachment?.createNewFile()
                 }
             }

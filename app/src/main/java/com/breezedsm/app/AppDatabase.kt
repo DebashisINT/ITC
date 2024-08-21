@@ -264,5 +264,17 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL("ALTER TABLE new_order_data ADD COLUMN isDeleted INTEGER NOT NULL DEFAULT 0  ")
                  }
         }
+
+       /* val MIGRATION_10_11: Migration = object : Migration(10, 11) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE new_order_product ADD COLUMN order_edit_date_time TEXT NOT NULL DEFAULT '' ")
+                database.execSQL("ALTER TABLE new_order_product ADD COLUMN order_edit_remarks TEXT NOT NULL DEFAULT '' ")
+                database.execSQL("ALTER TABLE new_order_product ADD COLUMN order_date TEXT NOT NULL DEFAULT '' ")
+                database.execSQL("ALTER TABLE new_order_product ADD COLUMN isEdited INTEGER NOT NULL DEFAULT 0 ")
+                database.execSQL("ALTER TABLE new_order_product ADD COLUMN isDeleted INTEGER NOT NULL DEFAULT 0 ")
+                database.execSQL("ALTER TABLE new_order_product ADD COLUMN isInrange INTEGER NOT NULL DEFAULT 0 ")
+
+            }
+        }*/
     }
 }

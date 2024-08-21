@@ -44,7 +44,7 @@ class ViewComStockProductDetails: BaseFragment(), View.OnClickListener {
     }
 
     private fun initView(view:View){
-        rvList=view?.findViewById(R.id.rv_view_competetor_stock_list)
+        rvList=view.findViewById(R.id.rv_view_competetor_stock_list)
         rvList.layoutManager=LinearLayoutManager(mContext)
     }
 

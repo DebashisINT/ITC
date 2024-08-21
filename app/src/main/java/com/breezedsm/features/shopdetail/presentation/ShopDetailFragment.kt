@@ -1,6 +1,7 @@
 package com.breezedsm.features.shopdetail.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -320,6 +321,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
         mContext = context
     }
 
+    @SuppressLint("ResourceType")
     private fun initView(view: View) {
         rl_assigned_to_dd = view.findViewById(R.id.rl_assigned_to_dd)
         assigned_to_dd_TV = view.findViewById(R.id.assigned_to_dd_TV)
@@ -1467,7 +1469,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                         else{
                             AddShopFragment.isOrderEntryPressed=true
                             ShopDetailFragment.isOrderEntryPressed=true
-                            AddShopFragment.newShopID=addShopData?.shop_id
+                            AddShopFragment.newShopID=addShopData?.shop_id!!
                             (mContext as DashboardActivity).loadFragment(FragType.ViewAllOrderListFragment, true, addShopData)
                         }
 
@@ -1547,7 +1549,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                         else{
                             AddShopFragment.isOrderEntryPressed=true
                             ShopDetailFragment.isOrderEntryPressed=true
-                            AddShopFragment.newShopID=addShopData?.shop_id
+                            AddShopFragment.newShopID=addShopData?.shop_id!!
                             (mContext as DashboardActivity).loadFragment(FragType.ViewAllOrderListFragment, true, addShopData)
                         }
 
@@ -1739,7 +1741,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                         else{
                             AddShopFragment.isOrderEntryPressed=true
                             ShopDetailFragment.isOrderEntryPressed=true
-                            AddShopFragment.newShopID=addShopData?.shop_id
+                            AddShopFragment.newShopID=addShopData?.shop_id!!
                             (mContext as DashboardActivity).loadFragment(FragType.ViewAllOrderListFragment, true, addShopData)
                         }
                         //(mContext as DashboardActivity).showSnackMessage(getString(R.string.functionality_disabled))
@@ -1815,7 +1817,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                         else{
                             AddShopFragment.isOrderEntryPressed=true
                             ShopDetailFragment.isOrderEntryPressed=true
-                            AddShopFragment.newShopID=addShopData?.shop_id
+                            AddShopFragment.newShopID=addShopData?.shop_id!!
                             (mContext as DashboardActivity).loadFragment(FragType.ViewAllOrderListFragment, true, addShopData)
                         }
                         //(mContext as DashboardActivity).showSnackMessage(getString(R.string.functionality_disabled))
@@ -3336,9 +3338,9 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
 
                 /////////
                 if(programFab5?.labelText.equals("Current Stock") || programFab6?.labelText.equals("Current Stock")){
-                    (mContext as DashboardActivity).loadFragment(FragType.UpdateShopStockFragment, true, addShopData?.shop_id)
+                    (mContext as DashboardActivity).loadFragment(FragType.UpdateShopStockFragment, true, addShopData?.shop_id!!)
                 }else if(programFab5?.labelText.equals("Competitor Stock") || programFab6?.labelText.equals("Competitor Stock")){
-                    (context as DashboardActivity).loadFragment(FragType.CompetetorStockFragment, true, addShopData?.shop_id)
+                    (context as DashboardActivity).loadFragment(FragType.CompetetorStockFragment, true, addShopData?.shop_id!!)
                 }else{
                     (mContext as DashboardActivity).loadFragment(FragType.StockListFragment, true, addShopData)
                 }
@@ -3398,7 +3400,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                 programFab7?.setImageResource(R.drawable.ic_tick_float_icon)
                 programFab7?.colorNormal = mContext.resources.getColor(R.color.delivery_status_green)
 
-                (mContext as DashboardActivity).loadFragment(FragType.UpdateShopStockFragment, true, addShopData?.shop_id)
+                (mContext as DashboardActivity).loadFragment(FragType.UpdateShopStockFragment, true, addShopData?.shop_id!!)
             }
             702 ->{
                 floating_fab.close(true)
@@ -3422,7 +3424,7 @@ class ShopDetailFragment : BaseFragment(), View.OnClickListener {
                 programFab7?.setImageResource(R.drawable.ic_tick_float_icon)
                 programFab7?.colorNormal = mContext.resources.getColor(R.color.delivery_status_green)
 
-                (mContext as DashboardActivity).loadFragment(FragType.CompetetorStockFragment, true, addShopData?.shop_id)
+                (mContext as DashboardActivity).loadFragment(FragType.CompetetorStockFragment, true, addShopData?.shop_id!!)
             }
         }
     }
