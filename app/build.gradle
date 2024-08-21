@@ -158,7 +158,8 @@ dependencies {
 
     //compile "com.borax12.materialdaterangepicker:library:$daterange_version"
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    //implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
     implementation 'com.marcinmoskala.PreferenceHolder:preferenceholder:1.51'
     implementation 'androidx.multidex:multidex:2.0.0'
     implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.2.0'
@@ -258,7 +259,8 @@ dependencies {
     //implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
 
-    implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
+    //implementation('org.tensorflow:tensorflow-lite:0.0.0-nightly') { changing = true }
+    implementation 'org.tensorflow:tensorflow-lite:+'
     implementation 'com.google.mlkit:face-detection:16.1.0'
 
     implementation 'com.google.android.gms:play-services-location:18.0.0'   //location
