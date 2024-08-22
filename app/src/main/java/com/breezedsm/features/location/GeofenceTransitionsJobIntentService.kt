@@ -55,41 +55,55 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
     override fun onHandleWork(intent: Intent) {
         Timber.d("Geofence: GeofenceTransitionsJobIntentService : ENTRY")
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
-        if (geofencingEvent!!.hasError()) {
+        try {
+            if (geofencingEvent!!.hasError()) {
 //            val errorMessage = GeofenceErrorMessages.getErrorString(this,
 //                    geofencingEvent.errorCode)
-            Log.e(TAG, "${geofencingEvent.errorCode}")
+                Log.e(TAG, "${geofencingEvent!!.errorCode}")
+                return
+            }
+        }catch (ex:Exception){
             return
         }
 
+
         // Get the transition type.
-        val geofenceTransition = geofencingEvent.geofenceTransition
+        val geofenceTransition = geofencingEvent!!.geofenceTransition
+
+        println("tag_nearby_noti geofenceTransition"+geofenceTransition)
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER || geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT || geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
-
+            println("tag_nearby_noti geofenceTransition if"+geofenceTransition)
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             val triggeringGeofences = geofencingEvent.triggeringGeofences
 
             // Get the transition details as a String.
             val geofenceTransitionDetails = getGeofenceTransitionDetails(geofenceTransition,
-                    triggeringGeofences!!)
-            triggeringGeofences.forEach {
+                triggeringGeofences!!)
+            triggeringGeofences?.forEach {
                 //                it.requestId
                 // Send notification and log the transition details.
                 Timber.d("=====================Geofence=======================")
                 when (geofenceTransition) {
                     Geofence.GEOFENCE_TRANSITION_ENTER -> {
+                        println("tag_nearby_noti onHandleWork if GEOFENCE_TRANSITION_ENTER")
+
                         Timber.d("Geofence: GeofenceTransitionsJobIntentService : ENTER")
                         if (!TextUtils.isEmpty(Pref.user_id) && !Pref.isAutoLogout)
+
                             sendNotification(it.requestId)
                     }
                     Geofence.GEOFENCE_TRANSITION_EXIT -> {
+                        println("tag_nearby_noti onHandleWork if GEOFENCE_TRANSITION_EXIT")
+
                         Timber.d("Geofence: GeofenceTransitionsJobIntentService : EXIT")
                         cancelNotification(it.requestId)
                         endShopDuration(it.requestId)
                     }
                     Geofence.GEOFENCE_TRANSITION_DWELL -> {
+                        println("tag_nearby_noti onHandleWork if GEOFENCE_TRANSITION_DWELL")
+
                         Timber.d("Geofence: GeofenceTransitionsJobIntentService : DWELL")
                         if (!TextUtils.isEmpty(Pref.user_id) && !Pref.isAutoLogout)
                             sendNotification(it.requestId)
@@ -148,7 +162,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
                     "Mobile ${AppUtils.mobNetType(this)}"
 
                 AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
-                        AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopActiList[0].shopid!!, AppUtils.getCurrentDateForShopActi())
+                    AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), shopActiList[0].shopid!!, AppUtils.getCurrentDateForShopActi())
 
 //                AppUtils.isShopVisited = false
                 Pref.isShopVisited=false
@@ -191,7 +205,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
                         "Mobile ${AppUtils.mobNetType(this)}"
 
                     AppDatabase.getDBInstance()!!.shopActivityDao().updateDeviceStatusReason(AppUtils.getDeviceName(), AppUtils.getAndroidVersion(),
-                            AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), it.shopid!!, AppUtils.getCurrentDateForShopActi(), startTimestamp)
+                        AppUtils.getBatteryPercentage(this).toString(), netStatus, netType.toString(), it.shopid!!, AppUtils.getCurrentDateForShopActi(), startTimestamp)
 
 //                    AppUtils.isShopVisited = false
 
@@ -242,7 +256,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         var shopDataList: MutableList<ShopDurationRequestData> = ArrayList()
         /* Get shop activity that has completed time duration calculation*/
         var shopActivity: ShopActivityEntity? = AppDatabase.getDBInstance()!!.shopActivityDao().durationAvailableForShop(shopId, true, false)
-                ?: return
+            ?: return
         var shopDurationData = ShopDurationRequestData()
         shopDurationData.shop_id = shopActivity!!.shopid
         shopDurationData.spent_duration = shopActivity!!.duration_spent
@@ -262,26 +276,13 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         shopDurationData.isFirstShopVisited = shopActivity.isFirstShopVisited
         shopDurationData.distanceFromHomeLoc = shopActivity.distance_from_home_loc
         shopDurationData.next_visit_date = shopActivity.next_visit_date
+        //New shop Create issue
+        //shopDurationData.isnewShop = shopActivity.isnewShop!!
+        // 1.0 GeofenceTransitionsJobIntentService  AppV 4.0.6  multiple contact Data added on Api called
+        //shopDurationData.multi_contact_name = shopActivity.multi_contact_name
+        //shopDurationData.multi_contact_number = shopActivity.multi_contact_number
 
-        //duration garbage fix
-        try{
-            if(shopDurationData.spent_duration!!.contains("-") || shopDurationData.spent_duration!!.length != 8)
-            {
-                shopDurationData.spent_duration="00:00:10"
-            }
-        }catch (ex:Exception){
-            shopDurationData.spent_duration="00:00:10"
-        }
-
-        //Begin Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
-        if(shopActivity.isNewShop){
-            shopDurationData.isNewShop = 1
-        }else{
-            shopDurationData.isNewShop = 0
-        }
-        //End Rev 1.0 Suman 10-07-2023 IsnewShop in api+room mantis id 26537
-
-        // Rev 1.0 Suman 06-05-2024 Suman GeofenceTransitionsIntentService mantis 27335  begin
+        // Suman 06-05-2024 Suman SyncActivity update mantis 27335  begin
         try {
             var shopOb = AppDatabase.getDBInstance()!!.addShopEntryDao().getShopByIdN(shopDurationData.shop_id)
             shopDurationData.shop_lat=shopOb.shopLat.toString()
@@ -290,7 +291,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
         }catch (ex:Exception){
             ex.printStackTrace()
         }
-        // Rev 1.0 Suman 06-05-2024 Suman GeofenceTransitionsIntentService mantis 27335  end
+        // Suman 06-05-2024 Suman SyncActivity update mantis 27335  end
 
         shopDataList.add(shopDurationData)
 
@@ -305,18 +306,18 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
 
         val repository = ShopDurationRepositoryProvider.provideShopDurationRepository()
         repository.shopDuration(shopDurationApiReq)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ result ->
-                    if (result.status == NetworkConstant.SUCCESS) {
-                        for (i in 0 until shopDataList.size) {
-                            AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, shopDataList[i].shop_id!!, AppUtils.getCurrentDateForShopActi())
-                        }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ result ->
+                if (result.status == NetworkConstant.SUCCESS) {
+                    for (i in 0 until shopDataList.size) {
+                        AppDatabase.getDBInstance()!!.shopActivityDao().updateisUploaded(true, shopDataList[i].shop_id!!, AppUtils.getCurrentDateForShopActi())
                     }
+                }
 
-                }, { error ->
-                    error.printStackTrace()
-                })
+            }, { error ->
+                error.printStackTrace()
+            })
 
 
     }
@@ -330,8 +331,8 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
      * @return                      The transition details formatted as String.
      */
     private fun getGeofenceTransitionDetails(
-            geofenceTransition: Int,
-            triggeringGeofences: List<Geofence>): String {
+        geofenceTransition: Int,
+        triggeringGeofences: List<Geofence>): String {
 
         val geofenceTransitionString = getTransitionString(geofenceTransition)
 
@@ -370,12 +371,12 @@ class GeofenceTransitionsJobIntentService : JobIntentService() {
                 return
         }
         else {
-           if (list.isNotEmpty()) {
-               for (i in list.indices) {
-                   if (!list[i].isDurationCalculated)
-                       return
-               }
-           }
+            if (list.isNotEmpty()) {
+                for (i in list.indices) {
+                    if (!list[i].isDurationCalculated)
+                        return
+                }
+            }
         }
 
         Timber.d("Geofence: NearToShop : ShopName : $shopName")

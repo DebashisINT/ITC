@@ -4218,6 +4218,13 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
                 ", username : " + username + ", password : " + password + ", lat : " + Pref.latitude + ", long : " + Pref.longitude + ", location : " + location +
                 ", device token : " + Pref.deviceToken)
 
+        try {
+            Pref.current_latitude = Pref.latitude.toString()
+            Pref.current_longitude = Pref.longitude.toString()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
         val repository = LoginRepositoryProvider.provideLoginRepository()
         progress_wheel.spin()
         Timber.d("api_call  login()")
