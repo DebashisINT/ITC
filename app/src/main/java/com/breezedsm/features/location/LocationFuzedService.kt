@@ -28,6 +28,7 @@ import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.breezedsm.MonitorBroadcast
 import com.breezedsm.R
@@ -319,7 +320,8 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                     .setContentIntent(pendingIntent)
                     .setOngoing(true)
                     .build()
-                startForeground(AppConstant.FOREGROUND_SERVICE, notificationn, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
+                //startForeground(AppConstant.FOREGROUND_SERVICE, notificationn, ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION)
+                startForeground(AppConstant.FOREGROUND_SERVICE, notificationn)
 
             } else {
                 val notification = NotificationCompat.Builder(this)
