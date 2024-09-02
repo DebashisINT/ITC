@@ -520,7 +520,6 @@ class SplashActivity : BaseActivity(), GpsStatusDetector.GpsStatusDetectorCallBa
             val minVersion = Integer.parseInt(response.min_req_version?.replace(".", "").toString())
             val storeVersion = Integer.parseInt(response.play_store_version?.replace(".", "").toString())
             val currentVersion = Integer.parseInt(BuildConfig.VERSION_NAME.replace(".", ""))
-
             when {
                 currentVersion >= storeVersion -> goToNextScreen()
                 currentVersion in minVersion until storeVersion -> {
