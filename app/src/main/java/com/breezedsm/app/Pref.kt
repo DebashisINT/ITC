@@ -452,4 +452,6 @@ object Pref : PreferenceHolder() {
 
     var AttendWorkTypeID: String by bindToPreferenceField("", "AttendWorkTypeID")
     var AttendWorkTypeName: String by bindToPreferenceField("", "AttendWorkTypeName")
+
+    var loginID: String by bindToPreferenceField("", "loginID")
 }

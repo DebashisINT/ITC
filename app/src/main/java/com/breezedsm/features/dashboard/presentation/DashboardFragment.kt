@@ -2644,11 +2644,16 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         ""
                     )
                 else
-                    (mContext as DashboardActivity).loadFragment(
+                    /*(mContext as DashboardActivity).loadFragment(
                         FragType.TimeLineFragment,
                         false,
                         ""
-                    )
+                    )*/
+                (mContext as DashboardActivity).loadFragment(
+                    FragType.DayWiseFragment,
+                    false,
+                    ""
+                )
 
             }
             R.id.cancel_timer -> {
@@ -9546,7 +9551,7 @@ class DashboardFragment : BaseFragment(), View.OnClickListener, HBRecorderListen
                         simpleDialog.findViewById(R.id.dialog_message_headerTV) as AppCustomTextView
                     //dialog_yes_no_headerTV.text = "Hi "+Pref.user_name?.substring(0, Pref.user_name?.indexOf(" ")!!)+"!"
                     dialog_yes_no_headerTV.text = "Hi " + Pref.user_name!! + "!"
-                    dialogHeader.text = "Please mark your attendance."
+                    dialogHeader.text = "Please mark your Visit/Attendance."
                     val dialogYes =
                         simpleDialog.findViewById(R.id.tv_message_ok) as AppCustomTextView
                     dialogYes.setOnClickListener({ view ->

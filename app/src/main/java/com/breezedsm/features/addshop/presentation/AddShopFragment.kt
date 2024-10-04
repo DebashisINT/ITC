@@ -604,8 +604,14 @@ class AddShopFragment : BaseFragment(), View.OnClickListener {
         rl_pincode_root = view.findViewById(R.id.rl_pincode_root)
         rl_owner_contact_root = view.findViewById(R.id.rl_owner_contact_root)
         //rl_shop_name_root.visibility=View.GONE  //22-09-2021 comment
-        rl_address_root.visibility=View.GONE
-        rl_pincode_root.visibility=View.GONE
+        if(Pref.loginID.equals("manager",ignoreCase = true)){
+            rl_address_root.visibility=View.VISIBLE
+            rl_pincode_root.visibility=View.VISIBLE
+        }else{
+            rl_address_root.visibility=View.GONE
+            rl_pincode_root.visibility=View.GONE
+        }
+
         //rl_owner_contact_root.visibility=View.GONE   //22-09-2021 comment
 
 

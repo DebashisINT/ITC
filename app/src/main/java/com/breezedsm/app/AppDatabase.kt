@@ -57,7 +57,7 @@ import com.breezedsm.features.stockCompetetorStock.model.CompetetorStockData
            CcompetetorStockEntryModelEntity::class,CompetetorStockEntryProductModelEntity::class,
         ShopTypeStockViewStatus::class,ProspectEntity::class,ShopDeactivateEntity::class,NewGpsStatusEntity::class,NewProductListEntity::class,NewRateListEntity::class,
     NewOrderDataEntity::class,NewOrderProductEntity::class),
-        version = 10, exportSchema = false)
+        version = 1, exportSchema = false)
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun addShopEntryDao(): AddShopDao
@@ -179,8 +179,7 @@ abstract class AppDatabase : RoomDatabase() {
                         // allow queries on the main thread.
                         // Don't do this on a real app! See PersistenceBasicSample for an example.
                         .allowMainThreadQueries()
-                        .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5,MIGRATION_5_6,
-                            MIGRATION_6_7,MIGRATION_7_8,MIGRATION_8_9,MIGRATION_9_10)
+                        .addMigrations()
 //                        .fallbackToDestructiveMigration()
                         .build()
             }
@@ -190,91 +189,8 @@ abstract class AppDatabase : RoomDatabase() {
 
             return INSTANCE
         }
-
         fun destroyInstance() {
             INSTANCE = null
         }
-
-        val MIGRATION_1_2: Migration = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE prospect_list_master (id INTEGER NOT NULL PRIMARY KEY , pros_id  TEXT , pros_name TEXT ) ")
-                database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Available_Storage TEXT")
-                database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Total_Storage TEXT")
-            }
-        }
-        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE shop_detail ADD COLUMN shopStatusUpdate TEXT DEFAULT '1' ")
-            }
-        }
-
-        val MIGRATION_3_4: Migration = object : Migration(3, 4) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("create TABLE shop_deactivate_record  (id INTEGER NOT NULL PRIMARY KEY , shop_id  TEXT , noti_id TEXT ) ")
-            }
-        }
-        val MIGRATION_4_5: Migration = object : Migration(4, 5) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE shop_detail ADD COLUMN isShopDuplicate INTEGER NOT NULL DEFAULT 0 ")
-            }
-        }
-        val MIGRATION_5_6: Migration = object : Migration(5, 6) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE battery_net_status_list ADD COLUMN Power_Saver_Status TEXT NOT NULL DEFAULT 'Off' ")
-                database.execSQL("create TABLE new_gps_status  (id INTEGER NOT NULL PRIMARY KEY , date_time  TEXT , gps_service_status TEXT, network_status  TEXT , isUploaded INTEGER NOT NULL DEFAULT 0) ")
-            }
-        }
-        val MIGRATION_6_7: Migration = object : Migration(6, 7) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE INDEX ACTIVITYID ON shop_activity (shopActivityId,shopid,visited_date)")
-                database.execSQL("CREATE INDEX ACTIVITY_ID_DATE ON shop_activity (shopid,visited_date)")
-            }
-        }
-        val MIGRATION_7_8: Migration = object : Migration(7, 8) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                //database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITYID' ")
-                //database.execSQL( "DROP INDEX IF EXISTS 'ACTIVITY_ID_DATE' ")
-                database.execSQL("ALTER TABLE shop_activity ADD COLUMN isNewShop INTEGER NOT NULL DEFAULT 0 ")
-            }
-        }
-        val MIGRATION_8_9: Migration = object : Migration(8, 9) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("create TABLE new_product_list (product_id TEXT NOT NULL PRIMARY KEY,product_name TEXT NOT NULL,brand_id TEXT NOT NULL," +
-                        "brand_name TEXT NOT NULL,category_id TEXT NOT NULL,category_name TEXT NOT NULL,watt_id TEXT NOT NULL,watt_name TEXT NOT NULL,UOM TEXT NOT NULL )")
-                database.execSQL("create table new_rate_list (product_id TEXT NOT NULL PRIMARY KEY,mrp TEXT NOT NULL,item_price TEXT NOT NULL,specialRate TEXT NOT NULL)")
-                database.execSQL("create table new_order_data (sl_no INTEGER NOT NULL PRIMARY KEY,order_id TEXT NOT NULL,order_date TEXT NOT NULL,order_time TEXT NOT NULL," +
-                        "order_date_time TEXT NOT NULL,shop_id TEXT NOT NULL,shop_name TEXT NOT NULL,shop_type TEXT NOT NULL,isInrange INTEGER NOT NULL DEFAULT 0,order_lat TEXT NOT NULL,order_long TEXT NOT NULL,shop_addr TEXT NOT NULL," +
-                        "shop_pincode TEXT NOT NULL,order_total_amt TEXT NOT NULL,order_remarks TEXT NOT NULL,isUploaded INTEGER NOT NULL DEFAULT 0)")
-
-                database.execSQL("create table new_order_product (sl_no INTEGER NOT NULL PRIMARY KEY,order_id TEXT NOT NULL," +
-                        "product_id TEXT NOT NULL,product_name TEXT NOT NULL,submitedQty TEXT NOT NULL,submitedSpecialRate TEXT NOT NULL)")
-            }
-        }
-
-        val MIGRATION_9_10: Migration = object : Migration(9, 10) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN shop_id TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN total_amt TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN mrp TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN itemPrice TEXT NOT NULL DEFAULT '' ")
-
-                database.execSQL("ALTER TABLE new_order_data ADD COLUMN order_edit_date_time TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_data ADD COLUMN order_edit_remarks TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_data ADD COLUMN isEdited INTEGER NOT NULL DEFAULT 0 ")
-                database.execSQL("ALTER TABLE new_order_data ADD COLUMN isDeleted INTEGER NOT NULL DEFAULT 0  ")
-                 }
-        }
-
-       /* val MIGRATION_10_11: Migration = object : Migration(10, 11) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN order_edit_date_time TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN order_edit_remarks TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN order_date TEXT NOT NULL DEFAULT '' ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN isEdited INTEGER NOT NULL DEFAULT 0 ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN isDeleted INTEGER NOT NULL DEFAULT 0 ")
-                database.execSQL("ALTER TABLE new_order_product ADD COLUMN isInrange INTEGER NOT NULL DEFAULT 0 ")
-
-            }
-        }*/
     }
 }

@@ -986,6 +986,9 @@ class LocationFuzedService : Service(), GoogleApiClient.ConnectionCallbacks, Goo
                 Timber.d("LocationFuzedService : dayStart :  "+Pref.DayStartMarked.toString() + " dayEnd : "+Pref.DayEndMarked.toString()+" returning " + AppUtils.getCurrentDateTime())
                 return
             }
+        }else{
+            accuracyStatus = "accurate"
+            continueToAccurateFlow(location)
         }
 
     }

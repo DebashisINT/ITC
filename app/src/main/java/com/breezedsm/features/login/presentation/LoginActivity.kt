@@ -4125,7 +4125,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener, LocationListener {
             Pref.PhnNo = ""
             Pref.pwd = ""
         }
-
+        Pref.loginID = username
         var mLocation = ""
 
         if (Pref.latitude != "0.0" && Pref.longitude != "0.0") {

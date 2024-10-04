@@ -168,6 +168,7 @@ import com.breezedsm.features.orderList.NewOrderListFragment
 import com.breezedsm.features.orderList.OrderListFragment
 import com.breezedsm.features.orderdetail.presentation.OrderDetailFragment
 import com.breezedsm.features.orderhistory.ActivityMapFragment
+import com.breezedsm.features.orderhistory.DayWiseFragment
 import com.breezedsm.features.orderhistory.OrderhistoryFragment
 import com.breezedsm.features.orderhistory.TimeLineFragment
 import com.breezedsm.features.orderhistory.activitiesapi.LocationFetchRepositoryProvider
@@ -3792,6 +3793,15 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 setTopBarVisibility(TopBarConfig.ACTIVITYMAP)
             }
 
+            FragType.DayWiseFragment -> {
+
+                if (enableFragGeneration) {
+                    mFragment = DayWiseFragment()
+                }
+                setTopBarTitle("Timeline")
+                setTopBarVisibility(TopBarConfig.BACK)
+            }
+
             FragType.SearchLocationFragment -> {
 
                 if (enableFragGeneration) {
@@ -5534,7 +5544,7 @@ class DashboardActivity : BaseActivity(), View.OnClickListener, BaseNavigation, 
                 rl_confirm_btn.visibility = View.GONE
                 iv_list_party.visibility = View.GONE
                 iv_map.visibility = View.GONE
-                iv_settings.visibility = View.VISIBLE
+                iv_settings.visibility = View.GONE
                 ic_calendar.visibility = View.GONE
                 ic_chat_bot.visibility = View.GONE
                 iv_cancel_chat.visibility = View.GONE
