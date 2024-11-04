@@ -27,7 +27,7 @@
             android:background="@drawable/ic_new_login_bg_new3">
 
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_alignParentRight="true"
@@ -57,7 +57,7 @@
                     android:layout_gravity="center"
                   />
 
-                <com.breezedsm.widgets.AppCustomTextView
+                <com.progdsmfsm.widgets.AppCustomTextView
                     android:layout_marginTop="@dimen/_10sdp"
                     android:id="@+id/Logo_name_TV"
                     android:layout_below="@+id/logo_new"
@@ -72,7 +72,7 @@
                     android:text="@string/name_filed_managenent_system"
                     android:textSize="@dimen/_13sdp" />
 
-                <com.breezedsm.widgets.AppCustomTextView
+                <com.progdsmfsm.widgets.AppCustomTextView
                     android:id="@+id/app_title_TV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -136,7 +136,7 @@
                                                 android:layout_gravity="center"
                                                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                                                <com.breezedsm.widgets.AppCustomEditText
+                                                <com.progdsmfsm.widgets.AppCustomEditText
                                                     android:id="@+id/username_EDT"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="match_parent"
@@ -251,7 +251,7 @@
 <!--                            android:thumb="@drawable/login_rem_thumb_selector"-->
 <!--                            wheel:track="@drawable/login_rem_track_selector" />-->
 
-                        <com.breezedsm.widgets.AppCustomTextView
+                        <com.progdsmfsm.widgets.AppCustomTextView
                             android:id="@+id/share_log_login_TV"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
@@ -268,7 +268,7 @@
                     </RelativeLayout>
 
 
-                    <com.breezedsm.widgets.AppCustomTextView
+                    <com.progdsmfsm.widgets.AppCustomTextView
                         android:id="@+id/forgot_password_TV"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -308,7 +308,7 @@
                     android:layout_marginTop="@dimen/_7sdp"
                     android:layout_below="@+id/tv_internet_info">
 
-                    <com.breezedsm.widgets.AppCustomTextView
+                    <com.progdsmfsm.widgets.AppCustomTextView
                         android:id="@+id/activity_login_tvappCustomAnydeskInfo"
                         android:layout_width="@dimen/_45sdp"
                         android:layout_height="@dimen/_35sdp"
@@ -366,7 +366,7 @@
 
                 </LinearLayout>
 
-                <com.breezedsm.widgets.AppCustomTextView
+                <com.progdsmfsm.widgets.AppCustomTextView
                     android:id="@+id/tv_internet_info"
                     android:layout_width="@dimen/_270sdp"
                     android:layout_height="wrap_content"
@@ -394,7 +394,7 @@
 
     </ScrollView>
 
-    <com.breezedsm.widgets.AppCustomTextView
+    <com.progdsmfsm.widgets.AppCustomTextView
         android:id="@+id/version_name_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

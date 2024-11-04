@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/_150sdp"
         android:layout_centerHorizontal="true" />
 
-    <com.breezedsm.widgets.AppCustomTextView
+    <com.progdsmfsm.widgets.AppCustomTextView
         android:id="@+id/Logo_name_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -8,7 +8,7 @@
     android:background="@color/smoke_white"
     android:paddingTop="@dimen/_10sdp">
 
-    <com.breezedsm.widgets.AppCustomTextView
+    <com.progdsmfsm.widgets.AppCustomTextView
         android:id="@+id/tv_team_struct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:textColor="@color/colorAccent" />
     </RadioGroup>
 
-    <com.breezedsm.widgets.AppCustomTextView
+    <com.progdsmfsm.widgets.AppCustomTextView
         android:id="@+id/tv_shop_path"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:visibility="gone"/>
 
-    <com.breezedsm.widgets.AppCustomTextView
+    <com.progdsmfsm.widgets.AppCustomTextView
         android:id="@+id/tv_shop_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
         android:layout_below="@+id/tv_shop_count"
         android:layout_marginTop="@dimen/_5sdp"/>
 
-    <com.breezedsm.widgets.AppCustomTextView
+    <com.progdsmfsm.widgets.AppCustomTextView
         android:id="@+id/tv_no_data_available"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -104,7 +104,7 @@
             wheel:matProg_barColor="@color/default_text_color"
             wheel:matProg_progressIndeterminate="true" />
 
-        <com.breezedsm.widgets.AppCustomTextView
+        <com.progdsmfsm.widgets.AppCustomTextView
             android:id="@+id/tv_shop_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

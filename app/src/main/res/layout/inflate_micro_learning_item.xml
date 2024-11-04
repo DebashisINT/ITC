@@ -26,7 +26,7 @@
                 android:layout_height="@dimen/_120sdp"
                 app:srcCompat="@drawable/ic_image" />
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"/>
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
                 android:textSize="@dimen/_12sdp"
                 android:layout_below="@+id/tv_category"/>
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_video_duration_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:layout_below="@+id/tv_desc"
                 android:textColor="@color/black"/>
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_video_duration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                 app:srcCompat="@drawable/ic_download_circular_button"
                 android:layout_alignParentRight="true"/>
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_file_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                 android:textStyle="bold"
                 android:visibility="gone"/>
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_size_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                 android:layout_below="@+id/tv_file_name"
                 android:visibility="gone"/>
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_size"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                 android:textStyle="bold"
                 android:visibility="gone"/>
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/tv_update_note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

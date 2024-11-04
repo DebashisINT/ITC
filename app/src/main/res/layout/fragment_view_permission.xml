@@ -16,7 +16,7 @@
         app:cardCornerRadius="@dimen/_4sdp"
         app:cardElevation="@dimen/_2sdp">
 
-        <com.breezedsm.widgets.AppCustomTextView
+        <com.progdsmfsm.widgets.AppCustomTextView
             android:id="@+id/tv_frag_view_permission_phone_model"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -37,7 +37,7 @@
         app:cardCornerRadius="@dimen/_4sdp"
         app:cardElevation="@dimen/_2sdp">
 
-        <com.breezedsm.widgets.AppCustomTextView
+        <com.progdsmfsm.widgets.AppCustomTextView
             android:id="@+id/tv_frag_view_permission_android_version"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

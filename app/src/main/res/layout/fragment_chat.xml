@@ -14,7 +14,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white">
 
-        <com.breezedsm.widgets.AppCustomTextView
+        <com.progdsmfsm.widgets.AppCustomTextView
             android:id="@+id/tv_send_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_marginLeft="@dimen/_10sdp"
             android:background="@drawable/selector_billing_submit_bg"/>
 
-        <com.breezedsm.widgets.AppCustomEditText
+        <com.progdsmfsm.widgets.AppCustomEditText
             android:id="@+id/et_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

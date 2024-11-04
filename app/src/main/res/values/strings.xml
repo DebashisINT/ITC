@@ -425,12 +425,12 @@
     <string name="email" translatable="false">Email ID</string>
 
 
-    <!--breezedsm-->
-    <string name="breezedsm_user_name" translatable="false">Mr. Kinsuk Roy</string>
-    <string name="breezedsm_login" translatable="false">Logged in at 10:55 AM</string>
-    <string name="breezedsm_location" translatable="false">You have covered the distance of 3 KM in last hour </string>
-    <string name="breezedsm_shops" translatable="false">You have visited 2 shops</string>
-    <string name="breezedsm_time" translatable="false">10:30 AM</string>
+    <!--progdsmfsm-->
+    <string name="progdsmfsm_user_name" translatable="false">Mr. Kinsuk Roy</string>
+    <string name="progdsmfsm_login" translatable="false">Logged in at 10:55 AM</string>
+    <string name="progdsmfsm_location" translatable="false">You have covered the distance of 3 KM in last hour </string>
+    <string name="progdsmfsm_shops" translatable="false">You have visited 2 shops</string>
+    <string name="progdsmfsm_time" translatable="false">10:30 AM</string>
 
     <!--Change Password-->
     <string name="old_pwd" translatable="false">Old Password</string>
@@ -493,8 +493,8 @@
     <string name="capture_shop_image" translatable="false">Capture an image of shop</string>
     <string name="welcome" translatable="false">Welcome</string>
     <string name="vikas_malhotra" translatable="false">Vikash Malhotra</string>
-    <string name="dashboard_breezedsm_item" translatable="false">10.30\nAM</string>
-    <string name="dashboard_breezedsm_address" translatable="false">SDF Building, GP Block, Saltlake </string>
+    <string name="dashboard_progdsmfsm_item" translatable="false">10.30\nAM</string>
+    <string name="dashboard_progdsmfsm_address" translatable="false">SDF Building, GP Block, Saltlake </string>
     <string name="ten" translatable="false">10</string>
     <string name="five" translatable="false">5</string>
     <string name="organization_name" translatable="false">Nordusk</string>
@@ -1475,7 +1475,7 @@ even when the app is closed or not in use.</string>
     <string name="error_enter_canceled_by" translatable="false">Please enter cancelled by</string>
 
 
-    <string name="tfe_od_app_name" translation_description="Object Detection breezedsm app [CHAR_LIMIT=40]">Face Recognition</string>
+    <string name="tfe_od_app_name" translation_description="Object Detection progdsmfsm app [CHAR_LIMIT=40]">Face Recognition</string>
     <string name="tfe_od_camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>
     <string name="label_install_anydesk" translatable="false">Install Anydesk</string>
     <string name="label_open_anydesk" translatable="false">Open Anydesk</string>

@@ -72,7 +72,7 @@
             android:layout_below="@+id/ll_frag_my_profile_img_root"
             android:gravity="center">
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/profile_name_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.breezedsm.widgets.AppCustomEditText
+                    <com.progdsmfsm.widgets.AppCustomEditText
                         android:id="@+id/address_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.breezedsm.widgets.AppCustomEditText
+                    <com.progdsmfsm.widgets.AppCustomEditText
                         android:id="@+id/pincode_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.breezedsm.widgets.AppCustomEditText
+                    <com.progdsmfsm.widgets.AppCustomEditText
                         android:id="@+id/city_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -303,7 +303,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.breezedsm.widgets.AppCustomEditText
+                    <com.progdsmfsm.widgets.AppCustomEditText
                         android:id="@+id/state_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -356,7 +356,7 @@
                     android:textColorHint="@color/light_gray"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <com.breezedsm.widgets.AppCustomEditText
+                    <com.progdsmfsm.widgets.AppCustomEditText
                         android:id="@+id/country_EDT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -371,7 +371,7 @@
             </RelativeLayout>
 
 
-            <com.breezedsm.widgets.AppCustomTextView
+            <com.progdsmfsm.widgets.AppCustomTextView
                 android:id="@+id/update_TV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
